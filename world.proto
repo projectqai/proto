@@ -3,7 +3,7 @@ syntax = "proto3";
 package world;
 
 import "google/protobuf/timestamp.proto";
-option go_package = "github.com/hydraciv/core/proto";
+option go_package = "github.com/projectqai/hydra/proto";
 
 
 // ---------------------------------------
@@ -17,6 +17,9 @@ message Entity {
   optional GeoSpatialComponent  geo         = 11;
   optional SymbolComponent      symbol      = 12;
   optional CameraComponent      camera      = 15;
+  optional DetectionComponent   detection   = 16;
+  optional BearingComponent     bearing     = 17;
+  optional LocationUncertaintyComponent locationUncertainty = 20;
 }
 
 message ControllerRef {
@@ -32,6 +35,7 @@ message Lifetime {
 message GeoSpatialComponent {
   double longitude  = 1;
   double latitude   = 2;
+  double altitude   = 3;
 }
 
 message SymbolComponent {
@@ -45,6 +49,31 @@ message Camera {
 
 message CameraComponent {
   repeated Camera cameras = 1;
+}
+
+message DetectionComponent {
+  optional string detectorEntityID = 1;
+  optional string classification = 2;
+  optional google.protobuf.Timestamp lastMeasured = 3;
+}
+
+message BearingComponent {
+  optional double azimuth = 1;
+  optional double elevation = 2;
+}
+
+message CovarianceMatrix {
+  optional double mxx = 1;
+  optional double mxy = 2;
+  optional double mxz = 3;
+  optional double myy = 4;
+  optional double myz = 5;
+  optional double mzz = 6;
+}
+
+message LocationUncertaintyComponent {
+  optional CovarianceMatrix positionEnuCov = 1;
+  optional CovarianceMatrix velocityEnuCov = 2;
 }
 
 // ---------------------------------------------

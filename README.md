@@ -1,4 +1,5 @@
-hydra protobuf/grpc definitions
+common protobuf/grpc definitions
 -------------------------------
 
-we do not accept contributions at this time.
+we do not accept contributions from the public at this time.
+please contact info@project-q.ai for becoming a contributor
