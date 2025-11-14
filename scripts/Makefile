@@ -12,26 +12,26 @@ help:
 
 generate:
 	@echo "Generating Python protobuf bindings..."
-	@pipx run --spec grpcio-tools python3 scripts/generate_protos.py
+	@cd .. && pipx run --spec grpcio-tools python3 scripts/generate_protos.py
 
 clean:
 	@echo "Cleaning generated files and build artifacts..."
-	@rm -rf python/platform_proto/*_pb2.py
-	@rm -rf python/platform_proto/*_pb2_grpc.py
-	@rm -rf python/platform_proto/*_pb2.pyi
-	@rm -rf build/ dist/ *.egg-info python/*.egg-info
-	@find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
-	@find . -type f -name "*.pyc" -delete
+	@cd .. && rm -rf python/platform_proto/*_pb2.py
+	@cd .. && rm -rf python/platform_proto/*_pb2_grpc.py
+	@cd .. && rm -rf python/platform_proto/*_pb2.pyi
+	@cd .. && rm -rf build/ dist/ *.egg-info python/*.egg-info
+	@cd .. && find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+	@cd .. && find . -type f -name "*.pyc" -delete
 	@echo "Clean complete!"
 
 build: generate
 	@echo "Building Python package..."
-	@python3 -m build
+	@cd .. && python3 -m build
 
 install:
 	@echo "Installing package in development mode..."
-	@pip install -e .
+	@cd .. && pip install -e .
 
 test:
 	@echo "Running tests..."
-	@python3 -m pytest tests/ -v || echo "No tests found"
+	@cd .. && python3 -m pytest tests/ -v || echo "No tests found"

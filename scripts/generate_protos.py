@@ -10,11 +10,19 @@ Requirements:
     pip install grpcio-tools
 """
 
+import logging
 import os
 import sys
 import glob
 from pathlib import Path
 from grpc_tools import protoc
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 
 def fix_grpc_imports(output_dir: Path):
@@ -34,7 +42,7 @@ def fix_grpc_imports(output_dir: Path):
     if not grpc_files:
         return
 
-    print("Fixing imports in gRPC files...")
+    logger.info("Fixing imports in gRPC files...")
 
     for grpc_file in grpc_files:
         content = grpc_file.read_text()
@@ -48,7 +56,7 @@ def fix_grpc_imports(output_dir: Path):
 
         if fixed_content != content:
             grpc_file.write_text(fixed_content)
-            print(f"  ✓ Fixed imports in {grpc_file.name}")
+            logger.info(f"  ✓ Fixed imports in {grpc_file.name}")
 
 
 def generate_protos(repo_root: Path):
@@ -57,12 +65,11 @@ def generate_protos(repo_root: Path):
     proto_dir = repo_root
     output_dir = repo_root / "python" / "platform_proto"
 
-    print("=" * 50)
-    print("Generating Python protobuf bindings")
-    print("=" * 50)
-    print(f"Proto directory: {proto_dir}")
-    print(f"Output directory: {output_dir}")
-    print()
+    logger.info("=" * 50)
+    logger.info("Generating Python protobuf bindings")
+    logger.info("=" * 50)
+    logger.info(f"Proto directory: {proto_dir}")
+    logger.info(f"Output directory: {output_dir}")
 
     # Create output directory if it doesn't exist
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -71,12 +78,12 @@ def generate_protos(repo_root: Path):
     proto_files = list(proto_dir.glob("*.proto"))
 
     if not proto_files:
-        print("Error: No .proto files found in the repository root")
+        logger.error("No .proto files found in the repository root")
         return False
 
     # Generate Python code for each .proto file
     for proto_file in proto_files:
-        print(f"Generating Python bindings for {proto_file.name}...")
+        logger.info(f"Generating Python bindings for {proto_file.name}...")
 
         # Run protoc
         result = protoc.main([
@@ -89,20 +96,16 @@ def generate_protos(repo_root: Path):
         ])
 
         if result != 0:
-            print(f"Error: Failed to generate bindings for {proto_file.name}")
+            logger.error(f"Failed to generate bindings for {proto_file.name}")
             return False
-
-    print()
 
     # Fix imports in generated gRPC files
     fix_grpc_imports(output_dir)
 
-    print()
-    print(f"✓ Python bindings generated successfully in {output_dir}")
-    print()
-    print("Generated files:")
+    logger.info(f"✓ Python bindings generated successfully in {output_dir}")
+    logger.info("Generated files:")
     for py_file in sorted(output_dir.glob("*.py")):
-        print(f"  - {py_file.name}")
+        logger.info(f"  - {py_file.name}")
 
     return True
 

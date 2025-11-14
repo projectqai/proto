@@ -2,10 +2,10 @@
 name = "platform-proto"
 version = "0.1.0"
 description = "Hydra platform protobuf/gRPC definitions"
-readme = "README.md"
+readme = "../README.md"
 authors = ["Hydra"]
 license = "See LICENSE.txt"
-packages = [{include = "platform_proto", from = "python"}]
+packages = [{include = "platform_proto"}]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
