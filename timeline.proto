@@ -3,7 +3,7 @@ syntax = "proto3";
 package timeline;
 
 import "google/protobuf/timestamp.proto";
-option go_package = "github.com/hydraciv/core/proto";
+option go_package = "github.com/projectqai/proto/go";
 
 message GetTimelineRequest{
 }
