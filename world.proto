@@ -10,6 +10,7 @@ option go_package = "github.com/projectqai/proto/go";
 
 message Entity {
   string id = 1;
+  optional string               label       = 2;
 
   optional ControllerRef        controller  = 3;
   optional Lifetime             lifetime    = 4;
