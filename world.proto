@@ -21,6 +21,7 @@ message Entity {
   optional DetectionComponent   detection   = 16;
   optional BearingComponent     bearing     = 17;
   optional LocationUncertaintyComponent locationUncertainty = 20;
+  optional TrackComponent       track       = 21;
 }
 
 message ControllerRef {
@@ -75,6 +76,9 @@ message CovarianceMatrix {
 message LocationUncertaintyComponent {
   optional CovarianceMatrix positionEnuCov = 1;
   optional CovarianceMatrix velocityEnuCov = 2;
+}
+
+message TrackComponent {
 }
 
 // ---------------------------------------------
