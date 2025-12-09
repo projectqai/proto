@@ -14,6 +14,7 @@ message Entity {
 
   optional ControllerRef            controller  = 3;
   optional Lifetime                 lifetime    = 4;
+  optional Priority                 priority    = 5;
 
   optional GeoSpatialComponent      geo         = 11;
   optional SymbolComponent          symbol      = 12;
@@ -33,6 +34,24 @@ message ControllerRef {
 message Lifetime {
   optional google.protobuf.Timestamp from  = 1;
   optional google.protobuf.Timestamp until = 2;
+}
+
+
+enum Priority {
+  PriorityReserved0 = 0;
+
+  // only send when there's enough bandwidth available
+  // meta or auxiliary information where loss is tolerable
+  PriorityLow       = 1;
+
+  // send before low, but stay within bandwidth limits
+  // this is typically used for detections and other urgent information
+  PriorityHigh      = 2;
+
+  // Ignore bandwidth limit, send as hard as physically possible.
+  // Use this only if absolutely sure you understand the operational consequences. 
+  // Doing this wrong can jeopardize missions
+  PriorityBurst     = 3;
 }
 
 message GeoSpatialComponent {
