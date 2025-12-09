@@ -12,16 +12,17 @@ message Entity {
   string id = 1;
   optional string               label       = 2;
 
-  optional ControllerRef        controller  = 3;
-  optional Lifetime             lifetime    = 4;
+  optional ControllerRef            controller  = 3;
+  optional Lifetime                 lifetime    = 4;
 
-  optional GeoSpatialComponent  geo         = 11;
-  optional SymbolComponent      symbol      = 12;
-  optional CameraComponent      camera      = 15;
-  optional DetectionComponent   detection   = 16;
-  optional BearingComponent     bearing     = 17;
+  optional GeoSpatialComponent      geo         = 11;
+  optional SymbolComponent          symbol      = 12;
+  optional CameraComponent          camera      = 15;
+  optional DetectionComponent       detection   = 16;
+  optional BearingComponent         bearing     = 17;
   optional LocationUncertaintyComponent locationUncertainty = 20;
-  optional TrackComponent       track       = 21;
+  optional TrackComponent           track           = 21;
+  optional LocatorComponent         locator         = 22;
 }
 
 message ControllerRef {
@@ -81,6 +82,10 @@ message LocationUncertaintyComponent {
 message TrackComponent {
 }
 
+message LocatorComponent {
+  string locatedEntityID = 1;
+}
+
 // ---------------------------------------------
 
 message Geometry {
@@ -105,10 +110,10 @@ message EntityChangeResponse {
 }
 
 enum EntityChange {
-  Invalid       = 0;
-  Updated       = 1;
-  Expired       = 2;
-  Unobserved    = 3;
+  EntityChangeInvalid       = 0;
+  EntityChangeUpdated       = 1;
+  EntityChangeExpired       = 2;
+  EntityChangeUnobserved    = 3;
 }
 
 message EntityChangeEvent {
