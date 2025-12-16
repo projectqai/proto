@@ -1,0 +1,214 @@
+syntax = "proto3";
+
+package world;
+
+import "google/protobuf/timestamp.proto";
+option go_package = "github.com/projectqai/proto/go";
+
+
+// ---------------------------------------
+
+message Entity {
+  string id = 1;
+  optional string                   label       = 2;
+
+  optional ControllerRef            controller  = 3;
+  optional Lifetime                 lifetime    = 4;
+  optional Priority                 priority    = 5;
+
+  optional GeoSpatialComponent      geo         = 11;
+  optional SymbolComponent          symbol      = 12;
+  optional CameraComponent          camera      = 15;
+  optional DetectionComponent       detection   = 16;
+  optional BearingComponent         bearing     = 17;
+  optional LocationUncertaintyComponent locationUncertainty = 20;
+  optional TrackComponent           track           = 21;
+  optional LocatorComponent         locator         = 22;
+  optional TaskableComponent        taskable            = 23;
+}
+
+message ControllerRef {
+  string id     = 1;
+  string name   = 2;
+}
+
+message Lifetime {
+  optional google.protobuf.Timestamp from  = 1;
+  optional google.protobuf.Timestamp until = 2;
+}
+
+
+enum Priority {
+  PriorityReserved0 = 0;
+
+  // only send when there's enough bandwidth available
+  // meta or auxiliary information where loss is tolerable
+  PriorityLow       = 1;
+
+  // send before low, but stay within bandwidth limits
+  // this is typically used for detections and other urgent information
+  PriorityHigh      = 2;
+
+  // Ignore bandwidth limit, send as hard as physically possible.
+  // Use this only if absolutely sure you understand the operational consequences. 
+  // Doing this wrong can jeopardize missions
+  PriorityBurst     = 3;
+}
+
+message GeoSpatialComponent {
+  double longitude  = 1;
+  double latitude   = 2;
+  double altitude   = 3;
+}
+
+message SymbolComponent {
+  string milStd2525C = 1;
+};
+
+message Camera {
+  string label  = 1;
+  string url    = 2;
+}
+
+message CameraComponent {
+  repeated Camera cameras = 1;
+}
+
+message DetectionComponent {
+  optional string detectorEntityID = 1;
+  optional string classification = 2;
+  optional google.protobuf.Timestamp lastMeasured = 3;
+}
+
+message BearingComponent {
+  optional double azimuth = 1;
+  optional double elevation = 2;
+}
+
+message CovarianceMatrix {
+  optional double mxx = 1;
+  optional double mxy = 2;
+  optional double mxz = 3;
+  optional double myy = 4;
+  optional double myz = 5;
+  optional double mzz = 6;
+}
+
+message LocationUncertaintyComponent {
+  optional CovarianceMatrix positionEnuCov = 1;
+  optional CovarianceMatrix velocityEnuCov = 2;
+}
+
+message TrackComponent {
+}
+
+message LocatorComponent {
+  string locatedEntityID = 1;
+}
+
+message TaskableContext {
+  optional string entityId = 1;
+}
+
+message TaskableAssignee {
+  optional string entityId = 1;
+}
+
+message TaskableComponent {
+  optional string reserved              = 1;
+  optional string label                 = 2;
+  repeated TaskableContext  context     = 3;
+  repeated TaskableAssignee assignee    = 4;
+}
+
+// ---------------------------------------------
+
+message Geometry {
+  bytes wkb = 1;
+}
+
+message ListEntitiesRequest {
+  optional Geometry geo = 2;
+  optional TaskableContext  taskableContext     = 3;
+  optional TaskableAssignee TaskableAssignee    = 4;
+}
+
+message ListEntitiesResponse {
+  repeated Entity entities = 1;
+}
+
+message EntityChangeRequest {
+  repeated Entity changes = 1;
+}
+
+message EntityChangeResponse {
+  bool accepted = 1;
+  string debug  = 2;
+}
+
+enum EntityChange {
+  EntityChangeInvalid       = 0;
+  EntityChangeUpdated       = 1;
+  EntityChangeExpired       = 2;
+  EntityChangeUnobserved    = 3;
+}
+
+message EntityChangeEvent {
+  Entity entity     = 1;
+  EntityChange t    = 2;
+}
+
+message GetEntityRequest {
+  string id = 1;
+}
+
+message GetEntityResponse {
+  Entity entity = 1;
+}
+
+message ObserverRequest {
+}
+
+message ObserverState {
+  Geometry geo = 1;
+  optional google.protobuf.Timestamp viewHistory = 2;
+}
+
+message RunTaskRequest {
+  string entityId = 1;
+}
+
+enum TaskStatus {
+  TaskStatusInvalid       = 0;
+  TaskStatusRunning       = 1;
+  TaskStatusCompleted     = 2;
+  TaskStatusFailed        = 3;
+}
+
+message RunTaskResponse {
+  string executionId         = 1;
+  TaskStatus status          = 2;
+  optional string humanReadableReason = 3;
+}
+
+// interact with the world model
+service WorldService {
+
+  // list entities present in the world once
+  rpc ListEntities(ListEntitiesRequest) returns (ListEntitiesResponse);
+
+  // request every detail about one entity
+  rpc GetEntity(GetEntityRequest) returns (GetEntityResponse);
+
+  // continously monitor entities present in the world. this is used by downstream C2.
+  rpc WatchEntities(ListEntitiesRequest) returns (stream EntityChangeEvent);
+
+  // create or update an entity. used by capabilities
+  rpc Push(EntityChangeRequest) returns (EntityChangeResponse);
+
+  // observe all observers so controllers can pause georegions nobody is looking at
+  rpc Observe(ObserverRequest)  returns (stream ObserverState);
+
+  // create an instance of a specific task entity
+  rpc RunTask(RunTaskRequest)   returns (RunTaskResponse);
+}
