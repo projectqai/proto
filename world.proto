@@ -1,0 +1,331 @@
+syntax = "proto3";
+
+package world;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/projectqai/proto/go";
+
+// ---------------------------------------
+
+message Entity {
+  string id = 1;
+  optional string label = 2;
+
+  optional ControllerRef controller = 3;
+  optional Lifetime lifetime = 4;
+  optional Priority priority = 5;
+  reserved 7;
+  reserved 8;
+  reserved 9;
+  reserved 10;
+
+  optional GeoSpatialComponent geo = 11;
+  optional SymbolComponent symbol = 12;
+  optional CameraComponent camera = 15;
+
+  optional DetectionComponent detection = 16;
+  optional BearingComponent bearing = 17;
+  optional LocationUncertaintyComponent locationUncertainty = 20;
+  optional TrackComponent track = 21;
+  optional LocatorComponent locator = 22;
+  optional TaskableComponent taskable = 23;
+  optional KinematicsComponent kinematics = 24;
+  optional GeoShapeComponent shape = 25;
+
+  optional ConfigurationComponent config = 51;
+}
+
+message ControllerRef {
+  string id = 1;
+  string name = 2;
+}
+
+message Lifetime {
+  optional google.protobuf.Timestamp from = 1;
+  optional google.protobuf.Timestamp until = 2;
+}
+
+enum Priority {
+  PriorityReserved0 = 0;
+
+  // only send when there's enough bandwidth available
+  // meta or auxiliary information where loss is tolerable
+  PriorityLow = 1;
+
+  // send before low, but stay within bandwidth limits
+  // this is typically used for detections and other urgent information
+  PriorityHigh = 2;
+
+  // Ignore bandwidth limit, send as hard as physically possible.
+  // Use this only if absolutely sure you understand the operational consequences.
+  // Doing this wrong can jeopardize missions
+  PriorityBurst = 3;
+}
+
+message GeoSpatialComponent {
+  double longitude = 1;
+  double latitude = 2;
+
+  // height above ellipsoid (WGS84) in meters
+  optional double altitude = 3;
+}
+
+message SymbolComponent {
+  string milStd2525C = 1;
+}
+
+enum CameraProtocol {
+  CameraProtocolUnspecified = 0;
+  CameraProtocolWebrtc = 1;
+  CameraProtocolHls = 2;
+  CameraProtocolMjpeg = 3;
+  CameraProtocolImage = 4;
+}
+
+message Camera {
+  string label = 1;
+  string url = 2;
+  CameraProtocol protocol = 3;
+}
+
+message CameraComponent {
+  repeated Camera cameras = 1;
+}
+
+message DetectionComponent {
+  optional string detectorEntityId = 1;
+  optional string classification = 2;
+  optional google.protobuf.Timestamp lastMeasured = 3;
+}
+
+message BearingComponent {
+  optional double azimuth = 1;
+  optional double elevation = 2;
+}
+
+message CovarianceMatrix {
+  optional double mxx = 1;
+  optional double mxy = 2;
+  optional double mxz = 3;
+  optional double myy = 4;
+  optional double myz = 5;
+  optional double mzz = 6;
+}
+
+message LocationUncertaintyComponent {
+  // Position covariance matrix in local ENU frame (units: m²)
+  // Describes uncertainty ellipsoid of position estimate
+  optional CovarianceMatrix positionEnuCov = 1;
+  // Velocity covariance matrix in local ENU frame (units: m²/s²)
+  // Describes uncertainty of velocity estimate
+  optional CovarianceMatrix velocityEnuCov = 2;
+}
+
+message TrackComponent {}
+
+message LocatorComponent {
+  string locatedEntityId = 1;
+}
+
+message TaskableContext {
+  optional string entityId = 1;
+}
+
+message TaskableAssignee {
+  optional string entityId = 1;
+}
+
+message TaskableComponent {
+  optional string reserved = 1;
+  optional string label = 2;
+  repeated TaskableContext context = 3;
+  repeated TaskableAssignee assignee = 4;
+}
+
+message KinematicsEnu {
+  // Velocity components in the local East-North-Up (ENU) coordinate frame.
+  // The ENU frame is a right-handed Cartesian coordinate system with origin
+  // at the entity's position (GeoSpatialComponent), where:
+  // - East axis: tangent to the latitude line, pointing eastward
+  // - North axis: tangent to the longitude line, pointing northward
+  // - Up axis: perpendicular to the WGS84 ellipsoid, pointing away from Earth center
+  //
+  // Note: This is NOT a body frame - the axes do not rotate with the entity's
+  // heading/attitude. Velocities are expressed relative to the Earth's surface.
+  // All units are in meters per second (m/s).
+  optional double east = 1;   // m/s
+  optional double north = 2;  // m/s
+  optional double up = 3;     // m/s
+}
+
+message KinematicsComponent {
+  // Velocity in local ENU frame (see KinematicsEnu for frame definition)
+  optional KinematicsEnu velocityEnu = 1;
+  // Acceleration in local ENU frame (m/s²)
+  optional KinematicsEnu accelerationEnu = 2;
+}
+
+message GeoShapeComponent {
+  optional Geometry geometry = 1;
+}
+
+message ConfigurationComponent {
+  string controller = 1;
+  string key = 2;
+  google.protobuf.Struct value = 3;
+}
+
+// ---------------------------------------------
+
+// a 2.5D point on the projected flat surface in WGS84
+message PlanarPoint {
+  double longitude = 1;
+  double latitude = 2;
+
+  // height above ellipsoid (WGS84) in meters
+  optional double altitude = 3;
+}
+
+// a path with zero area on the projected flat surface
+// a ring is considered to be closed when the first and last points are identical
+message PlanarRing {
+  repeated PlanarPoint points = 1;
+}
+
+/// An area enclosed by a ring, with optional holes.
+/// All rings must be closed (first point = last point)
+message PlanarPolygon {
+  PlanarRing outer = 1;
+  repeated PlanarRing holes = 2;
+}
+
+// 2.5D geometry in WGS 84
+message PlanarGeometry {
+  oneof plane {
+    PlanarPoint point = 1;
+    PlanarRing line = 2;
+    PlanarPolygon polygon = 3;
+  }
+}
+
+message Geometry {
+  bytes wkb = 1 [deprecated = true];
+  PlanarGeometry planar = 2;
+}
+
+// ---------------------------------------------
+
+message EntityFilter {
+  optional string id = 1; // exact match on entity id
+  optional string label = 2; // exact match on entity label
+  optional GeoFilter geo = 3; // entity geo intersects with geometry/bounds
+  optional TaskableFilter taskable = 4;
+  repeated uint32 component = 5; // entity must have ALL these components
+
+  optional ConfigurationFilter config = 51;
+
+  repeated EntityFilter or = 100; // matches if ANY child filter matches
+  EntityFilter not = 101; // matches if child filter does NOT match
+}
+
+message TaskableFilter {
+  optional TaskableContext context = 1;
+  optional TaskableAssignee assignee = 2;
+}
+
+message GeoFilter {
+  oneof geo {
+    Geometry geometry = 1; // intersects with this geometry (bounding box check)
+    string geoEntityId = 2; // intersects with another entity's geo bounds
+  }
+}
+
+message ConfigurationFilter {
+  optional string controller = 1;
+  optional string key = 2;
+}
+
+message ListEntitiesRequest {
+  reserved 1; //deprecated
+  EntityFilter filter = 2;
+}
+
+message ListEntitiesResponse {
+  repeated Entity entities = 1;
+}
+
+message EntityChangeRequest {
+  repeated Entity changes = 1;
+}
+
+message EntityChangeResponse {
+  bool accepted = 1;
+  string debug = 2;
+}
+
+enum EntityChange {
+  EntityChangeInvalid = 0;
+  EntityChangeUpdated = 1;
+  EntityChangeExpired = 2;
+  EntityChangeUnobserved = 3;
+}
+
+message EntityChangeEvent {
+  Entity entity = 1;
+  EntityChange t = 2;
+}
+
+message GetEntityRequest {
+  string id = 1;
+}
+
+message GetEntityResponse {
+  Entity entity = 1;
+}
+
+message ObserverRequest {}
+
+message ObserverState {
+  Geometry geo = 1;
+  optional google.protobuf.Timestamp viewHistory = 2;
+}
+
+message RunTaskRequest {
+  string entityId = 1;
+}
+
+enum TaskStatus {
+  TaskStatusInvalid = 0;
+  TaskStatusRunning = 1;
+  TaskStatusCompleted = 2;
+  TaskStatusFailed = 3;
+}
+
+message RunTaskResponse {
+  string executionId = 1;
+  TaskStatus status = 2;
+  optional string humanReadableReason = 3;
+}
+
+// interact with the world model
+service WorldService {
+  // list entities present in the world once
+  rpc ListEntities(ListEntitiesRequest) returns (ListEntitiesResponse);
+
+  // request every detail about one entity
+  rpc GetEntity(GetEntityRequest) returns (GetEntityResponse);
+
+  // continously monitor entities present in the world. this is used by downstream C2.
+  rpc WatchEntities(ListEntitiesRequest) returns (stream EntityChangeEvent);
+
+  // create or update an entity. used by capabilities
+  rpc Push(EntityChangeRequest) returns (EntityChangeResponse);
+
+  // observe all observers so controllers can pause georegions nobody is looking at
+  rpc Observe(ObserverRequest) returns (stream ObserverState);
+
+  // create an instance of a specific task entity
+  rpc RunTask(RunTaskRequest) returns (RunTaskResponse);
+}
