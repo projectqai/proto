@@ -36,6 +36,7 @@ message Entity {
   optional GeoShapeComponent shape = 25;
   optional ClassificationComponent classification = 26;
 
+  optional OrientationComponent orientation = 30;
   optional ConfigurationComponent config = 51;
 }
 
@@ -72,6 +73,8 @@ message GeoSpatialComponent {
 
   // height above ellipsoid (WGS84) in meters
   optional double altitude = 3;
+
+  optional CovarianceMatrix covariance = 4;
 }
 
 message SymbolComponent {
@@ -107,6 +110,13 @@ message BearingComponent {
   optional double elevation = 2;
 }
 
+message Quaternion {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+  double w = 4;
+}
+
 message CovarianceMatrix {
   optional double mxx = 1;
   optional double mxy = 2;
@@ -116,12 +126,15 @@ message CovarianceMatrix {
   optional double mzz = 6;
 }
 
+message OrientationComponent {
+  optional Quaternion orientation = 1;
+  optional CovarianceMatrix covariance = 2;
+}
+
+// DEPRECATED: CovarianceMatrix is now included in every message
 message LocationUncertaintyComponent {
-  // Position covariance matrix in local ENU frame (units: m²)
-  // Describes uncertainty ellipsoid of position estimate
+  option deprecated = true;
   optional CovarianceMatrix positionEnuCov = 1;
-  // Velocity covariance matrix in local ENU frame (units: m²/s²)
-  // Describes uncertainty of velocity estimate
   optional CovarianceMatrix velocityEnuCov = 2;
 }
 
@@ -160,9 +173,10 @@ message KinematicsEnu {
   optional double east = 1; // m/s
   optional double north = 2; // m/s
   optional double up = 3; // m/s
+  optional CovarianceMatrix covariance = 4;
 }
 
-message KinematicsComponent {
+essage KinematicsComponent {
   // Velocity in local ENU frame (see KinematicsEnu for frame definition)
   optional KinematicsEnu velocityEnu = 1;
   // Acceleration in local ENU frame (m/s²)
