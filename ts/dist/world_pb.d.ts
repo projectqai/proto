@@ -96,6 +96,11 @@ export declare type Entity = Message<"world.Entity"> & {
   shape?: GeoShapeComponent;
 
   /**
+   * @generated from field: optional world.ClassificationComponent classification = 26;
+   */
+  classification?: ClassificationComponent;
+
+  /**
    * @generated from field: optional world.ConfigurationComponent config = 51;
    */
   config?: ConfigurationComponent;
@@ -526,6 +531,27 @@ export declare type GeoShapeComponent = Message<"world.GeoShapeComponent"> & {
 export declare const GeoShapeComponentSchema: GenMessage<GeoShapeComponent>;
 
 /**
+ * @generated from message world.ClassificationComponent
+ */
+export declare type ClassificationComponent = Message<"world.ClassificationComponent"> & {
+  /**
+   * @generated from field: optional world.ClassificationBattleDimension dimension = 1;
+   */
+  dimension?: ClassificationBattleDimension;
+
+  /**
+   * @generated from field: optional world.ClassificationIdentity identity = 2;
+   */
+  identity?: ClassificationIdentity;
+};
+
+/**
+ * Describes the message world.ClassificationComponent.
+ * Use `create(ClassificationComponentSchema)` to create a new message.
+ */
+export declare const ClassificationComponentSchema: GenMessage<ClassificationComponent>;
+
+/**
  * @generated from message world.ConfigurationComponent
  */
 export declare type ConfigurationComponent = Message<"world.ConfigurationComponent"> & {
@@ -910,6 +936,22 @@ export declare type EntityChangeEvent = Message<"world.EntityChangeEvent"> & {
 export declare const EntityChangeEventSchema: GenMessage<EntityChangeEvent>;
 
 /**
+ * @generated from message world.EntityChangeBatch
+ */
+export declare type EntityChangeBatch = Message<"world.EntityChangeBatch"> & {
+  /**
+   * @generated from field: repeated world.EntityChangeEvent events = 1;
+   */
+  events: EntityChangeEvent[];
+};
+
+/**
+ * Describes the message world.EntityChangeBatch.
+ * Use `create(EntityChangeBatchSchema)` to create a new message.
+ */
+export declare const EntityChangeBatchSchema: GenMessage<EntityChangeBatch>;
+
+/**
  * @generated from message world.GetEntityRequest
  */
 export declare type GetEntityRequest = Message<"world.GetEntityRequest"> & {
@@ -1090,6 +1132,120 @@ export enum CameraProtocol {
  * Describes the enum world.CameraProtocol.
  */
 export declare const CameraProtocolSchema: GenEnum<CameraProtocol>;
+
+/**
+ * @generated from enum world.ClassificationIdentity
+ */
+export enum ClassificationIdentity {
+  /**
+   * @generated from enum value: ClassificationIdentityInvalid = 0;
+   */
+  ClassificationIdentityInvalid = 0,
+
+  /**
+   * P
+   *
+   * @generated from enum value: ClassificationIdentityPending = 1;
+   */
+  ClassificationIdentityPending = 1,
+
+  /**
+   * U
+   *
+   * @generated from enum value: ClassificationIdentityUnknown = 2;
+   */
+  ClassificationIdentityUnknown = 2,
+
+  /**
+   * F
+   *
+   * @generated from enum value: ClassificationIdentityFriend = 3;
+   */
+  ClassificationIdentityFriend = 3,
+
+  /**
+   * N
+   *
+   * @generated from enum value: ClassificationIdentityNeutral = 4;
+   */
+  ClassificationIdentityNeutral = 4,
+
+  /**
+   * H
+   *
+   * @generated from enum value: ClassificationIdentityHostile = 5;
+   */
+  ClassificationIdentityHostile = 5,
+
+  /**
+   * S
+   *
+   * @generated from enum value: ClassificationIdentitySuspect = 6;
+   */
+  ClassificationIdentitySuspect = 6,
+}
+
+/**
+ * Describes the enum world.ClassificationIdentity.
+ */
+export declare const ClassificationIdentitySchema: GenEnum<ClassificationIdentity>;
+
+/**
+ * @generated from enum world.ClassificationBattleDimension
+ */
+export enum ClassificationBattleDimension {
+  /**
+   * @generated from enum value: ClassificationBattleDimensionInvalid = 0;
+   */
+  ClassificationBattleDimensionInvalid = 0,
+
+  /**
+   * Z
+   *
+   * @generated from enum value: ClassificationBattleDimensionUnknown = 1;
+   */
+  ClassificationBattleDimensionUnknown = 1,
+
+  /**
+   * P
+   *
+   * @generated from enum value: ClassificationBattleDimensionSpace = 2;
+   */
+  ClassificationBattleDimensionSpace = 2,
+
+  /**
+   * A
+   *
+   * @generated from enum value: ClassificationBattleDimensionAir = 3;
+   */
+  ClassificationBattleDimensionAir = 3,
+
+  /**
+   * G
+   *
+   * @generated from enum value: ClassificationBattleDimensionGround = 4;
+   */
+  ClassificationBattleDimensionGround = 4,
+
+  /**
+   * S
+   *
+   * @generated from enum value: ClassificationBattleDimensionSeaSurface = 5;
+   */
+  ClassificationBattleDimensionSeaSurface = 5,
+
+  /**
+   * U
+   *
+   * @generated from enum value: ClassificationBattleDimensionSubsurface = 6;
+   */
+  ClassificationBattleDimensionSubsurface = 6,
+}
+
+/**
+ * Describes the enum world.ClassificationBattleDimension.
+ */
+export declare const ClassificationBattleDimensionSchema: GenEnum<ClassificationBattleDimension>;
 
 /**
  * @generated from enum world.EntityChange

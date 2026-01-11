@@ -23,6 +23,26 @@ class CameraProtocol(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     CameraProtocolMjpeg: _ClassVar[CameraProtocol]
     CameraProtocolImage: _ClassVar[CameraProtocol]
 
+class ClassificationIdentity(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    ClassificationIdentityInvalid: _ClassVar[ClassificationIdentity]
+    ClassificationIdentityPending: _ClassVar[ClassificationIdentity]
+    ClassificationIdentityUnknown: _ClassVar[ClassificationIdentity]
+    ClassificationIdentityFriend: _ClassVar[ClassificationIdentity]
+    ClassificationIdentityNeutral: _ClassVar[ClassificationIdentity]
+    ClassificationIdentityHostile: _ClassVar[ClassificationIdentity]
+    ClassificationIdentitySuspect: _ClassVar[ClassificationIdentity]
+
+class ClassificationBattleDimension(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    ClassificationBattleDimensionInvalid: _ClassVar[ClassificationBattleDimension]
+    ClassificationBattleDimensionUnknown: _ClassVar[ClassificationBattleDimension]
+    ClassificationBattleDimensionSpace: _ClassVar[ClassificationBattleDimension]
+    ClassificationBattleDimensionAir: _ClassVar[ClassificationBattleDimension]
+    ClassificationBattleDimensionGround: _ClassVar[ClassificationBattleDimension]
+    ClassificationBattleDimensionSeaSurface: _ClassVar[ClassificationBattleDimension]
+    ClassificationBattleDimensionSubsurface: _ClassVar[ClassificationBattleDimension]
+
 class EntityChange(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
     EntityChangeInvalid: _ClassVar[EntityChange]
@@ -45,6 +65,20 @@ CameraProtocolWebrtc: CameraProtocol
 CameraProtocolHls: CameraProtocol
 CameraProtocolMjpeg: CameraProtocol
 CameraProtocolImage: CameraProtocol
+ClassificationIdentityInvalid: ClassificationIdentity
+ClassificationIdentityPending: ClassificationIdentity
+ClassificationIdentityUnknown: ClassificationIdentity
+ClassificationIdentityFriend: ClassificationIdentity
+ClassificationIdentityNeutral: ClassificationIdentity
+ClassificationIdentityHostile: ClassificationIdentity
+ClassificationIdentitySuspect: ClassificationIdentity
+ClassificationBattleDimensionInvalid: ClassificationBattleDimension
+ClassificationBattleDimensionUnknown: ClassificationBattleDimension
+ClassificationBattleDimensionSpace: ClassificationBattleDimension
+ClassificationBattleDimensionAir: ClassificationBattleDimension
+ClassificationBattleDimensionGround: ClassificationBattleDimension
+ClassificationBattleDimensionSeaSurface: ClassificationBattleDimension
+ClassificationBattleDimensionSubsurface: ClassificationBattleDimension
 EntityChangeInvalid: EntityChange
 EntityChangeUpdated: EntityChange
 EntityChangeExpired: EntityChange
@@ -55,7 +89,7 @@ TaskStatusCompleted: TaskStatus
 TaskStatusFailed: TaskStatus
 
 class Entity(_message.Message):
-    __slots__ = ("id", "label", "controller", "lifetime", "priority", "geo", "symbol", "camera", "detection", "bearing", "locationUncertainty", "track", "locator", "taskable", "kinematics", "shape", "config")
+    __slots__ = ("id", "label", "controller", "lifetime", "priority", "geo", "symbol", "camera", "detection", "bearing", "locationUncertainty", "track", "locator", "taskable", "kinematics", "shape", "classification", "config")
     ID_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     CONTROLLER_FIELD_NUMBER: _ClassVar[int]
@@ -72,6 +106,7 @@ class Entity(_message.Message):
     TASKABLE_FIELD_NUMBER: _ClassVar[int]
     KINEMATICS_FIELD_NUMBER: _ClassVar[int]
     SHAPE_FIELD_NUMBER: _ClassVar[int]
+    CLASSIFICATION_FIELD_NUMBER: _ClassVar[int]
     CONFIG_FIELD_NUMBER: _ClassVar[int]
     id: str
     label: str
@@ -89,8 +124,9 @@ class Entity(_message.Message):
     taskable: TaskableComponent
     kinematics: KinematicsComponent
     shape: GeoShapeComponent
+    classification: ClassificationComponent
     config: ConfigurationComponent
-    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[ControllerRef, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., locationUncertainty: _Optional[_Union[LocationUncertaintyComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[ControllerRef, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., locationUncertainty: _Optional[_Union[LocationUncertaintyComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ...) -> None: ...
 
 class ControllerRef(_message.Message):
     __slots__ = ("id", "name")
@@ -239,6 +275,14 @@ class GeoShapeComponent(_message.Message):
     geometry: Geometry
     def __init__(self, geometry: _Optional[_Union[Geometry, _Mapping]] = ...) -> None: ...
 
+class ClassificationComponent(_message.Message):
+    __slots__ = ("dimension", "identity")
+    DIMENSION_FIELD_NUMBER: _ClassVar[int]
+    IDENTITY_FIELD_NUMBER: _ClassVar[int]
+    dimension: ClassificationBattleDimension
+    identity: ClassificationIdentity
+    def __init__(self, dimension: _Optional[_Union[ClassificationBattleDimension, str]] = ..., identity: _Optional[_Union[ClassificationIdentity, str]] = ...) -> None: ...
+
 class ConfigurationComponent(_message.Message):
     __slots__ = ("controller", "key", "value")
     CONTROLLER_FIELD_NUMBER: _ClassVar[int]
@@ -366,6 +410,12 @@ class EntityChangeEvent(_message.Message):
     entity: Entity
     t: EntityChange
     def __init__(self, entity: _Optional[_Union[Entity, _Mapping]] = ..., t: _Optional[_Union[EntityChange, str]] = ...) -> None: ...
+
+class EntityChangeBatch(_message.Message):
+    __slots__ = ("events",)
+    EVENTS_FIELD_NUMBER: _ClassVar[int]
+    events: _containers.RepeatedCompositeFieldContainer[EntityChangeEvent]
+    def __init__(self, events: _Optional[_Iterable[_Union[EntityChangeEvent, _Mapping]]] = ...) -> None: ...
 
 class GetEntityRequest(_message.Message):
     __slots__ = ("id",)

@@ -16,6 +16,7 @@ message Entity {
   optional ControllerRef controller = 3;
   optional Lifetime lifetime = 4;
   optional Priority priority = 5;
+  reserved 6;
   reserved 7;
   reserved 8;
   reserved 9;
@@ -33,6 +34,7 @@ message Entity {
   optional TaskableComponent taskable = 23;
   optional KinematicsComponent kinematics = 24;
   optional GeoShapeComponent shape = 25;
+  optional ClassificationComponent classification = 26;
 
   optional ConfigurationComponent config = 51;
 }
@@ -155,9 +157,9 @@ message KinematicsEnu {
   // Note: This is NOT a body frame - the axes do not rotate with the entity's
   // heading/attitude. Velocities are expressed relative to the Earth's surface.
   // All units are in meters per second (m/s).
-  optional double east = 1;   // m/s
-  optional double north = 2;  // m/s
-  optional double up = 3;     // m/s
+  optional double east = 1; // m/s
+  optional double north = 2; // m/s
+  optional double up = 3; // m/s
 }
 
 message KinematicsComponent {
@@ -169,6 +171,31 @@ message KinematicsComponent {
 
 message GeoShapeComponent {
   optional Geometry geometry = 1;
+}
+
+enum ClassificationIdentity {
+  ClassificationIdentityInvalid = 0;
+  ClassificationIdentityPending = 1; // P
+  ClassificationIdentityUnknown = 2; // U
+  ClassificationIdentityFriend = 3; // F
+  ClassificationIdentityNeutral = 4; // N
+  ClassificationIdentityHostile = 5; // H
+  ClassificationIdentitySuspect = 6; // S
+}
+
+enum ClassificationBattleDimension {
+  ClassificationBattleDimensionInvalid = 0;
+  ClassificationBattleDimensionUnknown = 1; // Z
+  ClassificationBattleDimensionSpace = 2; // P
+  ClassificationBattleDimensionAir = 3; // A
+  ClassificationBattleDimensionGround = 4; // G
+  ClassificationBattleDimensionSeaSurface = 5; // S
+  ClassificationBattleDimensionSubsurface = 6; // U
+}
+
+message ClassificationComponent {
+  optional ClassificationBattleDimension dimension = 1;
+  optional ClassificationIdentity identity = 2;
 }
 
 message ConfigurationComponent {
@@ -275,6 +302,10 @@ enum EntityChange {
 message EntityChangeEvent {
   Entity entity = 1;
   EntityChange t = 2;
+}
+
+message EntityChangeBatch {
+  repeated EntityChangeEvent events = 1;
 }
 
 message GetEntityRequest {
