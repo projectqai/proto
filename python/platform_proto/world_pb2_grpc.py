@@ -5,7 +5,7 @@ import warnings
 
 from . import world_pb2 as world__pb2
 
-GRPC_GENERATED_VERSION = '1.70.0'
+GRPC_GENERATED_VERSION = '1.76.0'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
 
@@ -18,7 +18,7 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in world_pb2_grpc.py depends on'
+        + ' but the generated code in world_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
@@ -54,11 +54,6 @@ class WorldServiceStub(object):
                 '/world.WorldService/Push',
                 request_serializer=world__pb2.EntityChangeRequest.SerializeToString,
                 response_deserializer=world__pb2.EntityChangeResponse.FromString,
-                _registered_method=True)
-        self.Observe = channel.unary_stream(
-                '/world.WorldService/Observe',
-                request_serializer=world__pb2.ObserverRequest.SerializeToString,
-                response_deserializer=world__pb2.ObserverState.FromString,
                 _registered_method=True)
         self.RunTask = channel.unary_unary(
                 '/world.WorldService/RunTask',
@@ -99,13 +94,6 @@ class WorldServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def Observe(self, request, context):
-        """observe all observers so controllers can pause georegions nobody is looking at
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def RunTask(self, request, context):
         """create an instance of a specific task entity
         """
@@ -135,11 +123,6 @@ def add_WorldServiceServicer_to_server(servicer, server):
                     servicer.Push,
                     request_deserializer=world__pb2.EntityChangeRequest.FromString,
                     response_serializer=world__pb2.EntityChangeResponse.SerializeToString,
-            ),
-            'Observe': grpc.unary_stream_rpc_method_handler(
-                    servicer.Observe,
-                    request_deserializer=world__pb2.ObserverRequest.FromString,
-                    response_serializer=world__pb2.ObserverState.SerializeToString,
             ),
             'RunTask': grpc.unary_unary_rpc_method_handler(
                     servicer.RunTask,
@@ -256,33 +239,6 @@ class WorldService(object):
             '/world.WorldService/Push',
             world__pb2.EntityChangeRequest.SerializeToString,
             world__pb2.EntityChangeResponse.FromString,
-            options,
-            channel_credentials,
-            insecure,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-            _registered_method=True)
-
-    @staticmethod
-    def Observe(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_stream(
-            request,
-            target,
-            '/world.WorldService/Observe',
-            world__pb2.ObserverRequest.SerializeToString,
-            world__pb2.ObserverState.FromString,
             options,
             channel_credentials,
             insecure,

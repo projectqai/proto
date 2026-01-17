@@ -43,8 +43,6 @@ const (
 	WorldServiceWatchEntitiesProcedure = "/world.WorldService/WatchEntities"
 	// WorldServicePushProcedure is the fully-qualified name of the WorldService's Push RPC.
 	WorldServicePushProcedure = "/world.WorldService/Push"
-	// WorldServiceObserveProcedure is the fully-qualified name of the WorldService's Observe RPC.
-	WorldServiceObserveProcedure = "/world.WorldService/Observe"
 	// WorldServiceRunTaskProcedure is the fully-qualified name of the WorldService's RunTask RPC.
 	WorldServiceRunTaskProcedure = "/world.WorldService/RunTask"
 )
@@ -59,8 +57,6 @@ type WorldServiceClient interface {
 	WatchEntities(context.Context, *connect.Request[_go.ListEntitiesRequest]) (*connect.ServerStreamForClient[_go.EntityChangeEvent], error)
 	// create or update an entity. used by capabilities
 	Push(context.Context, *connect.Request[_go.EntityChangeRequest]) (*connect.Response[_go.EntityChangeResponse], error)
-	// observe all observers so controllers can pause georegions nobody is looking at
-	Observe(context.Context, *connect.Request[_go.ObserverRequest]) (*connect.ServerStreamForClient[_go.ObserverState], error)
 	// create an instance of a specific task entity
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
 }
@@ -100,12 +96,6 @@ func NewWorldServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(worldServiceMethods.ByName("Push")),
 			connect.WithClientOptions(opts...),
 		),
-		observe: connect.NewClient[_go.ObserverRequest, _go.ObserverState](
-			httpClient,
-			baseURL+WorldServiceObserveProcedure,
-			connect.WithSchema(worldServiceMethods.ByName("Observe")),
-			connect.WithClientOptions(opts...),
-		),
 		runTask: connect.NewClient[_go.RunTaskRequest, _go.RunTaskResponse](
 			httpClient,
 			baseURL+WorldServiceRunTaskProcedure,
@@ -121,7 +111,6 @@ type worldServiceClient struct {
 	getEntity     *connect.Client[_go.GetEntityRequest, _go.GetEntityResponse]
 	watchEntities *connect.Client[_go.ListEntitiesRequest, _go.EntityChangeEvent]
 	push          *connect.Client[_go.EntityChangeRequest, _go.EntityChangeResponse]
-	observe       *connect.Client[_go.ObserverRequest, _go.ObserverState]
 	runTask       *connect.Client[_go.RunTaskRequest, _go.RunTaskResponse]
 }
 
@@ -145,11 +134,6 @@ func (c *worldServiceClient) Push(ctx context.Context, req *connect.Request[_go.
 	return c.push.CallUnary(ctx, req)
 }
 
-// Observe calls world.WorldService.Observe.
-func (c *worldServiceClient) Observe(ctx context.Context, req *connect.Request[_go.ObserverRequest]) (*connect.ServerStreamForClient[_go.ObserverState], error) {
-	return c.observe.CallServerStream(ctx, req)
-}
-
 // RunTask calls world.WorldService.RunTask.
 func (c *worldServiceClient) RunTask(ctx context.Context, req *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error) {
 	return c.runTask.CallUnary(ctx, req)
@@ -165,8 +149,6 @@ type WorldServiceHandler interface {
 	WatchEntities(context.Context, *connect.Request[_go.ListEntitiesRequest], *connect.ServerStream[_go.EntityChangeEvent]) error
 	// create or update an entity. used by capabilities
 	Push(context.Context, *connect.Request[_go.EntityChangeRequest]) (*connect.Response[_go.EntityChangeResponse], error)
-	// observe all observers so controllers can pause georegions nobody is looking at
-	Observe(context.Context, *connect.Request[_go.ObserverRequest], *connect.ServerStream[_go.ObserverState]) error
 	// create an instance of a specific task entity
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
 }
@@ -202,12 +184,6 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(worldServiceMethods.ByName("Push")),
 		connect.WithHandlerOptions(opts...),
 	)
-	worldServiceObserveHandler := connect.NewServerStreamHandler(
-		WorldServiceObserveProcedure,
-		svc.Observe,
-		connect.WithSchema(worldServiceMethods.ByName("Observe")),
-		connect.WithHandlerOptions(opts...),
-	)
 	worldServiceRunTaskHandler := connect.NewUnaryHandler(
 		WorldServiceRunTaskProcedure,
 		svc.RunTask,
@@ -224,8 +200,6 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 			worldServiceWatchEntitiesHandler.ServeHTTP(w, r)
 		case WorldServicePushProcedure:
 			worldServicePushHandler.ServeHTTP(w, r)
-		case WorldServiceObserveProcedure:
-			worldServiceObserveHandler.ServeHTTP(w, r)
 		case WorldServiceRunTaskProcedure:
 			worldServiceRunTaskHandler.ServeHTTP(w, r)
 		default:
@@ -251,10 +225,6 @@ func (UnimplementedWorldServiceHandler) WatchEntities(context.Context, *connect.
 
 func (UnimplementedWorldServiceHandler) Push(context.Context, *connect.Request[_go.EntityChangeRequest]) (*connect.Response[_go.EntityChangeResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.Push is not implemented"))
-}
-
-func (UnimplementedWorldServiceHandler) Observe(context.Context, *connect.Request[_go.ObserverRequest], *connect.ServerStream[_go.ObserverState]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.Observe is not implemented"))
 }
 
 func (UnimplementedWorldServiceHandler) RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error) {

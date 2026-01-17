@@ -274,9 +274,20 @@ message ConfigurationFilter {
   optional string key = 2;
 }
 
+message WatchLimiter {
+  // Maximum non-burst messages per second this consumer wants to receive (0 = unlimited)
+  optional uint64 max_messages_per_second = 1;
+
+  // Only deliver messages at or above this priority level
+  // Default (unset or PriorityReserved0) = deliver all priorities
+  optional Priority min_priority = 3;
+}
+
 message ListEntitiesRequest {
   reserved 1; //deprecated
   EntityFilter filter = 2;
+
+  optional WatchLimiter watchLimiter = 3;
 }
 
 message ListEntitiesResponse {
@@ -353,9 +364,6 @@ service WorldService {
 
   // create or update an entity. used by capabilities
   rpc Push(EntityChangeRequest) returns (EntityChangeResponse);
-
-  // observe all observers so controllers can pause georegions nobody is looking at
-  rpc Observe(ObserverRequest) returns (stream ObserverState);
 
   // create an instance of a specific task entity
   rpc RunTask(RunTaskRequest) returns (RunTaskResponse);

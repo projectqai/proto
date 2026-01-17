@@ -23,7 +23,6 @@ const (
 	WorldService_GetEntity_FullMethodName     = "/world.WorldService/GetEntity"
 	WorldService_WatchEntities_FullMethodName = "/world.WorldService/WatchEntities"
 	WorldService_Push_FullMethodName          = "/world.WorldService/Push"
-	WorldService_Observe_FullMethodName       = "/world.WorldService/Observe"
 	WorldService_RunTask_FullMethodName       = "/world.WorldService/RunTask"
 )
 
@@ -41,8 +40,6 @@ type WorldServiceClient interface {
 	WatchEntities(ctx context.Context, in *ListEntitiesRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[EntityChangeEvent], error)
 	// create or update an entity. used by capabilities
 	Push(ctx context.Context, in *EntityChangeRequest, opts ...grpc.CallOption) (*EntityChangeResponse, error)
-	// observe all observers so controllers can pause georegions nobody is looking at
-	Observe(ctx context.Context, in *ObserverRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ObserverState], error)
 	// create an instance of a specific task entity
 	RunTask(ctx context.Context, in *RunTaskRequest, opts ...grpc.CallOption) (*RunTaskResponse, error)
 }
@@ -104,25 +101,6 @@ func (c *worldServiceClient) Push(ctx context.Context, in *EntityChangeRequest, 
 	return out, nil
 }
 
-func (c *worldServiceClient) Observe(ctx context.Context, in *ObserverRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ObserverState], error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &WorldService_ServiceDesc.Streams[1], WorldService_Observe_FullMethodName, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	x := &grpc.GenericClientStream[ObserverRequest, ObserverState]{ClientStream: stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type WorldService_ObserveClient = grpc.ServerStreamingClient[ObserverState]
-
 func (c *worldServiceClient) RunTask(ctx context.Context, in *RunTaskRequest, opts ...grpc.CallOption) (*RunTaskResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RunTaskResponse)
@@ -147,8 +125,6 @@ type WorldServiceServer interface {
 	WatchEntities(*ListEntitiesRequest, grpc.ServerStreamingServer[EntityChangeEvent]) error
 	// create or update an entity. used by capabilities
 	Push(context.Context, *EntityChangeRequest) (*EntityChangeResponse, error)
-	// observe all observers so controllers can pause georegions nobody is looking at
-	Observe(*ObserverRequest, grpc.ServerStreamingServer[ObserverState]) error
 	// create an instance of a specific task entity
 	RunTask(context.Context, *RunTaskRequest) (*RunTaskResponse, error)
 	mustEmbedUnimplementedWorldServiceServer()
@@ -172,9 +148,6 @@ func (UnimplementedWorldServiceServer) WatchEntities(*ListEntitiesRequest, grpc.
 }
 func (UnimplementedWorldServiceServer) Push(context.Context, *EntityChangeRequest) (*EntityChangeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Push not implemented")
-}
-func (UnimplementedWorldServiceServer) Observe(*ObserverRequest, grpc.ServerStreamingServer[ObserverState]) error {
-	return status.Errorf(codes.Unimplemented, "method Observe not implemented")
 }
 func (UnimplementedWorldServiceServer) RunTask(context.Context, *RunTaskRequest) (*RunTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RunTask not implemented")
@@ -265,17 +238,6 @@ func _WorldService_Push_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _WorldService_Observe_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(ObserverRequest)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
-	}
-	return srv.(WorldServiceServer).Observe(m, &grpc.GenericServerStream[ObserverRequest, ObserverState]{ServerStream: stream})
-}
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type WorldService_ObserveServer = grpc.ServerStreamingServer[ObserverState]
-
 func _WorldService_RunTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RunTaskRequest)
 	if err := dec(in); err != nil {
@@ -322,11 +284,6 @@ var WorldService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "WatchEntities",
 			Handler:       _WorldService_WatchEntities_Handler,
-			ServerStreams: true,
-		},
-		{
-			StreamName:    "Observe",
-			Handler:       _WorldService_Observe_Handler,
 			ServerStreams: true,
 		},
 	},

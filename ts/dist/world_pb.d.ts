@@ -846,6 +846,32 @@ export declare type ConfigurationFilter = Message<"world.ConfigurationFilter"> &
 export declare const ConfigurationFilterSchema: GenMessage<ConfigurationFilter>;
 
 /**
+ * @generated from message world.WatchLimiter
+ */
+export declare type WatchLimiter = Message<"world.WatchLimiter"> & {
+  /**
+   * Maximum non-burst messages per second this consumer wants to receive (0 = unlimited)
+   *
+   * @generated from field: optional uint64 max_messages_per_second = 1;
+   */
+  maxMessagesPerSecond?: bigint;
+
+  /**
+   * Only deliver messages at or above this priority level
+   * Default (unset or PriorityReserved0) = deliver all priorities
+   *
+   * @generated from field: optional world.Priority min_priority = 3;
+   */
+  minPriority?: Priority;
+};
+
+/**
+ * Describes the message world.WatchLimiter.
+ * Use `create(WatchLimiterSchema)` to create a new message.
+ */
+export declare const WatchLimiterSchema: GenMessage<WatchLimiter>;
+
+/**
  * @generated from message world.ListEntitiesRequest
  */
 export declare type ListEntitiesRequest = Message<"world.ListEntitiesRequest"> & {
@@ -853,6 +879,11 @@ export declare type ListEntitiesRequest = Message<"world.ListEntitiesRequest"> &
    * @generated from field: world.EntityFilter filter = 2;
    */
   filter?: EntityFilter;
+
+  /**
+   * @generated from field: optional world.WatchLimiter watchLimiter = 3;
+   */
+  watchLimiter?: WatchLimiter;
 };
 
 /**
@@ -1352,16 +1383,6 @@ export declare const WorldService: GenService<{
     methodKind: "unary";
     input: typeof EntityChangeRequestSchema;
     output: typeof EntityChangeResponseSchema;
-  },
-  /**
-   * observe all observers so controllers can pause georegions nobody is looking at
-   *
-   * @generated from rpc world.WorldService.Observe
-   */
-  observe: {
-    methodKind: "server_streaming";
-    input: typeof ObserverRequestSchema;
-    output: typeof ObserverStateSchema;
   },
   /**
    * create an instance of a specific task entity

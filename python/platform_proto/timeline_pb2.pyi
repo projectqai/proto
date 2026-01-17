@@ -1,7 +1,10 @@
+import datetime
+
 from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
-from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Optional, Union as _Union
+from collections.abc import Mapping as _Mapping
+from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
@@ -19,7 +22,7 @@ class GetTimelineResponse(_message.Message):
     max: _timestamp_pb2.Timestamp
     frozen: bool
     at: _timestamp_pb2.Timestamp
-    def __init__(self, min: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., max: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., frozen: bool = ..., at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    def __init__(self, min: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., max: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., frozen: bool = ..., at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class MoveTimelineRequest(_message.Message):
     __slots__ = ("freeze", "at")
@@ -27,10 +30,10 @@ class MoveTimelineRequest(_message.Message):
     AT_FIELD_NUMBER: _ClassVar[int]
     freeze: bool
     at: _timestamp_pb2.Timestamp
-    def __init__(self, freeze: bool = ..., at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    def __init__(self, freeze: bool = ..., at: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class MoveTimelineResponse(_message.Message):
     __slots__ = ("current",)
     CURRENT_FIELD_NUMBER: _ClassVar[int]
     current: _timestamp_pb2.Timestamp
-    def __init__(self, current: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    def __init__(self, current: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
