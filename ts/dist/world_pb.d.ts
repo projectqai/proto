@@ -1094,34 +1094,36 @@ export declare const RunTaskResponseSchema: GenMessage<RunTaskResponse>;
  */
 export enum Priority {
   /**
-   * @generated from enum value: PriorityReserved0 = 0;
+   * @generated from enum value: PriorityUnspecified = 0;
    */
-  PriorityReserved0 = 0,
+  PriorityUnspecified = 0,
 
   /**
-   * only send when there's enough bandwidth available
-   * meta or auxiliary information where loss is tolerable
+   * ROUTINE (R): Normal day-to-day traffic.
+   * Transmitted and delivered in order received, after higher precedence.
+   * May be delayed or colescated when bandwidth is constrained.
    *
-   * @generated from enum value: PriorityLow = 1;
+   * @generated from enum value: PriorityRoutine = 1;
    */
-  PriorityLow = 1,
+  PriorityRoutine = 1,
 
   /**
-   * send before low, but stay within bandwidth limits
-   * this is typically used for detections and other urgent information
+   * IMMEDIATE (O): Messages gravely affecting operational security.
+   * Requires immediate delivery. Transmitted ahead of ROUTINE traffic.
+   * Interrupts lower precedence messages. Target handling time <30 seconds.
    *
-   * @generated from enum value: PriorityHigh = 2;
+   * @generated from enum value: PriorityImmediate = 2;
    */
-  PriorityHigh = 2,
+  PriorityImmediate = 2,
 
   /**
-   * Ignore bandwidth limit, send as hard as physically possible.
-   * Use this only if absolutely sure you understand the operational consequences.
-   * Doing this wrong can jeopardize missions
+   * FLASH (Z): Override all other traffic, 
+   * Ignores all bandwidth limits. Use only for emergency action messages where delay is unacceptable.
+   * Misuse can jeopardize missions because the it will override signal stealth limits.
    *
-   * @generated from enum value: PriorityBurst = 3;
+   * @generated from enum value: PriorityFlash = 3;
    */
-  PriorityBurst = 3,
+  PriorityFlash = 3,
 }
 
 /**

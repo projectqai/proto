@@ -13,10 +13,10 @@ DESCRIPTOR: _descriptor.FileDescriptor
 
 class Priority(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
-    PriorityReserved0: _ClassVar[Priority]
-    PriorityLow: _ClassVar[Priority]
-    PriorityHigh: _ClassVar[Priority]
-    PriorityBurst: _ClassVar[Priority]
+    PriorityUnspecified: _ClassVar[Priority]
+    PriorityRoutine: _ClassVar[Priority]
+    PriorityImmediate: _ClassVar[Priority]
+    PriorityFlash: _ClassVar[Priority]
 
 class CameraProtocol(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -59,10 +59,10 @@ class TaskStatus(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     TaskStatusRunning: _ClassVar[TaskStatus]
     TaskStatusCompleted: _ClassVar[TaskStatus]
     TaskStatusFailed: _ClassVar[TaskStatus]
-PriorityReserved0: Priority
-PriorityLow: Priority
-PriorityHigh: Priority
-PriorityBurst: Priority
+PriorityUnspecified: Priority
+PriorityRoutine: Priority
+PriorityImmediate: Priority
+PriorityFlash: Priority
 CameraProtocolUnspecified: CameraProtocol
 CameraProtocolWebrtc: CameraProtocol
 CameraProtocolHls: CameraProtocol

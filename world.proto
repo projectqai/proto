@@ -50,20 +50,20 @@ message Lifetime {
 }
 
 enum Priority {
-  PriorityReserved0 = 0;
+  PriorityUnspecified = 0;
 
-  // only send when there's enough bandwidth available
-  // meta or auxiliary information where loss is tolerable
-  PriorityLow = 1;
+  // ROUTINE: Normal day-to-day traffic.
+  // May be delayed or colescated into a later update when bandwidth is constrained
+  PriorityRoutine = 1;
 
-  // send before low, but stay within bandwidth limits
-  // this is typically used for detections and other urgent information
-  PriorityHigh = 2;
+  // IMMEDIATE: Delay would negatively affect the mission
+  // Sent before lower precedence messages
+  PriorityImmediate = 2;
 
-  // Ignore bandwidth limit, send as hard as physically possible.
-  // Use this only if absolutely sure you understand the operational consequences.
-  // Doing this wrong can jeopardize missions
-  PriorityBurst = 3;
+  // FLASH: Extreme urgency
+  // Sent before lower precedence messages and without respecting mission bandwidth/signal limits
+  // Highly visible flare, misuse can jeopardize missions
+  PriorityFlash = 3;
 }
 
 message GeoSpatialComponent {
