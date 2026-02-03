@@ -1,5 +1,8 @@
-all: python go ts
+all: fmt python go ts
 
+
+fmt:
+	buf format -w
 
 python: .PHONY
 	@$(MAKE) -C python generate

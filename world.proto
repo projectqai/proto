@@ -176,7 +176,7 @@ message KinematicsEnu {
   optional CovarianceMatrix covariance = 4;
 }
 
-essage KinematicsComponent {
+message KinematicsComponent {
   // Velocity in local ENU frame (see KinematicsEnu for frame definition)
   optional KinematicsEnu velocityEnu = 1;
   // Acceleration in local ENU frame (m/s²)
@@ -288,20 +288,26 @@ message ConfigurationFilter {
   optional string key = 2;
 }
 
-message WatchLimiter {
-  // Maximum non-burst messages per second this consumer wants to receive (0 = unlimited)
+message WatchBehavior {
+  // Maximum non-flash messages per second this consumer can handle (0 = unlimited)
   optional uint64 max_messages_per_second = 1;
 
   // Only deliver messages at or above this priority level
   // Default (unset or PriorityReserved0) = deliver all priorities
   optional Priority min_priority = 3;
+
+  // Re-stream all matching entities at this interval in milliseconds, even if unchanged.
+  // For consumers that dont understand lifetimes and require fixed interval updates
+  // 0 or unset = only stream actual changes
+  // values lower than 1000 might be capped to 1s
+  optional uint32 keepalive_interval_ms = 4;
 }
 
 message ListEntitiesRequest {
   reserved 1; //deprecated
   EntityFilter filter = 2;
 
-  optional WatchLimiter watchLimiter = 3;
+  optional WatchBehavior behaviour = 4;
 }
 
 message ListEntitiesResponse {

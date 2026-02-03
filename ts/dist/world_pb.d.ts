@@ -101,6 +101,11 @@ export declare type Entity = Message<"world.Entity"> & {
   classification?: ClassificationComponent;
 
   /**
+   * @generated from field: optional world.OrientationComponent orientation = 30;
+   */
+  orientation?: OrientationComponent;
+
+  /**
    * @generated from field: optional world.ConfigurationComponent config = 51;
    */
   config?: ConfigurationComponent;
@@ -174,6 +179,11 @@ export declare type GeoSpatialComponent = Message<"world.GeoSpatialComponent"> &
    * @generated from field: optional double altitude = 3;
    */
   altitude?: number;
+
+  /**
+   * @generated from field: optional world.CovarianceMatrix covariance = 4;
+   */
+  covariance?: CovarianceMatrix;
 };
 
 /**
@@ -288,6 +298,37 @@ export declare type BearingComponent = Message<"world.BearingComponent"> & {
 export declare const BearingComponentSchema: GenMessage<BearingComponent>;
 
 /**
+ * @generated from message world.Quaternion
+ */
+export declare type Quaternion = Message<"world.Quaternion"> & {
+  /**
+   * @generated from field: double x = 1;
+   */
+  x: number;
+
+  /**
+   * @generated from field: double y = 2;
+   */
+  y: number;
+
+  /**
+   * @generated from field: double z = 3;
+   */
+  z: number;
+
+  /**
+   * @generated from field: double w = 4;
+   */
+  w: number;
+};
+
+/**
+ * Describes the message world.Quaternion.
+ * Use `create(QuaternionSchema)` to create a new message.
+ */
+export declare const QuaternionSchema: GenMessage<Quaternion>;
+
+/**
  * @generated from message world.CovarianceMatrix
  */
 export declare type CovarianceMatrix = Message<"world.CovarianceMatrix"> & {
@@ -329,21 +370,39 @@ export declare type CovarianceMatrix = Message<"world.CovarianceMatrix"> & {
 export declare const CovarianceMatrixSchema: GenMessage<CovarianceMatrix>;
 
 /**
+ * @generated from message world.OrientationComponent
+ */
+export declare type OrientationComponent = Message<"world.OrientationComponent"> & {
+  /**
+   * @generated from field: optional world.Quaternion orientation = 1;
+   */
+  orientation?: Quaternion;
+
+  /**
+   * @generated from field: optional world.CovarianceMatrix covariance = 2;
+   */
+  covariance?: CovarianceMatrix;
+};
+
+/**
+ * Describes the message world.OrientationComponent.
+ * Use `create(OrientationComponentSchema)` to create a new message.
+ */
+export declare const OrientationComponentSchema: GenMessage<OrientationComponent>;
+
+/**
+ * DEPRECATED: CovarianceMatrix is now included in every message
+ *
  * @generated from message world.LocationUncertaintyComponent
+ * @deprecated
  */
 export declare type LocationUncertaintyComponent = Message<"world.LocationUncertaintyComponent"> & {
   /**
-   * Position covariance matrix in local ENU frame (units: m²)
-   * Describes uncertainty ellipsoid of position estimate
-   *
    * @generated from field: optional world.CovarianceMatrix positionEnuCov = 1;
    */
   positionEnuCov?: CovarianceMatrix;
 
   /**
-   * Velocity covariance matrix in local ENU frame (units: m²/s²)
-   * Describes uncertainty of velocity estimate
-   *
    * @generated from field: optional world.CovarianceMatrix velocityEnuCov = 2;
    */
   velocityEnuCov?: CovarianceMatrix;
@@ -352,6 +411,7 @@ export declare type LocationUncertaintyComponent = Message<"world.LocationUncert
 /**
  * Describes the message world.LocationUncertaintyComponent.
  * Use `create(LocationUncertaintyComponentSchema)` to create a new message.
+ * @deprecated
  */
 export declare const LocationUncertaintyComponentSchema: GenMessage<LocationUncertaintyComponent>;
 
@@ -481,6 +541,11 @@ export declare type KinematicsEnu = Message<"world.KinematicsEnu"> & {
    * @generated from field: optional double up = 3;
    */
   up?: number;
+
+  /**
+   * @generated from field: optional world.CovarianceMatrix covariance = 4;
+   */
+  covariance?: CovarianceMatrix;
 };
 
 /**
@@ -846,11 +911,11 @@ export declare type ConfigurationFilter = Message<"world.ConfigurationFilter"> &
 export declare const ConfigurationFilterSchema: GenMessage<ConfigurationFilter>;
 
 /**
- * @generated from message world.WatchLimiter
+ * @generated from message world.WatchBehavior
  */
-export declare type WatchLimiter = Message<"world.WatchLimiter"> & {
+export declare type WatchBehavior = Message<"world.WatchBehavior"> & {
   /**
-   * Maximum non-burst messages per second this consumer wants to receive (0 = unlimited)
+   * Maximum non-flash messages per second this consumer can handle (0 = unlimited)
    *
    * @generated from field: optional uint64 max_messages_per_second = 1;
    */
@@ -863,13 +928,23 @@ export declare type WatchLimiter = Message<"world.WatchLimiter"> & {
    * @generated from field: optional world.Priority min_priority = 3;
    */
   minPriority?: Priority;
+
+  /**
+   * Re-stream all matching entities at this interval in milliseconds, even if unchanged.
+   * For consumers that dont understand lifetimes and require fixed interval updates
+   * 0 or unset = only stream actual changes
+   * values lower than 1000 might be capped to 1s
+   *
+   * @generated from field: optional uint32 keepalive_interval_ms = 4;
+   */
+  keepaliveIntervalMs?: number;
 };
 
 /**
- * Describes the message world.WatchLimiter.
- * Use `create(WatchLimiterSchema)` to create a new message.
+ * Describes the message world.WatchBehavior.
+ * Use `create(WatchBehaviorSchema)` to create a new message.
  */
-export declare const WatchLimiterSchema: GenMessage<WatchLimiter>;
+export declare const WatchBehaviorSchema: GenMessage<WatchBehavior>;
 
 /**
  * @generated from message world.ListEntitiesRequest
@@ -881,9 +956,9 @@ export declare type ListEntitiesRequest = Message<"world.ListEntitiesRequest"> &
   filter?: EntityFilter;
 
   /**
-   * @generated from field: optional world.WatchLimiter watchLimiter = 3;
+   * @generated from field: optional world.WatchBehavior behaviour = 4;
    */
-  watchLimiter?: WatchLimiter;
+  behaviour?: WatchBehavior;
 };
 
 /**
@@ -1099,27 +1174,25 @@ export enum Priority {
   PriorityUnspecified = 0,
 
   /**
-   * ROUTINE (R): Normal day-to-day traffic.
-   * Transmitted and delivered in order received, after higher precedence.
-   * May be delayed or colescated when bandwidth is constrained.
+   * ROUTINE: Normal day-to-day traffic.
+   * May be delayed or colescated into a later update when bandwidth is constrained
    *
    * @generated from enum value: PriorityRoutine = 1;
    */
   PriorityRoutine = 1,
 
   /**
-   * IMMEDIATE (O): Messages gravely affecting operational security.
-   * Requires immediate delivery. Transmitted ahead of ROUTINE traffic.
-   * Interrupts lower precedence messages. Target handling time <30 seconds.
+   * IMMEDIATE: Delay would negatively affect the mission
+   * Sent before lower precedence messages
    *
    * @generated from enum value: PriorityImmediate = 2;
    */
   PriorityImmediate = 2,
 
   /**
-   * FLASH (Z): Override all other traffic, 
-   * Ignores all bandwidth limits. Use only for emergency action messages where delay is unacceptable.
-   * Misuse can jeopardize missions because the it will override signal stealth limits.
+   * FLASH: Extreme urgency
+   * Sent before lower precedence messages and without respecting mission bandwidth/signal limits
+   * Highly visible flare, misuse can jeopardize missions
    *
    * @generated from enum value: PriorityFlash = 3;
    */

@@ -1,13 +1,10 @@
-import datetime
-
 from google.protobuf import struct_pb2 as _struct_pb2
 from google.protobuf import timestamp_pb2 as _timestamp_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
-from collections.abc import Iterable as _Iterable, Mapping as _Mapping
-from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
+from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Mapping, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
@@ -92,7 +89,7 @@ TaskStatusCompleted: TaskStatus
 TaskStatusFailed: TaskStatus
 
 class Entity(_message.Message):
-    __slots__ = ("id", "label", "controller", "lifetime", "priority", "geo", "symbol", "camera", "detection", "bearing", "locationUncertainty", "track", "locator", "taskable", "kinematics", "shape", "classification", "config")
+    __slots__ = ("id", "label", "controller", "lifetime", "priority", "geo", "symbol", "camera", "detection", "bearing", "locationUncertainty", "track", "locator", "taskable", "kinematics", "shape", "classification", "orientation", "config")
     ID_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     CONTROLLER_FIELD_NUMBER: _ClassVar[int]
@@ -110,6 +107,7 @@ class Entity(_message.Message):
     KINEMATICS_FIELD_NUMBER: _ClassVar[int]
     SHAPE_FIELD_NUMBER: _ClassVar[int]
     CLASSIFICATION_FIELD_NUMBER: _ClassVar[int]
+    ORIENTATION_FIELD_NUMBER: _ClassVar[int]
     CONFIG_FIELD_NUMBER: _ClassVar[int]
     id: str
     label: str
@@ -128,8 +126,9 @@ class Entity(_message.Message):
     kinematics: KinematicsComponent
     shape: GeoShapeComponent
     classification: ClassificationComponent
+    orientation: OrientationComponent
     config: ConfigurationComponent
-    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[ControllerRef, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., locationUncertainty: _Optional[_Union[LocationUncertaintyComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[ControllerRef, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., locationUncertainty: _Optional[_Union[LocationUncertaintyComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ...) -> None: ...
 
 class ControllerRef(_message.Message):
     __slots__ = ("id", "name")
@@ -144,17 +143,19 @@ class Lifetime(_message.Message):
     FROM_FIELD_NUMBER: _ClassVar[int]
     UNTIL_FIELD_NUMBER: _ClassVar[int]
     until: _timestamp_pb2.Timestamp
-    def __init__(self, until: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ..., **kwargs) -> None: ...
+    def __init__(self, until: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., **kwargs) -> None: ...
 
 class GeoSpatialComponent(_message.Message):
-    __slots__ = ("longitude", "latitude", "altitude")
+    __slots__ = ("longitude", "latitude", "altitude", "covariance")
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     ALTITUDE_FIELD_NUMBER: _ClassVar[int]
+    COVARIANCE_FIELD_NUMBER: _ClassVar[int]
     longitude: float
     latitude: float
     altitude: float
-    def __init__(self, longitude: _Optional[float] = ..., latitude: _Optional[float] = ..., altitude: _Optional[float] = ...) -> None: ...
+    covariance: CovarianceMatrix
+    def __init__(self, longitude: _Optional[float] = ..., latitude: _Optional[float] = ..., altitude: _Optional[float] = ..., covariance: _Optional[_Union[CovarianceMatrix, _Mapping]] = ...) -> None: ...
 
 class SymbolComponent(_message.Message):
     __slots__ = ("milStd2525C",)
@@ -186,7 +187,7 @@ class DetectionComponent(_message.Message):
     detectorEntityId: str
     classification: str
     lastMeasured: _timestamp_pb2.Timestamp
-    def __init__(self, detectorEntityId: _Optional[str] = ..., classification: _Optional[str] = ..., lastMeasured: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    def __init__(self, detectorEntityId: _Optional[str] = ..., classification: _Optional[str] = ..., lastMeasured: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class BearingComponent(_message.Message):
     __slots__ = ("azimuth", "elevation")
@@ -195,6 +196,18 @@ class BearingComponent(_message.Message):
     azimuth: float
     elevation: float
     def __init__(self, azimuth: _Optional[float] = ..., elevation: _Optional[float] = ...) -> None: ...
+
+class Quaternion(_message.Message):
+    __slots__ = ("x", "y", "z", "w")
+    X_FIELD_NUMBER: _ClassVar[int]
+    Y_FIELD_NUMBER: _ClassVar[int]
+    Z_FIELD_NUMBER: _ClassVar[int]
+    W_FIELD_NUMBER: _ClassVar[int]
+    x: float
+    y: float
+    z: float
+    w: float
+    def __init__(self, x: _Optional[float] = ..., y: _Optional[float] = ..., z: _Optional[float] = ..., w: _Optional[float] = ...) -> None: ...
 
 class CovarianceMatrix(_message.Message):
     __slots__ = ("mxx", "mxy", "mxz", "myy", "myz", "mzz")
@@ -211,6 +224,14 @@ class CovarianceMatrix(_message.Message):
     myz: float
     mzz: float
     def __init__(self, mxx: _Optional[float] = ..., mxy: _Optional[float] = ..., mxz: _Optional[float] = ..., myy: _Optional[float] = ..., myz: _Optional[float] = ..., mzz: _Optional[float] = ...) -> None: ...
+
+class OrientationComponent(_message.Message):
+    __slots__ = ("orientation", "covariance")
+    ORIENTATION_FIELD_NUMBER: _ClassVar[int]
+    COVARIANCE_FIELD_NUMBER: _ClassVar[int]
+    orientation: Quaternion
+    covariance: CovarianceMatrix
+    def __init__(self, orientation: _Optional[_Union[Quaternion, _Mapping]] = ..., covariance: _Optional[_Union[CovarianceMatrix, _Mapping]] = ...) -> None: ...
 
 class LocationUncertaintyComponent(_message.Message):
     __slots__ = ("positionEnuCov", "velocityEnuCov")
@@ -255,14 +276,16 @@ class TaskableComponent(_message.Message):
     def __init__(self, reserved: _Optional[str] = ..., label: _Optional[str] = ..., context: _Optional[_Iterable[_Union[TaskableContext, _Mapping]]] = ..., assignee: _Optional[_Iterable[_Union[TaskableAssignee, _Mapping]]] = ...) -> None: ...
 
 class KinematicsEnu(_message.Message):
-    __slots__ = ("east", "north", "up")
+    __slots__ = ("east", "north", "up", "covariance")
     EAST_FIELD_NUMBER: _ClassVar[int]
     NORTH_FIELD_NUMBER: _ClassVar[int]
     UP_FIELD_NUMBER: _ClassVar[int]
+    COVARIANCE_FIELD_NUMBER: _ClassVar[int]
     east: float
     north: float
     up: float
-    def __init__(self, east: _Optional[float] = ..., north: _Optional[float] = ..., up: _Optional[float] = ...) -> None: ...
+    covariance: CovarianceMatrix
+    def __init__(self, east: _Optional[float] = ..., north: _Optional[float] = ..., up: _Optional[float] = ..., covariance: _Optional[_Union[CovarianceMatrix, _Mapping]] = ...) -> None: ...
 
 class KinematicsComponent(_message.Message):
     __slots__ = ("velocityEnu", "accelerationEnu")
@@ -380,21 +403,23 @@ class ConfigurationFilter(_message.Message):
     key: str
     def __init__(self, controller: _Optional[str] = ..., key: _Optional[str] = ...) -> None: ...
 
-class WatchLimiter(_message.Message):
-    __slots__ = ("max_messages_per_second", "min_priority")
+class WatchBehavior(_message.Message):
+    __slots__ = ("max_messages_per_second", "min_priority", "keepalive_interval_ms")
     MAX_MESSAGES_PER_SECOND_FIELD_NUMBER: _ClassVar[int]
     MIN_PRIORITY_FIELD_NUMBER: _ClassVar[int]
+    KEEPALIVE_INTERVAL_MS_FIELD_NUMBER: _ClassVar[int]
     max_messages_per_second: int
     min_priority: Priority
-    def __init__(self, max_messages_per_second: _Optional[int] = ..., min_priority: _Optional[_Union[Priority, str]] = ...) -> None: ...
+    keepalive_interval_ms: int
+    def __init__(self, max_messages_per_second: _Optional[int] = ..., min_priority: _Optional[_Union[Priority, str]] = ..., keepalive_interval_ms: _Optional[int] = ...) -> None: ...
 
 class ListEntitiesRequest(_message.Message):
-    __slots__ = ("filter", "watchLimiter")
+    __slots__ = ("filter", "behaviour")
     FILTER_FIELD_NUMBER: _ClassVar[int]
-    WATCHLIMITER_FIELD_NUMBER: _ClassVar[int]
+    BEHAVIOUR_FIELD_NUMBER: _ClassVar[int]
     filter: EntityFilter
-    watchLimiter: WatchLimiter
-    def __init__(self, filter: _Optional[_Union[EntityFilter, _Mapping]] = ..., watchLimiter: _Optional[_Union[WatchLimiter, _Mapping]] = ...) -> None: ...
+    behaviour: WatchBehavior
+    def __init__(self, filter: _Optional[_Union[EntityFilter, _Mapping]] = ..., behaviour: _Optional[_Union[WatchBehavior, _Mapping]] = ...) -> None: ...
 
 class ListEntitiesResponse(_message.Message):
     __slots__ = ("entities",)
@@ -452,7 +477,7 @@ class ObserverState(_message.Message):
     VIEWHISTORY_FIELD_NUMBER: _ClassVar[int]
     geo: Geometry
     viewHistory: _timestamp_pb2.Timestamp
-    def __init__(self, geo: _Optional[_Union[Geometry, _Mapping]] = ..., viewHistory: _Optional[_Union[datetime.datetime, _timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    def __init__(self, geo: _Optional[_Union[Geometry, _Mapping]] = ..., viewHistory: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class RunTaskRequest(_message.Message):
     __slots__ = ("entityId",)
