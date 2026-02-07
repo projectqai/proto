@@ -264,16 +264,18 @@ class TaskableAssignee(_message.Message):
     def __init__(self, entityId: _Optional[str] = ...) -> None: ...
 
 class TaskableComponent(_message.Message):
-    __slots__ = ("reserved", "label", "context", "assignee")
+    __slots__ = ("reserved", "label", "context", "assignee", "schema")
     RESERVED_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     CONTEXT_FIELD_NUMBER: _ClassVar[int]
     ASSIGNEE_FIELD_NUMBER: _ClassVar[int]
+    SCHEMA_FIELD_NUMBER: _ClassVar[int]
     reserved: str
     label: str
     context: _containers.RepeatedCompositeFieldContainer[TaskableContext]
     assignee: _containers.RepeatedCompositeFieldContainer[TaskableAssignee]
-    def __init__(self, reserved: _Optional[str] = ..., label: _Optional[str] = ..., context: _Optional[_Iterable[_Union[TaskableContext, _Mapping]]] = ..., assignee: _Optional[_Iterable[_Union[TaskableAssignee, _Mapping]]] = ...) -> None: ...
+    schema: _struct_pb2.Struct
+    def __init__(self, reserved: _Optional[str] = ..., label: _Optional[str] = ..., context: _Optional[_Iterable[_Union[TaskableContext, _Mapping]]] = ..., assignee: _Optional[_Iterable[_Union[TaskableAssignee, _Mapping]]] = ..., schema: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ...) -> None: ...
 
 class KinematicsEnu(_message.Message):
     __slots__ = ("east", "north", "up", "covariance")
@@ -404,14 +406,14 @@ class ConfigurationFilter(_message.Message):
     def __init__(self, controller: _Optional[str] = ..., key: _Optional[str] = ...) -> None: ...
 
 class WatchBehavior(_message.Message):
-    __slots__ = ("max_messages_per_second", "min_priority", "keepalive_interval_ms")
-    MAX_MESSAGES_PER_SECOND_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ("max_rate_hz", "min_priority", "keepalive_interval_ms")
+    MAX_RATE_HZ_FIELD_NUMBER: _ClassVar[int]
     MIN_PRIORITY_FIELD_NUMBER: _ClassVar[int]
     KEEPALIVE_INTERVAL_MS_FIELD_NUMBER: _ClassVar[int]
-    max_messages_per_second: int
+    max_rate_hz: float
     min_priority: Priority
     keepalive_interval_ms: int
-    def __init__(self, max_messages_per_second: _Optional[int] = ..., min_priority: _Optional[_Union[Priority, str]] = ..., keepalive_interval_ms: _Optional[int] = ...) -> None: ...
+    def __init__(self, max_rate_hz: _Optional[float] = ..., min_priority: _Optional[_Union[Priority, str]] = ..., keepalive_interval_ms: _Optional[int] = ...) -> None: ...
 
 class ListEntitiesRequest(_message.Message):
     __slots__ = ("filter", "behaviour")

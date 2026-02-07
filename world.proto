@@ -157,6 +157,7 @@ message TaskableComponent {
   optional string label = 2;
   repeated TaskableContext context = 3;
   repeated TaskableAssignee assignee = 4;
+  google.protobuf.Struct schema = 5;
 }
 
 message KinematicsEnu {
@@ -289,8 +290,8 @@ message ConfigurationFilter {
 }
 
 message WatchBehavior {
-  // Maximum non-flash messages per second this consumer can handle (0 = unlimited)
-  optional uint64 max_messages_per_second = 1;
+  // Maximum non-flash message rate this consumer can handle (0 = unlimited)
+  optional float max_rate_hz = 1;
 
   // Only deliver messages at or above this priority level
   // Default (unset or PriorityReserved0) = deliver all priorities

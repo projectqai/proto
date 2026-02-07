@@ -498,6 +498,11 @@ export declare type TaskableComponent = Message<"world.TaskableComponent"> & {
    * @generated from field: repeated world.TaskableAssignee assignee = 4;
    */
   assignee: TaskableAssignee[];
+
+  /**
+   * @generated from field: google.protobuf.Struct schema = 5;
+   */
+  schema?: JsonObject;
 };
 
 /**
@@ -915,11 +920,11 @@ export declare const ConfigurationFilterSchema: GenMessage<ConfigurationFilter>;
  */
 export declare type WatchBehavior = Message<"world.WatchBehavior"> & {
   /**
-   * Maximum non-flash messages per second this consumer can handle (0 = unlimited)
+   * Maximum non-flash message rate this consumer can handle (0 = unlimited)
    *
-   * @generated from field: optional uint64 max_messages_per_second = 1;
+   * @generated from field: optional float max_rate_hz = 1;
    */
-  maxMessagesPerSecond?: bigint;
+  maxRateHz?: number;
 
   /**
    * Only deliver messages at or above this priority level
