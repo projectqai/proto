@@ -55,6 +55,16 @@ class WorldServiceStub(object):
                 request_serializer=world__pb2.EntityChangeRequest.SerializeToString,
                 response_deserializer=world__pb2.EntityChangeResponse.FromString,
                 _registered_method=True)
+        self.ExpireEntity = channel.unary_unary(
+                '/world.WorldService/ExpireEntity',
+                request_serializer=world__pb2.ExpireEntityRequest.SerializeToString,
+                response_deserializer=world__pb2.ExpireEntityResponse.FromString,
+                _registered_method=True)
+        self.GetLocalNode = channel.unary_unary(
+                '/world.WorldService/GetLocalNode',
+                request_serializer=world__pb2.GetLocalNodeRequest.SerializeToString,
+                response_deserializer=world__pb2.GetLocalNodeResponse.FromString,
+                _registered_method=True)
         self.RunTask = channel.unary_unary(
                 '/world.WorldService/RunTask',
                 request_serializer=world__pb2.RunTaskRequest.SerializeToString,
@@ -88,7 +98,25 @@ class WorldServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def Push(self, request, context):
-        """create or update an entity. used by capabilities
+        """Create or update an entity. Used by capabilities.
+
+        Push uses merge semantics: only components present (set) in the pushed entity
+        are updated. Components not included in the message are left unchanged.
+        Components cannot be removed once set.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ExpireEntity(self, request, context):
+        """expire an entity, setting its lifetime.until to now
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetLocalNode(self, request, context):
+        """get information about the local node the client is connected to
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -123,6 +151,16 @@ def add_WorldServiceServicer_to_server(servicer, server):
                     servicer.Push,
                     request_deserializer=world__pb2.EntityChangeRequest.FromString,
                     response_serializer=world__pb2.EntityChangeResponse.SerializeToString,
+            ),
+            'ExpireEntity': grpc.unary_unary_rpc_method_handler(
+                    servicer.ExpireEntity,
+                    request_deserializer=world__pb2.ExpireEntityRequest.FromString,
+                    response_serializer=world__pb2.ExpireEntityResponse.SerializeToString,
+            ),
+            'GetLocalNode': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetLocalNode,
+                    request_deserializer=world__pb2.GetLocalNodeRequest.FromString,
+                    response_serializer=world__pb2.GetLocalNodeResponse.SerializeToString,
             ),
             'RunTask': grpc.unary_unary_rpc_method_handler(
                     servicer.RunTask,
@@ -239,6 +277,60 @@ class WorldService(object):
             '/world.WorldService/Push',
             world__pb2.EntityChangeRequest.SerializeToString,
             world__pb2.EntityChangeResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ExpireEntity(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/world.WorldService/ExpireEntity',
+            world__pb2.ExpireEntityRequest.SerializeToString,
+            world__pb2.ExpireEntityResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetLocalNode(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/world.WorldService/GetLocalNode',
+            world__pb2.GetLocalNodeRequest.SerializeToString,
+            world__pb2.GetLocalNodeResponse.FromString,
             options,
             channel_credentials,
             insecure,

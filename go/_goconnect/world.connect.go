@@ -43,6 +43,12 @@ const (
 	WorldServiceWatchEntitiesProcedure = "/world.WorldService/WatchEntities"
 	// WorldServicePushProcedure is the fully-qualified name of the WorldService's Push RPC.
 	WorldServicePushProcedure = "/world.WorldService/Push"
+	// WorldServiceExpireEntityProcedure is the fully-qualified name of the WorldService's ExpireEntity
+	// RPC.
+	WorldServiceExpireEntityProcedure = "/world.WorldService/ExpireEntity"
+	// WorldServiceGetLocalNodeProcedure is the fully-qualified name of the WorldService's GetLocalNode
+	// RPC.
+	WorldServiceGetLocalNodeProcedure = "/world.WorldService/GetLocalNode"
 	// WorldServiceRunTaskProcedure is the fully-qualified name of the WorldService's RunTask RPC.
 	WorldServiceRunTaskProcedure = "/world.WorldService/RunTask"
 )
@@ -55,8 +61,16 @@ type WorldServiceClient interface {
 	GetEntity(context.Context, *connect.Request[_go.GetEntityRequest]) (*connect.Response[_go.GetEntityResponse], error)
 	// continously monitor entities present in the world. this is used by downstream C2.
 	WatchEntities(context.Context, *connect.Request[_go.ListEntitiesRequest]) (*connect.ServerStreamForClient[_go.EntityChangeEvent], error)
-	// create or update an entity. used by capabilities
+	// Create or update an entity. Used by capabilities.
+	//
+	// Push uses merge semantics: only components present (set) in the pushed entity
+	// are updated. Components not included in the message are left unchanged.
+	// Components cannot be removed once set.
 	Push(context.Context, *connect.Request[_go.EntityChangeRequest]) (*connect.Response[_go.EntityChangeResponse], error)
+	// expire an entity, setting its lifetime.until to now
+	ExpireEntity(context.Context, *connect.Request[_go.ExpireEntityRequest]) (*connect.Response[_go.ExpireEntityResponse], error)
+	// get information about the local node the client is connected to
+	GetLocalNode(context.Context, *connect.Request[_go.GetLocalNodeRequest]) (*connect.Response[_go.GetLocalNodeResponse], error)
 	// create an instance of a specific task entity
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
 }
@@ -96,6 +110,18 @@ func NewWorldServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(worldServiceMethods.ByName("Push")),
 			connect.WithClientOptions(opts...),
 		),
+		expireEntity: connect.NewClient[_go.ExpireEntityRequest, _go.ExpireEntityResponse](
+			httpClient,
+			baseURL+WorldServiceExpireEntityProcedure,
+			connect.WithSchema(worldServiceMethods.ByName("ExpireEntity")),
+			connect.WithClientOptions(opts...),
+		),
+		getLocalNode: connect.NewClient[_go.GetLocalNodeRequest, _go.GetLocalNodeResponse](
+			httpClient,
+			baseURL+WorldServiceGetLocalNodeProcedure,
+			connect.WithSchema(worldServiceMethods.ByName("GetLocalNode")),
+			connect.WithClientOptions(opts...),
+		),
 		runTask: connect.NewClient[_go.RunTaskRequest, _go.RunTaskResponse](
 			httpClient,
 			baseURL+WorldServiceRunTaskProcedure,
@@ -111,6 +137,8 @@ type worldServiceClient struct {
 	getEntity     *connect.Client[_go.GetEntityRequest, _go.GetEntityResponse]
 	watchEntities *connect.Client[_go.ListEntitiesRequest, _go.EntityChangeEvent]
 	push          *connect.Client[_go.EntityChangeRequest, _go.EntityChangeResponse]
+	expireEntity  *connect.Client[_go.ExpireEntityRequest, _go.ExpireEntityResponse]
+	getLocalNode  *connect.Client[_go.GetLocalNodeRequest, _go.GetLocalNodeResponse]
 	runTask       *connect.Client[_go.RunTaskRequest, _go.RunTaskResponse]
 }
 
@@ -134,6 +162,16 @@ func (c *worldServiceClient) Push(ctx context.Context, req *connect.Request[_go.
 	return c.push.CallUnary(ctx, req)
 }
 
+// ExpireEntity calls world.WorldService.ExpireEntity.
+func (c *worldServiceClient) ExpireEntity(ctx context.Context, req *connect.Request[_go.ExpireEntityRequest]) (*connect.Response[_go.ExpireEntityResponse], error) {
+	return c.expireEntity.CallUnary(ctx, req)
+}
+
+// GetLocalNode calls world.WorldService.GetLocalNode.
+func (c *worldServiceClient) GetLocalNode(ctx context.Context, req *connect.Request[_go.GetLocalNodeRequest]) (*connect.Response[_go.GetLocalNodeResponse], error) {
+	return c.getLocalNode.CallUnary(ctx, req)
+}
+
 // RunTask calls world.WorldService.RunTask.
 func (c *worldServiceClient) RunTask(ctx context.Context, req *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error) {
 	return c.runTask.CallUnary(ctx, req)
@@ -147,8 +185,16 @@ type WorldServiceHandler interface {
 	GetEntity(context.Context, *connect.Request[_go.GetEntityRequest]) (*connect.Response[_go.GetEntityResponse], error)
 	// continously monitor entities present in the world. this is used by downstream C2.
 	WatchEntities(context.Context, *connect.Request[_go.ListEntitiesRequest], *connect.ServerStream[_go.EntityChangeEvent]) error
-	// create or update an entity. used by capabilities
+	// Create or update an entity. Used by capabilities.
+	//
+	// Push uses merge semantics: only components present (set) in the pushed entity
+	// are updated. Components not included in the message are left unchanged.
+	// Components cannot be removed once set.
 	Push(context.Context, *connect.Request[_go.EntityChangeRequest]) (*connect.Response[_go.EntityChangeResponse], error)
+	// expire an entity, setting its lifetime.until to now
+	ExpireEntity(context.Context, *connect.Request[_go.ExpireEntityRequest]) (*connect.Response[_go.ExpireEntityResponse], error)
+	// get information about the local node the client is connected to
+	GetLocalNode(context.Context, *connect.Request[_go.GetLocalNodeRequest]) (*connect.Response[_go.GetLocalNodeResponse], error)
 	// create an instance of a specific task entity
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
 }
@@ -184,6 +230,18 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(worldServiceMethods.ByName("Push")),
 		connect.WithHandlerOptions(opts...),
 	)
+	worldServiceExpireEntityHandler := connect.NewUnaryHandler(
+		WorldServiceExpireEntityProcedure,
+		svc.ExpireEntity,
+		connect.WithSchema(worldServiceMethods.ByName("ExpireEntity")),
+		connect.WithHandlerOptions(opts...),
+	)
+	worldServiceGetLocalNodeHandler := connect.NewUnaryHandler(
+		WorldServiceGetLocalNodeProcedure,
+		svc.GetLocalNode,
+		connect.WithSchema(worldServiceMethods.ByName("GetLocalNode")),
+		connect.WithHandlerOptions(opts...),
+	)
 	worldServiceRunTaskHandler := connect.NewUnaryHandler(
 		WorldServiceRunTaskProcedure,
 		svc.RunTask,
@@ -200,6 +258,10 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 			worldServiceWatchEntitiesHandler.ServeHTTP(w, r)
 		case WorldServicePushProcedure:
 			worldServicePushHandler.ServeHTTP(w, r)
+		case WorldServiceExpireEntityProcedure:
+			worldServiceExpireEntityHandler.ServeHTTP(w, r)
+		case WorldServiceGetLocalNodeProcedure:
+			worldServiceGetLocalNodeHandler.ServeHTTP(w, r)
 		case WorldServiceRunTaskProcedure:
 			worldServiceRunTaskHandler.ServeHTTP(w, r)
 		default:
@@ -225,6 +287,14 @@ func (UnimplementedWorldServiceHandler) WatchEntities(context.Context, *connect.
 
 func (UnimplementedWorldServiceHandler) Push(context.Context, *connect.Request[_go.EntityChangeRequest]) (*connect.Response[_go.EntityChangeResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.Push is not implemented"))
+}
+
+func (UnimplementedWorldServiceHandler) ExpireEntity(context.Context, *connect.Request[_go.ExpireEntityRequest]) (*connect.Response[_go.ExpireEntityResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.ExpireEntity is not implemented"))
+}
+
+func (UnimplementedWorldServiceHandler) GetLocalNode(context.Context, *connect.Request[_go.GetLocalNodeRequest]) (*connect.Response[_go.GetLocalNodeResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.GetLocalNode is not implemented"))
 }
 
 func (UnimplementedWorldServiceHandler) RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error) {

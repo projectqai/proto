@@ -23,6 +23,8 @@ const (
 	WorldService_GetEntity_FullMethodName     = "/world.WorldService/GetEntity"
 	WorldService_WatchEntities_FullMethodName = "/world.WorldService/WatchEntities"
 	WorldService_Push_FullMethodName          = "/world.WorldService/Push"
+	WorldService_ExpireEntity_FullMethodName  = "/world.WorldService/ExpireEntity"
+	WorldService_GetLocalNode_FullMethodName  = "/world.WorldService/GetLocalNode"
 	WorldService_RunTask_FullMethodName       = "/world.WorldService/RunTask"
 )
 
@@ -38,8 +40,16 @@ type WorldServiceClient interface {
 	GetEntity(ctx context.Context, in *GetEntityRequest, opts ...grpc.CallOption) (*GetEntityResponse, error)
 	// continously monitor entities present in the world. this is used by downstream C2.
 	WatchEntities(ctx context.Context, in *ListEntitiesRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[EntityChangeEvent], error)
-	// create or update an entity. used by capabilities
+	// Create or update an entity. Used by capabilities.
+	//
+	// Push uses merge semantics: only components present (set) in the pushed entity
+	// are updated. Components not included in the message are left unchanged.
+	// Components cannot be removed once set.
 	Push(ctx context.Context, in *EntityChangeRequest, opts ...grpc.CallOption) (*EntityChangeResponse, error)
+	// expire an entity, setting its lifetime.until to now
+	ExpireEntity(ctx context.Context, in *ExpireEntityRequest, opts ...grpc.CallOption) (*ExpireEntityResponse, error)
+	// get information about the local node the client is connected to
+	GetLocalNode(ctx context.Context, in *GetLocalNodeRequest, opts ...grpc.CallOption) (*GetLocalNodeResponse, error)
 	// create an instance of a specific task entity
 	RunTask(ctx context.Context, in *RunTaskRequest, opts ...grpc.CallOption) (*RunTaskResponse, error)
 }
@@ -101,6 +111,26 @@ func (c *worldServiceClient) Push(ctx context.Context, in *EntityChangeRequest, 
 	return out, nil
 }
 
+func (c *worldServiceClient) ExpireEntity(ctx context.Context, in *ExpireEntityRequest, opts ...grpc.CallOption) (*ExpireEntityResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ExpireEntityResponse)
+	err := c.cc.Invoke(ctx, WorldService_ExpireEntity_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *worldServiceClient) GetLocalNode(ctx context.Context, in *GetLocalNodeRequest, opts ...grpc.CallOption) (*GetLocalNodeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetLocalNodeResponse)
+	err := c.cc.Invoke(ctx, WorldService_GetLocalNode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *worldServiceClient) RunTask(ctx context.Context, in *RunTaskRequest, opts ...grpc.CallOption) (*RunTaskResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RunTaskResponse)
@@ -123,8 +153,16 @@ type WorldServiceServer interface {
 	GetEntity(context.Context, *GetEntityRequest) (*GetEntityResponse, error)
 	// continously monitor entities present in the world. this is used by downstream C2.
 	WatchEntities(*ListEntitiesRequest, grpc.ServerStreamingServer[EntityChangeEvent]) error
-	// create or update an entity. used by capabilities
+	// Create or update an entity. Used by capabilities.
+	//
+	// Push uses merge semantics: only components present (set) in the pushed entity
+	// are updated. Components not included in the message are left unchanged.
+	// Components cannot be removed once set.
 	Push(context.Context, *EntityChangeRequest) (*EntityChangeResponse, error)
+	// expire an entity, setting its lifetime.until to now
+	ExpireEntity(context.Context, *ExpireEntityRequest) (*ExpireEntityResponse, error)
+	// get information about the local node the client is connected to
+	GetLocalNode(context.Context, *GetLocalNodeRequest) (*GetLocalNodeResponse, error)
 	// create an instance of a specific task entity
 	RunTask(context.Context, *RunTaskRequest) (*RunTaskResponse, error)
 	mustEmbedUnimplementedWorldServiceServer()
@@ -148,6 +186,12 @@ func (UnimplementedWorldServiceServer) WatchEntities(*ListEntitiesRequest, grpc.
 }
 func (UnimplementedWorldServiceServer) Push(context.Context, *EntityChangeRequest) (*EntityChangeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Push not implemented")
+}
+func (UnimplementedWorldServiceServer) ExpireEntity(context.Context, *ExpireEntityRequest) (*ExpireEntityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExpireEntity not implemented")
+}
+func (UnimplementedWorldServiceServer) GetLocalNode(context.Context, *GetLocalNodeRequest) (*GetLocalNodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLocalNode not implemented")
 }
 func (UnimplementedWorldServiceServer) RunTask(context.Context, *RunTaskRequest) (*RunTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RunTask not implemented")
@@ -238,6 +282,42 @@ func _WorldService_Push_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorldService_ExpireEntity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExpireEntityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorldServiceServer).ExpireEntity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorldService_ExpireEntity_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorldServiceServer).ExpireEntity(ctx, req.(*ExpireEntityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorldService_GetLocalNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLocalNodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorldServiceServer).GetLocalNode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorldService_GetLocalNode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorldServiceServer).GetLocalNode(ctx, req.(*GetLocalNodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _WorldService_RunTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RunTaskRequest)
 	if err := dec(in); err != nil {
@@ -274,6 +354,14 @@ var WorldService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Push",
 			Handler:    _WorldService_Push_Handler,
+		},
+		{
+			MethodName: "ExpireEntity",
+			Handler:    _WorldService_ExpireEntity_Handler,
+		},
+		{
+			MethodName: "GetLocalNode",
+			Handler:    _WorldService_GetLocalNode_Handler,
 		},
 		{
 			MethodName: "RunTask",

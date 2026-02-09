@@ -12,6 +12,8 @@ import type { Timestamp } from "@bufbuild/protobuf/wkt";
 export declare const file_world: GenFile;
 
 /**
+ * metadata
+ *
  * @generated from message world.Entity
  */
 export declare type Entity = Message<"world.Entity"> & {
@@ -26,9 +28,9 @@ export declare type Entity = Message<"world.Entity"> & {
   label?: string;
 
   /**
-   * @generated from field: optional world.ControllerRef controller = 3;
+   * @generated from field: optional world.Controller controller = 3;
    */
-  controller?: ControllerRef;
+  controller?: Controller;
 
   /**
    * @generated from field: optional world.Lifetime lifetime = 4;
@@ -66,11 +68,6 @@ export declare type Entity = Message<"world.Entity"> & {
   bearing?: BearingComponent;
 
   /**
-   * @generated from field: optional world.LocationUncertaintyComponent locationUncertainty = 20;
-   */
-  locationUncertainty?: LocationUncertaintyComponent;
-
-  /**
    * @generated from field: optional world.TrackComponent track = 21;
    */
   track?: TrackComponent;
@@ -79,11 +76,6 @@ export declare type Entity = Message<"world.Entity"> & {
    * @generated from field: optional world.LocatorComponent locator = 22;
    */
   locator?: LocatorComponent;
-
-  /**
-   * @generated from field: optional world.TaskableComponent taskable = 23;
-   */
-  taskable?: TaskableComponent;
 
   /**
    * @generated from field: optional world.KinematicsComponent kinematics = 24;
@@ -101,14 +93,56 @@ export declare type Entity = Message<"world.Entity"> & {
   classification?: ClassificationComponent;
 
   /**
+   * @generated from field: optional world.TransponderComponent transponder = 27;
+   */
+  transponder?: TransponderComponent;
+
+  /**
+   * @generated from field: optional world.AdministrativeComponent administrative = 28;
+   */
+  administrative?: AdministrativeComponent;
+
+  /**
    * @generated from field: optional world.OrientationComponent orientation = 30;
    */
   orientation?: OrientationComponent;
 
   /**
+   * @generated from field: optional world.NavigationComponent navigation = 34;
+   */
+  navigation?: NavigationComponent;
+
+  /**
+   * @generated from field: optional world.PowerComponent power = 33;
+   */
+  power?: PowerComponent;
+
+  /**
+   * experimental, dont use yet externally
+   *
+   * @generated from field: optional world.TaskableComponent taskable = 23;
+   */
+  taskable?: TaskableComponent;
+
+  /**
+   * @generated from field: optional world.DeviceComponent device = 50;
+   */
+  device?: DeviceComponent;
+
+  /**
    * @generated from field: optional world.ConfigurationComponent config = 51;
    */
   config?: ConfigurationComponent;
+
+  /**
+   * @generated from field: optional world.MissionComponent mission = 31;
+   */
+  mission?: MissionComponent;
+
+  /**
+   * @generated from field: optional world.LinkComponent link = 32;
+   */
+  link?: LinkComponent;
 };
 
 /**
@@ -118,39 +152,57 @@ export declare type Entity = Message<"world.Entity"> & {
 export declare const EntitySchema: GenMessage<Entity>;
 
 /**
- * @generated from message world.ControllerRef
+ * A controller owns an entity.
+ * The engine normally rejects changes to the entity from non owners,
+ * but some future work might ask the controller to merge the change.
+ * in that case it MUST NOT be sent via push since push is eventually consistent
+ *
+ * @generated from message world.Controller
  */
-export declare type ControllerRef = Message<"world.ControllerRef"> & {
+export declare type Controller = Message<"world.Controller"> & {
   /**
-   * @generated from field: string id = 1;
+   * @generated from field: optional string id = 1;
    */
-  id: string;
+  id?: string;
 
   /**
-   * @generated from field: string name = 2;
+   * @generated from field: optional string node = 2;
    */
-  name: string;
+  node?: string;
 };
 
 /**
- * Describes the message world.ControllerRef.
- * Use `create(ControllerRefSchema)` to create a new message.
+ * Describes the message world.Controller.
+ * Use `create(ControllerSchema)` to create a new message.
  */
-export declare const ControllerRefSchema: GenMessage<ControllerRef>;
+export declare const ControllerSchema: GenMessage<Controller>;
 
 /**
  * @generated from message world.Lifetime
  */
 export declare type Lifetime = Message<"world.Lifetime"> & {
   /**
+   * time this entity should become valid.
+   * will be set to now automatically if omited
+   *
    * @generated from field: optional google.protobuf.Timestamp from = 1;
    */
   from?: Timestamp;
 
   /**
+   * entities with until after or at now are considered expired / deleted
+   *
    * @generated from field: optional google.protobuf.Timestamp until = 2;
    */
   until?: Timestamp;
+
+  /**
+   * last time we have seen this entity, normally between from and until
+   * if set, updates to an entity with older fresh value are ignored by default
+   *
+   * @generated from field: optional google.protobuf.Timestamp fresh = 3;
+   */
+  fresh?: Timestamp;
 };
 
 /**
@@ -382,6 +434,23 @@ export declare type OrientationComponent = Message<"world.OrientationComponent">
    * @generated from field: optional world.CovarianceMatrix covariance = 2;
    */
   covariance?: CovarianceMatrix;
+
+  /**
+   * angular velocity in radians per second (body frame)
+   *
+   * @generated from field: optional double roll_rate = 3;
+   */
+  rollRate?: number;
+
+  /**
+   * @generated from field: optional double pitch_rate = 4;
+   */
+  pitchRate?: number;
+
+  /**
+   * @generated from field: optional double yaw_rate = 5;
+   */
+  yawRate?: number;
 };
 
 /**
@@ -391,34 +460,27 @@ export declare type OrientationComponent = Message<"world.OrientationComponent">
 export declare const OrientationComponentSchema: GenMessage<OrientationComponent>;
 
 /**
- * DEPRECATED: CovarianceMatrix is now included in every message
- *
- * @generated from message world.LocationUncertaintyComponent
- * @deprecated
- */
-export declare type LocationUncertaintyComponent = Message<"world.LocationUncertaintyComponent"> & {
-  /**
-   * @generated from field: optional world.CovarianceMatrix positionEnuCov = 1;
-   */
-  positionEnuCov?: CovarianceMatrix;
-
-  /**
-   * @generated from field: optional world.CovarianceMatrix velocityEnuCov = 2;
-   */
-  velocityEnuCov?: CovarianceMatrix;
-};
-
-/**
- * Describes the message world.LocationUncertaintyComponent.
- * Use `create(LocationUncertaintyComponentSchema)` to create a new message.
- * @deprecated
- */
-export declare const LocationUncertaintyComponentSchema: GenMessage<LocationUncertaintyComponent>;
-
-/**
  * @generated from message world.TrackComponent
  */
 export declare type TrackComponent = Message<"world.TrackComponent"> & {
+  /**
+   * @generated from field: optional string tracker = 1;
+   */
+  tracker?: string;
+
+  /**
+   * entity ID of a GeoShapeComponent containing the track history
+   *
+   * @generated from field: optional string history = 2;
+   */
+  history?: string;
+
+  /**
+   * entity ID of a GeoShapeComponent containing the predicted forward track
+   *
+   * @generated from field: optional string prediction = 3;
+   */
+  prediction?: string;
 };
 
 /**
@@ -622,6 +684,528 @@ export declare type ClassificationComponent = Message<"world.ClassificationCompo
 export declare const ClassificationComponentSchema: GenMessage<ClassificationComponent>;
 
 /**
+ * @generated from message world.TransponderAIS
+ */
+export declare type TransponderAIS = Message<"world.TransponderAIS"> & {
+  /**
+   * @generated from field: optional uint32 mmsi = 1;
+   */
+  mmsi?: number;
+
+  /**
+   * @generated from field: optional uint32 imo = 2;
+   */
+  imo?: number;
+
+  /**
+   * @generated from field: optional string callsign = 3;
+   */
+  callsign?: string;
+
+  /**
+   * @generated from field: optional string vessel_name = 4;
+   */
+  vesselName?: string;
+};
+
+/**
+ * Describes the message world.TransponderAIS.
+ * Use `create(TransponderAISSchema)` to create a new message.
+ */
+export declare const TransponderAISSchema: GenMessage<TransponderAIS>;
+
+/**
+ * @generated from message world.TransponderADSB
+ */
+export declare type TransponderADSB = Message<"world.TransponderADSB"> & {
+  /**
+   * @generated from field: optional uint32 icao_address = 1;
+   */
+  icaoAddress?: number;
+
+  /**
+   * @generated from field: optional string flight_id = 2;
+   */
+  flightId?: string;
+};
+
+/**
+ * Describes the message world.TransponderADSB.
+ * Use `create(TransponderADSBSchema)` to create a new message.
+ */
+export declare const TransponderADSBSchema: GenMessage<TransponderADSB>;
+
+/**
+ * @generated from message world.TransponderComponent
+ */
+export declare type TransponderComponent = Message<"world.TransponderComponent"> & {
+  /**
+   * @generated from field: optional world.TransponderAIS ais = 1;
+   */
+  ais?: TransponderAIS;
+
+  /**
+   * @generated from field: optional world.TransponderADSB adsb = 2;
+   */
+  adsb?: TransponderADSB;
+};
+
+/**
+ * Describes the message world.TransponderComponent.
+ * Use `create(TransponderComponentSchema)` to create a new message.
+ */
+export declare const TransponderComponentSchema: GenMessage<TransponderComponent>;
+
+/**
+ * @generated from message world.AdministrativeComponent
+ */
+export declare type AdministrativeComponent = Message<"world.AdministrativeComponent"> & {
+  /**
+   * @generated from field: optional string id = 1;
+   */
+  id?: string;
+
+  /**
+   * @generated from field: optional string flag = 2;
+   */
+  flag?: string;
+
+  /**
+   * @generated from field: optional string owner = 3;
+   */
+  owner?: string;
+
+  /**
+   * @generated from field: optional string manufacturer = 4;
+   */
+  manufacturer?: string;
+
+  /**
+   * @generated from field: optional string model = 5;
+   */
+  model?: string;
+
+  /**
+   * @generated from field: optional uint32 year_built = 6;
+   */
+  yearBuilt?: number;
+
+  /**
+   * @generated from field: optional float length_m = 7;
+   */
+  lengthM?: number;
+
+  /**
+   * @generated from field: optional float tonnage_gt = 8;
+   */
+  tonnageGt?: number;
+
+  /**
+   * @generated from field: optional float engine_power_kw = 9;
+   */
+  enginePowerKw?: number;
+};
+
+/**
+ * Describes the message world.AdministrativeComponent.
+ * Use `create(AdministrativeComponentSchema)` to create a new message.
+ */
+export declare const AdministrativeComponentSchema: GenMessage<AdministrativeComponent>;
+
+/**
+ * Live navigation telemetry of an asset
+ *
+ * @generated from message world.NavigationComponent
+ */
+export declare type NavigationComponent = Message<"world.NavigationComponent"> & {
+  /**
+   * @generated from field: optional world.NavigationMode mode = 1;
+   */
+  mode?: NavigationMode;
+
+  /**
+   * @generated from field: optional bool armed = 2;
+   */
+  armed?: boolean;
+
+  /**
+   * @generated from field: optional bool emergency = 3;
+   */
+  emergency?: boolean;
+
+  /**
+   * current waypoint index in the active mission
+   *
+   * @generated from field: optional uint32 waypoint_current = 4;
+   */
+  waypointCurrent?: number;
+
+  /**
+   * total number of waypoints in the active mission
+   *
+   * @generated from field: optional uint32 waypoint_total = 5;
+   */
+  waypointTotal?: number;
+};
+
+/**
+ * Describes the message world.NavigationComponent.
+ * Use `create(NavigationComponentSchema)` to create a new message.
+ */
+export declare const NavigationComponentSchema: GenMessage<NavigationComponent>;
+
+/**
+ * @generated from message world.MissionComponent
+ */
+export declare type MissionComponent = Message<"world.MissionComponent"> & {
+  /**
+   * asset entity IDs participating in this mission
+   *
+   * @generated from field: repeated string members = 1;
+   */
+  members: string[];
+
+  /**
+   * human-readable status from the source system. can be multi line / markdown
+   *
+   * @generated from field: optional string description = 2;
+   */
+  description?: string;
+
+  /**
+   * human-readable destination (e.g. port name)
+   *
+   * @generated from field: optional string destination = 3;
+   */
+  destination?: string;
+
+  /**
+   * estimated time of arrival
+   *
+   * @generated from field: optional google.protobuf.Timestamp eta = 4;
+   */
+  eta?: Timestamp;
+};
+
+/**
+ * Describes the message world.MissionComponent.
+ * Use `create(MissionComponentSchema)` to create a new message.
+ */
+export declare const MissionComponentSchema: GenMessage<MissionComponent>;
+
+/**
+ * @generated from message world.LinkComponent
+ */
+export declare type LinkComponent = Message<"world.LinkComponent"> & {
+  /**
+   * @generated from field: optional world.LinkStatus status = 1;
+   */
+  status?: LinkStatus;
+
+  /**
+   * received signal strength indicator in dBm
+   *
+   * @generated from field: optional sint32 rssi_dbm = 2;
+   */
+  rssiDbm?: number;
+
+  /**
+   * signal-to-noise ratio in dB
+   *
+   * @generated from field: optional sint32 snr_db = 3;
+   */
+  snrDb?: number;
+
+  /**
+   * entity id of the device that manages the link to this entity
+   *
+   * @generated from field: optional string via = 5;
+   */
+  via?: string;
+};
+
+/**
+ * Describes the message world.LinkComponent.
+ * Use `create(LinkComponentSchema)` to create a new message.
+ */
+export declare const LinkComponentSchema: GenMessage<LinkComponent>;
+
+/**
+ * @generated from message world.PowerComponent
+ */
+export declare type PowerComponent = Message<"world.PowerComponent"> & {
+  /**
+   * battery charge remaining (0.0 - 1.0)
+   *
+   * @generated from field: optional float battery_charge_remaining = 1;
+   */
+  batteryChargeRemaining?: number;
+
+  /**
+   * battery or board voltage in volts
+   *
+   * @generated from field: optional float voltage = 2;
+   */
+  voltage?: number;
+
+  /**
+   * estimated remaining operating time in seconds
+   *
+   * @generated from field: optional uint32 remaining_seconds = 3;
+   */
+  remainingSeconds?: number;
+};
+
+/**
+ * Describes the message world.PowerComponent.
+ * Use `create(PowerComponentSchema)` to create a new message.
+ */
+export declare const PowerComponentSchema: GenMessage<PowerComponent>;
+
+/**
+ * @generated from message world.Configurable
+ */
+export declare type Configurable = Message<"world.Configurable"> & {
+  /**
+   * @generated from field: string key = 1;
+   */
+  key: string;
+
+  /**
+   * @generated from field: google.protobuf.Struct schema = 2;
+   */
+  schema?: JsonObject;
+
+  /**
+   * @generated from field: google.protobuf.Struct value = 3;
+   */
+  value?: JsonObject;
+
+  /**
+   * @generated from field: world.ConfigurationState state = 4;
+   */
+  state: ConfigurationState;
+
+  /**
+   * @generated from field: optional string error = 5;
+   */
+  error?: string;
+};
+
+/**
+ * Describes the message world.Configurable.
+ * Use `create(ConfigurableSchema)` to create a new message.
+ */
+export declare const ConfigurableSchema: GenMessage<Configurable>;
+
+/**
+ * @generated from message world.DeviceComponent
+ */
+export declare type DeviceComponent = Message<"world.DeviceComponent"> & {
+  /**
+   * parent device entity, forming the device tree. unset for root (node).
+   *
+   * @generated from field: optional string parent = 1;
+   */
+  parent?: string;
+
+  /**
+   * list of non-direct ancestors this device is made of
+   *
+   * @generated from field: repeated string composition = 2;
+   */
+  composition: string[];
+
+  /**
+   * configurable keys, their current state and schema
+   *
+   * @generated from field: repeated world.Configurable configurable = 3;
+   */
+  configurable: Configurable[];
+
+  /**
+   * a stable identifier that remains the same no matter where the asset is connected to
+   * generally used to match a specific device within the hydris network
+   *
+   * @generated from field: optional string unique_hardware_id = 4;
+   */
+  uniqueHardwareId?: string;
+
+  /**
+   * unstructured controller specific labels that can be matched to configure
+   * all devices with these properties at the same time
+   * when not using unique_hardware_id
+   *
+   * @generated from field: map<string, string> labels = 5;
+   */
+  labels: { [key: string]: string };
+
+  /**
+   * @generated from field: world.DeviceState state = 6;
+   */
+  state: DeviceState;
+
+  /**
+   * @generated from field: optional string error = 7;
+   */
+  error?: string;
+
+  /**
+   * subsystem-specific descriptors
+   *
+   * @generated from field: optional world.NodeDevice node = 9;
+   */
+  node?: NodeDevice;
+
+  /**
+   * @generated from field: optional world.UsbDevice usb = 10;
+   */
+  usb?: UsbDevice;
+
+  /**
+   * @generated from field: optional world.IpDevice ip = 11;
+   */
+  ip?: IpDevice;
+
+  /**
+   * @generated from field: optional world.SerialDevice serial = 12;
+   */
+  serial?: SerialDevice;
+};
+
+/**
+ * Describes the message world.DeviceComponent.
+ * Use `create(DeviceComponentSchema)` to create a new message.
+ */
+export declare const DeviceComponentSchema: GenMessage<DeviceComponent>;
+
+/**
+ * @generated from message world.NodeDevice
+ */
+export declare type NodeDevice = Message<"world.NodeDevice"> & {
+  /**
+   * @generated from field: optional string hostname = 1;
+   */
+  hostname?: string;
+
+  /**
+   * @generated from field: optional string os = 2;
+   */
+  os?: string;
+
+  /**
+   * @generated from field: optional string arch = 3;
+   */
+  arch?: string;
+
+  /**
+   * @generated from field: optional uint32 num_cpu = 4;
+   */
+  numCpu?: number;
+};
+
+/**
+ * Describes the message world.NodeDevice.
+ * Use `create(NodeDeviceSchema)` to create a new message.
+ */
+export declare const NodeDeviceSchema: GenMessage<NodeDevice>;
+
+/**
+ * @generated from message world.UsbDevice
+ */
+export declare type UsbDevice = Message<"world.UsbDevice"> & {
+  /**
+   * @generated from field: optional uint32 vendor_id = 1;
+   */
+  vendorId?: number;
+
+  /**
+   * @generated from field: optional uint32 product_id = 2;
+   */
+  productId?: number;
+
+  /**
+   * @generated from field: optional uint32 device_class = 3;
+   */
+  deviceClass?: number;
+
+  /**
+   * @generated from field: optional uint32 device_subclass = 4;
+   */
+  deviceSubclass?: number;
+
+  /**
+   * @generated from field: optional uint32 device_protocol = 5;
+   */
+  deviceProtocol?: number;
+
+  /**
+   * @generated from field: optional string manufacturer_name = 6;
+   */
+  manufacturerName?: string;
+
+  /**
+   * @generated from field: optional string product_name = 7;
+   */
+  productName?: string;
+
+  /**
+   * @generated from field: optional string serial_number = 8;
+   */
+  serialNumber?: string;
+};
+
+/**
+ * Describes the message world.UsbDevice.
+ * Use `create(UsbDeviceSchema)` to create a new message.
+ */
+export declare const UsbDeviceSchema: GenMessage<UsbDevice>;
+
+/**
+ * @generated from message world.IpDevice
+ */
+export declare type IpDevice = Message<"world.IpDevice"> & {
+  /**
+   * @generated from field: optional string host = 1;
+   */
+  host?: string;
+
+  /**
+   * @generated from field: optional uint32 port = 2;
+   */
+  port?: number;
+};
+
+/**
+ * Describes the message world.IpDevice.
+ * Use `create(IpDeviceSchema)` to create a new message.
+ */
+export declare const IpDeviceSchema: GenMessage<IpDevice>;
+
+/**
+ * @generated from message world.SerialDevice
+ */
+export declare type SerialDevice = Message<"world.SerialDevice"> & {
+  /**
+   * @generated from field: optional string path = 1;
+   */
+  path?: string;
+
+  /**
+   * @generated from field: optional uint32 baud_rate = 2;
+   */
+  baudRate?: number;
+};
+
+/**
+ * Describes the message world.SerialDevice.
+ * Use `create(SerialDeviceSchema)` to create a new message.
+ */
+export declare const SerialDeviceSchema: GenMessage<SerialDevice>;
+
+/**
+ * Desired/target configuration, created by the user/UI.
+ *
  * @generated from message world.ConfigurationComponent
  */
 export declare type ConfigurationComponent = Message<"world.ConfigurationComponent"> & {
@@ -639,6 +1223,14 @@ export declare type ConfigurationComponent = Message<"world.ConfigurationCompone
    * @generated from field: google.protobuf.Struct value = 3;
    */
   value?: JsonObject;
+
+  /**
+   * apply to a specific or a subset of devices
+   * if empty, applies to all devices from this controller that advertise this key.
+   *
+   * @generated from field: world.EntityFilter selector = 4;
+   */
+  selector?: EntityFilter;
 };
 
 /**
@@ -816,6 +1408,26 @@ export declare type EntityFilter = Message<"world.EntityFilter"> & {
   component: number[];
 
   /**
+   * @generated from field: optional world.ControllerFilter controller = 7;
+   */
+  controller?: ControllerFilter;
+
+  /**
+   * @generated from field: optional world.TrackFilter track = 8;
+   */
+  track?: TrackFilter;
+
+  /**
+   * @generated from field: optional world.MissionFilter mission = 9;
+   */
+  mission?: MissionFilter;
+
+  /**
+   * @generated from field: optional world.DeviceFilter device = 50;
+   */
+  device?: DeviceFilter;
+
+  /**
    * @generated from field: optional world.ConfigurationFilter config = 51;
    */
   config?: ConfigurationFilter;
@@ -840,6 +1452,63 @@ export declare type EntityFilter = Message<"world.EntityFilter"> & {
  * Use `create(EntityFilterSchema)` to create a new message.
  */
 export declare const EntityFilterSchema: GenMessage<EntityFilter>;
+
+/**
+ * @generated from message world.ControllerFilter
+ */
+export declare type ControllerFilter = Message<"world.ControllerFilter"> & {
+  /**
+   * @generated from field: optional string id = 1;
+   */
+  id?: string;
+};
+
+/**
+ * Describes the message world.ControllerFilter.
+ * Use `create(ControllerFilterSchema)` to create a new message.
+ */
+export declare const ControllerFilterSchema: GenMessage<ControllerFilter>;
+
+/**
+ * @generated from message world.TrackFilter
+ */
+export declare type TrackFilter = Message<"world.TrackFilter"> & {
+  /**
+   * @generated from field: optional string tracker = 1;
+   */
+  tracker?: string;
+};
+
+/**
+ * Describes the message world.TrackFilter.
+ * Use `create(TrackFilterSchema)` to create a new message.
+ */
+export declare const TrackFilterSchema: GenMessage<TrackFilter>;
+
+/**
+ * @generated from message world.MissionFilter
+ */
+export declare type MissionFilter = Message<"world.MissionFilter"> & {
+  /**
+   * find member assets of this mission
+   *
+   * @generated from field: optional string mission_id = 1;
+   */
+  missionId?: string;
+
+  /**
+   * find missions containing this asset
+   *
+   * @generated from field: optional string member_id = 2;
+   */
+  memberId?: string;
+};
+
+/**
+ * Describes the message world.MissionFilter.
+ * Use `create(MissionFilterSchema)` to create a new message.
+ */
+export declare const MissionFilterSchema: GenMessage<MissionFilter>;
 
 /**
  * @generated from message world.TaskableFilter
@@ -895,16 +1564,49 @@ export declare type GeoFilter = Message<"world.GeoFilter"> & {
 export declare const GeoFilterSchema: GenMessage<GeoFilter>;
 
 /**
+ * @generated from message world.DeviceFilter
+ */
+export declare type DeviceFilter = Message<"world.DeviceFilter"> & {
+  /**
+   * subset match against device.labels
+   *
+   * @generated from field: map<string, string> labels = 1;
+   */
+  labels: { [key: string]: string };
+
+  /**
+   * @generated from field: optional string unique_hardware_id = 4;
+   */
+  uniqueHardwareId?: string;
+
+  /**
+   * @generated from field: optional world.UsbDevice usb = 10;
+   */
+  usb?: UsbDevice;
+
+  /**
+   * @generated from field: optional world.IpDevice ip = 11;
+   */
+  ip?: IpDevice;
+
+  /**
+   * @generated from field: optional world.SerialDevice serial = 12;
+   */
+  serial?: SerialDevice;
+};
+
+/**
+ * Describes the message world.DeviceFilter.
+ * Use `create(DeviceFilterSchema)` to create a new message.
+ */
+export declare const DeviceFilterSchema: GenMessage<DeviceFilter>;
+
+/**
  * @generated from message world.ConfigurationFilter
  */
 export declare type ConfigurationFilter = Message<"world.ConfigurationFilter"> & {
   /**
-   * @generated from field: optional string controller = 1;
-   */
-  controller?: string;
-
-  /**
-   * @generated from field: optional string key = 2;
+   * @generated from field: optional string key = 1;
    */
   key?: string;
 };
@@ -1005,6 +1707,34 @@ export declare type EntityChangeRequest = Message<"world.EntityChangeRequest"> &
 export declare const EntityChangeRequestSchema: GenMessage<EntityChangeRequest>;
 
 /**
+ * @generated from message world.ExpireEntityRequest
+ */
+export declare type ExpireEntityRequest = Message<"world.ExpireEntityRequest"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+};
+
+/**
+ * Describes the message world.ExpireEntityRequest.
+ * Use `create(ExpireEntityRequestSchema)` to create a new message.
+ */
+export declare const ExpireEntityRequestSchema: GenMessage<ExpireEntityRequest>;
+
+/**
+ * @generated from message world.ExpireEntityResponse
+ */
+export declare type ExpireEntityResponse = Message<"world.ExpireEntityResponse"> & {
+};
+
+/**
+ * Describes the message world.ExpireEntityResponse.
+ * Use `create(ExpireEntityResponseSchema)` to create a new message.
+ */
+export declare const ExpireEntityResponseSchema: GenMessage<ExpireEntityResponse>;
+
+/**
  * @generated from message world.EntityChangeResponse
  */
 export declare type EntityChangeResponse = Message<"world.EntityChangeResponse"> & {
@@ -1093,6 +1823,34 @@ export declare type GetEntityResponse = Message<"world.GetEntityResponse"> & {
  * Use `create(GetEntityResponseSchema)` to create a new message.
  */
 export declare const GetEntityResponseSchema: GenMessage<GetEntityResponse>;
+
+/**
+ * @generated from message world.GetLocalNodeRequest
+ */
+export declare type GetLocalNodeRequest = Message<"world.GetLocalNodeRequest"> & {
+};
+
+/**
+ * Describes the message world.GetLocalNodeRequest.
+ * Use `create(GetLocalNodeRequestSchema)` to create a new message.
+ */
+export declare const GetLocalNodeRequestSchema: GenMessage<GetLocalNodeRequest>;
+
+/**
+ * @generated from message world.GetLocalNodeResponse
+ */
+export declare type GetLocalNodeResponse = Message<"world.GetLocalNodeResponse"> & {
+  /**
+   * @generated from field: world.Entity entity = 1;
+   */
+  entity?: Entity;
+};
+
+/**
+ * Describes the message world.GetLocalNodeResponse.
+ * Use `create(GetLocalNodeResponseSchema)` to create a new message.
+ */
+export declare const GetLocalNodeResponseSchema: GenMessage<GetLocalNodeResponse>;
 
 /**
  * @generated from message world.ObserverRequest
@@ -1359,6 +2117,150 @@ export enum ClassificationBattleDimension {
 export declare const ClassificationBattleDimensionSchema: GenEnum<ClassificationBattleDimension>;
 
 /**
+ * @generated from enum world.NavigationMode
+ */
+export enum NavigationMode {
+  /**
+   * @generated from enum value: NavigationModeUnspecified = 0;
+   */
+  NavigationModeUnspecified = 0,
+
+  /**
+   * planned but not yet active
+   *
+   * @generated from enum value: NavigationModePlanned = 1;
+   */
+  NavigationModePlanned = 1,
+
+  /**
+   * anchored, moored, landed
+   *
+   * @generated from enum value: NavigationModeStationary = 2;
+   */
+  NavigationModeStationary = 2,
+
+  /**
+   * might be human-controlled or we dont know
+   *
+   * @generated from enum value: NavigationModeUnderway = 3;
+   */
+  NavigationModeUnderway = 3,
+
+  /**
+   * executing a known mission / auto
+   *
+   * @generated from enum value: NavigationModeAutonomous = 4;
+   */
+  NavigationModeAutonomous = 4,
+
+  /**
+   * externally guided waypoint by a known system
+   *
+   * @generated from enum value: NavigationModeGuided = 5;
+   */
+  NavigationModeGuided = 5,
+
+  /**
+   * orbiting/holding pattern around a point
+   *
+   * @generated from enum value: NavigationModeLoitering = 6;
+   */
+  NavigationModeLoitering = 6,
+
+  /**
+   * RTL / RTB
+   *
+   * @generated from enum value: NavigationModeReturning = 7;
+   */
+  NavigationModeReturning = 7,
+}
+
+/**
+ * Describes the enum world.NavigationMode.
+ */
+export declare const NavigationModeSchema: GenEnum<NavigationMode>;
+
+/**
+ * @generated from enum world.LinkStatus
+ */
+export enum LinkStatus {
+  /**
+   * @generated from enum value: LinkStatusUnspecified = 0;
+   */
+  LinkStatusUnspecified = 0,
+
+  /**
+   * @generated from enum value: LinkStatusConnected = 1;
+   */
+  LinkStatusConnected = 1,
+
+  /**
+   * @generated from enum value: LinkStatusDegraded = 2;
+   */
+  LinkStatusDegraded = 2,
+
+  /**
+   * @generated from enum value: LinkStatusLost = 3;
+   */
+  LinkStatusLost = 3,
+}
+
+/**
+ * Describes the enum world.LinkStatus.
+ */
+export declare const LinkStatusSchema: GenEnum<LinkStatus>;
+
+/**
+ * @generated from enum world.DeviceState
+ */
+export enum DeviceState {
+  /**
+   * @generated from enum value: DeviceStatePending = 0;
+   */
+  DeviceStatePending = 0,
+
+  /**
+   * @generated from enum value: DeviceStateActive = 1;
+   */
+  DeviceStateActive = 1,
+
+  /**
+   * @generated from enum value: DeviceStateFailed = 2;
+   */
+  DeviceStateFailed = 2,
+}
+
+/**
+ * Describes the enum world.DeviceState.
+ */
+export declare const DeviceStateSchema: GenEnum<DeviceState>;
+
+/**
+ * @generated from enum world.ConfigurationState
+ */
+export enum ConfigurationState {
+  /**
+   * @generated from enum value: ConfigurationStatePending = 0;
+   */
+  ConfigurationStatePending = 0,
+
+  /**
+   * @generated from enum value: ConfigurationStateActive = 1;
+   */
+  ConfigurationStateActive = 1,
+
+  /**
+   * @generated from enum value: ConfigurationStateFailed = 2;
+   */
+  ConfigurationStateFailed = 2,
+}
+
+/**
+ * Describes the enum world.ConfigurationState.
+ */
+export declare const ConfigurationStateSchema: GenEnum<ConfigurationState>;
+
+/**
  * @generated from enum world.EntityChange
  */
 export enum EntityChange {
@@ -1455,7 +2357,11 @@ export declare const WorldService: GenService<{
     output: typeof EntityChangeEventSchema;
   },
   /**
-   * create or update an entity. used by capabilities
+   * Create or update an entity. Used by capabilities.
+   *
+   * Push uses merge semantics: only components present (set) in the pushed entity
+   * are updated. Components not included in the message are left unchanged.
+   * Components cannot be removed once set.
    *
    * @generated from rpc world.WorldService.Push
    */
@@ -1463,6 +2369,26 @@ export declare const WorldService: GenService<{
     methodKind: "unary";
     input: typeof EntityChangeRequestSchema;
     output: typeof EntityChangeResponseSchema;
+  },
+  /**
+   * expire an entity, setting its lifetime.until to now
+   *
+   * @generated from rpc world.WorldService.ExpireEntity
+   */
+  expireEntity: {
+    methodKind: "unary";
+    input: typeof ExpireEntityRequestSchema;
+    output: typeof ExpireEntityResponseSchema;
+  },
+  /**
+   * get information about the local node the client is connected to
+   *
+   * @generated from rpc world.WorldService.GetLocalNode
+   */
+  getLocalNode: {
+    methodKind: "unary";
+    input: typeof GetLocalNodeRequestSchema;
+    output: typeof GetLocalNodeResponseSchema;
   },
   /**
    * create an instance of a specific task entity

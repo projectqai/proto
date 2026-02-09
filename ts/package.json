@@ -1,6 +1,6 @@
 {
   "name": "@projectqai/proto",
-  "version": "0.0.14",
+  "version": "0.0.18",
   "author": "projectq-release-bot",
   "type": "module",
   "exports": {
@@ -13,6 +13,11 @@
       "types": "./dist/timeline_pb.d.ts",
       "import": "./dist/timeline_pb.js",
       "default": "./dist/timeline_pb.js"
+    },
+    "./controller": {
+      "types": "./dist/controller_pb.d.ts",
+      "import": "./dist/controller_pb.js",
+      "default": "./dist/controller_pb.js"
     }
   },
   "files": [
