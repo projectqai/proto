@@ -598,6 +598,7 @@ message GetLocalNodeRequest {}
 
 message GetLocalNodeResponse {
   Entity entity = 1;
+  string node_id = 2;
 }
 
 message ObserverRequest {}

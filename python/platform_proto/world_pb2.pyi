@@ -792,10 +792,12 @@ class GetLocalNodeRequest(_message.Message):
     def __init__(self) -> None: ...
 
 class GetLocalNodeResponse(_message.Message):
-    __slots__ = ("entity",)
+    __slots__ = ("entity", "node_id")
     ENTITY_FIELD_NUMBER: _ClassVar[int]
+    NODE_ID_FIELD_NUMBER: _ClassVar[int]
     entity: Entity
-    def __init__(self, entity: _Optional[_Union[Entity, _Mapping]] = ...) -> None: ...
+    node_id: str
+    def __init__(self, entity: _Optional[_Union[Entity, _Mapping]] = ..., node_id: _Optional[str] = ...) -> None: ...
 
 class ObserverRequest(_message.Message):
     __slots__ = ()

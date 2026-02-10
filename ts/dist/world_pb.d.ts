@@ -1844,6 +1844,11 @@ export declare type GetLocalNodeResponse = Message<"world.GetLocalNodeResponse">
    * @generated from field: world.Entity entity = 1;
    */
   entity?: Entity;
+
+  /**
+   * @generated from field: string node_id = 2;
+   */
+  nodeId: string;
 };
 
 /**
