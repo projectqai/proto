@@ -4,7 +4,9 @@
 
 import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { JsonObject, Message } from "@bufbuild/protobuf";
+import type { MetricComponent } from "./metrics_pb";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
+import type { LocalGeometry, PlanarGeometry } from "./geometry_pb";
 
 /**
  * Describes the file world.proto.
@@ -41,6 +43,11 @@ export declare type Entity = Message<"world.Entity"> & {
    * @generated from field: optional world.Priority priority = 5;
    */
   priority?: Priority;
+
+  /**
+   * @generated from field: optional world.Lease lease = 6;
+   */
+  lease?: Lease;
 
   /**
    * @generated from field: optional world.GeoSpatialComponent geo = 11;
@@ -118,6 +125,11 @@ export declare type Entity = Message<"world.Entity"> & {
   power?: PowerComponent;
 
   /**
+   * @generated from field: optional world.CaptureComponent capture = 35;
+   */
+  capture?: CaptureComponent;
+
+  /**
    * experimental, dont use yet externally
    *
    * @generated from field: optional world.TaskableComponent taskable = 23;
@@ -135,6 +147,11 @@ export declare type Entity = Message<"world.Entity"> & {
   config?: ConfigurationComponent;
 
   /**
+   * @generated from field: optional world.ConfigurableComponent configurable = 52;
+   */
+  configurable?: ConfigurableComponent;
+
+  /**
    * @generated from field: optional world.MissionComponent mission = 31;
    */
   mission?: MissionComponent;
@@ -143,6 +160,26 @@ export declare type Entity = Message<"world.Entity"> & {
    * @generated from field: optional world.LinkComponent link = 32;
    */
   link?: LinkComponent;
+
+  /**
+   * @generated from field: optional world.MetricComponent metric = 36;
+   */
+  metric?: MetricComponent;
+
+  /**
+   * @generated from field: optional world.SensorComponent sensor = 37;
+   */
+  sensor?: SensorComponent;
+
+  /**
+   * @generated from field: optional world.LocalShapeComponent local_shape = 29;
+   */
+  localShape?: LocalShapeComponent;
+
+  /**
+   * @generated from field: optional world.InteractivityComponent interactivity = 60;
+   */
+  interactivity?: InteractivityComponent;
 };
 
 /**
@@ -176,6 +213,32 @@ export declare type Controller = Message<"world.Controller"> & {
  * Use `create(ControllerSchema)` to create a new message.
  */
 export declare const ControllerSchema: GenMessage<Controller>;
+
+/**
+ * Leases are used by controllers to negotiate exclusivity on an entity
+ * The engine rejects pushes that attempt to change the holder of an active lease,
+ * which a controller can use to "lock" something.
+ * Note that this is a local lock, it is not distirbuted vertically
+ *
+ * @generated from message world.Lease
+ */
+export declare type Lease = Message<"world.Lease"> & {
+  /**
+   * @generated from field: string controller = 1;
+   */
+  controller: string;
+
+  /**
+   * @generated from field: optional google.protobuf.Timestamp expires = 2;
+   */
+  expires?: Timestamp;
+};
+
+/**
+ * Describes the message world.Lease.
+ * Use `create(LeaseSchema)` to create a new message.
+ */
+export declare const LeaseSchema: GenMessage<Lease>;
 
 /**
  * @generated from message world.Lifetime
@@ -261,6 +324,31 @@ export declare type SymbolComponent = Message<"world.SymbolComponent"> & {
 export declare const SymbolComponentSchema: GenMessage<SymbolComponent>;
 
 /**
+ * @generated from message world.InteractivityComponent
+ */
+export declare type InteractivityComponent = Message<"world.InteractivityComponent"> & {
+  /**
+   * use lucide names for max compat
+   *
+   * @generated from field: optional string icon = 1;
+   */
+  icon?: string;
+
+  /**
+   * some url where a user can learn more about this entity
+   *
+   * @generated from field: optional string reference_url = 3;
+   */
+  referenceUrl?: string;
+};
+
+/**
+ * Describes the message world.InteractivityComponent.
+ * Use `create(InteractivityComponentSchema)` to create a new message.
+ */
+export declare const InteractivityComponentSchema: GenMessage<InteractivityComponent>;
+
+/**
  * @generated from message world.Camera
  */
 export declare type Camera = Message<"world.Camera"> & {
@@ -278,6 +366,27 @@ export declare type Camera = Message<"world.Camera"> & {
    * @generated from field: world.CameraProtocol protocol = 3;
    */
   protocol: CameraProtocol;
+
+  /**
+   * horizontal field of view in degrees
+   *
+   * @generated from field: optional double fov = 4;
+   */
+  fov?: number;
+
+  /**
+   * minimum detection range in meters (blind zone)
+   *
+   * @generated from field: optional double range_min = 5;
+   */
+  rangeMin?: number;
+
+  /**
+   * maximum detection range in meters
+   *
+   * @generated from field: optional double range_max = 6;
+   */
+  rangeMax?: number;
 };
 
 /**
@@ -348,6 +457,24 @@ export declare type BearingComponent = Message<"world.BearingComponent"> & {
  * Use `create(BearingComponentSchema)` to create a new message.
  */
 export declare const BearingComponentSchema: GenMessage<BearingComponent>;
+
+/**
+ * @generated from message world.SensorComponent
+ */
+export declare type SensorComponent = Message<"world.SensorComponent"> & {
+  /**
+   * entity IDS of GeoShapeComponent entities that describe the coverage
+   *
+   * @generated from field: repeated string coverage = 2;
+   */
+  coverage: string[];
+};
+
+/**
+ * Describes the message world.SensorComponent.
+ * Use `create(SensorComponentSchema)` to create a new message.
+ */
+export declare const SensorComponentSchema: GenMessage<SensorComponent>;
 
 /**
  * @generated from message world.Quaternion
@@ -647,6 +774,28 @@ export declare type KinematicsComponent = Message<"world.KinematicsComponent"> &
 export declare const KinematicsComponentSchema: GenMessage<KinematicsComponent>;
 
 /**
+ * @generated from message world.Geometry
+ */
+export declare type Geometry = Message<"world.Geometry"> & {
+  /**
+   * @generated from field: bytes wkb = 1 [deprecated = true];
+   * @deprecated
+   */
+  wkb: Uint8Array;
+
+  /**
+   * @generated from field: world.PlanarGeometry planar = 2;
+   */
+  planar?: PlanarGeometry;
+};
+
+/**
+ * Describes the message world.Geometry.
+ * Use `create(GeometrySchema)` to create a new message.
+ */
+export declare const GeometrySchema: GenMessage<Geometry>;
+
+/**
  * @generated from message world.GeoShapeComponent
  */
 export declare type GeoShapeComponent = Message<"world.GeoShapeComponent"> & {
@@ -661,6 +810,29 @@ export declare type GeoShapeComponent = Message<"world.GeoShapeComponent"> & {
  * Use `create(GeoShapeComponentSchema)` to create a new message.
  */
 export declare const GeoShapeComponentSchema: GenMessage<GeoShapeComponent>;
+
+/**
+ * @generated from message world.LocalShapeComponent
+ */
+export declare type LocalShapeComponent = Message<"world.LocalShapeComponent"> & {
+  /**
+   * entity ID whose frame this geometry is defined in
+   *
+   * @generated from field: string relative_to = 2;
+   */
+  relativeTo: string;
+
+  /**
+   * @generated from field: optional world.LocalGeometry geometry = 1;
+   */
+  geometry?: LocalGeometry;
+};
+
+/**
+ * Describes the message world.LocalShapeComponent.
+ * Use `create(LocalShapeComponentSchema)` to create a new message.
+ */
+export declare const LocalShapeComponentSchema: GenMessage<LocalShapeComponent>;
 
 /**
  * @generated from message world.ClassificationComponent
@@ -922,6 +1094,27 @@ export declare type LinkComponent = Message<"world.LinkComponent"> & {
    * @generated from field: optional string via = 5;
    */
   via?: string;
+
+  /**
+   * last measured end-to-end latency in milliseconds
+   *
+   * @generated from field: optional uint32 last_latency_ms = 6;
+   */
+  lastLatencyMs?: number;
+
+  /**
+   * exponential moving average of latency in milliseconds
+   *
+   * @generated from field: optional uint32 avg_latency_ms = 7;
+   */
+  avgLatencyMs?: number;
+
+  /**
+   * last time data was received over this link
+   *
+   * @generated from field: optional google.protobuf.Timestamp last_seen = 8;
+   */
+  lastSeen?: Timestamp;
 };
 
 /**
@@ -929,6 +1122,52 @@ export declare type LinkComponent = Message<"world.LinkComponent"> & {
  * Use `create(LinkComponentSchema)` to create a new message.
  */
 export declare const LinkComponentSchema: GenMessage<LinkComponent>;
+
+/**
+ * @generated from message world.CaptureComponent
+ */
+export declare type CaptureComponent = Message<"world.CaptureComponent"> & {
+  /**
+   * last raw payload received from this entity
+   *
+   * @generated from field: optional bytes payload = 1;
+   */
+  payload?: Uint8Array;
+
+  /**
+   * application-level port (e.g. LoRaWAN FPort, UDP port)
+   *
+   * @generated from field: optional uint32 port = 2;
+   */
+  port?: number;
+
+  /**
+   * content type hint (e.g. "application/octet-stream", "application/json")
+   *
+   * @generated from field: optional string content_type = 3;
+   */
+  contentType?: string;
+
+  /**
+   * entity ID of the device that captured this data
+   *
+   * @generated from field: optional string captured_by = 4;
+   */
+  capturedBy?: string;
+
+  /**
+   * when the payload was captured
+   *
+   * @generated from field: optional google.protobuf.Timestamp captured_at = 5;
+   */
+  capturedAt?: Timestamp;
+};
+
+/**
+ * Describes the message world.CaptureComponent.
+ * Use `create(CaptureComponentSchema)` to create a new message.
+ */
+export declare const CaptureComponentSchema: GenMessage<CaptureComponent>;
 
 /**
  * @generated from message world.PowerComponent
@@ -963,42 +1202,99 @@ export declare type PowerComponent = Message<"world.PowerComponent"> & {
 export declare const PowerComponentSchema: GenMessage<PowerComponent>;
 
 /**
- * @generated from message world.Configurable
+ * @generated from message world.DeviceClassOption
  */
-export declare type Configurable = Message<"world.Configurable"> & {
+export declare type DeviceClassOption = Message<"world.DeviceClassOption"> & {
   /**
-   * @generated from field: string key = 1;
+   * @generated from field: string class = 1;
    */
-  key: string;
+  class: string;
 
   /**
-   * @generated from field: google.protobuf.Struct schema = 2;
+   * Human-readable label for the UI select (e.g. "USB Serial Device")
+   *
+   * @generated from field: string label = 2;
+   */
+  label: string;
+};
+
+/**
+ * Describes the message world.DeviceClassOption.
+ * Use `create(DeviceClassOptionSchema)` to create a new message.
+ */
+export declare const DeviceClassOptionSchema: GenMessage<DeviceClassOption>;
+
+/**
+ * Presence of this component indicates a controller is managing this entity.
+ * It declares what can be configured and reports the controller's state.
+ * Always on the same entity as a DeviceComponent.
+ * ConfigurationComponent (user-created config) is also placed on this entity.
+ *
+ * @generated from message world.ConfigurableComponent
+ */
+export declare type ConfigurableComponent = Message<"world.ConfigurableComponent"> & {
+  /**
+   * @generated from field: google.protobuf.Struct schema = 1;
    */
   schema?: JsonObject;
 
   /**
-   * @generated from field: google.protobuf.Struct value = 3;
+   * current state reported by the controller
+   *
+   * @generated from field: google.protobuf.Struct value = 2;
    */
   value?: JsonObject;
 
   /**
-   * @generated from field: world.ConfigurationState state = 4;
+   * @generated from field: world.ConfigurableState state = 3;
    */
-  state: ConfigurationState;
+  state: ConfigurableState;
 
   /**
-   * @generated from field: optional string error = 5;
+   * @generated from field: optional string error = 4;
    */
   error?: string;
+
+  /**
+   * Human-readable label for the UI (e.g. "Defaults", "USB Device", "Channel 0")
+   *
+   * @generated from field: optional string label = 5;
+   */
+  label?: string;
+
+  /**
+   * Echoed from ConfigurationComponent.version after the controller
+   * has finished processing the configuration.
+   *
+   * @generated from field: uint64 applied_version = 6;
+   */
+  appliedVersion: bigint;
+
+  /**
+   * what kinds of devices can be attached underneath this entity
+   *
+   * @generated from field: repeated world.DeviceClassOption supported_device_classes = 7;
+   */
+  supportedDeviceClasses: DeviceClassOption[];
+
+  /**
+   * indicated when the controller will activate this entity
+   *
+   * @generated from field: optional google.protobuf.Timestamp scheduled_at = 8;
+   */
+  scheduledAt?: Timestamp;
 };
 
 /**
- * Describes the message world.Configurable.
- * Use `create(ConfigurableSchema)` to create a new message.
+ * Describes the message world.ConfigurableComponent.
+ * Use `create(ConfigurableComponentSchema)` to create a new message.
  */
-export declare const ConfigurableSchema: GenMessage<Configurable>;
+export declare const ConfigurableComponentSchema: GenMessage<ConfigurableComponent>;
 
 /**
+ * Physical device in the device tree. Describes hardware topology only.
+ * Can be discovered automatically or created by hand.
+ *
  * @generated from message world.DeviceComponent
  */
 export declare type DeviceComponent = Message<"world.DeviceComponent"> & {
@@ -1010,6 +1306,7 @@ export declare type DeviceComponent = Message<"world.DeviceComponent"> & {
   parent?: string;
 
   /**
+   * TODO might not be needed?
    * list of non-direct ancestors this device is made of
    *
    * @generated from field: repeated string composition = 2;
@@ -1017,28 +1314,13 @@ export declare type DeviceComponent = Message<"world.DeviceComponent"> & {
   composition: string[];
 
   /**
-   * configurable keys, their current state and schema
-   *
-   * @generated from field: repeated world.Configurable configurable = 3;
-   */
-  configurable: Configurable[];
-
-  /**
    * a stable identifier that remains the same no matter where the asset is connected to
-   * generally used to match a specific device within the hydris network
+   * e.g. USB serial number, MAC address. lets the system recognize the same
+   * physical hardware even if it moves to a different port or node.
    *
    * @generated from field: optional string unique_hardware_id = 4;
    */
   uniqueHardwareId?: string;
-
-  /**
-   * unstructured controller specific labels that can be matched to configure
-   * all devices with these properties at the same time
-   * when not using unique_hardware_id
-   *
-   * @generated from field: map<string, string> labels = 5;
-   */
-  labels: { [key: string]: string };
 
   /**
    * @generated from field: world.DeviceState state = 6;
@@ -1051,26 +1333,50 @@ export declare type DeviceComponent = Message<"world.DeviceComponent"> & {
   error?: string;
 
   /**
+   * device class (e.g. "usb_serial", "radio", "camera")
+   *
+   * @generated from field: optional string class = 10;
+   */
+  class?: string;
+
+  /**
+   * human-readable category for UI grouping (e.g. "Air", "Sea", "Network")
+   *
+   * @generated from field: optional string category = 13;
+   */
+  category?: string;
+
+  /**
    * subsystem-specific descriptors
    *
-   * @generated from field: optional world.NodeDevice node = 9;
+   * @generated from field: optional world.NodeDevice node = 20;
    */
   node?: NodeDevice;
 
   /**
-   * @generated from field: optional world.UsbDevice usb = 10;
+   * @generated from field: optional world.UsbDevice usb = 21;
    */
   usb?: UsbDevice;
 
   /**
-   * @generated from field: optional world.IpDevice ip = 11;
+   * @generated from field: optional world.IpDevice ip = 22;
    */
   ip?: IpDevice;
 
   /**
-   * @generated from field: optional world.SerialDevice serial = 12;
+   * @generated from field: optional world.SerialDevice serial = 23;
    */
   serial?: SerialDevice;
+
+  /**
+   * @generated from field: optional world.EthernetDevice ethernet = 24;
+   */
+  ethernet?: EthernetDevice;
+
+  /**
+   * @generated from field: optional world.LPWANDevice lpwan = 25;
+   */
+  lpwan?: LPWANDevice;
 };
 
 /**
@@ -1183,6 +1489,31 @@ export declare type IpDevice = Message<"world.IpDevice"> & {
 export declare const IpDeviceSchema: GenMessage<IpDevice>;
 
 /**
+ * @generated from message world.EthernetDevice
+ */
+export declare type EthernetDevice = Message<"world.EthernetDevice"> & {
+  /**
+   * MAC address in canonical colon-separated hex (e.g. "aa:bb:cc:dd:ee:ff")
+   *
+   * @generated from field: optional string mac_address = 1;
+   */
+  macAddress?: string;
+
+  /**
+   * vendor name resolved from the OUI prefix, if known
+   *
+   * @generated from field: optional string vendor = 2;
+   */
+  vendor?: string;
+};
+
+/**
+ * Describes the message world.EthernetDevice.
+ * Use `create(EthernetDeviceSchema)` to create a new message.
+ */
+export declare const EthernetDeviceSchema: GenMessage<EthernetDevice>;
+
+/**
  * @generated from message world.SerialDevice
  */
 export declare type SerialDevice = Message<"world.SerialDevice"> & {
@@ -1204,33 +1535,50 @@ export declare type SerialDevice = Message<"world.SerialDevice"> & {
 export declare const SerialDeviceSchema: GenMessage<SerialDevice>;
 
 /**
- * Desired/target configuration, created by the user/UI.
+ * @generated from message world.LPWANDevice
+ */
+export declare type LPWANDevice = Message<"world.LPWANDevice"> & {
+  /**
+   * IEEE 802 EUI-64 identifier (e.g. "a84041c6545d1429")
+   *
+   * @generated from field: optional string eui = 1;
+   */
+  eui?: string;
+
+  /**
+   * network address assigned after join/activation (e.g. "012a7125")
+   *
+   * @generated from field: optional string address = 2;
+   */
+  address?: string;
+};
+
+/**
+ * Describes the message world.LPWANDevice.
+ * Use `create(LPWANDeviceSchema)` to create a new message.
+ */
+export declare const LPWANDeviceSchema: GenMessage<LPWANDevice>;
+
+/**
+ * Configuration pushed onto an entity. The engine delivers entities with
+ * Config to the matching controller via Reconcile.
  *
  * @generated from message world.ConfigurationComponent
  */
 export declare type ConfigurationComponent = Message<"world.ConfigurationComponent"> & {
-  /**
-   * @generated from field: string controller = 1;
-   */
-  controller: string;
-
-  /**
-   * @generated from field: string key = 2;
-   */
-  key: string;
-
   /**
    * @generated from field: google.protobuf.Struct value = 3;
    */
   value?: JsonObject;
 
   /**
-   * apply to a specific or a subset of devices
-   * if empty, applies to all devices from this controller that advertise this key.
+   * Monotonically increasing counter set by the config pusher.
+   * The controller echoes this back in ConfigurableComponent.applied_version
+   * once the configuration has been processed.
    *
-   * @generated from field: world.EntityFilter selector = 4;
+   * @generated from field: uint64 version = 5;
    */
-  selector?: EntityFilter;
+  version: bigint;
 };
 
 /**
@@ -1238,137 +1586,6 @@ export declare type ConfigurationComponent = Message<"world.ConfigurationCompone
  * Use `create(ConfigurationComponentSchema)` to create a new message.
  */
 export declare const ConfigurationComponentSchema: GenMessage<ConfigurationComponent>;
-
-/**
- * a 2.5D point on the projected flat surface in WGS84
- *
- * @generated from message world.PlanarPoint
- */
-export declare type PlanarPoint = Message<"world.PlanarPoint"> & {
-  /**
-   * @generated from field: double longitude = 1;
-   */
-  longitude: number;
-
-  /**
-   * @generated from field: double latitude = 2;
-   */
-  latitude: number;
-
-  /**
-   * height above ellipsoid (WGS84) in meters
-   *
-   * @generated from field: optional double altitude = 3;
-   */
-  altitude?: number;
-};
-
-/**
- * Describes the message world.PlanarPoint.
- * Use `create(PlanarPointSchema)` to create a new message.
- */
-export declare const PlanarPointSchema: GenMessage<PlanarPoint>;
-
-/**
- * a path with zero area on the projected flat surface
- * a ring is considered to be closed when the first and last points are identical
- *
- * @generated from message world.PlanarRing
- */
-export declare type PlanarRing = Message<"world.PlanarRing"> & {
-  /**
-   * @generated from field: repeated world.PlanarPoint points = 1;
-   */
-  points: PlanarPoint[];
-};
-
-/**
- * Describes the message world.PlanarRing.
- * Use `create(PlanarRingSchema)` to create a new message.
- */
-export declare const PlanarRingSchema: GenMessage<PlanarRing>;
-
-/**
- * / An area enclosed by a ring, with optional holes.
- * / All rings must be closed (first point = last point)
- *
- * @generated from message world.PlanarPolygon
- */
-export declare type PlanarPolygon = Message<"world.PlanarPolygon"> & {
-  /**
-   * @generated from field: world.PlanarRing outer = 1;
-   */
-  outer?: PlanarRing;
-
-  /**
-   * @generated from field: repeated world.PlanarRing holes = 2;
-   */
-  holes: PlanarRing[];
-};
-
-/**
- * Describes the message world.PlanarPolygon.
- * Use `create(PlanarPolygonSchema)` to create a new message.
- */
-export declare const PlanarPolygonSchema: GenMessage<PlanarPolygon>;
-
-/**
- * 2.5D geometry in WGS 84
- *
- * @generated from message world.PlanarGeometry
- */
-export declare type PlanarGeometry = Message<"world.PlanarGeometry"> & {
-  /**
-   * @generated from oneof world.PlanarGeometry.plane
-   */
-  plane: {
-    /**
-     * @generated from field: world.PlanarPoint point = 1;
-     */
-    value: PlanarPoint;
-    case: "point";
-  } | {
-    /**
-     * @generated from field: world.PlanarRing line = 2;
-     */
-    value: PlanarRing;
-    case: "line";
-  } | {
-    /**
-     * @generated from field: world.PlanarPolygon polygon = 3;
-     */
-    value: PlanarPolygon;
-    case: "polygon";
-  } | { case: undefined; value?: undefined };
-};
-
-/**
- * Describes the message world.PlanarGeometry.
- * Use `create(PlanarGeometrySchema)` to create a new message.
- */
-export declare const PlanarGeometrySchema: GenMessage<PlanarGeometry>;
-
-/**
- * @generated from message world.Geometry
- */
-export declare type Geometry = Message<"world.Geometry"> & {
-  /**
-   * @generated from field: bytes wkb = 1 [deprecated = true];
-   * @deprecated
-   */
-  wkb: Uint8Array;
-
-  /**
-   * @generated from field: world.PlanarGeometry planar = 2;
-   */
-  planar?: PlanarGeometry;
-};
-
-/**
- * Describes the message world.Geometry.
- * Use `create(GeometrySchema)` to create a new message.
- */
-export declare const GeometrySchema: GenMessage<Geometry>;
 
 /**
  * @generated from message world.EntityFilter
@@ -1568,31 +1785,16 @@ export declare const GeoFilterSchema: GenMessage<GeoFilter>;
  */
 export declare type DeviceFilter = Message<"world.DeviceFilter"> & {
   /**
-   * subset match against device.labels
+   * match devices with this parent entity ID (for building the device tree)
    *
-   * @generated from field: map<string, string> labels = 1;
+   * @generated from field: optional string parent = 1;
    */
-  labels: { [key: string]: string };
+  parent?: string;
 
   /**
    * @generated from field: optional string unique_hardware_id = 4;
    */
   uniqueHardwareId?: string;
-
-  /**
-   * @generated from field: optional world.UsbDevice usb = 10;
-   */
-  usb?: UsbDevice;
-
-  /**
-   * @generated from field: optional world.IpDevice ip = 11;
-   */
-  ip?: IpDevice;
-
-  /**
-   * @generated from field: optional world.SerialDevice serial = 12;
-   */
-  serial?: SerialDevice;
 };
 
 /**
@@ -1605,10 +1807,6 @@ export declare const DeviceFilterSchema: GenMessage<DeviceFilter>;
  * @generated from message world.ConfigurationFilter
  */
 export declare type ConfigurationFilter = Message<"world.ConfigurationFilter"> & {
-  /**
-   * @generated from field: optional string key = 1;
-   */
-  key?: string;
 };
 
 /**
@@ -1695,9 +1893,21 @@ export declare const ListEntitiesResponseSchema: GenMessage<ListEntitiesResponse
  */
 export declare type EntityChangeRequest = Message<"world.EntityChangeRequest"> & {
   /**
+   * components present (set) in the pushed entity are replaced entirely, not recursively.
+   * Components not included in the message are left unchanged.
+   * missing Components are NOT removed
+   *
    * @generated from field: repeated world.Entity changes = 1;
    */
   changes: Entity[];
+
+  /**
+   * replaces the whole entity atoomically.
+   * missing Components ARE removed
+   *
+   * @generated from field: repeated world.Entity replacements = 2;
+   */
+  replacements: Entity[];
 };
 
 /**
@@ -2000,6 +2210,11 @@ export enum CameraProtocol {
    * @generated from enum value: CameraProtocolImage = 4;
    */
   CameraProtocolImage = 4,
+
+  /**
+   * @generated from enum value: CameraProtocolIframe = 5;
+   */
+  CameraProtocolIframe = 5,
 }
 
 /**
@@ -2241,29 +2456,44 @@ export enum DeviceState {
 export declare const DeviceStateSchema: GenEnum<DeviceState>;
 
 /**
- * @generated from enum world.ConfigurationState
+ * @generated from enum world.ConfigurableState
  */
-export enum ConfigurationState {
+export enum ConfigurableState {
   /**
-   * @generated from enum value: ConfigurationStatePending = 0;
+   * @generated from enum value: ConfigurableStateInactive = 0;
    */
-  ConfigurationStatePending = 0,
+  ConfigurableStateInactive = 0,
 
   /**
-   * @generated from enum value: ConfigurationStateActive = 1;
+   * @generated from enum value: ConfigurableStateStarting = 1;
    */
-  ConfigurationStateActive = 1,
+  ConfigurableStateStarting = 1,
 
   /**
-   * @generated from enum value: ConfigurationStateFailed = 2;
+   * @generated from enum value: ConfigurableStateActive = 2;
    */
-  ConfigurationStateFailed = 2,
+  ConfigurableStateActive = 2,
+
+  /**
+   * @generated from enum value: ConfigurableStateFailed = 3;
+   */
+  ConfigurableStateFailed = 3,
+
+  /**
+   * @generated from enum value: ConfigurableStateConflict = 4;
+   */
+  ConfigurableStateConflict = 4,
+
+  /**
+   * @generated from enum value: ConfigurableStateScheduled = 5;
+   */
+  ConfigurableStateScheduled = 5,
 }
 
 /**
- * Describes the enum world.ConfigurationState.
+ * Describes the enum world.ConfigurableState.
  */
-export declare const ConfigurationStateSchema: GenEnum<ConfigurationState>;
+export declare const ConfigurableStateSchema: GenEnum<ConfigurableState>;
 
 /**
  * @generated from enum world.EntityChange
@@ -2363,10 +2593,6 @@ export declare const WorldService: GenService<{
   },
   /**
    * Create or update an entity. Used by capabilities.
-   *
-   * Push uses merge semantics: only components present (set) in the pushed entity
-   * are updated. Components not included in the message are left unchanged.
-   * Components cannot be removed once set.
    *
    * @generated from rpc world.WorldService.Push
    */

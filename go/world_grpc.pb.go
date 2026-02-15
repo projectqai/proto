@@ -41,10 +41,6 @@ type WorldServiceClient interface {
 	// continously monitor entities present in the world. this is used by downstream C2.
 	WatchEntities(ctx context.Context, in *ListEntitiesRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[EntityChangeEvent], error)
 	// Create or update an entity. Used by capabilities.
-	//
-	// Push uses merge semantics: only components present (set) in the pushed entity
-	// are updated. Components not included in the message are left unchanged.
-	// Components cannot be removed once set.
 	Push(ctx context.Context, in *EntityChangeRequest, opts ...grpc.CallOption) (*EntityChangeResponse, error)
 	// expire an entity, setting its lifetime.until to now
 	ExpireEntity(ctx context.Context, in *ExpireEntityRequest, opts ...grpc.CallOption) (*ExpireEntityResponse, error)
@@ -154,10 +150,6 @@ type WorldServiceServer interface {
 	// continously monitor entities present in the world. this is used by downstream C2.
 	WatchEntities(*ListEntitiesRequest, grpc.ServerStreamingServer[EntityChangeEvent]) error
 	// Create or update an entity. Used by capabilities.
-	//
-	// Push uses merge semantics: only components present (set) in the pushed entity
-	// are updated. Components not included in the message are left unchanged.
-	// Components cannot be removed once set.
 	Push(context.Context, *EntityChangeRequest) (*EntityChangeResponse, error)
 	// expire an entity, setting its lifetime.until to now
 	ExpireEntity(context.Context, *ExpireEntityRequest) (*ExpireEntityResponse, error)

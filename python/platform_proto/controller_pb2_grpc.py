@@ -26,67 +26,7 @@ if _version_not_supported:
 
 
 class ControllerServiceStub(object):
-    """API for controllers to receive work from the engine.
-
-    The engine matches ConfigurationComponent entities to DeviceComponent entities
-    using the config's selector, and streams the results as
-    ControllerDeviceConfigurationEvent messages carrying both the config and device entity.
-
-    ## Engine guarantees
-
-    - Every New event is eventually followed by a Removed event
-    for that (config.id, device.id) pair.
-    - Each event carries the full config and device entities.
-
-    ## Event sequences by scenario
-
-    Stream starts:
-    New(config, device) for each existing match
-
-    Config added, no devices match yet:
-    (no events until a device matches)
-
-    Config added, devices already match:
-    New(config, device) for each match
-
-    Config value updated (selector unchanged):
-    Changed(config, device) for all matched devices
-    (carries new config entity)
-
-    Config selector changed:
-    Removed(config, device) for devices that no longer match
-    New(config, device) for newly matching devices
-    Changed(config, device) for devices that still match
-
-    Config removed:
-    Removed(config, device) for all matched devices
-
-    Device appears, matches existing config(s):
-    New(config, device) per matching config
-
-    Device updated, still matches:
-    Changed(config, device) with updated device entity
-
-    Device updated, match set changes:
-    Removed(config, device) from configs it no longer matches
-    New(config, device) to configs it now newly matches
-
-    Device removed:
-    Removed(config, device) for each config it was matched to
-
-    ## 1:1 mode — one connector per (config, device) pair
-
-    New     → start connector (carries full config + device)
-    Changed → restart connector, or pass update to running connector
-    Removed → stop connector
-
-    ## 1:N mode — one connector per config, devices added/removed dynamically
-
-    New     → add device to connector, start connector if first device for this config
-    Changed → update device or config in connector
-    Removed → remove device from connector, stop connector if last device removed
-
-    """
+    """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
         """Constructor.
@@ -99,72 +39,23 @@ class ControllerServiceStub(object):
                 request_serializer=controller__pb2.ControllerReconciliationRequest.SerializeToString,
                 response_deserializer=controller__pb2.ControllerReconciliationEvent.FromString,
                 _registered_method=True)
+        self.RestartConnector = channel.unary_unary(
+                '/world.ControllerService/RestartConnector',
+                request_serializer=controller__pb2.RestartConnectorRequest.SerializeToString,
+                response_deserializer=controller__pb2.RestartConnectorResponse.FromString,
+                _registered_method=True)
 
 
 class ControllerServiceServicer(object):
-    """API for controllers to receive work from the engine.
-
-    The engine matches ConfigurationComponent entities to DeviceComponent entities
-    using the config's selector, and streams the results as
-    ControllerDeviceConfigurationEvent messages carrying both the config and device entity.
-
-    ## Engine guarantees
-
-    - Every New event is eventually followed by a Removed event
-    for that (config.id, device.id) pair.
-    - Each event carries the full config and device entities.
-
-    ## Event sequences by scenario
-
-    Stream starts:
-    New(config, device) for each existing match
-
-    Config added, no devices match yet:
-    (no events until a device matches)
-
-    Config added, devices already match:
-    New(config, device) for each match
-
-    Config value updated (selector unchanged):
-    Changed(config, device) for all matched devices
-    (carries new config entity)
-
-    Config selector changed:
-    Removed(config, device) for devices that no longer match
-    New(config, device) for newly matching devices
-    Changed(config, device) for devices that still match
-
-    Config removed:
-    Removed(config, device) for all matched devices
-
-    Device appears, matches existing config(s):
-    New(config, device) per matching config
-
-    Device updated, still matches:
-    Changed(config, device) with updated device entity
-
-    Device updated, match set changes:
-    Removed(config, device) from configs it no longer matches
-    New(config, device) to configs it now newly matches
-
-    Device removed:
-    Removed(config, device) for each config it was matched to
-
-    ## 1:1 mode — one connector per (config, device) pair
-
-    New     → start connector (carries full config + device)
-    Changed → restart connector, or pass update to running connector
-    Removed → stop connector
-
-    ## 1:N mode — one connector per config, devices added/removed dynamically
-
-    New     → add device to connector, start connector if first device for this config
-    Changed → update device or config in connector
-    Removed → remove device from connector, stop connector if last device removed
-
-    """
+    """Missing associated documentation comment in .proto file."""
 
     def Reconcile(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def RestartConnector(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -178,6 +69,11 @@ def add_ControllerServiceServicer_to_server(servicer, server):
                     request_deserializer=controller__pb2.ControllerReconciliationRequest.FromString,
                     response_serializer=controller__pb2.ControllerReconciliationEvent.SerializeToString,
             ),
+            'RestartConnector': grpc.unary_unary_rpc_method_handler(
+                    servicer.RestartConnector,
+                    request_deserializer=controller__pb2.RestartConnectorRequest.FromString,
+                    response_serializer=controller__pb2.RestartConnectorResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
             'world.ControllerService', rpc_method_handlers)
@@ -187,67 +83,7 @@ def add_ControllerServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class ControllerService(object):
-    """API for controllers to receive work from the engine.
-
-    The engine matches ConfigurationComponent entities to DeviceComponent entities
-    using the config's selector, and streams the results as
-    ControllerDeviceConfigurationEvent messages carrying both the config and device entity.
-
-    ## Engine guarantees
-
-    - Every New event is eventually followed by a Removed event
-    for that (config.id, device.id) pair.
-    - Each event carries the full config and device entities.
-
-    ## Event sequences by scenario
-
-    Stream starts:
-    New(config, device) for each existing match
-
-    Config added, no devices match yet:
-    (no events until a device matches)
-
-    Config added, devices already match:
-    New(config, device) for each match
-
-    Config value updated (selector unchanged):
-    Changed(config, device) for all matched devices
-    (carries new config entity)
-
-    Config selector changed:
-    Removed(config, device) for devices that no longer match
-    New(config, device) for newly matching devices
-    Changed(config, device) for devices that still match
-
-    Config removed:
-    Removed(config, device) for all matched devices
-
-    Device appears, matches existing config(s):
-    New(config, device) per matching config
-
-    Device updated, still matches:
-    Changed(config, device) with updated device entity
-
-    Device updated, match set changes:
-    Removed(config, device) from configs it no longer matches
-    New(config, device) to configs it now newly matches
-
-    Device removed:
-    Removed(config, device) for each config it was matched to
-
-    ## 1:1 mode — one connector per (config, device) pair
-
-    New     → start connector (carries full config + device)
-    Changed → restart connector, or pass update to running connector
-    Removed → stop connector
-
-    ## 1:N mode — one connector per config, devices added/removed dynamically
-
-    New     → add device to connector, start connector if first device for this config
-    Changed → update device or config in connector
-    Removed → remove device from connector, stop connector if last device removed
-
-    """
+    """Missing associated documentation comment in .proto file."""
 
     @staticmethod
     def Reconcile(request,
@@ -266,6 +102,33 @@ class ControllerService(object):
             '/world.ControllerService/Reconcile',
             controller__pb2.ControllerReconciliationRequest.SerializeToString,
             controller__pb2.ControllerReconciliationEvent.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def RestartConnector(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/world.ControllerService/RestartConnector',
+            controller__pb2.RestartConnectorRequest.SerializeToString,
+            controller__pb2.RestartConnectorResponse.FromString,
             options,
             channel_credentials,
             insecure,

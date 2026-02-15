@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package world;
+
+option go_package = "github.com/projectqai/proto/go";
+
+// ---------------------------------------------
+// Planar geometry: 2.5D on the projected flat surface in WGS84
+
+// a 2.5D point on the projected flat surface in WGS84
+message PlanarPoint {
+  double longitude = 1;
+  double latitude = 2;
+
+  // height above ellipsoid (WGS84) in meters
+  optional double altitude = 3;
+}
+
+// a path with zero area on the projected flat surface
+// a ring is considered to be closed when the first and last points are identical
+message PlanarRing {
+  repeated PlanarPoint points = 1;
+}
+
+/// An area enclosed by a ring, with optional holes.
+/// All rings must be closed (first point = last point)
+message PlanarPolygon {
+  PlanarRing outer = 1;
+  repeated PlanarRing holes = 2;
+}
+
+// 2.5D geometry in WGS 84
+message PlanarCircle {
+  PlanarPoint center = 1;
+  double radius_m = 2;
+  optional double inner_radius_m = 3; // omit for solid circle
+}
+
+message PlanarGeometry {
+  oneof plane {
+    PlanarPoint point = 1;
+    PlanarRing line = 2;
+    PlanarPolygon polygon = 3;
+    PlanarCircle circle = 4;
+  }
+}
+
+// ---------------------------------------------
+// ENU geometry: offsets in meters from entity origin
+// east = +x, north = +y, up = +z
+
+message LocalPoint {
+  double east_m = 1;
+  double north_m = 2;
+  optional double up_m = 3;
+}
+
+message LocalRing {
+  repeated LocalPoint points = 1;
+}
+
+message LocalPolygon {
+  LocalRing outer = 1;
+  repeated LocalRing holes = 2;
+}
+
+message LocalCircle {
+  LocalPoint center = 1;
+  double radius_m = 2;
+  optional double inner_radius_m = 3;
+}
+
+message LocalGeometry {
+  oneof shape {
+    LocalPoint point = 1;
+    LocalRing line = 2;
+    LocalPolygon polygon = 3;
+    LocalCircle circle = 4;
+  }
+}
+
+// ---------------------------------------------

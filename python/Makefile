@@ -31,6 +31,7 @@ setup: check-poetry
 
 generate: check-poetry
 	@echo "Generating Python protobuf bindings..."
+	@poetry install --quiet
 	@poetry run python generate_protos.py
 
 clean:

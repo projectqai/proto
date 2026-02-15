@@ -28,7 +28,7 @@ export declare type ControllerReconciliationRequest = Message<"world.ControllerR
 export declare const ControllerReconciliationRequestSchema: GenMessage<ControllerReconciliationRequest>;
 
 /**
- * a (config, device) match was added, changed, or removed
+ * An entity with Config on this controller was added, changed, or removed.
  *
  * @generated from message world.ControllerDeviceConfigurationEvent
  */
@@ -42,11 +42,6 @@ export declare type ControllerDeviceConfigurationEvent = Message<"world.Controll
    * @generated from field: world.Entity config = 2;
    */
   config?: Entity;
-
-  /**
-   * @generated from field: world.Entity device = 3;
-   */
-  device?: Entity;
 };
 
 /**
@@ -78,6 +73,39 @@ export declare type ControllerReconciliationEvent = Message<"world.ControllerRec
 export declare const ControllerReconciliationEventSchema: GenMessage<ControllerReconciliationEvent>;
 
 /**
+ * @generated from message world.RestartConnectorRequest
+ */
+export declare type RestartConnectorRequest = Message<"world.RestartConnectorRequest"> & {
+  /**
+   * @generated from field: string controller = 1;
+   */
+  controller: string;
+
+  /**
+   * @generated from field: string entity_id = 2;
+   */
+  entityId: string;
+};
+
+/**
+ * Describes the message world.RestartConnectorRequest.
+ * Use `create(RestartConnectorRequestSchema)` to create a new message.
+ */
+export declare const RestartConnectorRequestSchema: GenMessage<RestartConnectorRequest>;
+
+/**
+ * @generated from message world.RestartConnectorResponse
+ */
+export declare type RestartConnectorResponse = Message<"world.RestartConnectorResponse"> & {
+};
+
+/**
+ * Describes the message world.RestartConnectorResponse.
+ * Use `create(RestartConnectorResponseSchema)` to create a new message.
+ */
+export declare const RestartConnectorResponseSchema: GenMessage<RestartConnectorResponse>;
+
+/**
  * @generated from enum world.ControllerDeviceConfigurationEventType
  */
 export enum ControllerDeviceConfigurationEventType {
@@ -103,67 +131,6 @@ export enum ControllerDeviceConfigurationEventType {
 export declare const ControllerDeviceConfigurationEventTypeSchema: GenEnum<ControllerDeviceConfigurationEventType>;
 
 /**
- * API for controllers to receive work from the engine.
- *
- * The engine matches ConfigurationComponent entities to DeviceComponent entities
- * using the config's selector, and streams the results as
- * ControllerDeviceConfigurationEvent messages carrying both the config and device entity.
- *
- * ## Engine guarantees
- *
- *   - Every New event is eventually followed by a Removed event
- *     for that (config.id, device.id) pair.
- *   - Each event carries the full config and device entities.
- *
- * ## Event sequences by scenario
- *
- *   Stream starts:
- *     New(config, device) for each existing match
- *
- *   Config added, no devices match yet:
- *     (no events until a device matches)
- *
- *   Config added, devices already match:
- *     New(config, device) for each match
- *
- *   Config value updated (selector unchanged):
- *     Changed(config, device) for all matched devices
- *       (carries new config entity)
- *
- *   Config selector changed:
- *     Removed(config, device) for devices that no longer match
- *     New(config, device) for newly matching devices
- *     Changed(config, device) for devices that still match
- *
- *   Config removed:
- *     Removed(config, device) for all matched devices
- *
- *   Device appears, matches existing config(s):
- *     New(config, device) per matching config
- *
- *   Device updated, still matches:
- *     Changed(config, device) with updated device entity
- *
- *   Device updated, match set changes:
- *     Removed(config, device) from configs it no longer matches
- *     New(config, device) to configs it now newly matches
- *
- *   Device removed:
- *     Removed(config, device) for each config it was matched to
- *
- * ## 1:1 mode — one connector per (config, device) pair
- *
- *   New     → start connector (carries full config + device)
- *   Changed → restart connector, or pass update to running connector
- *   Removed → stop connector
- *
- * ## 1:N mode — one connector per config, devices added/removed dynamically
- *
- *   New     → add device to connector, start connector if first device for this config
- *   Changed → update device or config in connector
- *   Removed → remove device from connector, stop connector if last device removed
- *
- *
  * @generated from service world.ControllerService
  */
 export declare const ControllerService: GenService<{
@@ -174,6 +141,14 @@ export declare const ControllerService: GenService<{
     methodKind: "server_streaming";
     input: typeof ControllerReconciliationRequestSchema;
     output: typeof ControllerReconciliationEventSchema;
+  },
+  /**
+   * @generated from rpc world.ControllerService.RestartConnector
+   */
+  restartConnector: {
+    methodKind: "unary";
+    input: typeof RestartConnectorRequestSchema;
+    output: typeof RestartConnectorResponseSchema;
   },
 }>;
 

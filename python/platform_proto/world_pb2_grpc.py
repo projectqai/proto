@@ -99,10 +99,6 @@ class WorldServiceServicer(object):
 
     def Push(self, request, context):
         """Create or update an entity. Used by capabilities.
-
-        Push uses merge semantics: only components present (set) in the pushed entity
-        are updated. Components not included in the message are left unchanged.
-        Components cannot be removed once set.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')

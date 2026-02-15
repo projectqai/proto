@@ -22,17 +22,27 @@ class ControllerReconciliationRequest(_message.Message):
     def __init__(self, controller: _Optional[str] = ...) -> None: ...
 
 class ControllerDeviceConfigurationEvent(_message.Message):
-    __slots__ = ("t", "config", "device")
+    __slots__ = ("t", "config")
     T_FIELD_NUMBER: _ClassVar[int]
     CONFIG_FIELD_NUMBER: _ClassVar[int]
-    DEVICE_FIELD_NUMBER: _ClassVar[int]
     t: ControllerDeviceConfigurationEventType
     config: _world_pb2.Entity
-    device: _world_pb2.Entity
-    def __init__(self, t: _Optional[_Union[ControllerDeviceConfigurationEventType, str]] = ..., config: _Optional[_Union[_world_pb2.Entity, _Mapping]] = ..., device: _Optional[_Union[_world_pb2.Entity, _Mapping]] = ...) -> None: ...
+    def __init__(self, t: _Optional[_Union[ControllerDeviceConfigurationEventType, str]] = ..., config: _Optional[_Union[_world_pb2.Entity, _Mapping]] = ...) -> None: ...
 
 class ControllerReconciliationEvent(_message.Message):
     __slots__ = ("config",)
     CONFIG_FIELD_NUMBER: _ClassVar[int]
     config: ControllerDeviceConfigurationEvent
     def __init__(self, config: _Optional[_Union[ControllerDeviceConfigurationEvent, _Mapping]] = ...) -> None: ...
+
+class RestartConnectorRequest(_message.Message):
+    __slots__ = ("controller", "entity_id")
+    CONTROLLER_FIELD_NUMBER: _ClassVar[int]
+    ENTITY_ID_FIELD_NUMBER: _ClassVar[int]
+    controller: str
+    entity_id: str
+    def __init__(self, controller: _Optional[str] = ..., entity_id: _Optional[str] = ...) -> None: ...
+
+class RestartConnectorResponse(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...

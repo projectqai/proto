@@ -9,7 +9,7 @@ import { file_world } from "./world_pb";
  * Describes the file controller.proto.
  */
 export const file_controller = /*@__PURE__*/
-  fileDesc("ChBjb250cm9sbGVyLnByb3RvEgV3b3JsZCI1Ch9Db250cm9sbGVyUmVjb25jaWxpYXRpb25SZXF1ZXN0EhIKCmNvbnRyb2xsZXIYASABKAkinAEKIkNvbnRyb2xsZXJEZXZpY2VDb25maWd1cmF0aW9uRXZlbnQSOAoBdBgBIAEoDjItLndvcmxkLkNvbnRyb2xsZXJEZXZpY2VDb25maWd1cmF0aW9uRXZlbnRUeXBlEh0KBmNvbmZpZxgCIAEoCzINLndvcmxkLkVudGl0eRIdCgZkZXZpY2UYAyABKAsyDS53b3JsZC5FbnRpdHkiZQodQ29udHJvbGxlclJlY29uY2lsaWF0aW9uRXZlbnQSOwoGY29uZmlnGAIgASgLMikud29ybGQuQ29udHJvbGxlckRldmljZUNvbmZpZ3VyYXRpb25FdmVudEgAQgcKBWV2ZW50KrEBCiZDb250cm9sbGVyRGV2aWNlQ29uZmlndXJhdGlvbkV2ZW50VHlwZRIpCiVDb250cm9sbGVyRGV2aWNlQ29uZmlndXJhdGlvbkV2ZW50TmV3EAASLQopQ29udHJvbGxlckRldmljZUNvbmZpZ3VyYXRpb25FdmVudENoYW5nZWQQARItCilDb250cm9sbGVyRGV2aWNlQ29uZmlndXJhdGlvbkV2ZW50UmVtb3ZlZBACMnAKEUNvbnRyb2xsZXJTZXJ2aWNlElsKCVJlY29uY2lsZRImLndvcmxkLkNvbnRyb2xsZXJSZWNvbmNpbGlhdGlvblJlcXVlc3QaJC53b3JsZC5Db250cm9sbGVyUmVjb25jaWxpYXRpb25FdmVudDABQiBaHmdpdGh1Yi5jb20vcHJvamVjdHFhaS9wcm90by9nb2IGcHJvdG8z", [file_world]);
+  fileDesc("ChBjb250cm9sbGVyLnByb3RvEgV3b3JsZCI1Ch9Db250cm9sbGVyUmVjb25jaWxpYXRpb25SZXF1ZXN0EhIKCmNvbnRyb2xsZXIYASABKAkifQoiQ29udHJvbGxlckRldmljZUNvbmZpZ3VyYXRpb25FdmVudBI4CgF0GAEgASgOMi0ud29ybGQuQ29udHJvbGxlckRldmljZUNvbmZpZ3VyYXRpb25FdmVudFR5cGUSHQoGY29uZmlnGAIgASgLMg0ud29ybGQuRW50aXR5ImUKHUNvbnRyb2xsZXJSZWNvbmNpbGlhdGlvbkV2ZW50EjsKBmNvbmZpZxgCIAEoCzIpLndvcmxkLkNvbnRyb2xsZXJEZXZpY2VDb25maWd1cmF0aW9uRXZlbnRIAEIHCgVldmVudCJAChdSZXN0YXJ0Q29ubmVjdG9yUmVxdWVzdBISCgpjb250cm9sbGVyGAEgASgJEhEKCWVudGl0eV9pZBgCIAEoCSIaChhSZXN0YXJ0Q29ubmVjdG9yUmVzcG9uc2UqsQEKJkNvbnRyb2xsZXJEZXZpY2VDb25maWd1cmF0aW9uRXZlbnRUeXBlEikKJUNvbnRyb2xsZXJEZXZpY2VDb25maWd1cmF0aW9uRXZlbnROZXcQABItCilDb250cm9sbGVyRGV2aWNlQ29uZmlndXJhdGlvbkV2ZW50Q2hhbmdlZBABEi0KKUNvbnRyb2xsZXJEZXZpY2VDb25maWd1cmF0aW9uRXZlbnRSZW1vdmVkEAIyxQEKEUNvbnRyb2xsZXJTZXJ2aWNlElsKCVJlY29uY2lsZRImLndvcmxkLkNvbnRyb2xsZXJSZWNvbmNpbGlhdGlvblJlcXVlc3QaJC53b3JsZC5Db250cm9sbGVyUmVjb25jaWxpYXRpb25FdmVudDABElMKEFJlc3RhcnRDb25uZWN0b3ISHi53b3JsZC5SZXN0YXJ0Q29ubmVjdG9yUmVxdWVzdBofLndvcmxkLlJlc3RhcnRDb25uZWN0b3JSZXNwb25zZUIgWh5naXRodWIuY29tL3Byb2plY3RxYWkvcHJvdG8vZ29iBnByb3RvMw", [file_world]);
 
 /**
  * Describes the message world.ControllerReconciliationRequest.
@@ -33,6 +33,20 @@ export const ControllerReconciliationEventSchema = /*@__PURE__*/
   messageDesc(file_controller, 2);
 
 /**
+ * Describes the message world.RestartConnectorRequest.
+ * Use `create(RestartConnectorRequestSchema)` to create a new message.
+ */
+export const RestartConnectorRequestSchema = /*@__PURE__*/
+  messageDesc(file_controller, 3);
+
+/**
+ * Describes the message world.RestartConnectorResponse.
+ * Use `create(RestartConnectorResponseSchema)` to create a new message.
+ */
+export const RestartConnectorResponseSchema = /*@__PURE__*/
+  messageDesc(file_controller, 4);
+
+/**
  * Describes the enum world.ControllerDeviceConfigurationEventType.
  */
 export const ControllerDeviceConfigurationEventTypeSchema = /*@__PURE__*/
@@ -45,67 +59,6 @@ export const ControllerDeviceConfigurationEventType = /*@__PURE__*/
   tsEnum(ControllerDeviceConfigurationEventTypeSchema);
 
 /**
- * API for controllers to receive work from the engine.
- *
- * The engine matches ConfigurationComponent entities to DeviceComponent entities
- * using the config's selector, and streams the results as
- * ControllerDeviceConfigurationEvent messages carrying both the config and device entity.
- *
- * ## Engine guarantees
- *
- *   - Every New event is eventually followed by a Removed event
- *     for that (config.id, device.id) pair.
- *   - Each event carries the full config and device entities.
- *
- * ## Event sequences by scenario
- *
- *   Stream starts:
- *     New(config, device) for each existing match
- *
- *   Config added, no devices match yet:
- *     (no events until a device matches)
- *
- *   Config added, devices already match:
- *     New(config, device) for each match
- *
- *   Config value updated (selector unchanged):
- *     Changed(config, device) for all matched devices
- *       (carries new config entity)
- *
- *   Config selector changed:
- *     Removed(config, device) for devices that no longer match
- *     New(config, device) for newly matching devices
- *     Changed(config, device) for devices that still match
- *
- *   Config removed:
- *     Removed(config, device) for all matched devices
- *
- *   Device appears, matches existing config(s):
- *     New(config, device) per matching config
- *
- *   Device updated, still matches:
- *     Changed(config, device) with updated device entity
- *
- *   Device updated, match set changes:
- *     Removed(config, device) from configs it no longer matches
- *     New(config, device) to configs it now newly matches
- *
- *   Device removed:
- *     Removed(config, device) for each config it was matched to
- *
- * ## 1:1 mode — one connector per (config, device) pair
- *
- *   New     → start connector (carries full config + device)
- *   Changed → restart connector, or pass update to running connector
- *   Removed → stop connector
- *
- * ## 1:N mode — one connector per config, devices added/removed dynamically
- *
- *   New     → add device to connector, start connector if first device for this config
- *   Changed → update device or config in connector
- *   Removed → remove device from connector, stop connector if last device removed
- *
- *
  * @generated from service world.ControllerService
  */
 export const ControllerService = /*@__PURE__*/

@@ -1,0 +1,194 @@
+syntax = "proto3";
+
+package world;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/projectqai/proto/go";
+
+// ---------------------------------------------
+// Metrics — generic strongly-typed sensor values (modelled after HA sensors)
+
+enum MetricKind {
+  MetricKindUnspecified = 0;
+
+  // Environmental
+  MetricKindTemperature = 1;
+  MetricKindPressure = 2;
+  MetricKindHumidity = 3;
+  MetricKindIlluminance = 4;
+  MetricKindSoundLevel = 5;
+  MetricKindWindSpeed = 6;
+  MetricKindWindDirection = 7;
+  MetricKindPrecipitation = 8;
+  MetricKindIrradiance = 9;
+
+  // Electrical
+  MetricKindVoltage = 20;
+  MetricKindCurrent = 21;
+  MetricKindPower = 22;
+  MetricKindEnergy = 23;
+  MetricKindFrequency = 24;
+  MetricKindResistance = 25;
+
+  // Progress / ratio
+  MetricKindProgress = 40;
+  MetricKindPercentage = 41;
+
+  // Distance / spatial
+  MetricKindDistance = 60;
+  MetricKindSpeed = 61;
+  MetricKindAcceleration = 62;
+  MetricKindDepth = 63;
+
+  // Data / network
+  MetricKindDataRate = 80;
+  MetricKindLatency = 81;
+  MetricKindDataSize = 82;
+
+  // Chemical / air quality
+  MetricKindCo2 = 100;
+  MetricKindPm25 = 101;
+  MetricKindPm10 = 102;
+  MetricKindAqi = 103;
+  MetricKindPh = 104;
+
+  // Weight / mass
+  MetricKindWeight = 110;
+
+  // Volume / flow
+  MetricKindVolume = 112;
+  MetricKindVolumeFlowRate = 113;
+
+  // Signal
+  MetricKindSignalStrength = 115;
+
+  // Misc
+  MetricKindDuration = 118;
+  MetricKindCount = 120;
+}
+
+enum MetricUnit {
+  MetricUnitUnspecified = 0;
+
+  // Temperature
+  MetricUnitCelsius = 1;
+  MetricUnitFahrenheit = 2;
+  MetricUnitKelvin = 3;
+
+  // Pressure
+  MetricUnitHectopascal = 10;
+  MetricUnitPsi = 11;
+  MetricUnitBar = 12;
+  MetricUnitMillibar = 13;
+  MetricUnitInHg = 14;
+
+  // Ratio / percentage
+  MetricUnitPercent = 20;
+  MetricUnitRatio = 21; // 0.0–1.0
+
+  // Electrical
+  MetricUnitVolt = 30;
+  MetricUnitMillivolt = 31;
+  MetricUnitAmpere = 32;
+  MetricUnitMilliampere = 33;
+  MetricUnitWatt = 34;
+  MetricUnitKilowatt = 35;
+  MetricUnitWattHour = 36;
+  MetricUnitKilowattHour = 37;
+  MetricUnitHertz = 38;
+  MetricUnitKilohertz = 39;
+  MetricUnitMegahertz = 40;
+  MetricUnitOhm = 41;
+
+  // Distance / speed
+  MetricUnitMeter = 50;
+  MetricUnitKilometer = 51;
+  MetricUnitFoot = 52;
+  MetricUnitNauticalMile = 53;
+  MetricUnitMeterPerSecond = 54;
+  MetricUnitKnot = 55;
+  MetricUnitKilometerPerHour = 56;
+  MetricUnitMeterPerSecondSquared = 57;
+
+  // Light
+  MetricUnitLux = 60;
+
+  // Sound
+  MetricUnitDecibel = 70;
+  MetricUnitDecibelA = 71; // A-weighted (dBA)
+
+  // Data rate
+  MetricUnitBitPerSecond = 80;
+  MetricUnitKilobitPerSecond = 81;
+  MetricUnitMegabitPerSecond = 82;
+
+  // Misc
+
+  // Data size
+  MetricUnitByte = 84;
+  MetricUnitKilobyte = 85;
+  MetricUnitMegabyte = 86;
+  MetricUnitGigabyte = 87;
+
+  // Chemical / air quality
+  MetricUnitPartsPerMillion = 90;
+  MetricUnitMicrogramPerCubicMeter = 91;
+
+  // Precipitation
+  MetricUnitMillimeter = 94;
+  MetricUnitMillimeterPerHour = 95;
+
+  // Angular
+  MetricUnitDegree = 100;
+  MetricUnitRadian = 101;
+
+  // Time
+  MetricUnitMillisecond = 83;
+  MetricUnitSecond = 110;
+  MetricUnitMinute = 111;
+  MetricUnitHour = 112;
+
+  // Weight
+  MetricUnitKilogram = 113;
+  MetricUnitGram = 114;
+  MetricUnitPound = 115;
+
+  // Volume
+  MetricUnitLiter = 116;
+  MetricUnitMilliliter = 117;
+  MetricUnitCubicMeter = 118;
+  MetricUnitGallon = 119;
+
+  // Generic
+  MetricUnitCount = 120;
+
+  // Volume flow
+  MetricUnitLiterPerMinute = 121;
+  MetricUnitCubicMeterPerHour = 122;
+
+  // Signal
+  MetricUnitDecibelMilliwatt = 123; // dBm
+
+  // Irradiance
+  MetricUnitWattPerSquareMeter = 124;
+}
+
+message Metric {
+  MetricUnit unit = 1;
+  optional uint32 id = 2; // unique within this entity
+  optional MetricKind kind = 3;
+  optional string label = 4; // human-readable display name, e.g. "Engine Bay Temperature"
+  optional google.protobuf.Timestamp measured_at = 5;
+
+  oneof val {
+    double double = 10;
+    float float = 11;
+    sint64 sint64 = 12;
+    uint64 uint64 = 13;
+  }
+}
+
+message MetricComponent {
+  repeated Metric metrics = 1;
+}

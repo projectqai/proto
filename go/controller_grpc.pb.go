@@ -19,74 +19,16 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ControllerService_Reconcile_FullMethodName = "/world.ControllerService/Reconcile"
+	ControllerService_Reconcile_FullMethodName        = "/world.ControllerService/Reconcile"
+	ControllerService_RestartConnector_FullMethodName = "/world.ControllerService/RestartConnector"
 )
 
 // ControllerServiceClient is the client API for ControllerService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-//
-// API for controllers to receive work from the engine.
-//
-// The engine matches ConfigurationComponent entities to DeviceComponent entities
-// using the config's selector, and streams the results as
-// ControllerDeviceConfigurationEvent messages carrying both the config and device entity.
-//
-// ## Engine guarantees
-//
-//   - Every New event is eventually followed by a Removed event
-//     for that (config.id, device.id) pair.
-//   - Each event carries the full config and device entities.
-//
-// ## Event sequences by scenario
-//
-//	Stream starts:
-//	  New(config, device) for each existing match
-//
-//	Config added, no devices match yet:
-//	  (no events until a device matches)
-//
-//	Config added, devices already match:
-//	  New(config, device) for each match
-//
-//	Config value updated (selector unchanged):
-//	  Changed(config, device) for all matched devices
-//	    (carries new config entity)
-//
-//	Config selector changed:
-//	  Removed(config, device) for devices that no longer match
-//	  New(config, device) for newly matching devices
-//	  Changed(config, device) for devices that still match
-//
-//	Config removed:
-//	  Removed(config, device) for all matched devices
-//
-//	Device appears, matches existing config(s):
-//	  New(config, device) per matching config
-//
-//	Device updated, still matches:
-//	  Changed(config, device) with updated device entity
-//
-//	Device updated, match set changes:
-//	  Removed(config, device) from configs it no longer matches
-//	  New(config, device) to configs it now newly matches
-//
-//	Device removed:
-//	  Removed(config, device) for each config it was matched to
-//
-// ## 1:1 mode — one connector per (config, device) pair
-//
-//	New     → start connector (carries full config + device)
-//	Changed → restart connector, or pass update to running connector
-//	Removed → stop connector
-//
-// ## 1:N mode — one connector per config, devices added/removed dynamically
-//
-//	New     → add device to connector, start connector if first device for this config
-//	Changed → update device or config in connector
-//	Removed → remove device from connector, stop connector if last device removed
 type ControllerServiceClient interface {
 	Reconcile(ctx context.Context, in *ControllerReconciliationRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[ControllerReconciliationEvent], error)
+	RestartConnector(ctx context.Context, in *RestartConnectorRequest, opts ...grpc.CallOption) (*RestartConnectorResponse, error)
 }
 
 type controllerServiceClient struct {
@@ -116,71 +58,22 @@ func (c *controllerServiceClient) Reconcile(ctx context.Context, in *ControllerR
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type ControllerService_ReconcileClient = grpc.ServerStreamingClient[ControllerReconciliationEvent]
 
+func (c *controllerServiceClient) RestartConnector(ctx context.Context, in *RestartConnectorRequest, opts ...grpc.CallOption) (*RestartConnectorResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RestartConnectorResponse)
+	err := c.cc.Invoke(ctx, ControllerService_RestartConnector_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ControllerServiceServer is the server API for ControllerService service.
 // All implementations must embed UnimplementedControllerServiceServer
 // for forward compatibility.
-//
-// API for controllers to receive work from the engine.
-//
-// The engine matches ConfigurationComponent entities to DeviceComponent entities
-// using the config's selector, and streams the results as
-// ControllerDeviceConfigurationEvent messages carrying both the config and device entity.
-//
-// ## Engine guarantees
-//
-//   - Every New event is eventually followed by a Removed event
-//     for that (config.id, device.id) pair.
-//   - Each event carries the full config and device entities.
-//
-// ## Event sequences by scenario
-//
-//	Stream starts:
-//	  New(config, device) for each existing match
-//
-//	Config added, no devices match yet:
-//	  (no events until a device matches)
-//
-//	Config added, devices already match:
-//	  New(config, device) for each match
-//
-//	Config value updated (selector unchanged):
-//	  Changed(config, device) for all matched devices
-//	    (carries new config entity)
-//
-//	Config selector changed:
-//	  Removed(config, device) for devices that no longer match
-//	  New(config, device) for newly matching devices
-//	  Changed(config, device) for devices that still match
-//
-//	Config removed:
-//	  Removed(config, device) for all matched devices
-//
-//	Device appears, matches existing config(s):
-//	  New(config, device) per matching config
-//
-//	Device updated, still matches:
-//	  Changed(config, device) with updated device entity
-//
-//	Device updated, match set changes:
-//	  Removed(config, device) from configs it no longer matches
-//	  New(config, device) to configs it now newly matches
-//
-//	Device removed:
-//	  Removed(config, device) for each config it was matched to
-//
-// ## 1:1 mode — one connector per (config, device) pair
-//
-//	New     → start connector (carries full config + device)
-//	Changed → restart connector, or pass update to running connector
-//	Removed → stop connector
-//
-// ## 1:N mode — one connector per config, devices added/removed dynamically
-//
-//	New     → add device to connector, start connector if first device for this config
-//	Changed → update device or config in connector
-//	Removed → remove device from connector, stop connector if last device removed
 type ControllerServiceServer interface {
 	Reconcile(*ControllerReconciliationRequest, grpc.ServerStreamingServer[ControllerReconciliationEvent]) error
+	RestartConnector(context.Context, *RestartConnectorRequest) (*RestartConnectorResponse, error)
 	mustEmbedUnimplementedControllerServiceServer()
 }
 
@@ -193,6 +86,9 @@ type UnimplementedControllerServiceServer struct{}
 
 func (UnimplementedControllerServiceServer) Reconcile(*ControllerReconciliationRequest, grpc.ServerStreamingServer[ControllerReconciliationEvent]) error {
 	return status.Errorf(codes.Unimplemented, "method Reconcile not implemented")
+}
+func (UnimplementedControllerServiceServer) RestartConnector(context.Context, *RestartConnectorRequest) (*RestartConnectorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RestartConnector not implemented")
 }
 func (UnimplementedControllerServiceServer) mustEmbedUnimplementedControllerServiceServer() {}
 func (UnimplementedControllerServiceServer) testEmbeddedByValue()                           {}
@@ -226,13 +122,36 @@ func _ControllerService_Reconcile_Handler(srv interface{}, stream grpc.ServerStr
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type ControllerService_ReconcileServer = grpc.ServerStreamingServer[ControllerReconciliationEvent]
 
+func _ControllerService_RestartConnector_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RestartConnectorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ControllerServiceServer).RestartConnector(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ControllerService_RestartConnector_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ControllerServiceServer).RestartConnector(ctx, req.(*RestartConnectorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ControllerService_ServiceDesc is the grpc.ServiceDesc for ControllerService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ControllerService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "world.ControllerService",
 	HandlerType: (*ControllerServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "RestartConnector",
+			Handler:    _ControllerService_RestartConnector_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "Reconcile",

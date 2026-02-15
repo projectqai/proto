@@ -36,11 +36,15 @@ const (
 	// ControllerServiceReconcileProcedure is the fully-qualified name of the ControllerService's
 	// Reconcile RPC.
 	ControllerServiceReconcileProcedure = "/world.ControllerService/Reconcile"
+	// ControllerServiceRestartConnectorProcedure is the fully-qualified name of the ControllerService's
+	// RestartConnector RPC.
+	ControllerServiceRestartConnectorProcedure = "/world.ControllerService/RestartConnector"
 )
 
 // ControllerServiceClient is a client for the world.ControllerService service.
 type ControllerServiceClient interface {
 	Reconcile(context.Context, *connect.Request[_go.ControllerReconciliationRequest]) (*connect.ServerStreamForClient[_go.ControllerReconciliationEvent], error)
+	RestartConnector(context.Context, *connect.Request[_go.RestartConnectorRequest]) (*connect.Response[_go.RestartConnectorResponse], error)
 }
 
 // NewControllerServiceClient constructs a client for the world.ControllerService service. By
@@ -60,12 +64,19 @@ func NewControllerServiceClient(httpClient connect.HTTPClient, baseURL string, o
 			connect.WithSchema(controllerServiceMethods.ByName("Reconcile")),
 			connect.WithClientOptions(opts...),
 		),
+		restartConnector: connect.NewClient[_go.RestartConnectorRequest, _go.RestartConnectorResponse](
+			httpClient,
+			baseURL+ControllerServiceRestartConnectorProcedure,
+			connect.WithSchema(controllerServiceMethods.ByName("RestartConnector")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // controllerServiceClient implements ControllerServiceClient.
 type controllerServiceClient struct {
-	reconcile *connect.Client[_go.ControllerReconciliationRequest, _go.ControllerReconciliationEvent]
+	reconcile        *connect.Client[_go.ControllerReconciliationRequest, _go.ControllerReconciliationEvent]
+	restartConnector *connect.Client[_go.RestartConnectorRequest, _go.RestartConnectorResponse]
 }
 
 // Reconcile calls world.ControllerService.Reconcile.
@@ -73,9 +84,15 @@ func (c *controllerServiceClient) Reconcile(ctx context.Context, req *connect.Re
 	return c.reconcile.CallServerStream(ctx, req)
 }
 
+// RestartConnector calls world.ControllerService.RestartConnector.
+func (c *controllerServiceClient) RestartConnector(ctx context.Context, req *connect.Request[_go.RestartConnectorRequest]) (*connect.Response[_go.RestartConnectorResponse], error) {
+	return c.restartConnector.CallUnary(ctx, req)
+}
+
 // ControllerServiceHandler is an implementation of the world.ControllerService service.
 type ControllerServiceHandler interface {
 	Reconcile(context.Context, *connect.Request[_go.ControllerReconciliationRequest], *connect.ServerStream[_go.ControllerReconciliationEvent]) error
+	RestartConnector(context.Context, *connect.Request[_go.RestartConnectorRequest]) (*connect.Response[_go.RestartConnectorResponse], error)
 }
 
 // NewControllerServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -91,10 +108,18 @@ func NewControllerServiceHandler(svc ControllerServiceHandler, opts ...connect.H
 		connect.WithSchema(controllerServiceMethods.ByName("Reconcile")),
 		connect.WithHandlerOptions(opts...),
 	)
+	controllerServiceRestartConnectorHandler := connect.NewUnaryHandler(
+		ControllerServiceRestartConnectorProcedure,
+		svc.RestartConnector,
+		connect.WithSchema(controllerServiceMethods.ByName("RestartConnector")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/world.ControllerService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case ControllerServiceReconcileProcedure:
 			controllerServiceReconcileHandler.ServeHTTP(w, r)
+		case ControllerServiceRestartConnectorProcedure:
+			controllerServiceRestartConnectorHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -106,4 +131,8 @@ type UnimplementedControllerServiceHandler struct{}
 
 func (UnimplementedControllerServiceHandler) Reconcile(context.Context, *connect.Request[_go.ControllerReconciliationRequest], *connect.ServerStream[_go.ControllerReconciliationEvent]) error {
 	return connect.NewError(connect.CodeUnimplemented, errors.New("world.ControllerService.Reconcile is not implemented"))
+}
+
+func (UnimplementedControllerServiceHandler) RestartConnector(context.Context, *connect.Request[_go.RestartConnectorRequest]) (*connect.Response[_go.RestartConnectorResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.ControllerService.RestartConnector is not implemented"))
 }

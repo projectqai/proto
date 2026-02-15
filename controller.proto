@@ -16,11 +16,10 @@ enum ControllerDeviceConfigurationEventType {
   ControllerDeviceConfigurationEventRemoved = 2;
 }
 
-// a (config, device) match was added, changed, or removed
+// An entity with Config on this controller was added, changed, or removed.
 message ControllerDeviceConfigurationEvent {
   ControllerDeviceConfigurationEventType t = 1;
   Entity config = 2;
-  Entity device = 3;
 }
 
 message ControllerReconciliationEvent {
@@ -31,64 +30,34 @@ message ControllerReconciliationEvent {
 
 // API for controllers to receive work from the engine.
 //
-// The engine matches ConfigurationComponent entities to DeviceComponent entities
-// using the config's selector, and streams the results as
-// ControllerDeviceConfigurationEvent messages carrying both the config and device entity.
+// The engine watches for entities that have:
+//   - Controller.Id == the requested controller name
+//   - Config != nil
+//   - Controller.Node == local node
 //
-// ## Engine guarantees
+// and streams them as ControllerDeviceConfigurationEvent messages.
 //
-//   - Every New event is eventually followed by a Removed event
-//     for that (config.id, device.id) pair.
-//   - Each event carries the full config and device entities.
-//
-// ## Event sequences by scenario
+// ## Event sequences
 //
 //   Stream starts:
-//     New(config, device) for each existing match
+//     New(entity) for each matching entity
 //
-//   Config added, no devices match yet:
-//     (no events until a device matches)
+//   Entity gains Config for this controller:
+//     New(entity)
 //
-//   Config added, devices already match:
-//     New(config, device) for each match
+//   Entity Config value updated:
+//     Changed(entity)
 //
-//   Config value updated (selector unchanged):
-//     Changed(config, device) for all matched devices
-//       (carries new config entity)
-//
-//   Config selector changed:
-//     Removed(config, device) for devices that no longer match
-//     New(config, device) for newly matching devices
-//     Changed(config, device) for devices that still match
-//
-//   Config removed:
-//     Removed(config, device) for all matched devices
-//
-//   Device appears, matches existing config(s):
-//     New(config, device) per matching config
-//
-//   Device updated, still matches:
-//     Changed(config, device) with updated device entity
-//
-//   Device updated, match set changes:
-//     Removed(config, device) from configs it no longer matches
-//     New(config, device) to configs it now newly matches
-//
-//   Device removed:
-//     Removed(config, device) for each config it was matched to
-//
-// ## 1:1 mode — one connector per (config, device) pair
-//
-//   New     → start connector (carries full config + device)
-//   Changed → restart connector, or pass update to running connector
-//   Removed → stop connector
-//
-// ## 1:N mode — one connector per config, devices added/removed dynamically
-//
-//   New     → add device to connector, start connector if first device for this config
-//   Changed → update device or config in connector
-//   Removed → remove device from connector, stop connector if last device removed
-//
+//   Entity removed or no longer matches:
+//     Removed(entity)
+
+message RestartConnectorRequest {
+  string controller = 1;
+  string entity_id = 2;
+}
+message RestartConnectorResponse {}
+
 service ControllerService {
   rpc Reconcile(ControllerReconciliationRequest) returns (stream ControllerReconciliationEvent);
+  rpc RestartConnector(RestartConnectorRequest) returns (RestartConnectorResponse);
 }

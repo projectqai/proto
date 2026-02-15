@@ -4,20 +4,10 @@
   "author": "projectq-release-bot",
   "type": "module",
   "exports": {
-    "./world": {
-      "types": "./dist/world_pb.d.ts",
-      "import": "./dist/world_pb.js",
-      "default": "./dist/world_pb.js"
-    },
-    "./timeline": {
-      "types": "./dist/timeline_pb.d.ts",
-      "import": "./dist/timeline_pb.js",
-      "default": "./dist/timeline_pb.js"
-    },
-    "./controller": {
-      "types": "./dist/controller_pb.d.ts",
-      "import": "./dist/controller_pb.js",
-      "default": "./dist/controller_pb.js"
+    "./*": {
+      "types": "./dist/*_pb.d.ts",
+      "import": "./dist/*_pb.js",
+      "default": "./dist/*_pb.js"
     }
   },
   "files": [

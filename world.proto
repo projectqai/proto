@@ -2,8 +2,10 @@ syntax = "proto3";
 
 package world;
 
+import "geometry.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
+import "metrics.proto";
 
 option go_package = "github.com/projectqai/proto/go";
 
@@ -18,7 +20,7 @@ message Entity {
   optional Controller controller = 3;
   optional Lifetime lifetime = 4;
   optional Priority priority = 5;
-  reserved 6;
+  optional Lease lease = 6;
   reserved 7;
   reserved 8;
   reserved 9;
@@ -42,13 +44,20 @@ message Entity {
   optional OrientationComponent orientation = 30;
   optional NavigationComponent navigation = 34;
   optional PowerComponent power = 33;
+  optional CaptureComponent capture = 35;
 
   // experimental, dont use yet externally
   optional TaskableComponent taskable = 23;
   optional DeviceComponent device = 50;
   optional ConfigurationComponent config = 51;
+  optional ConfigurableComponent configurable = 52;
   optional MissionComponent mission = 31;
   optional LinkComponent link = 32;
+  optional MetricComponent metric = 36;
+  optional SensorComponent sensor = 37;
+  optional LocalShapeComponent local_shape = 29;
+
+  optional InteractivityComponent interactivity = 60;
 }
 
 // A controller owns an entity.
@@ -58,6 +67,15 @@ message Entity {
 message Controller {
   optional string id = 1;
   optional string node = 2;
+}
+
+// Leases are used by controllers to negotiate exclusivity on an entity
+// The engine rejects pushes that attempt to change the holder of an active lease,
+// which a controller can use to "lock" something.
+// Note that this is a local lock, it is not distirbuted vertically
+message Lease {
+  string controller = 1;
+  optional google.protobuf.Timestamp expires = 2;
 }
 
 message Lifetime {
@@ -104,18 +122,36 @@ message SymbolComponent {
   string milStd2525C = 1;
 }
 
+message InteractivityComponent {
+  // use lucide names for max compat
+  optional string icon = 1;
+
+  // some url where a user can learn more about this entity
+  optional string reference_url = 3;
+}
+
 enum CameraProtocol {
   CameraProtocolUnspecified = 0;
   CameraProtocolWebrtc = 1;
   CameraProtocolHls = 2;
   CameraProtocolMjpeg = 3;
   CameraProtocolImage = 4;
+  CameraProtocolIframe = 5;
 }
 
 message Camera {
   string label = 1;
   string url = 2;
   CameraProtocol protocol = 3;
+
+  // horizontal field of view in degrees
+  optional double fov = 4;
+
+  // minimum detection range in meters (blind zone)
+  optional double range_min = 5;
+
+  // maximum detection range in meters
+  optional double range_max = 6;
 }
 
 message CameraComponent {
@@ -131,6 +167,11 @@ message DetectionComponent {
 message BearingComponent {
   optional double azimuth = 1;
   optional double elevation = 2;
+}
+
+message SensorComponent {
+  // entity IDS of GeoShapeComponent entities that describe the coverage
+  repeated string coverage = 2;
 }
 
 message Quaternion {
@@ -213,8 +254,20 @@ message KinematicsComponent {
   optional KinematicsEnu accelerationEnu = 2;
 }
 
+message Geometry {
+  bytes wkb = 1 [deprecated = true];
+  PlanarGeometry planar = 2;
+}
+
 message GeoShapeComponent {
   optional Geometry geometry = 1;
+}
+
+message LocalShapeComponent {
+  // entity ID whose frame this geometry is defined in
+  string relative_to = 2;
+
+  optional LocalGeometry geometry = 1;
 }
 
 enum ClassificationIdentity {
@@ -328,6 +381,32 @@ message LinkComponent {
 
   // entity id of the device that manages the link to this entity
   optional string via = 5;
+
+  // last measured end-to-end latency in milliseconds
+  optional uint32 last_latency_ms = 6;
+
+  // exponential moving average of latency in milliseconds
+  optional uint32 avg_latency_ms = 7;
+
+  // last time data was received over this link
+  optional google.protobuf.Timestamp last_seen = 8;
+}
+
+message CaptureComponent {
+  // last raw payload received from this entity
+  optional bytes payload = 1;
+
+  // application-level port (e.g. LoRaWAN FPort, UDP port)
+  optional uint32 port = 2;
+
+  // content type hint (e.g. "application/octet-stream", "application/json")
+  optional string content_type = 3;
+
+  // entity ID of the device that captured this data
+  optional string captured_by = 4;
+
+  // when the payload was captured
+  optional google.protobuf.Timestamp captured_at = 5;
 }
 
 message PowerComponent {
@@ -347,47 +426,80 @@ enum DeviceState {
   DeviceStateFailed = 2;
 }
 
-enum ConfigurationState {
-  ConfigurationStatePending = 0;
-  ConfigurationStateActive = 1;
-  ConfigurationStateFailed = 2;
+enum ConfigurableState {
+  ConfigurableStateInactive = 0;
+  ConfigurableStateStarting = 1;
+  ConfigurableStateActive = 2;
+  ConfigurableStateFailed = 3;
+  ConfigurableStateConflict = 4;
+  ConfigurableStateScheduled = 5;
 }
 
-message Configurable {
-  string key = 1;
-  google.protobuf.Struct schema = 2;
-  google.protobuf.Struct value = 3;
-  ConfigurationState state = 4;
-  optional string error = 5;
+message DeviceClassOption {
+  string class = 1;
+
+  // Human-readable label for the UI select (e.g. "USB Serial Device")
+  string label = 2;
 }
 
+// Presence of this component indicates a controller is managing this entity.
+// It declares what can be configured and reports the controller's state.
+// Always on the same entity as a DeviceComponent.
+// ConfigurationComponent (user-created config) is also placed on this entity.
+message ConfigurableComponent {
+  google.protobuf.Struct schema = 1;
+
+  // current state reported by the controller
+  google.protobuf.Struct value = 2;
+
+  ConfigurableState state = 3;
+  optional string error = 4;
+
+  // Human-readable label for the UI (e.g. "Defaults", "USB Device", "Channel 0")
+  optional string label = 5;
+
+  // Echoed from ConfigurationComponent.version after the controller
+  // has finished processing the configuration.
+  uint64 applied_version = 6;
+
+  // what kinds of devices can be attached underneath this entity
+  repeated DeviceClassOption supported_device_classes = 7;
+
+  // indicated when the controller will activate this entity
+  optional google.protobuf.Timestamp scheduled_at = 8;
+}
+
+// Physical device in the device tree. Describes hardware topology only.
+// Can be discovered automatically or created by hand.
 message DeviceComponent {
   // parent device entity, forming the device tree. unset for root (node).
   optional string parent = 1;
 
+  // TODO might not be needed?
   // list of non-direct ancestors this device is made of
   repeated string composition = 2;
 
-  // configurable keys, their current state and schema
-  repeated Configurable configurable = 3;
-
   // a stable identifier that remains the same no matter where the asset is connected to
-  // generally used to match a specific device within the hydris network
+  // e.g. USB serial number, MAC address. lets the system recognize the same
+  // physical hardware even if it moves to a different port or node.
   optional string unique_hardware_id = 4;
-
-  // unstructured controller specific labels that can be matched to configure
-  // all devices with these properties at the same time
-  // when not using unique_hardware_id
-  map<string, string> labels = 5;
 
   DeviceState state = 6;
   optional string error = 7;
 
+  // device class (e.g. "usb_serial", "radio", "camera")
+  optional string class = 10;
+
+  // human-readable category for UI grouping (e.g. "Air", "Sea", "Network")
+  optional string category = 13;
+
   // subsystem-specific descriptors
-  optional NodeDevice node = 9;
-  optional UsbDevice usb = 10;
-  optional IpDevice ip = 11;
-  optional SerialDevice serial = 12;
+  optional NodeDevice node = 20;
+  optional UsbDevice usb = 21;
+  optional IpDevice ip = 22;
+  optional SerialDevice serial = 23;
+  optional EthernetDevice ethernet = 24;
+  optional LPWANDevice lpwan = 25;
 }
 
 message NodeDevice {
@@ -413,58 +525,36 @@ message IpDevice {
   optional uint32 port = 2;
 }
 
+message EthernetDevice {
+  // MAC address in canonical colon-separated hex (e.g. "aa:bb:cc:dd:ee:ff")
+  optional string mac_address = 1;
+
+  // vendor name resolved from the OUI prefix, if known
+  optional string vendor = 2;
+}
+
 message SerialDevice {
   optional string path = 1;
   optional uint32 baud_rate = 2;
 }
 
-// Desired/target configuration, created by the user/UI.
+message LPWANDevice {
+  // IEEE 802 EUI-64 identifier (e.g. "a84041c6545d1429")
+  optional string eui = 1;
+
+  // network address assigned after join/activation (e.g. "012a7125")
+  optional string address = 2;
+}
+
+// Configuration pushed onto an entity. The engine delivers entities with
+// Config to the matching controller via Reconcile.
 message ConfigurationComponent {
-  string controller = 1;
-  string key = 2;
   google.protobuf.Struct value = 3;
 
-  // apply to a specific or a subset of devices
-  // if empty, applies to all devices from this controller that advertise this key.
-  EntityFilter selector = 4;
-}
-
-// ---------------------------------------------
-
-// a 2.5D point on the projected flat surface in WGS84
-message PlanarPoint {
-  double longitude = 1;
-  double latitude = 2;
-
-  // height above ellipsoid (WGS84) in meters
-  optional double altitude = 3;
-}
-
-// a path with zero area on the projected flat surface
-// a ring is considered to be closed when the first and last points are identical
-message PlanarRing {
-  repeated PlanarPoint points = 1;
-}
-
-/// An area enclosed by a ring, with optional holes.
-/// All rings must be closed (first point = last point)
-message PlanarPolygon {
-  PlanarRing outer = 1;
-  repeated PlanarRing holes = 2;
-}
-
-// 2.5D geometry in WGS 84
-message PlanarGeometry {
-  oneof plane {
-    PlanarPoint point = 1;
-    PlanarRing line = 2;
-    PlanarPolygon polygon = 3;
-  }
-}
-
-message Geometry {
-  bytes wkb = 1 [deprecated = true];
-  PlanarGeometry planar = 2;
+  // Monotonically increasing counter set by the config pusher.
+  // The controller echoes this back in ConfigurableComponent.applied_version
+  // once the configuration has been processed.
+  uint64 version = 5;
 }
 
 // ---------------------------------------------
@@ -515,19 +605,13 @@ message GeoFilter {
 }
 
 message DeviceFilter {
-  // subset match against device.labels
-  map<string, string> labels = 1;
+  // match devices with this parent entity ID (for building the device tree)
+  optional string parent = 1;
 
   optional string unique_hardware_id = 4;
-
-  optional UsbDevice usb = 10;
-  optional IpDevice ip = 11;
-  optional SerialDevice serial = 12;
 }
 
-message ConfigurationFilter {
-  optional string key = 1;
-}
+message ConfigurationFilter {}
 
 message WatchBehavior {
   // Maximum non-flash message rate this consumer can handle (0 = unlimited)
@@ -556,7 +640,14 @@ message ListEntitiesResponse {
 }
 
 message EntityChangeRequest {
+  // components present (set) in the pushed entity are replaced entirely, not recursively.
+  // Components not included in the message are left unchanged.
+  // missing Components are NOT removed
   repeated Entity changes = 1;
+
+  // replaces the whole entity atoomically.
+  // missing Components ARE removed
+  repeated Entity replacements = 2;
 }
 
 message ExpireEntityRequest {
@@ -637,10 +728,6 @@ service WorldService {
   rpc WatchEntities(ListEntitiesRequest) returns (stream EntityChangeEvent);
 
   // Create or update an entity. Used by capabilities.
-  //
-  // Push uses merge semantics: only components present (set) in the pushed entity
-  // are updated. Components not included in the message are left unchanged.
-  // Components cannot be removed once set.
   rpc Push(EntityChangeRequest) returns (EntityChangeResponse);
 
   // expire an entity, setting its lifetime.until to now
