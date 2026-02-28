@@ -33,7 +33,6 @@ message Entity {
   optional CameraComponent camera = 15;
   optional DetectionComponent detection = 16;
   optional BearingComponent bearing = 17;
-  reserved 20; // was LocationUncertaintyComponent
   optional TrackComponent track = 21;
   optional LocatorComponent locator = 22;
   optional KinematicsComponent kinematics = 24;
@@ -56,8 +55,10 @@ message Entity {
   optional MetricComponent metric = 36;
   optional SensorComponent sensor = 37;
   optional LocalShapeComponent local_shape = 29;
-
+  optional PoseComponent pose = 38;
+  optional TaskExecutionComponent task_execution = 41;
   optional InteractivityComponent interactivity = 60;
+  optional TargetPoseComponent target_pose = 62;
 }
 
 // A controller owns an entity.
@@ -130,32 +131,56 @@ message InteractivityComponent {
   optional string reference_url = 3;
 }
 
-enum CameraProtocol {
-  CameraProtocolUnspecified = 0;
-  CameraProtocolWebrtc = 1;
-  CameraProtocolHls = 2;
-  CameraProtocolMjpeg = 3;
-  CameraProtocolImage = 4;
-  CameraProtocolIframe = 5;
+enum MediaStreamProtocol {
+  MediaStreamProtocolUnspecified = 0;
+  MediaStreamProtocolWebrtc = 1;
+  MediaStreamProtocolHls = 2;
+  MediaStreamProtocolMjpeg = 3;
+  MediaStreamProtocolImage = 4;
+  MediaStreamProtocolIframe = 5;
+  MediaStreamProtocolRtsp = 6;
 }
 
-message Camera {
+enum MediaStreamRole {
+  MediaStreamRoleUnspecified = 0;
+  MediaStreamRoleMain = 1; // primary high-resolution stream
+  MediaStreamRoleSub = 2; // lower-resolution sub stream
+  MediaStreamRoleSnapshot = 3; // still image capture
+}
+
+message MediaStream {
   string label = 1;
   string url = 2;
-  CameraProtocol protocol = 3;
-
-  // horizontal field of view in degrees
-  optional double fov = 4;
-
-  // minimum detection range in meters (blind zone)
-  optional double range_min = 5;
-
-  // maximum detection range in meters
-  optional double range_max = 6;
+  MediaStreamProtocol protocol = 3;
+  MediaStreamRole role = 9; // stream role (main, sub, snapshot)
+  string codec = 10; // video codec, e.g. "H264", "H265"
+  optional int32 width = 11; // resolution width in pixels
+  optional int32 height = 12; // resolution height in pixels
 }
 
 message CameraComponent {
-  repeated Camera cameras = 1;
+  repeated MediaStream streams = 1;
+
+  // If the camera is PTZ, this Entity represents where this camera is looking at
+  // The device driver reconcile target_pose->pose with physical actuation of the gymbal
+  optional string focal_point = 2;
+
+  // horizontal field of view in degrees, centered on the entity's azimuth.
+  // For varifocal cameras, this is the current effective FOV (computed by
+  // the engine from fov_wide/fov_tele + zoom if set).
+  optional double fov = 3;
+
+  // minimum detection range in meters (blind zone)
+  optional double range_min = 4;
+
+  // maximum detection range in meters
+  optional double range_max = 5;
+
+  // Static optical specs for varifocal/zoom cameras.
+  // When set, the engine computes effective fov from PolarOffset.range (focal distance):
+  //   zoom = range / range_max, fov = fov_wide + zoom * (fov_tele - fov_wide)
+  optional double fov_wide = 6; // horizontal FOV at widest zoom (degrees)
+  optional double fov_tele = 7; // horizontal FOV at max zoom (degrees)
 }
 
 message DetectionComponent {
@@ -164,8 +189,15 @@ message DetectionComponent {
   optional google.protobuf.Timestamp lastMeasured = 3;
 }
 
+// Absolute bearing in the world, relative to the local ENU frame.
+// For root entities this is set directly; for child entities with a
+// PolarOffset the engine computes it by composing down the pose tree.
 message BearingComponent {
+  // clockwise angle from true north in degrees [0, 360)
   optional double azimuth = 1;
+
+  // angle above the local horizontal plane in degrees [-90, 90]
+  // positive = above horizon, negative = below
   optional double elevation = 2;
 }
 
@@ -190,14 +222,62 @@ message CovarianceMatrix {
   optional double mzz = 6;
 }
 
-message OrientationComponent {
-  optional Quaternion orientation = 1;
-  optional CovarianceMatrix covariance = 2;
+message CartesianOffset {
+  double east_m = 1;
+  double north_m = 2;
+  optional double up_m = 3;
+  optional CovarianceMatrix covariance = 4;
 
-  // angular velocity in radians per second (body frame)
-  optional double roll_rate = 3;
-  optional double pitch_rate = 4;
-  optional double yaw_rate = 5;
+  optional Quaternion orientation = 5;
+}
+
+message PolarOffset {
+  // angle from the parent's forward axis, degrees [0, 360)
+  double azimuth = 1;
+  // above the parent's horizontal plane, degrees [-90, 90]
+  optional double elevation = 2;
+  // distance in meters. omit for bearing-only (passive sensor)
+  optional double range = 3;
+  optional CovarianceMatrix covariance = 4;
+
+  optional Quaternion orientation = 5;
+}
+
+// This entity's pose is defined relative to a parent entity's coordinate frame.
+// The engine computes absolute GeoSpatialComponent by walking the tree.
+// If the pose cannot be fully resolved (e.g. missing range), no geo is produced.
+message PoseComponent {
+  // parent entity in the transform tree
+  string parent = 1;
+
+  oneof offset {
+    CartesianOffset cartesian = 2;
+    PolarOffset polar = 3;
+  }
+}
+
+// Desired pose for this joint, same shape as PoseComponent's offset.
+// A device specific reconciler continuously drives the actual PoseComponent toward this target.
+message TargetPoseComponent {
+  oneof offset {
+    CartesianOffset cartesian = 1;
+    PolarOffset polar = 2;
+  }
+}
+
+// Angular velocity around the entity's own body axes
+message AngularVelocity {
+  double roll_rate = 1; // radians per second
+  double pitch_rate = 2; // radians per second
+  double yaw_rate = 3; // radians per second
+}
+
+// Absolute orientation in the world, relative to the local ENU frame.
+// For root entities this is set directly; for child entities the engine
+// computes it by composing orientations down the pose tree.
+message OrientationComponent {
+  Quaternion orientation = 1;
+  optional CovarianceMatrix covariance = 2;
 }
 
 message TrackComponent {
@@ -208,6 +288,9 @@ message TrackComponent {
 
   // entity ID of a GeoShapeComponent containing the predicted forward track
   optional string prediction = 3;
+
+  // detection entity IDs that contribute to this track
+  repeated string detections = 4;
 }
 
 message LocatorComponent {
@@ -222,20 +305,67 @@ message TaskableAssignee {
   optional string entityId = 1;
 }
 
+enum TaskableMode {
+  // RunTask places the TaskExecutionComponent on the same entity as the
+  // TaskableComponent. Only one execution at a time; a second RunTask while
+  // one is active is rejected.
+  TaskableModeExclusive = 0;
+
+  // Like Exclusive, but a new RunTask replaces the current execution
+  // instead of being rejected.
+  TaskableModeReconcile = 1;
+
+  // RunTask creates a new child entity with the TaskExecutionComponent.
+  // Multiple executions can run in parallel.
+  TaskableModeSpawn = 2;
+
+  // Like Reconcile, but the driver manages a priority queue of active tasks.
+  // RunTask creates child entities; the driver picks the highest-priority one.
+  TaskableModePriorityQueue = 3;
+}
+
 message TaskableComponent {
   optional string reserved = 1;
   optional string label = 2;
   repeated TaskableContext context = 3;
   repeated TaskableAssignee assignee = 4;
   google.protobuf.Struct schema = 5;
+  TaskableMode mode = 6;
+}
+
+enum TaskExecutionState {
+  TaskExecutionStatePending = 0;
+  TaskExecutionStateRunning = 1;
+  TaskExecutionStateCompleted = 2;
+  TaskExecutionStateFailed = 3;
+}
+
+// An instance of a task being executed.
+// Created by RunTask, referencing a TaskableComponent entity as the definition.
+// The controller that owns the taskable watches for these and executes them.
+message TaskExecutionComponent {
+  // entity ID of the TaskableComponent that defines this task
+  string task = 1;
+
+  // parameters supplied by the caller, validated against the taskable's schema
+  optional google.protobuf.Struct parameters = 2;
+
+  // current execution state, updated by the controller
+  TaskExecutionState state = 3;
+
+  // human-readable error or result message
+  optional string reason = 4;
+
+  // priority level for PriorityQueue mode (higher = more important)
+  optional uint32 priority = 5;
 }
 
 message KinematicsEnu {
   // Velocity components in the local East-North-Up (ENU) coordinate frame.
   // The ENU frame is a right-handed Cartesian coordinate system with origin
   // at the entity's position (GeoSpatialComponent), where:
-  // - East axis: tangent to the latitude line, pointing eastward
-  // - North axis: tangent to the longitude line, pointing northward
+  // - East axis: tangent to the parallel (line of constant latitude), pointing eastward
+  // - North axis: tangent to the meridian (line of constant longitude), pointing northward
   // - Up axis: perpendicular to the WGS84 ellipsoid, pointing away from Earth center
   //
   // Note: This is NOT a body frame - the axes do not rotate with the entity's
@@ -252,6 +382,8 @@ message KinematicsComponent {
   optional KinematicsEnu velocityEnu = 1;
   // Acceleration in local ENU frame (m/s²)
   optional KinematicsEnu accelerationEnu = 2;
+  // Angular velocity around the entity's body axes
+  optional AngularVelocity angularVelocityBody = 3;
 }
 
 message Geometry {
@@ -701,6 +833,9 @@ message ObserverState {
 
 message RunTaskRequest {
   string entityId = 1;
+
+  // priority for PriorityQueue mode (higher = more important)
+  optional uint32 priority = 2;
 }
 
 enum TaskStatus {
