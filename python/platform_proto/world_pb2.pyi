@@ -25,6 +25,7 @@ class CameraProtocol(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     CameraProtocolMjpeg: _ClassVar[CameraProtocol]
     CameraProtocolImage: _ClassVar[CameraProtocol]
     CameraProtocolIframe: _ClassVar[CameraProtocol]
+    CameraProtocolRtsp: _ClassVar[CameraProtocol]
 
 class ClassificationIdentity(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -102,6 +103,7 @@ CameraProtocolHls: CameraProtocol
 CameraProtocolMjpeg: CameraProtocol
 CameraProtocolImage: CameraProtocol
 CameraProtocolIframe: CameraProtocol
+CameraProtocolRtsp: CameraProtocol
 ClassificationIdentityInvalid: ClassificationIdentity
 ClassificationIdentityPending: ClassificationIdentity
 ClassificationIdentityUnknown: ClassificationIdentity

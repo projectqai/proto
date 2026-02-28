@@ -137,6 +137,7 @@ enum CameraProtocol {
   CameraProtocolMjpeg = 3;
   CameraProtocolImage = 4;
   CameraProtocolIframe = 5;
+  CameraProtocolRtsp = 6;
 }
 
 message Camera {
