@@ -1,4 +1,4 @@
-all: fmt python go ts
+all: fmt python go ts rust
 
 
 fmt:
@@ -12,5 +12,8 @@ go: .PHONY
 
 ts: .PHONY
 	@$(MAKE) -C ts generate
+
+rust: .PHONY
+	@$(MAKE) -C rust generate
 
 .PHONY:
