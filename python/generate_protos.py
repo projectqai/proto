@@ -37,12 +37,12 @@ def fix_grpc_imports(output_dir: Path):
     """
     import re
 
-    grpc_files = list(output_dir.glob("*_grpc.py"))
+    grpc_files = list(output_dir.glob("*_pb2*.py"))
 
     if not grpc_files:
         return
 
-    logger.info("Fixing imports in gRPC files...")
+    logger.info("Fixing imports in generated files...")
 
     for grpc_file in grpc_files:
         content = grpc_file.read_text()

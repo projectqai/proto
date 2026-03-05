@@ -22,7 +22,7 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-import world_pb2 as world__pb2
+from . import world_pb2 as world__pb2
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10\x63ontroller.proto\x12\x05world\x1a\x0bworld.proto\"5\n\x1f\x43ontrollerReconciliationRequest\x12\x12\n\ncontroller\x18\x01 \x01(\t\"}\n\"ControllerDeviceConfigurationEvent\x12\x38\n\x01t\x18\x01 \x01(\x0e\x32-.world.ControllerDeviceConfigurationEventType\x12\x1d\n\x06\x63onfig\x18\x02 \x01(\x0b\x32\r.world.Entity\"e\n\x1d\x43ontrollerReconciliationEvent\x12;\n\x06\x63onfig\x18\x02 \x01(\x0b\x32).world.ControllerDeviceConfigurationEventH\x00\x42\x07\n\x05\x65vent\"@\n\x17RestartConnectorRequest\x12\x12\n\ncontroller\x18\x01 \x01(\t\x12\x11\n\tentity_id\x18\x02 \x01(\t\"\x1a\n\x18RestartConnectorResponse*\xb1\x01\n&ControllerDeviceConfigurationEventType\x12)\n%ControllerDeviceConfigurationEventNew\x10\x00\x12-\n)ControllerDeviceConfigurationEventChanged\x10\x01\x12-\n)ControllerDeviceConfigurationEventRemoved\x10\x02\x32\xc5\x01\n\x11\x43ontrollerService\x12[\n\tReconcile\x12&.world.ControllerReconciliationRequest\x1a$.world.ControllerReconciliationEvent0\x01\x12S\n\x10RestartConnector\x12\x1e.world.RestartConnectorRequest\x1a\x1f.world.RestartConnectorResponseB Z\x1egithub.com/projectqai/proto/gob\x06proto3')
