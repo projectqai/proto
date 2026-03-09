@@ -1,6 +1,6 @@
 {
   "name": "@projectqai/proto",
-  "version": "0.0.19",
+  "version": "0.0.26",
   "author": "projectq-release-bot",
   "type": "module",
   "exports": {
@@ -8,14 +8,23 @@
       "types": "./dist/*_pb.d.ts",
       "import": "./dist/*_pb.js",
       "default": "./dist/*_pb.js"
+    },
+    "./device": {
+      "import": "./device.ts",
+      "default": "./device.ts"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "device.ts"
   ],
   "license": "Apache-2.0",
   "peerDependencies": {
     "@bufbuild/protobuf": "^2.10.1"
+  },
+  "dependencies": {
+    "@connectrpc/connect": "^2.0.0",
+    "@connectrpc/connect-node": "^2.0.0"
   },
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "^2.10.1"
