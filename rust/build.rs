@@ -9,7 +9,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 "../metrics.proto",
                 "../world.proto",
                 "../timeline.proto",
-                "../controller.proto",
             ],
             &[".."],
         )?;
