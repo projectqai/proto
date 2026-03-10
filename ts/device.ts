@@ -1,5 +1,6 @@
 import { createClient, type Client, ConnectError, Code } from "@connectrpc/connect";
-import { createGrpcTransport } from "@connectrpc/connect-node";
+import { createTransport } from "@connectrpc/connect/protocol-connect";
+import type { UniversalClientFn } from "@connectrpc/connect/protocol";
 import { create, clone } from "@bufbuild/protobuf";
 import {
 	WorldService,
@@ -37,9 +38,72 @@ export {
 	type Entity,
 } from "./dist/world_pb.js";
 
+// fetch-based universal HTTP client for the Connect protocol.
+// Works in Node, Bun, browsers, and goja — no http2 dependency.
+const universalFetch: UniversalClientFn = async (req) => {
+	const body = req.body ? await collectBytes(req.body) : undefined;
+	// Prevent the server from gzip-encoding responses — the Connect
+	// transport handles its own compression negotiation.
+	req.header.set("Accept-Encoding", "identity");
+	const resp = await fetch(req.url, {
+		method: req.method,
+		headers: req.header,
+		body,
+		signal: (req as any).signal,
+	});
+	return {
+		status: resp.status,
+		header: resp.headers,
+		body: responseBodyStream(resp),
+		trailer: new Headers(),
+	};
+};
+
+async function collectBytes(iter: AsyncIterable<Uint8Array>): Promise<Uint8Array> {
+	const chunks: Uint8Array[] = [];
+	for await (const value of iter) {
+		chunks.push(value);
+	}
+	const len = chunks.reduce((n, c) => n + c.length, 0);
+	const out = new Uint8Array(len);
+	let off = 0;
+	for (const c of chunks) { out.set(c, off); off += c.length; }
+	return out;
+}
+
+function responseBodyStream(resp: Response): AsyncIterable<Uint8Array> {
+	if (!resp.body) return { [Symbol.asyncIterator]() { return { next: () => Promise.resolve({ done: true as const, value: undefined }), throw: () => Promise.resolve({ done: true as const, value: undefined }) }; } };
+	const reader = resp.body.getReader();
+	return {
+		[Symbol.asyncIterator]() {
+			return {
+				async next() {
+					const { done, value } = await reader.read();
+					if (done) { reader.releaseLock(); return { done: true as const, value: undefined }; }
+					return { done: false as const, value };
+				},
+				async throw(e: unknown) {
+					reader.releaseLock();
+					return { done: true as const, value: undefined };
+				},
+			};
+		}
+	};
+}
+
 export function connect(serverURL?: string): WorldClient {
 	const base = serverURL ?? process.env.HYDRIS_SERVER ?? "http://localhost:50051";
-	const transport = createGrpcTransport({ baseUrl: base, httpVersion: "2" });
+	const transport = createTransport({
+		baseUrl: base,
+		httpClient: universalFetch,
+		useBinaryFormat: true,
+		interceptors: [],
+		acceptCompression: [],
+		sendCompression: null,
+		compressMinBytes: Number.MAX_SAFE_INTEGER,
+		readMaxBytes: Number.MAX_SAFE_INTEGER,
+		writeMaxBytes: Number.MAX_SAFE_INTEGER,
+	});
 	return createClient(WorldService, transport);
 }
 
