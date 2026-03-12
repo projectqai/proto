@@ -147,6 +147,7 @@ export interface AttachOptions<S extends SchemaProperties> {
 	device?: { category?: string };
 	icon?: string;
 	schema: S;
+	init?: (client: WorldClient, config: InferConfig<S>, signal: AbortSignal) => Promise<void>;
 	run: (client: WorldClient, config: InferConfig<S>, signal: AbortSignal) => Promise<void>;
 	health?: () => HealthResult | Promise<HealthResult>;
 	interval?: number;
@@ -202,10 +203,13 @@ export async function attach<S extends SchemaProperties>(opts: AttachOptions<S>)
 
 	let heartbeatId: ReturnType<typeof setInterval> | null = null;
 
+	let initialized = false;
+
 	const pushHeartbeat = (result?: Record<number, { label: string; value: number | bigint }>) => {
+		const state = initialized ? DeviceState.DeviceStateActive : DeviceState.DeviceStatePending;
 		const e = create(EntitySchema, {
 			id: entityID,
-			device: create(DeviceComponentSchema, { ...entity.device, state: DeviceState.DeviceStateActive }),
+			device: create(DeviceComponentSchema, { ...entity.device, state }),
 			lifetime: create(LifetimeSchema, {
 				until: create(TimestampSchema, { seconds: BigInt(Math.floor((Date.now() + interval + 1_000) / 1000)) }),
 			}),
@@ -241,7 +245,7 @@ export async function attach<S extends SchemaProperties>(opts: AttachOptions<S>)
 			: create(ConfigurableComponentSchema);
 		cfg.state = state;
 		cfg.error = error;
-		if (entity.config && state === ConfigurableState.ConfigurableStateActive) {
+		if (entity.config && (state === ConfigurableState.ConfigurableStateStarting || state === ConfigurableState.ConfigurableStateActive)) {
 			cfg.appliedVersion = entity.config.version;
 		}
 		await push(client, create(EntitySchema, { id: entityID, configurable: cfg })).catch(() => { });
@@ -257,6 +261,7 @@ export async function attach<S extends SchemaProperties>(opts: AttachOptions<S>)
 			runningAbort.abort();
 			runningAbort = null;
 			currentEntity = null;
+			initialized = false;
 			console.log(`stopped entity=${entityID}`);
 			if (e) pushState(e, ConfigurableState.ConfigurableStateInactive);
 		}
@@ -270,6 +275,18 @@ export async function attach<S extends SchemaProperties>(opts: AttachOptions<S>)
 		(async () => {
 			while (!childSignal.aborted) {
 				await pushState(e, ConfigurableState.ConfigurableStateStarting);
+
+				try {
+					if (opts.init) await opts.init(client, extractConfig(e, opts.schema), childSignal);
+				} catch (err) {
+					if (childSignal.aborted || isCanceled(err)) return;
+					console.error(`init failed entity=${entityID}`, err);
+					await pushState(e, ConfigurableState.ConfigurableStateFailed, String(err));
+					await sleep(5_000, childSignal);
+					continue;
+				}
+
+				initialized = true;
 				await pushState(e, ConfigurableState.ConfigurableStateActive);
 
 				try {
