@@ -10,6 +10,7 @@ import {
 	EntityChangeRequestSchema,
 	ConfigurableComponentSchema,
 	ConfigurableState,
+	ConfigurationComponentSchema,
 	EntityChange,
 	LifetimeSchema,
 	DeviceComponentSchema,
@@ -147,6 +148,9 @@ export interface AttachOptions<S extends SchemaProperties> {
 	device?: { category?: string };
 	icon?: string;
 	schema: S;
+	/** Default config to push on attach so the plugin starts without manual
+	 *  configuration. Pushed with fresh=0 so it won't overwrite an existing config. */
+	config?: InferConfig<S>;
 	init?: (client: WorldClient, config: InferConfig<S>, signal: AbortSignal) => Promise<void>;
 	run: (client: WorldClient, config: InferConfig<S>, signal: AbortSignal) => Promise<void>;
 	health?: () => HealthResult | Promise<HealthResult>;
@@ -197,6 +201,21 @@ export async function attach<S extends SchemaProperties>(opts: AttachOptions<S>)
 
 	// Register entity without device — device is managed by heartbeat
 	await push(client, create(EntitySchema, { ...entity, device: undefined }));
+
+	// Push a default config if specified, with fresh=0 so it won't
+	// overwrite an existing config that has a newer timestamp.
+	if (opts.config !== undefined) {
+		await push(client, create(EntitySchema, {
+			id: entityID,
+			config: create(ConfigurationComponentSchema, {
+				value: opts.config as Record<string, unknown>,
+			}),
+			lifetime: create(LifetimeSchema, {
+				fresh: create(TimestampSchema, { seconds: 0n }),
+			}),
+		}));
+	}
+
 	console.log(`attached entity=${entityID}`);
 
 	// Heartbeat

@@ -50,6 +50,11 @@ export declare type Entity = Message<"world.Entity"> & {
   lease?: Lease;
 
   /**
+   * @generated from field: optional world.Routing routing = 7;
+   */
+  routing?: Routing;
+
+  /**
    * @generated from field: optional world.GeoSpatialComponent geo = 11;
    */
   geo?: GeoSpatialComponent;
@@ -195,6 +200,11 @@ export declare type Entity = Message<"world.Entity"> & {
    * @generated from field: optional world.TargetPoseComponent target_pose = 62;
    */
   targetPose?: TargetPoseComponent;
+
+  /**
+   * @generated from field: optional world.ChatComponent chat = 39;
+   */
+  chat?: ChatComponent;
 };
 
 /**
@@ -221,6 +231,11 @@ export declare type Controller = Message<"world.Controller"> & {
    * @generated from field: optional string node = 2;
    */
   node?: string;
+
+  /**
+   * @generated from field: optional string origin = 3;
+   */
+  origin?: string;
 };
 
 /**
@@ -281,6 +296,14 @@ export declare type Lifetime = Message<"world.Lifetime"> & {
    * @generated from field: optional google.protobuf.Timestamp fresh = 3;
    */
   fresh?: Timestamp;
+
+  /**
+   * per-component lifetime metadata
+   * key is the proto field number of the component in Entity (e.g. 11 for geo)
+   *
+   * @generated from field: map<int32, world.Lifetime> components = 4;
+   */
+  components: { [key: number]: Lifetime };
 };
 
 /**
@@ -288,6 +311,43 @@ export declare type Lifetime = Message<"world.Lifetime"> & {
  * Use `create(LifetimeSchema)` to create a new message.
  */
 export declare const LifetimeSchema: GenMessage<Lifetime>;
+
+/**
+ * @generated from message world.Channel
+ */
+export declare type Channel = Message<"world.Channel"> & {
+  /**
+   * empty string is the default channel
+   *
+   * @generated from field: string name = 1;
+   */
+  name: string;
+};
+
+/**
+ * Describes the message world.Channel.
+ * Use `create(ChannelSchema)` to create a new message.
+ */
+export declare const ChannelSchema: GenMessage<Channel>;
+
+/**
+ * Presence of this component marks the entity as routable to other nodes
+ * or downstream consumers. Entities without Routing stay local.
+ *
+ * @generated from message world.Routing
+ */
+export declare type Routing = Message<"world.Routing"> & {
+  /**
+   * @generated from field: repeated world.Channel channels = 1;
+   */
+  channels: Channel[];
+};
+
+/**
+ * Describes the message world.Routing.
+ * Use `create(RoutingSchema)` to create a new message.
+ */
+export declare const RoutingSchema: GenMessage<Routing>;
 
 /**
  * @generated from message world.GeoSpatialComponent
@@ -1695,6 +1755,11 @@ export declare type DeviceComponent = Message<"world.DeviceComponent"> & {
    * @generated from field: optional world.LPWANDevice lpwan = 25;
    */
   lpwan?: LPWANDevice;
+
+  /**
+   * @generated from field: optional world.MeshtasticDevice meshtastic = 26;
+   */
+  meshtastic?: MeshtasticDevice;
 };
 
 /**
@@ -1853,6 +1918,42 @@ export declare type SerialDevice = Message<"world.SerialDevice"> & {
 export declare const SerialDeviceSchema: GenMessage<SerialDevice>;
 
 /**
+ * @generated from message world.MeshtasticDevice
+ */
+export declare type MeshtasticDevice = Message<"world.MeshtasticDevice"> & {
+  /**
+   * @generated from field: optional uint32 node_num = 1;
+   */
+  nodeNum?: number;
+
+  /**
+   * @generated from field: optional string long_name = 2;
+   */
+  longName?: string;
+
+  /**
+   * @generated from field: optional string short_name = 3;
+   */
+  shortName?: string;
+
+  /**
+   * @generated from field: optional string hardware_model = 4;
+   */
+  hardwareModel?: string;
+
+  /**
+   * @generated from field: optional bytes public_key = 5;
+   */
+  publicKey?: Uint8Array;
+};
+
+/**
+ * Describes the message world.MeshtasticDevice.
+ * Use `create(MeshtasticDeviceSchema)` to create a new message.
+ */
+export declare const MeshtasticDeviceSchema: GenMessage<MeshtasticDevice>;
+
+/**
  * @generated from message world.LPWANDevice
  */
 export declare type LPWANDevice = Message<"world.LPWANDevice"> & {
@@ -1906,6 +2007,38 @@ export declare type ConfigurationComponent = Message<"world.ConfigurationCompone
 export declare const ConfigurationComponentSchema: GenMessage<ConfigurationComponent>;
 
 /**
+ * @generated from message world.ChatComponent
+ */
+export declare type ChatComponent = Message<"world.ChatComponent"> & {
+  /**
+   * entity pointer: sender entity ID
+   *
+   * @generated from field: optional string sender = 1;
+   */
+  sender?: string;
+
+  /**
+   * entity pointer: recipient entity ID (if known)
+   *
+   * @generated from field: optional string to = 3;
+   */
+  to?: string;
+
+  /**
+   * message text
+   *
+   * @generated from field: string message = 4;
+   */
+  message: string;
+};
+
+/**
+ * Describes the message world.ChatComponent.
+ * Use `create(ChatComponentSchema)` to create a new message.
+ */
+export declare const ChatComponentSchema: GenMessage<ChatComponent>;
+
+/**
  * @generated from message world.EntityFilter
  */
 export declare type EntityFilter = Message<"world.EntityFilter"> & {
@@ -1956,6 +2089,13 @@ export declare type EntityFilter = Message<"world.EntityFilter"> & {
    * @generated from field: optional world.MissionFilter mission = 9;
    */
   mission?: MissionFilter;
+
+  /**
+   * entity must be routed to this channel
+   *
+   * @generated from field: optional world.ChannelFilter channel = 10;
+   */
+  channel?: ChannelFilter;
 
   /**
    * @generated from field: optional world.DeviceFilter device = 50;
@@ -2132,6 +2272,24 @@ export declare type ConfigurationFilter = Message<"world.ConfigurationFilter"> &
  * Use `create(ConfigurationFilterSchema)` to create a new message.
  */
 export declare const ConfigurationFilterSchema: GenMessage<ConfigurationFilter>;
+
+/**
+ * @generated from message world.ChannelFilter
+ */
+export declare type ChannelFilter = Message<"world.ChannelFilter"> & {
+  /**
+   * match entities routed to this channel name
+   *
+   * @generated from field: string name = 1;
+   */
+  name: string;
+};
+
+/**
+ * Describes the message world.ChannelFilter.
+ * Use `create(ChannelFilterSchema)` to create a new message.
+ */
+export declare const ChannelFilterSchema: GenMessage<ChannelFilter>;
 
 /**
  * @generated from message world.WatchBehavior
@@ -2963,6 +3121,204 @@ export enum EntityChange {
  * Describes the enum world.EntityChange.
  */
 export declare const EntityChangeSchema: GenEnum<EntityChange>;
+
+/**
+ * Proto field numbers of Entity component fields.
+ * Used in EntityFilter.component and Lifetime.components.
+ *
+ * @generated from enum world.EntityComponent
+ */
+export enum EntityComponent {
+  /**
+   * @generated from enum value: EntityComponentUnspecified = 0;
+   */
+  EntityComponentUnspecified = 0,
+
+  /**
+   * @generated from enum value: EntityComponentLabel = 2;
+   */
+  EntityComponentLabel = 2,
+
+  /**
+   * @generated from enum value: EntityComponentController = 3;
+   */
+  EntityComponentController = 3,
+
+  /**
+   * @generated from enum value: EntityComponentLifetime = 4;
+   */
+  EntityComponentLifetime = 4,
+
+  /**
+   * @generated from enum value: EntityComponentPriority = 5;
+   */
+  EntityComponentPriority = 5,
+
+  /**
+   * @generated from enum value: EntityComponentLease = 6;
+   */
+  EntityComponentLease = 6,
+
+  /**
+   * @generated from enum value: EntityComponentRouting = 7;
+   */
+  EntityComponentRouting = 7,
+
+  /**
+   * @generated from enum value: EntityComponentGeo = 11;
+   */
+  EntityComponentGeo = 11,
+
+  /**
+   * @generated from enum value: EntityComponentSymbol = 12;
+   */
+  EntityComponentSymbol = 12,
+
+  /**
+   * @generated from enum value: EntityComponentCamera = 15;
+   */
+  EntityComponentCamera = 15,
+
+  /**
+   * @generated from enum value: EntityComponentDetection = 16;
+   */
+  EntityComponentDetection = 16,
+
+  /**
+   * @generated from enum value: EntityComponentBearing = 17;
+   */
+  EntityComponentBearing = 17,
+
+  /**
+   * @generated from enum value: EntityComponentTrack = 21;
+   */
+  EntityComponentTrack = 21,
+
+  /**
+   * @generated from enum value: EntityComponentLocator = 22;
+   */
+  EntityComponentLocator = 22,
+
+  /**
+   * @generated from enum value: EntityComponentTaskable = 23;
+   */
+  EntityComponentTaskable = 23,
+
+  /**
+   * @generated from enum value: EntityComponentKinematics = 24;
+   */
+  EntityComponentKinematics = 24,
+
+  /**
+   * @generated from enum value: EntityComponentShape = 25;
+   */
+  EntityComponentShape = 25,
+
+  /**
+   * @generated from enum value: EntityComponentClassification = 26;
+   */
+  EntityComponentClassification = 26,
+
+  /**
+   * @generated from enum value: EntityComponentTransponder = 27;
+   */
+  EntityComponentTransponder = 27,
+
+  /**
+   * @generated from enum value: EntityComponentAdministrative = 28;
+   */
+  EntityComponentAdministrative = 28,
+
+  /**
+   * @generated from enum value: EntityComponentLocalShape = 29;
+   */
+  EntityComponentLocalShape = 29,
+
+  /**
+   * @generated from enum value: EntityComponentOrientation = 30;
+   */
+  EntityComponentOrientation = 30,
+
+  /**
+   * @generated from enum value: EntityComponentMission = 31;
+   */
+  EntityComponentMission = 31,
+
+  /**
+   * @generated from enum value: EntityComponentLink = 32;
+   */
+  EntityComponentLink = 32,
+
+  /**
+   * @generated from enum value: EntityComponentPower = 33;
+   */
+  EntityComponentPower = 33,
+
+  /**
+   * @generated from enum value: EntityComponentNavigation = 34;
+   */
+  EntityComponentNavigation = 34,
+
+  /**
+   * @generated from enum value: EntityComponentCapture = 35;
+   */
+  EntityComponentCapture = 35,
+
+  /**
+   * @generated from enum value: EntityComponentMetric = 36;
+   */
+  EntityComponentMetric = 36,
+
+  /**
+   * @generated from enum value: EntityComponentSensor = 37;
+   */
+  EntityComponentSensor = 37,
+
+  /**
+   * @generated from enum value: EntityComponentPose = 38;
+   */
+  EntityComponentPose = 38,
+
+  /**
+   * @generated from enum value: EntityComponentChat = 39;
+   */
+  EntityComponentChat = 39,
+
+  /**
+   * @generated from enum value: EntityComponentTaskExecution = 41;
+   */
+  EntityComponentTaskExecution = 41,
+
+  /**
+   * @generated from enum value: EntityComponentDevice = 50;
+   */
+  EntityComponentDevice = 50,
+
+  /**
+   * @generated from enum value: EntityComponentConfig = 51;
+   */
+  EntityComponentConfig = 51,
+
+  /**
+   * @generated from enum value: EntityComponentConfigurable = 52;
+   */
+  EntityComponentConfigurable = 52,
+
+  /**
+   * @generated from enum value: EntityComponentInteractivity = 60;
+   */
+  EntityComponentInteractivity = 60,
+
+  /**
+   * @generated from enum value: EntityComponentTargetPose = 62;
+   */
+  EntityComponentTargetPose = 62,
+}
+
+/**
+ * Describes the enum world.EntityComponent.
+ */
+export declare const EntityComponentSchema: GenEnum<EntityComponent>;
 
 /**
  * @generated from enum world.TaskStatus

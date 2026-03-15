@@ -21,7 +21,7 @@ message Entity {
   optional Lifetime lifetime = 4;
   optional Priority priority = 5;
   optional Lease lease = 6;
-  reserved 7;
+  optional Routing routing = 7;
   reserved 8;
   reserved 9;
   reserved 10;
@@ -59,6 +59,7 @@ message Entity {
   optional TaskExecutionComponent task_execution = 41;
   optional InteractivityComponent interactivity = 60;
   optional TargetPoseComponent target_pose = 62;
+  optional ChatComponent chat = 39;
 }
 
 // A controller owns an entity.
@@ -68,6 +69,7 @@ message Entity {
 message Controller {
   optional string id = 1;
   optional string node = 2;
+  optional string origin = 3;
 }
 
 // Leases are used by controllers to negotiate exclusivity on an entity
@@ -90,6 +92,10 @@ message Lifetime {
   // last time we have seen this entity, normally between from and until
   // if set, updates to an entity with older fresh value are ignored by default
   optional google.protobuf.Timestamp fresh = 3;
+
+  // per-component lifetime metadata
+  // key is the proto field number of the component in Entity (e.g. 11 for geo)
+  map<int32, Lifetime> components = 4;
 }
 
 enum Priority {
@@ -107,6 +113,17 @@ enum Priority {
   // Sent before lower precedence messages and without respecting mission bandwidth/signal limits
   // Highly visible flare, misuse can jeopardize missions
   PriorityFlash = 3;
+}
+
+message Channel {
+  // empty string is the default channel
+  string name = 1;
+}
+
+// Presence of this component marks the entity as routable to other nodes
+// or downstream consumers. Entities without Routing stay local.
+message Routing {
+  repeated Channel channels = 1;
 }
 
 message GeoSpatialComponent {
@@ -632,6 +649,7 @@ message DeviceComponent {
   optional SerialDevice serial = 23;
   optional EthernetDevice ethernet = 24;
   optional LPWANDevice lpwan = 25;
+  optional MeshtasticDevice meshtastic = 26;
 }
 
 message NodeDevice {
@@ -670,6 +688,14 @@ message SerialDevice {
   optional uint32 baud_rate = 2;
 }
 
+message MeshtasticDevice {
+  optional uint32 node_num = 1;
+  optional string long_name = 2;
+  optional string short_name = 3;
+  optional string hardware_model = 4;
+  optional bytes public_key = 5;
+}
+
 message LPWANDevice {
   // IEEE 802 EUI-64 identifier (e.g. "a84041c6545d1429")
   optional string eui = 1;
@@ -689,6 +715,13 @@ message ConfigurationComponent {
   uint64 version = 5;
 }
 
+message ChatComponent {
+  optional string sender = 1; // entity pointer: sender entity ID
+  reserved 2;
+  optional string to = 3; // entity pointer: recipient entity ID (if known)
+  string message = 4; // message text
+}
+
 // ---------------------------------------------
 
 message EntityFilter {
@@ -700,6 +733,8 @@ message EntityFilter {
   optional ControllerFilter controller = 7;
   optional TrackFilter track = 8;
   optional MissionFilter mission = 9;
+
+  optional ChannelFilter channel = 10; // entity must be routed to this channel
 
   optional DeviceFilter device = 50;
   optional ConfigurationFilter config = 51;
@@ -744,6 +779,11 @@ message DeviceFilter {
 }
 
 message ConfigurationFilter {}
+
+message ChannelFilter {
+  // match entities routed to this channel name
+  string name = 1;
+}
 
 message WatchBehavior {
   // Maximum non-flash message rate this consumer can handle (0 = unlimited)
@@ -798,6 +838,48 @@ enum EntityChange {
   EntityChangeUpdated = 1;
   EntityChangeExpired = 2;
   EntityChangeUnobserved = 3;
+}
+
+// Proto field numbers of Entity component fields.
+// Used in EntityFilter.component and Lifetime.components.
+enum EntityComponent {
+  EntityComponentUnspecified = 0;
+  EntityComponentLabel = 2;
+  EntityComponentController = 3;
+  EntityComponentLifetime = 4;
+  EntityComponentPriority = 5;
+  EntityComponentLease = 6;
+  EntityComponentRouting = 7;
+  EntityComponentGeo = 11;
+  EntityComponentSymbol = 12;
+  EntityComponentCamera = 15;
+  EntityComponentDetection = 16;
+  EntityComponentBearing = 17;
+  EntityComponentTrack = 21;
+  EntityComponentLocator = 22;
+  EntityComponentTaskable = 23;
+  EntityComponentKinematics = 24;
+  EntityComponentShape = 25;
+  EntityComponentClassification = 26;
+  EntityComponentTransponder = 27;
+  EntityComponentAdministrative = 28;
+  EntityComponentLocalShape = 29;
+  EntityComponentOrientation = 30;
+  EntityComponentMission = 31;
+  EntityComponentLink = 32;
+  EntityComponentPower = 33;
+  EntityComponentNavigation = 34;
+  EntityComponentCapture = 35;
+  EntityComponentMetric = 36;
+  EntityComponentSensor = 37;
+  EntityComponentPose = 38;
+  EntityComponentChat = 39;
+  EntityComponentTaskExecution = 41;
+  EntityComponentDevice = 50;
+  EntityComponentConfig = 51;
+  EntityComponentConfigurable = 52;
+  EntityComponentInteractivity = 60;
+  EntityComponentTargetPose = 62;
 }
 
 message EntityChangeEvent {

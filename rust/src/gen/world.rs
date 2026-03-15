@@ -526,6 +526,8 @@ pub struct Entity {
     pub priority: ::core::option::Option<i32>,
     #[prost(message, optional, tag = "6")]
     pub lease: ::core::option::Option<Lease>,
+    #[prost(message, optional, tag = "7")]
+    pub routing: ::core::option::Option<Routing>,
     #[prost(message, optional, tag = "11")]
     pub geo: ::core::option::Option<GeoSpatialComponent>,
     #[prost(message, optional, tag = "12")]
@@ -585,6 +587,8 @@ pub struct Entity {
     pub interactivity: ::core::option::Option<InteractivityComponent>,
     #[prost(message, optional, tag = "62")]
     pub target_pose: ::core::option::Option<TargetPoseComponent>,
+    #[prost(message, optional, tag = "39")]
+    pub chat: ::core::option::Option<ChatComponent>,
 }
 /// A controller owns an entity.
 /// The engine normally rejects changes to the entity from non owners,
@@ -596,6 +600,8 @@ pub struct Controller {
     pub id: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, optional, tag = "2")]
     pub node: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "3")]
+    pub origin: ::core::option::Option<::prost::alloc::string::String>,
 }
 /// Leases are used by controllers to negotiate exclusivity on an entity
 /// The engine rejects pushes that attempt to change the holder of an active lease,
@@ -608,7 +614,7 @@ pub struct Lease {
     #[prost(message, optional, tag = "2")]
     pub expires: ::core::option::Option<::prost_types::Timestamp>,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Lifetime {
     /// time this entity should become valid.
     /// will be set to now automatically if omited
@@ -621,6 +627,23 @@ pub struct Lifetime {
     /// if set, updates to an entity with older fresh value are ignored by default
     #[prost(message, optional, tag = "3")]
     pub fresh: ::core::option::Option<::prost_types::Timestamp>,
+    /// per-component lifetime metadata
+    /// key is the proto field number of the component in Entity (e.g. 11 for geo)
+    #[prost(map = "int32, message", tag = "4")]
+    pub components: ::std::collections::HashMap<i32, Lifetime>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Channel {
+    /// empty string is the default channel
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+}
+/// Presence of this component marks the entity as routable to other nodes
+/// or downstream consumers. Entities without Routing stay local.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Routing {
+    #[prost(message, repeated, tag = "1")]
+    pub channels: ::prost::alloc::vec::Vec<Channel>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GeoSpatialComponent {
@@ -1179,6 +1202,8 @@ pub struct DeviceComponent {
     pub ethernet: ::core::option::Option<EthernetDevice>,
     #[prost(message, optional, tag = "25")]
     pub lpwan: ::core::option::Option<LpwanDevice>,
+    #[prost(message, optional, tag = "26")]
+    pub meshtastic: ::core::option::Option<MeshtasticDevice>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NodeDevice {
@@ -1234,6 +1259,19 @@ pub struct SerialDevice {
     pub baud_rate: ::core::option::Option<u32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MeshtasticDevice {
+    #[prost(uint32, optional, tag = "1")]
+    pub node_num: ::core::option::Option<u32>,
+    #[prost(string, optional, tag = "2")]
+    pub long_name: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "3")]
+    pub short_name: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "4")]
+    pub hardware_model: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(bytes = "vec", optional, tag = "5")]
+    pub public_key: ::core::option::Option<::prost::alloc::vec::Vec<u8>>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LpwanDevice {
     /// IEEE 802 EUI-64 identifier (e.g. "a84041c6545d1429")
     #[prost(string, optional, tag = "1")]
@@ -1253,6 +1291,18 @@ pub struct ConfigurationComponent {
     /// once the configuration has been processed.
     #[prost(uint64, tag = "5")]
     pub version: u64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ChatComponent {
+    /// entity pointer: sender entity ID
+    #[prost(string, optional, tag = "1")]
+    pub sender: ::core::option::Option<::prost::alloc::string::String>,
+    /// entity pointer: recipient entity ID (if known)
+    #[prost(string, optional, tag = "3")]
+    pub to: ::core::option::Option<::prost::alloc::string::String>,
+    /// message text
+    #[prost(string, tag = "4")]
+    pub message: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EntityFilter {
@@ -1276,6 +1326,9 @@ pub struct EntityFilter {
     pub track: ::core::option::Option<TrackFilter>,
     #[prost(message, optional, tag = "9")]
     pub mission: ::core::option::Option<MissionFilter>,
+    /// entity must be routed to this channel
+    #[prost(message, optional, tag = "10")]
+    pub channel: ::core::option::Option<ChannelFilter>,
     #[prost(message, optional, tag = "50")]
     pub device: ::core::option::Option<DeviceFilter>,
     #[prost(message, optional, tag = "51")]
@@ -1340,6 +1393,12 @@ pub struct DeviceFilter {
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ConfigurationFilter {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ChannelFilter {
+    /// match entities routed to this channel name
+    #[prost(string, tag = "1")]
+    pub name: ::prost::alloc::string::String,
+}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct WatchBehavior {
     /// Maximum non-flash message rate this consumer can handle (0 = unlimited)
@@ -1911,6 +1970,139 @@ impl EntityChange {
             "EntityChangeUpdated" => Some(Self::Updated),
             "EntityChangeExpired" => Some(Self::Expired),
             "EntityChangeUnobserved" => Some(Self::Unobserved),
+            _ => None,
+        }
+    }
+}
+/// Proto field numbers of Entity component fields.
+/// Used in EntityFilter.component and Lifetime.components.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum EntityComponent {
+    Unspecified = 0,
+    Label = 2,
+    Controller = 3,
+    Lifetime = 4,
+    Priority = 5,
+    Lease = 6,
+    Routing = 7,
+    Geo = 11,
+    Symbol = 12,
+    Camera = 15,
+    Detection = 16,
+    Bearing = 17,
+    Track = 21,
+    Locator = 22,
+    Taskable = 23,
+    Kinematics = 24,
+    Shape = 25,
+    Classification = 26,
+    Transponder = 27,
+    Administrative = 28,
+    LocalShape = 29,
+    Orientation = 30,
+    Mission = 31,
+    Link = 32,
+    Power = 33,
+    Navigation = 34,
+    Capture = 35,
+    Metric = 36,
+    Sensor = 37,
+    Pose = 38,
+    Chat = 39,
+    TaskExecution = 41,
+    Device = 50,
+    Config = 51,
+    Configurable = 52,
+    Interactivity = 60,
+    TargetPose = 62,
+}
+impl EntityComponent {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "EntityComponentUnspecified",
+            Self::Label => "EntityComponentLabel",
+            Self::Controller => "EntityComponentController",
+            Self::Lifetime => "EntityComponentLifetime",
+            Self::Priority => "EntityComponentPriority",
+            Self::Lease => "EntityComponentLease",
+            Self::Routing => "EntityComponentRouting",
+            Self::Geo => "EntityComponentGeo",
+            Self::Symbol => "EntityComponentSymbol",
+            Self::Camera => "EntityComponentCamera",
+            Self::Detection => "EntityComponentDetection",
+            Self::Bearing => "EntityComponentBearing",
+            Self::Track => "EntityComponentTrack",
+            Self::Locator => "EntityComponentLocator",
+            Self::Taskable => "EntityComponentTaskable",
+            Self::Kinematics => "EntityComponentKinematics",
+            Self::Shape => "EntityComponentShape",
+            Self::Classification => "EntityComponentClassification",
+            Self::Transponder => "EntityComponentTransponder",
+            Self::Administrative => "EntityComponentAdministrative",
+            Self::LocalShape => "EntityComponentLocalShape",
+            Self::Orientation => "EntityComponentOrientation",
+            Self::Mission => "EntityComponentMission",
+            Self::Link => "EntityComponentLink",
+            Self::Power => "EntityComponentPower",
+            Self::Navigation => "EntityComponentNavigation",
+            Self::Capture => "EntityComponentCapture",
+            Self::Metric => "EntityComponentMetric",
+            Self::Sensor => "EntityComponentSensor",
+            Self::Pose => "EntityComponentPose",
+            Self::Chat => "EntityComponentChat",
+            Self::TaskExecution => "EntityComponentTaskExecution",
+            Self::Device => "EntityComponentDevice",
+            Self::Config => "EntityComponentConfig",
+            Self::Configurable => "EntityComponentConfigurable",
+            Self::Interactivity => "EntityComponentInteractivity",
+            Self::TargetPose => "EntityComponentTargetPose",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "EntityComponentUnspecified" => Some(Self::Unspecified),
+            "EntityComponentLabel" => Some(Self::Label),
+            "EntityComponentController" => Some(Self::Controller),
+            "EntityComponentLifetime" => Some(Self::Lifetime),
+            "EntityComponentPriority" => Some(Self::Priority),
+            "EntityComponentLease" => Some(Self::Lease),
+            "EntityComponentRouting" => Some(Self::Routing),
+            "EntityComponentGeo" => Some(Self::Geo),
+            "EntityComponentSymbol" => Some(Self::Symbol),
+            "EntityComponentCamera" => Some(Self::Camera),
+            "EntityComponentDetection" => Some(Self::Detection),
+            "EntityComponentBearing" => Some(Self::Bearing),
+            "EntityComponentTrack" => Some(Self::Track),
+            "EntityComponentLocator" => Some(Self::Locator),
+            "EntityComponentTaskable" => Some(Self::Taskable),
+            "EntityComponentKinematics" => Some(Self::Kinematics),
+            "EntityComponentShape" => Some(Self::Shape),
+            "EntityComponentClassification" => Some(Self::Classification),
+            "EntityComponentTransponder" => Some(Self::Transponder),
+            "EntityComponentAdministrative" => Some(Self::Administrative),
+            "EntityComponentLocalShape" => Some(Self::LocalShape),
+            "EntityComponentOrientation" => Some(Self::Orientation),
+            "EntityComponentMission" => Some(Self::Mission),
+            "EntityComponentLink" => Some(Self::Link),
+            "EntityComponentPower" => Some(Self::Power),
+            "EntityComponentNavigation" => Some(Self::Navigation),
+            "EntityComponentCapture" => Some(Self::Capture),
+            "EntityComponentMetric" => Some(Self::Metric),
+            "EntityComponentSensor" => Some(Self::Sensor),
+            "EntityComponentPose" => Some(Self::Pose),
+            "EntityComponentChat" => Some(Self::Chat),
+            "EntityComponentTaskExecution" => Some(Self::TaskExecution),
+            "EntityComponentDevice" => Some(Self::Device),
+            "EntityComponentConfig" => Some(Self::Config),
+            "EntityComponentConfigurable" => Some(Self::Configurable),
+            "EntityComponentInteractivity" => Some(Self::Interactivity),
+            "EntityComponentTargetPose" => Some(Self::TargetPose),
             _ => None,
         }
     }
