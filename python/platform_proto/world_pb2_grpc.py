@@ -70,6 +70,11 @@ class WorldServiceStub(object):
                 request_serializer=world__pb2.RunTaskRequest.SerializeToString,
                 response_deserializer=world__pb2.RunTaskResponse.FromString,
                 _registered_method=True)
+        self.HardReset = channel.unary_unary(
+                '/world.WorldService/HardReset',
+                request_serializer=world__pb2.HardResetRequest.SerializeToString,
+                response_deserializer=world__pb2.HardResetResponse.FromString,
+                _registered_method=True)
 
 
 class WorldServiceServicer(object):
@@ -125,6 +130,13 @@ class WorldServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def HardReset(self, request, context):
+        """clear all engine state including persistence
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_WorldServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -162,6 +174,11 @@ def add_WorldServiceServicer_to_server(servicer, server):
                     servicer.RunTask,
                     request_deserializer=world__pb2.RunTaskRequest.FromString,
                     response_serializer=world__pb2.RunTaskResponse.SerializeToString,
+            ),
+            'HardReset': grpc.unary_unary_rpc_method_handler(
+                    servicer.HardReset,
+                    request_deserializer=world__pb2.HardResetRequest.FromString,
+                    response_serializer=world__pb2.HardResetResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -354,6 +371,33 @@ class WorldService(object):
             '/world.WorldService/RunTask',
             world__pb2.RunTaskRequest.SerializeToString,
             world__pb2.RunTaskResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def HardReset(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/world.WorldService/HardReset',
+            world__pb2.HardResetRequest.SerializeToString,
+            world__pb2.HardResetResponse.FromString,
             options,
             channel_credentials,
             insecure,

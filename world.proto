@@ -717,9 +717,10 @@ message ConfigurationComponent {
 
 message ChatComponent {
   optional string sender = 1; // entity pointer: sender entity ID
-  reserved 2;
   optional string to = 3; // entity pointer: recipient entity ID (if known)
   string message = 4; // message text
+  optional string reply_to = 5; // id of chat message this is a reply to. if the downstream doesnt support replys, it'll appear as regular message
+  optional bool reaction = 6; // this message is a reaction rather than text reply. if the downstream doesnt support reactions, it'll appear as regular reply
 }
 
 // ---------------------------------------------
@@ -933,6 +934,10 @@ message RunTaskResponse {
   optional string humanReadableReason = 3;
 }
 
+message HardResetRequest {}
+
+message HardResetResponse {}
+
 // interact with the world model
 service WorldService {
   // list entities present in the world once
@@ -955,4 +960,7 @@ service WorldService {
 
   // create an instance of a specific task entity
   rpc RunTask(RunTaskRequest) returns (RunTaskResponse);
+
+  // clear all engine state including persistence
+  rpc HardReset(HardResetRequest) returns (HardResetResponse);
 }

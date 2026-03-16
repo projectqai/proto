@@ -51,6 +51,8 @@ const (
 	WorldServiceGetLocalNodeProcedure = "/world.WorldService/GetLocalNode"
 	// WorldServiceRunTaskProcedure is the fully-qualified name of the WorldService's RunTask RPC.
 	WorldServiceRunTaskProcedure = "/world.WorldService/RunTask"
+	// WorldServiceHardResetProcedure is the fully-qualified name of the WorldService's HardReset RPC.
+	WorldServiceHardResetProcedure = "/world.WorldService/HardReset"
 )
 
 // WorldServiceClient is a client for the world.WorldService service.
@@ -69,6 +71,8 @@ type WorldServiceClient interface {
 	GetLocalNode(context.Context, *connect.Request[_go.GetLocalNodeRequest]) (*connect.Response[_go.GetLocalNodeResponse], error)
 	// create an instance of a specific task entity
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
+	// clear all engine state including persistence
+	HardReset(context.Context, *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error)
 }
 
 // NewWorldServiceClient constructs a client for the world.WorldService service. By default, it uses
@@ -124,6 +128,12 @@ func NewWorldServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(worldServiceMethods.ByName("RunTask")),
 			connect.WithClientOptions(opts...),
 		),
+		hardReset: connect.NewClient[_go.HardResetRequest, _go.HardResetResponse](
+			httpClient,
+			baseURL+WorldServiceHardResetProcedure,
+			connect.WithSchema(worldServiceMethods.ByName("HardReset")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -136,6 +146,7 @@ type worldServiceClient struct {
 	expireEntity  *connect.Client[_go.ExpireEntityRequest, _go.ExpireEntityResponse]
 	getLocalNode  *connect.Client[_go.GetLocalNodeRequest, _go.GetLocalNodeResponse]
 	runTask       *connect.Client[_go.RunTaskRequest, _go.RunTaskResponse]
+	hardReset     *connect.Client[_go.HardResetRequest, _go.HardResetResponse]
 }
 
 // ListEntities calls world.WorldService.ListEntities.
@@ -173,6 +184,11 @@ func (c *worldServiceClient) RunTask(ctx context.Context, req *connect.Request[_
 	return c.runTask.CallUnary(ctx, req)
 }
 
+// HardReset calls world.WorldService.HardReset.
+func (c *worldServiceClient) HardReset(ctx context.Context, req *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error) {
+	return c.hardReset.CallUnary(ctx, req)
+}
+
 // WorldServiceHandler is an implementation of the world.WorldService service.
 type WorldServiceHandler interface {
 	// list entities present in the world once
@@ -189,6 +205,8 @@ type WorldServiceHandler interface {
 	GetLocalNode(context.Context, *connect.Request[_go.GetLocalNodeRequest]) (*connect.Response[_go.GetLocalNodeResponse], error)
 	// create an instance of a specific task entity
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
+	// clear all engine state including persistence
+	HardReset(context.Context, *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error)
 }
 
 // NewWorldServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -240,6 +258,12 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(worldServiceMethods.ByName("RunTask")),
 		connect.WithHandlerOptions(opts...),
 	)
+	worldServiceHardResetHandler := connect.NewUnaryHandler(
+		WorldServiceHardResetProcedure,
+		svc.HardReset,
+		connect.WithSchema(worldServiceMethods.ByName("HardReset")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/world.WorldService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case WorldServiceListEntitiesProcedure:
@@ -256,6 +280,8 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 			worldServiceGetLocalNodeHandler.ServeHTTP(w, r)
 		case WorldServiceRunTaskProcedure:
 			worldServiceRunTaskHandler.ServeHTTP(w, r)
+		case WorldServiceHardResetProcedure:
+			worldServiceHardResetHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -291,4 +317,8 @@ func (UnimplementedWorldServiceHandler) GetLocalNode(context.Context, *connect.R
 
 func (UnimplementedWorldServiceHandler) RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.RunTask is not implemented"))
+}
+
+func (UnimplementedWorldServiceHandler) HardReset(context.Context, *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.HardReset is not implemented"))
 }

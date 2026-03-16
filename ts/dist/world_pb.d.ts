@@ -2030,6 +2030,20 @@ export declare type ChatComponent = Message<"world.ChatComponent"> & {
    * @generated from field: string message = 4;
    */
   message: string;
+
+  /**
+   * id of chat message this is a reply to.
+   *
+   * @generated from field: optional string reply_to = 5;
+   */
+  replyTo?: string;
+
+  /**
+   * this message is a reaction rather than text reply. if the downstream doesnt support reactions, it'll appear as regular reply
+   *
+   * @generated from field: optional bool reaction = 6;
+   */
+  reaction?: boolean;
 };
 
 /**
@@ -2624,6 +2638,30 @@ export declare type RunTaskResponse = Message<"world.RunTaskResponse"> & {
  * Use `create(RunTaskResponseSchema)` to create a new message.
  */
 export declare const RunTaskResponseSchema: GenMessage<RunTaskResponse>;
+
+/**
+ * @generated from message world.HardResetRequest
+ */
+export declare type HardResetRequest = Message<"world.HardResetRequest"> & {
+};
+
+/**
+ * Describes the message world.HardResetRequest.
+ * Use `create(HardResetRequestSchema)` to create a new message.
+ */
+export declare const HardResetRequestSchema: GenMessage<HardResetRequest>;
+
+/**
+ * @generated from message world.HardResetResponse
+ */
+export declare type HardResetResponse = Message<"world.HardResetResponse"> & {
+};
+
+/**
+ * Describes the message world.HardResetResponse.
+ * Use `create(HardResetResponseSchema)` to create a new message.
+ */
+export declare const HardResetResponseSchema: GenMessage<HardResetResponse>;
 
 /**
  * @generated from enum world.Priority
@@ -3425,6 +3463,16 @@ export declare const WorldService: GenService<{
     methodKind: "unary";
     input: typeof RunTaskRequestSchema;
     output: typeof RunTaskResponseSchema;
+  },
+  /**
+   * clear all engine state including persistence
+   *
+   * @generated from rpc world.WorldService.HardReset
+   */
+  hardReset: {
+    methodKind: "unary";
+    input: typeof HardResetRequestSchema;
+    output: typeof HardResetResponseSchema;
   },
 }>;
 

@@ -937,14 +937,18 @@ class ConfigurationComponent(_message.Message):
     def __init__(self, value: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., version: _Optional[int] = ...) -> None: ...
 
 class ChatComponent(_message.Message):
-    __slots__ = ("sender", "to", "message")
+    __slots__ = ("sender", "to", "message", "reply_to", "reaction")
     SENDER_FIELD_NUMBER: _ClassVar[int]
     TO_FIELD_NUMBER: _ClassVar[int]
     MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    REPLY_TO_FIELD_NUMBER: _ClassVar[int]
+    REACTION_FIELD_NUMBER: _ClassVar[int]
     sender: str
     to: str
     message: str
-    def __init__(self, sender: _Optional[str] = ..., to: _Optional[str] = ..., message: _Optional[str] = ...) -> None: ...
+    reply_to: str
+    reaction: bool
+    def __init__(self, sender: _Optional[str] = ..., to: _Optional[str] = ..., message: _Optional[str] = ..., reply_to: _Optional[str] = ..., reaction: bool = ...) -> None: ...
 
 class EntityFilter(_message.Message):
     __slots__ = ("id", "label", "geo", "taskable", "component", "controller", "track", "mission", "channel", "device", "config")
@@ -1145,3 +1149,11 @@ class RunTaskResponse(_message.Message):
     status: TaskStatus
     humanReadableReason: str
     def __init__(self, executionId: _Optional[str] = ..., status: _Optional[_Union[TaskStatus, str]] = ..., humanReadableReason: _Optional[str] = ...) -> None: ...
+
+class HardResetRequest(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class HardResetResponse(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...

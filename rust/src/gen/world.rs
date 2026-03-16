@@ -1303,6 +1303,12 @@ pub struct ChatComponent {
     /// message text
     #[prost(string, tag = "4")]
     pub message: ::prost::alloc::string::String,
+    /// id of chat message this is a reply to.
+    #[prost(string, optional, tag = "5")]
+    pub reply_to: ::core::option::Option<::prost::alloc::string::String>,
+    /// this message is a reaction rather than text reply. if the downstream doesnt support reactions, it'll appear as regular reply
+    #[prost(bool, optional, tag = "6")]
+    pub reaction: ::core::option::Option<bool>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EntityFilter {
@@ -1510,6 +1516,10 @@ pub struct RunTaskResponse {
     #[prost(string, optional, tag = "3")]
     pub human_readable_reason: ::core::option::Option<::prost::alloc::string::String>,
 }
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct HardResetRequest {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct HardResetResponse {}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum Priority {
@@ -2403,6 +2413,31 @@ pub mod world_service_client {
                 .insert(GrpcMethod::new("world.WorldService", "RunTask"));
             self.inner.unary(req, path, codec).await
         }
+        /// clear all engine state including persistence
+        pub async fn hard_reset(
+            &mut self,
+            request: impl tonic::IntoRequest<super::HardResetRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::HardResetResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/world.WorldService/HardReset",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("world.WorldService", "HardReset"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -2477,6 +2512,14 @@ pub mod world_service_server {
             &self,
             request: tonic::Request<super::RunTaskRequest>,
         ) -> std::result::Result<tonic::Response<super::RunTaskResponse>, tonic::Status>;
+        /// clear all engine state including persistence
+        async fn hard_reset(
+            &self,
+            request: tonic::Request<super::HardResetRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::HardResetResponse>,
+            tonic::Status,
+        >;
     }
     /// interact with the world model
     #[derive(Debug)]
@@ -2856,6 +2899,51 @@ pub mod world_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = RunTaskSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/world.WorldService/HardReset" => {
+                    #[allow(non_camel_case_types)]
+                    struct HardResetSvc<T: WorldService>(pub Arc<T>);
+                    impl<
+                        T: WorldService,
+                    > tonic::server::UnaryService<super::HardResetRequest>
+                    for HardResetSvc<T> {
+                        type Response = super::HardResetResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::HardResetRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as WorldService>::hard_reset(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = HardResetSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
