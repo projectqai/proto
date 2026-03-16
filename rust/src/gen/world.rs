@@ -1215,6 +1215,10 @@ pub struct NodeDevice {
     pub arch: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(uint32, optional, tag = "4")]
     pub num_cpu: ::core::option::Option<u32>,
+    #[prost(string, optional, tag = "5")]
+    pub os_version: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "6")]
+    pub hydris_version: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UsbDevice {
@@ -1303,7 +1307,7 @@ pub struct ChatComponent {
     /// message text
     #[prost(string, tag = "4")]
     pub message: ::prost::alloc::string::String,
-    /// id of chat message this is a reply to.
+    /// id of chat message this is a reply to. if the downstream doesnt support replys, it'll appear as regular message
     #[prost(string, optional, tag = "5")]
     pub reply_to: ::core::option::Option<::prost::alloc::string::String>,
     /// this message is a reaction rather than text reply. if the downstream doesnt support reactions, it'll appear as regular reply

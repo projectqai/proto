@@ -657,6 +657,8 @@ message NodeDevice {
   optional string os = 2;
   optional string arch = 3;
   optional uint32 num_cpu = 4;
+  optional string os_version = 5;
+  optional string hydris_version = 6;
 }
 
 message UsbDevice {

@@ -1791,6 +1791,16 @@ export declare type NodeDevice = Message<"world.NodeDevice"> & {
    * @generated from field: optional uint32 num_cpu = 4;
    */
   numCpu?: number;
+
+  /**
+   * @generated from field: optional string os_version = 5;
+   */
+  osVersion?: string;
+
+  /**
+   * @generated from field: optional string hydris_version = 6;
+   */
+  hydrisVersion?: string;
 };
 
 /**
@@ -2032,7 +2042,7 @@ export declare type ChatComponent = Message<"world.ChatComponent"> & {
   message: string;
 
   /**
-   * id of chat message this is a reply to.
+   * id of chat message this is a reply to. if the downstream doesnt support replys, it'll appear as regular message
    *
    * @generated from field: optional string reply_to = 5;
    */
