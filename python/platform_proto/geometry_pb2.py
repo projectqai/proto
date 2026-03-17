@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0egeometry.proto\x12\x05world\"V\n\x0bPlanarPoint\x12\x11\n\tlongitude\x18\x01 \x01(\x01\x12\x10\n\x08latitude\x18\x02 \x01(\x01\x12\x15\n\x08\x61ltitude\x18\x03 \x01(\x01H\x00\x88\x01\x01\x42\x0b\n\t_altitude\"0\n\nPlanarRing\x12\"\n\x06points\x18\x01 \x03(\x0b\x32\x12.world.PlanarPoint\"S\n\rPlanarPolygon\x12 \n\x05outer\x18\x01 \x01(\x0b\x32\x11.world.PlanarRing\x12 \n\x05holes\x18\x02 \x03(\x0b\x32\x11.world.PlanarRing\"t\n\x0cPlanarCircle\x12\"\n\x06\x63\x65nter\x18\x01 \x01(\x0b\x32\x12.world.PlanarPoint\x12\x10\n\x08radius_m\x18\x02 \x01(\x01\x12\x1b\n\x0einner_radius_m\x18\x03 \x01(\x01H\x00\x88\x01\x01\x42\x11\n\x0f_inner_radius_m\"\xb1\x01\n\x0ePlanarGeometry\x12#\n\x05point\x18\x01 \x01(\x0b\x32\x12.world.PlanarPointH\x00\x12!\n\x04line\x18\x02 \x01(\x0b\x32\x11.world.PlanarRingH\x00\x12\'\n\x07polygon\x18\x03 \x01(\x0b\x32\x14.world.PlanarPolygonH\x00\x12%\n\x06\x63ircle\x18\x04 \x01(\x0b\x32\x13.world.PlanarCircleH\x00\x42\x07\n\x05plane\"I\n\nLocalPoint\x12\x0e\n\x06\x65\x61st_m\x18\x01 \x01(\x01\x12\x0f\n\x07north_m\x18\x02 \x01(\x01\x12\x11\n\x04up_m\x18\x03 \x01(\x01H\x00\x88\x01\x01\x42\x07\n\x05_up_m\".\n\tLocalRing\x12!\n\x06points\x18\x01 \x03(\x0b\x32\x11.world.LocalPoint\"P\n\x0cLocalPolygon\x12\x1f\n\x05outer\x18\x01 \x01(\x0b\x32\x10.world.LocalRing\x12\x1f\n\x05holes\x18\x02 \x03(\x0b\x32\x10.world.LocalRing\"r\n\x0bLocalCircle\x12!\n\x06\x63\x65nter\x18\x01 \x01(\x0b\x32\x11.world.LocalPoint\x12\x10\n\x08radius_m\x18\x02 \x01(\x01\x12\x1b\n\x0einner_radius_m\x18\x03 \x01(\x01H\x00\x88\x01\x01\x42\x11\n\x0f_inner_radius_m\"\xac\x01\n\rLocalGeometry\x12\"\n\x05point\x18\x01 \x01(\x0b\x32\x11.world.LocalPointH\x00\x12 \n\x04line\x18\x02 \x01(\x0b\x32\x10.world.LocalRingH\x00\x12&\n\x07polygon\x18\x03 \x01(\x0b\x32\x13.world.LocalPolygonH\x00\x12$\n\x06\x63ircle\x18\x04 \x01(\x0b\x32\x12.world.LocalCircleH\x00\x42\x07\n\x05shapeB Z\x1egithub.com/projectqai/proto/gob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0egeometry.proto\x12\x05world\"V\n\x0bPlanarPoint\x12\x11\n\tlongitude\x18\x01 \x01(\x01\x12\x10\n\x08latitude\x18\x02 \x01(\x01\x12\x15\n\x08\x61ltitude\x18\x03 \x01(\x01H\x00\x88\x01\x01\x42\x0b\n\t_altitude\"0\n\nPlanarRing\x12\"\n\x06points\x18\x01 \x03(\x0b\x32\x12.world.PlanarPoint\"S\n\rPlanarPolygon\x12 \n\x05outer\x18\x01 \x01(\x0b\x32\x11.world.PlanarRing\x12 \n\x05holes\x18\x02 \x03(\x0b\x32\x11.world.PlanarRing\"t\n\x0cPlanarCircle\x12\"\n\x06\x63\x65nter\x18\x01 \x01(\x0b\x32\x12.world.PlanarPoint\x12\x10\n\x08radius_m\x18\x02 \x01(\x01\x12\x1b\n\x0einner_radius_m\x18\x03 \x01(\x01H\x00\x88\x01\x01\x42\x11\n\x0f_inner_radius_m\"E\n\x18PlanarGeometryCollection\x12)\n\ngeometries\x18\x01 \x03(\x0b\x32\x15.world.PlanarGeometry\"\xa2\x02\n\x0ePlanarGeometry\x12#\n\x05point\x18\x01 \x01(\x0b\x32\x12.world.PlanarPointH\x00\x12!\n\x04line\x18\x02 \x01(\x0b\x32\x11.world.PlanarRingH\x00\x12\'\n\x07polygon\x18\x03 \x01(\x0b\x32\x14.world.PlanarPolygonH\x00\x12%\n\x06\x63ircle\x18\x04 \x01(\x0b\x32\x13.world.PlanarCircleH\x00\x12\x35\n\ncollection\x18\x05 \x01(\x0b\x32\x1f.world.PlanarGeometryCollectionH\x00\x12)\n\nline_style\x18\n \x01(\x0e\x32\x10.world.LineStyleH\x01\x88\x01\x01\x42\x07\n\x05planeB\r\n\x0b_line_style\"I\n\nLocalPoint\x12\x0e\n\x06\x65\x61st_m\x18\x01 \x01(\x01\x12\x0f\n\x07north_m\x18\x02 \x01(\x01\x12\x11\n\x04up_m\x18\x03 \x01(\x01H\x00\x88\x01\x01\x42\x07\n\x05_up_m\".\n\tLocalRing\x12!\n\x06points\x18\x01 \x03(\x0b\x32\x11.world.LocalPoint\"P\n\x0cLocalPolygon\x12\x1f\n\x05outer\x18\x01 \x01(\x0b\x32\x10.world.LocalRing\x12\x1f\n\x05holes\x18\x02 \x03(\x0b\x32\x10.world.LocalRing\"r\n\x0bLocalCircle\x12!\n\x06\x63\x65nter\x18\x01 \x01(\x0b\x32\x11.world.LocalPoint\x12\x10\n\x08radius_m\x18\x02 \x01(\x01\x12\x1b\n\x0einner_radius_m\x18\x03 \x01(\x01H\x00\x88\x01\x01\x42\x11\n\x0f_inner_radius_m\"C\n\x17LocalGeometryCollection\x12(\n\ngeometries\x18\x01 \x03(\x0b\x32\x14.world.LocalGeometry\"\x9c\x02\n\rLocalGeometry\x12\"\n\x05point\x18\x01 \x01(\x0b\x32\x11.world.LocalPointH\x00\x12 \n\x04line\x18\x02 \x01(\x0b\x32\x10.world.LocalRingH\x00\x12&\n\x07polygon\x18\x03 \x01(\x0b\x32\x13.world.LocalPolygonH\x00\x12$\n\x06\x63ircle\x18\x04 \x01(\x0b\x32\x12.world.LocalCircleH\x00\x12\x34\n\ncollection\x18\x05 \x01(\x0b\x32\x1e.world.LocalGeometryCollectionH\x00\x12)\n\nline_style\x18\n \x01(\x0e\x32\x10.world.LineStyleH\x01\x88\x01\x01\x42\x07\n\x05shapeB\r\n\x0b_line_style*I\n\tLineStyle\x12\x12\n\x0eLineStyleSolid\x10\x00\x12\x13\n\x0fLineStyleDashed\x10\x01\x12\x13\n\x0fLineStyleDotted\x10\x02\x42 Z\x1egithub.com/projectqai/proto/gob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,6 +32,8 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'geometry_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'Z\036github.com/projectqai/proto/go'
+  _globals['_LINESTYLE']._serialized_start=1407
+  _globals['_LINESTYLE']._serialized_end=1480
   _globals['_PLANARPOINT']._serialized_start=25
   _globals['_PLANARPOINT']._serialized_end=111
   _globals['_PLANARRING']._serialized_start=113
@@ -40,16 +42,20 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_PLANARPOLYGON']._serialized_end=246
   _globals['_PLANARCIRCLE']._serialized_start=248
   _globals['_PLANARCIRCLE']._serialized_end=364
-  _globals['_PLANARGEOMETRY']._serialized_start=367
-  _globals['_PLANARGEOMETRY']._serialized_end=544
-  _globals['_LOCALPOINT']._serialized_start=546
-  _globals['_LOCALPOINT']._serialized_end=619
-  _globals['_LOCALRING']._serialized_start=621
-  _globals['_LOCALRING']._serialized_end=667
-  _globals['_LOCALPOLYGON']._serialized_start=669
-  _globals['_LOCALPOLYGON']._serialized_end=749
-  _globals['_LOCALCIRCLE']._serialized_start=751
-  _globals['_LOCALCIRCLE']._serialized_end=865
-  _globals['_LOCALGEOMETRY']._serialized_start=868
-  _globals['_LOCALGEOMETRY']._serialized_end=1040
+  _globals['_PLANARGEOMETRYCOLLECTION']._serialized_start=366
+  _globals['_PLANARGEOMETRYCOLLECTION']._serialized_end=435
+  _globals['_PLANARGEOMETRY']._serialized_start=438
+  _globals['_PLANARGEOMETRY']._serialized_end=728
+  _globals['_LOCALPOINT']._serialized_start=730
+  _globals['_LOCALPOINT']._serialized_end=803
+  _globals['_LOCALRING']._serialized_start=805
+  _globals['_LOCALRING']._serialized_end=851
+  _globals['_LOCALPOLYGON']._serialized_start=853
+  _globals['_LOCALPOLYGON']._serialized_end=933
+  _globals['_LOCALCIRCLE']._serialized_start=935
+  _globals['_LOCALCIRCLE']._serialized_end=1049
+  _globals['_LOCALGEOMETRYCOLLECTION']._serialized_start=1051
+  _globals['_LOCALGEOMETRYCOLLECTION']._serialized_end=1118
+  _globals['_LOCALGEOMETRY']._serialized_start=1121
+  _globals['_LOCALGEOMETRY']._serialized_end=1405
 # @@protoc_insertion_point(module_scope)

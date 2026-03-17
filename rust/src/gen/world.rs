@@ -38,8 +38,15 @@ pub struct PlanarCircle {
     pub inner_radius_m: ::core::option::Option<f64>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PlanarGeometryCollection {
+    #[prost(message, repeated, tag = "1")]
+    pub geometries: ::prost::alloc::vec::Vec<PlanarGeometry>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct PlanarGeometry {
-    #[prost(oneof = "planar_geometry::Plane", tags = "1, 2, 3, 4")]
+    #[prost(enumeration = "LineStyle", optional, tag = "10")]
+    pub line_style: ::core::option::Option<i32>,
+    #[prost(oneof = "planar_geometry::Plane", tags = "1, 2, 3, 4, 5")]
     pub plane: ::core::option::Option<planar_geometry::Plane>,
 }
 /// Nested message and enum types in `PlanarGeometry`.
@@ -54,6 +61,8 @@ pub mod planar_geometry {
         Polygon(super::PlanarPolygon),
         #[prost(message, tag = "4")]
         Circle(super::PlanarCircle),
+        #[prost(message, tag = "5")]
+        Collection(super::PlanarGeometryCollection),
     }
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
@@ -87,8 +96,15 @@ pub struct LocalCircle {
     pub inner_radius_m: ::core::option::Option<f64>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct LocalGeometryCollection {
+    #[prost(message, repeated, tag = "1")]
+    pub geometries: ::prost::alloc::vec::Vec<LocalGeometry>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LocalGeometry {
-    #[prost(oneof = "local_geometry::Shape", tags = "1, 2, 3, 4")]
+    #[prost(enumeration = "LineStyle", optional, tag = "10")]
+    pub line_style: ::core::option::Option<i32>,
+    #[prost(oneof = "local_geometry::Shape", tags = "1, 2, 3, 4, 5")]
     pub shape: ::core::option::Option<local_geometry::Shape>,
 }
 /// Nested message and enum types in `LocalGeometry`.
@@ -103,6 +119,37 @@ pub mod local_geometry {
         Polygon(super::LocalPolygon),
         #[prost(message, tag = "4")]
         Circle(super::LocalCircle),
+        #[prost(message, tag = "5")]
+        Collection(super::LocalGeometryCollection),
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum LineStyle {
+    Solid = 0,
+    Dashed = 1,
+    Dotted = 2,
+}
+impl LineStyle {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Solid => "LineStyleSolid",
+            Self::Dashed => "LineStyleDashed",
+            Self::Dotted => "LineStyleDotted",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "LineStyleSolid" => Some(Self::Solid),
+            "LineStyleDashed" => Some(Self::Dashed),
+            "LineStyleDotted" => Some(Self::Dotted),
+            _ => None,
+        }
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]

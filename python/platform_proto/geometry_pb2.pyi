@@ -1,9 +1,19 @@
 from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Mapping, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
+
+class LineStyle(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    LineStyleSolid: _ClassVar[LineStyle]
+    LineStyleDashed: _ClassVar[LineStyle]
+    LineStyleDotted: _ClassVar[LineStyle]
+LineStyleSolid: LineStyle
+LineStyleDashed: LineStyle
+LineStyleDotted: LineStyle
 
 class PlanarPoint(_message.Message):
     __slots__ = ("longitude", "latitude", "altitude")
@@ -39,17 +49,27 @@ class PlanarCircle(_message.Message):
     inner_radius_m: float
     def __init__(self, center: _Optional[_Union[PlanarPoint, _Mapping]] = ..., radius_m: _Optional[float] = ..., inner_radius_m: _Optional[float] = ...) -> None: ...
 
+class PlanarGeometryCollection(_message.Message):
+    __slots__ = ("geometries",)
+    GEOMETRIES_FIELD_NUMBER: _ClassVar[int]
+    geometries: _containers.RepeatedCompositeFieldContainer[PlanarGeometry]
+    def __init__(self, geometries: _Optional[_Iterable[_Union[PlanarGeometry, _Mapping]]] = ...) -> None: ...
+
 class PlanarGeometry(_message.Message):
-    __slots__ = ("point", "line", "polygon", "circle")
+    __slots__ = ("point", "line", "polygon", "circle", "collection", "line_style")
     POINT_FIELD_NUMBER: _ClassVar[int]
     LINE_FIELD_NUMBER: _ClassVar[int]
     POLYGON_FIELD_NUMBER: _ClassVar[int]
     CIRCLE_FIELD_NUMBER: _ClassVar[int]
+    COLLECTION_FIELD_NUMBER: _ClassVar[int]
+    LINE_STYLE_FIELD_NUMBER: _ClassVar[int]
     point: PlanarPoint
     line: PlanarRing
     polygon: PlanarPolygon
     circle: PlanarCircle
-    def __init__(self, point: _Optional[_Union[PlanarPoint, _Mapping]] = ..., line: _Optional[_Union[PlanarRing, _Mapping]] = ..., polygon: _Optional[_Union[PlanarPolygon, _Mapping]] = ..., circle: _Optional[_Union[PlanarCircle, _Mapping]] = ...) -> None: ...
+    collection: PlanarGeometryCollection
+    line_style: LineStyle
+    def __init__(self, point: _Optional[_Union[PlanarPoint, _Mapping]] = ..., line: _Optional[_Union[PlanarRing, _Mapping]] = ..., polygon: _Optional[_Union[PlanarPolygon, _Mapping]] = ..., circle: _Optional[_Union[PlanarCircle, _Mapping]] = ..., collection: _Optional[_Union[PlanarGeometryCollection, _Mapping]] = ..., line_style: _Optional[_Union[LineStyle, str]] = ...) -> None: ...
 
 class LocalPoint(_message.Message):
     __slots__ = ("east_m", "north_m", "up_m")
@@ -85,14 +105,24 @@ class LocalCircle(_message.Message):
     inner_radius_m: float
     def __init__(self, center: _Optional[_Union[LocalPoint, _Mapping]] = ..., radius_m: _Optional[float] = ..., inner_radius_m: _Optional[float] = ...) -> None: ...
 
+class LocalGeometryCollection(_message.Message):
+    __slots__ = ("geometries",)
+    GEOMETRIES_FIELD_NUMBER: _ClassVar[int]
+    geometries: _containers.RepeatedCompositeFieldContainer[LocalGeometry]
+    def __init__(self, geometries: _Optional[_Iterable[_Union[LocalGeometry, _Mapping]]] = ...) -> None: ...
+
 class LocalGeometry(_message.Message):
-    __slots__ = ("point", "line", "polygon", "circle")
+    __slots__ = ("point", "line", "polygon", "circle", "collection", "line_style")
     POINT_FIELD_NUMBER: _ClassVar[int]
     LINE_FIELD_NUMBER: _ClassVar[int]
     POLYGON_FIELD_NUMBER: _ClassVar[int]
     CIRCLE_FIELD_NUMBER: _ClassVar[int]
+    COLLECTION_FIELD_NUMBER: _ClassVar[int]
+    LINE_STYLE_FIELD_NUMBER: _ClassVar[int]
     point: LocalPoint
     line: LocalRing
     polygon: LocalPolygon
     circle: LocalCircle
-    def __init__(self, point: _Optional[_Union[LocalPoint, _Mapping]] = ..., line: _Optional[_Union[LocalRing, _Mapping]] = ..., polygon: _Optional[_Union[LocalPolygon, _Mapping]] = ..., circle: _Optional[_Union[LocalCircle, _Mapping]] = ...) -> None: ...
+    collection: LocalGeometryCollection
+    line_style: LineStyle
+    def __init__(self, point: _Optional[_Union[LocalPoint, _Mapping]] = ..., line: _Optional[_Union[LocalRing, _Mapping]] = ..., polygon: _Optional[_Union[LocalPolygon, _Mapping]] = ..., circle: _Optional[_Union[LocalCircle, _Mapping]] = ..., collection: _Optional[_Union[LocalGeometryCollection, _Mapping]] = ..., line_style: _Optional[_Union[LineStyle, str]] = ...) -> None: ...

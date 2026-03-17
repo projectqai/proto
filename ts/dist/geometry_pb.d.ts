@@ -2,7 +2,7 @@
 // @generated from file geometry.proto (package world, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
@@ -114,6 +114,22 @@ export declare type PlanarCircle = Message<"world.PlanarCircle"> & {
 export declare const PlanarCircleSchema: GenMessage<PlanarCircle>;
 
 /**
+ * @generated from message world.PlanarGeometryCollection
+ */
+export declare type PlanarGeometryCollection = Message<"world.PlanarGeometryCollection"> & {
+  /**
+   * @generated from field: repeated world.PlanarGeometry geometries = 1;
+   */
+  geometries: PlanarGeometry[];
+};
+
+/**
+ * Describes the message world.PlanarGeometryCollection.
+ * Use `create(PlanarGeometryCollectionSchema)` to create a new message.
+ */
+export declare const PlanarGeometryCollectionSchema: GenMessage<PlanarGeometryCollection>;
+
+/**
  * @generated from message world.PlanarGeometry
  */
 export declare type PlanarGeometry = Message<"world.PlanarGeometry"> & {
@@ -144,7 +160,18 @@ export declare type PlanarGeometry = Message<"world.PlanarGeometry"> & {
      */
     value: PlanarCircle;
     case: "circle";
+  } | {
+    /**
+     * @generated from field: world.PlanarGeometryCollection collection = 5;
+     */
+    value: PlanarGeometryCollection;
+    case: "collection";
   } | { case: undefined; value?: undefined };
+
+  /**
+   * @generated from field: optional world.LineStyle line_style = 10;
+   */
+  lineStyle?: LineStyle;
 };
 
 /**
@@ -243,6 +270,22 @@ export declare type LocalCircle = Message<"world.LocalCircle"> & {
 export declare const LocalCircleSchema: GenMessage<LocalCircle>;
 
 /**
+ * @generated from message world.LocalGeometryCollection
+ */
+export declare type LocalGeometryCollection = Message<"world.LocalGeometryCollection"> & {
+  /**
+   * @generated from field: repeated world.LocalGeometry geometries = 1;
+   */
+  geometries: LocalGeometry[];
+};
+
+/**
+ * Describes the message world.LocalGeometryCollection.
+ * Use `create(LocalGeometryCollectionSchema)` to create a new message.
+ */
+export declare const LocalGeometryCollectionSchema: GenMessage<LocalGeometryCollection>;
+
+/**
  * @generated from message world.LocalGeometry
  */
 export declare type LocalGeometry = Message<"world.LocalGeometry"> & {
@@ -273,7 +316,18 @@ export declare type LocalGeometry = Message<"world.LocalGeometry"> & {
      */
     value: LocalCircle;
     case: "circle";
+  } | {
+    /**
+     * @generated from field: world.LocalGeometryCollection collection = 5;
+     */
+    value: LocalGeometryCollection;
+    case: "collection";
   } | { case: undefined; value?: undefined };
+
+  /**
+   * @generated from field: optional world.LineStyle line_style = 10;
+   */
+  lineStyle?: LineStyle;
 };
 
 /**
@@ -281,4 +335,29 @@ export declare type LocalGeometry = Message<"world.LocalGeometry"> & {
  * Use `create(LocalGeometrySchema)` to create a new message.
  */
 export declare const LocalGeometrySchema: GenMessage<LocalGeometry>;
+
+/**
+ * @generated from enum world.LineStyle
+ */
+export enum LineStyle {
+  /**
+   * @generated from enum value: LineStyleSolid = 0;
+   */
+  LineStyleSolid = 0,
+
+  /**
+   * @generated from enum value: LineStyleDashed = 1;
+   */
+  LineStyleDashed = 1,
+
+  /**
+   * @generated from enum value: LineStyleDotted = 2;
+   */
+  LineStyleDotted = 2,
+}
+
+/**
+ * Describes the enum world.LineStyle.
+ */
+export declare const LineStyleSchema: GenEnum<LineStyle>;
 

@@ -36,13 +36,25 @@ message PlanarCircle {
   optional double inner_radius_m = 3; // omit for solid circle
 }
 
+message PlanarGeometryCollection {
+  repeated PlanarGeometry geometries = 1;
+}
+
+enum LineStyle {
+  LineStyleSolid = 0;
+  LineStyleDashed = 1;
+  LineStyleDotted = 2;
+}
+
 message PlanarGeometry {
   oneof plane {
     PlanarPoint point = 1;
     PlanarRing line = 2;
     PlanarPolygon polygon = 3;
     PlanarCircle circle = 4;
+    PlanarGeometryCollection collection = 5;
   }
+  optional LineStyle line_style = 10;
 }
 
 // ---------------------------------------------
@@ -70,13 +82,19 @@ message LocalCircle {
   optional double inner_radius_m = 3;
 }
 
+message LocalGeometryCollection {
+  repeated LocalGeometry geometries = 1;
+}
+
 message LocalGeometry {
   oneof shape {
     LocalPoint point = 1;
     LocalRing line = 2;
     LocalPolygon polygon = 3;
     LocalCircle circle = 4;
+    LocalGeometryCollection collection = 5;
   }
+  optional LineStyle line_style = 10;
 }
 
 // ---------------------------------------------

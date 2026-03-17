@@ -2,13 +2,13 @@
 // @generated from file geometry.proto (package world, syntax proto3)
 /* eslint-disable */
 
-import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc, tsEnum } from "@bufbuild/protobuf/codegenv2";
 
 /**
  * Describes the file geometry.proto.
  */
 export const file_geometry = /*@__PURE__*/
-  fileDesc("Cg5nZW9tZXRyeS5wcm90bxIFd29ybGQiVgoLUGxhbmFyUG9pbnQSEQoJbG9uZ2l0dWRlGAEgASgBEhAKCGxhdGl0dWRlGAIgASgBEhUKCGFsdGl0dWRlGAMgASgBSACIAQFCCwoJX2FsdGl0dWRlIjAKClBsYW5hclJpbmcSIgoGcG9pbnRzGAEgAygLMhIud29ybGQuUGxhbmFyUG9pbnQiUwoNUGxhbmFyUG9seWdvbhIgCgVvdXRlchgBIAEoCzIRLndvcmxkLlBsYW5hclJpbmcSIAoFaG9sZXMYAiADKAsyES53b3JsZC5QbGFuYXJSaW5nInQKDFBsYW5hckNpcmNsZRIiCgZjZW50ZXIYASABKAsyEi53b3JsZC5QbGFuYXJQb2ludBIQCghyYWRpdXNfbRgCIAEoARIbCg5pbm5lcl9yYWRpdXNfbRgDIAEoAUgAiAEBQhEKD19pbm5lcl9yYWRpdXNfbSKxAQoOUGxhbmFyR2VvbWV0cnkSIwoFcG9pbnQYASABKAsyEi53b3JsZC5QbGFuYXJQb2ludEgAEiEKBGxpbmUYAiABKAsyES53b3JsZC5QbGFuYXJSaW5nSAASJwoHcG9seWdvbhgDIAEoCzIULndvcmxkLlBsYW5hclBvbHlnb25IABIlCgZjaXJjbGUYBCABKAsyEy53b3JsZC5QbGFuYXJDaXJjbGVIAEIHCgVwbGFuZSJJCgpMb2NhbFBvaW50Eg4KBmVhc3RfbRgBIAEoARIPCgdub3J0aF9tGAIgASgBEhEKBHVwX20YAyABKAFIAIgBAUIHCgVfdXBfbSIuCglMb2NhbFJpbmcSIQoGcG9pbnRzGAEgAygLMhEud29ybGQuTG9jYWxQb2ludCJQCgxMb2NhbFBvbHlnb24SHwoFb3V0ZXIYASABKAsyEC53b3JsZC5Mb2NhbFJpbmcSHwoFaG9sZXMYAiADKAsyEC53b3JsZC5Mb2NhbFJpbmcicgoLTG9jYWxDaXJjbGUSIQoGY2VudGVyGAEgASgLMhEud29ybGQuTG9jYWxQb2ludBIQCghyYWRpdXNfbRgCIAEoARIbCg5pbm5lcl9yYWRpdXNfbRgDIAEoAUgAiAEBQhEKD19pbm5lcl9yYWRpdXNfbSKsAQoNTG9jYWxHZW9tZXRyeRIiCgVwb2ludBgBIAEoCzIRLndvcmxkLkxvY2FsUG9pbnRIABIgCgRsaW5lGAIgASgLMhAud29ybGQuTG9jYWxSaW5nSAASJgoHcG9seWdvbhgDIAEoCzITLndvcmxkLkxvY2FsUG9seWdvbkgAEiQKBmNpcmNsZRgEIAEoCzISLndvcmxkLkxvY2FsQ2lyY2xlSABCBwoFc2hhcGVCIFoeZ2l0aHViLmNvbS9wcm9qZWN0cWFpL3Byb3RvL2dvYgZwcm90bzM");
+  fileDesc("Cg5nZW9tZXRyeS5wcm90bxIFd29ybGQiVgoLUGxhbmFyUG9pbnQSEQoJbG9uZ2l0dWRlGAEgASgBEhAKCGxhdGl0dWRlGAIgASgBEhUKCGFsdGl0dWRlGAMgASgBSACIAQFCCwoJX2FsdGl0dWRlIjAKClBsYW5hclJpbmcSIgoGcG9pbnRzGAEgAygLMhIud29ybGQuUGxhbmFyUG9pbnQiUwoNUGxhbmFyUG9seWdvbhIgCgVvdXRlchgBIAEoCzIRLndvcmxkLlBsYW5hclJpbmcSIAoFaG9sZXMYAiADKAsyES53b3JsZC5QbGFuYXJSaW5nInQKDFBsYW5hckNpcmNsZRIiCgZjZW50ZXIYASABKAsyEi53b3JsZC5QbGFuYXJQb2ludBIQCghyYWRpdXNfbRgCIAEoARIbCg5pbm5lcl9yYWRpdXNfbRgDIAEoAUgAiAEBQhEKD19pbm5lcl9yYWRpdXNfbSJFChhQbGFuYXJHZW9tZXRyeUNvbGxlY3Rpb24SKQoKZ2VvbWV0cmllcxgBIAMoCzIVLndvcmxkLlBsYW5hckdlb21ldHJ5IqICCg5QbGFuYXJHZW9tZXRyeRIjCgVwb2ludBgBIAEoCzISLndvcmxkLlBsYW5hclBvaW50SAASIQoEbGluZRgCIAEoCzIRLndvcmxkLlBsYW5hclJpbmdIABInCgdwb2x5Z29uGAMgASgLMhQud29ybGQuUGxhbmFyUG9seWdvbkgAEiUKBmNpcmNsZRgEIAEoCzITLndvcmxkLlBsYW5hckNpcmNsZUgAEjUKCmNvbGxlY3Rpb24YBSABKAsyHy53b3JsZC5QbGFuYXJHZW9tZXRyeUNvbGxlY3Rpb25IABIpCgpsaW5lX3N0eWxlGAogASgOMhAud29ybGQuTGluZVN0eWxlSAGIAQFCBwoFcGxhbmVCDQoLX2xpbmVfc3R5bGUiSQoKTG9jYWxQb2ludBIOCgZlYXN0X20YASABKAESDwoHbm9ydGhfbRgCIAEoARIRCgR1cF9tGAMgASgBSACIAQFCBwoFX3VwX20iLgoJTG9jYWxSaW5nEiEKBnBvaW50cxgBIAMoCzIRLndvcmxkLkxvY2FsUG9pbnQiUAoMTG9jYWxQb2x5Z29uEh8KBW91dGVyGAEgASgLMhAud29ybGQuTG9jYWxSaW5nEh8KBWhvbGVzGAIgAygLMhAud29ybGQuTG9jYWxSaW5nInIKC0xvY2FsQ2lyY2xlEiEKBmNlbnRlchgBIAEoCzIRLndvcmxkLkxvY2FsUG9pbnQSEAoIcmFkaXVzX20YAiABKAESGwoOaW5uZXJfcmFkaXVzX20YAyABKAFIAIgBAUIRCg9faW5uZXJfcmFkaXVzX20iQwoXTG9jYWxHZW9tZXRyeUNvbGxlY3Rpb24SKAoKZ2VvbWV0cmllcxgBIAMoCzIULndvcmxkLkxvY2FsR2VvbWV0cnkinAIKDUxvY2FsR2VvbWV0cnkSIgoFcG9pbnQYASABKAsyES53b3JsZC5Mb2NhbFBvaW50SAASIAoEbGluZRgCIAEoCzIQLndvcmxkLkxvY2FsUmluZ0gAEiYKB3BvbHlnb24YAyABKAsyEy53b3JsZC5Mb2NhbFBvbHlnb25IABIkCgZjaXJjbGUYBCABKAsyEi53b3JsZC5Mb2NhbENpcmNsZUgAEjQKCmNvbGxlY3Rpb24YBSABKAsyHi53b3JsZC5Mb2NhbEdlb21ldHJ5Q29sbGVjdGlvbkgAEikKCmxpbmVfc3R5bGUYCiABKA4yEC53b3JsZC5MaW5lU3R5bGVIAYgBAUIHCgVzaGFwZUINCgtfbGluZV9zdHlsZSpJCglMaW5lU3R5bGUSEgoOTGluZVN0eWxlU29saWQQABITCg9MaW5lU3R5bGVEYXNoZWQQARITCg9MaW5lU3R5bGVEb3R0ZWQQAkIgWh5naXRodWIuY29tL3Byb2plY3RxYWkvcHJvdG8vZ29iBnByb3RvMw");
 
 /**
  * Describes the message world.PlanarPoint.
@@ -39,44 +39,70 @@ export const PlanarCircleSchema = /*@__PURE__*/
   messageDesc(file_geometry, 3);
 
 /**
+ * Describes the message world.PlanarGeometryCollection.
+ * Use `create(PlanarGeometryCollectionSchema)` to create a new message.
+ */
+export const PlanarGeometryCollectionSchema = /*@__PURE__*/
+  messageDesc(file_geometry, 4);
+
+/**
  * Describes the message world.PlanarGeometry.
  * Use `create(PlanarGeometrySchema)` to create a new message.
  */
 export const PlanarGeometrySchema = /*@__PURE__*/
-  messageDesc(file_geometry, 4);
+  messageDesc(file_geometry, 5);
 
 /**
  * Describes the message world.LocalPoint.
  * Use `create(LocalPointSchema)` to create a new message.
  */
 export const LocalPointSchema = /*@__PURE__*/
-  messageDesc(file_geometry, 5);
+  messageDesc(file_geometry, 6);
 
 /**
  * Describes the message world.LocalRing.
  * Use `create(LocalRingSchema)` to create a new message.
  */
 export const LocalRingSchema = /*@__PURE__*/
-  messageDesc(file_geometry, 6);
+  messageDesc(file_geometry, 7);
 
 /**
  * Describes the message world.LocalPolygon.
  * Use `create(LocalPolygonSchema)` to create a new message.
  */
 export const LocalPolygonSchema = /*@__PURE__*/
-  messageDesc(file_geometry, 7);
+  messageDesc(file_geometry, 8);
 
 /**
  * Describes the message world.LocalCircle.
  * Use `create(LocalCircleSchema)` to create a new message.
  */
 export const LocalCircleSchema = /*@__PURE__*/
-  messageDesc(file_geometry, 8);
+  messageDesc(file_geometry, 9);
+
+/**
+ * Describes the message world.LocalGeometryCollection.
+ * Use `create(LocalGeometryCollectionSchema)` to create a new message.
+ */
+export const LocalGeometryCollectionSchema = /*@__PURE__*/
+  messageDesc(file_geometry, 10);
 
 /**
  * Describes the message world.LocalGeometry.
  * Use `create(LocalGeometrySchema)` to create a new message.
  */
 export const LocalGeometrySchema = /*@__PURE__*/
-  messageDesc(file_geometry, 9);
+  messageDesc(file_geometry, 11);
+
+/**
+ * Describes the enum world.LineStyle.
+ */
+export const LineStyleSchema = /*@__PURE__*/
+  enumDesc(file_geometry, 0);
+
+/**
+ * @generated from enum world.LineStyle
+ */
+export const LineStyle = /*@__PURE__*/
+  tsEnum(LineStyleSchema);
 
