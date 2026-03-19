@@ -701,6 +701,7 @@ pub struct GeoSpatialComponent {
     /// height above ellipsoid (WGS84) in meters
     #[prost(double, optional, tag = "3")]
     pub altitude: ::core::option::Option<f64>,
+    /// covariance in meters² (local ENU frame): xx=east², yy=north², zz=up²
     #[prost(message, optional, tag = "4")]
     pub covariance: ::core::option::Option<CovarianceMatrix>,
 }
@@ -808,6 +809,12 @@ pub struct Quaternion {
     #[prost(double, tag = "4")]
     pub w: f64,
 }
+/// Symmetric 3x3 covariance matrix (upper triangle).
+/// Units depend on the coordinate frame this matrix is attached to:
+///    - GeoSpatialComponent: meters² (ENU frame)
+///    - CartesianOffset:     meters² (east/north/up)
+///    - PolarOffset:         x=degrees², z=meters² (azimuth/elevation/range)
+///    - KinematicsEnu:       (m/s)² or (m/s²)²
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct CovarianceMatrix {
     #[prost(double, optional, tag = "1")]
@@ -831,6 +838,7 @@ pub struct CartesianOffset {
     pub north_m: f64,
     #[prost(double, optional, tag = "3")]
     pub up_m: ::core::option::Option<f64>,
+    /// covariance in meters²: xx=east², yy=north², zz=up²
     #[prost(message, optional, tag = "4")]
     pub covariance: ::core::option::Option<CovarianceMatrix>,
     #[prost(message, optional, tag = "5")]
@@ -847,8 +855,19 @@ pub struct PolarOffset {
     /// distance in meters. omit for bearing-only (passive sensor)
     #[prost(double, optional, tag = "3")]
     pub range: ::core::option::Option<f64>,
+    /// covariance: xx=degrees² (azimuth), yy=degrees² (elevation), zz=meters² (range)
+    /// if error fields below are set, engine fills this automatically
+    #[deprecated]
     #[prost(message, optional, tag = "4")]
     pub covariance: ::core::option::Option<CovarianceMatrix>,
+    /// measurement uncertainties (1-sigma), alternative to covariance matrix
+    /// engine normalizes: fills covariance from these if covariance is missing, or vice versa
+    #[prost(double, optional, tag = "10")]
+    pub azimuth_error_deg: ::core::option::Option<f64>,
+    #[prost(double, optional, tag = "11")]
+    pub elevation_error_deg: ::core::option::Option<f64>,
+    #[prost(double, optional, tag = "12")]
+    pub range_error_m: ::core::option::Option<f64>,
     #[prost(message, optional, tag = "5")]
     pub orientation: ::core::option::Option<Quaternion>,
 }

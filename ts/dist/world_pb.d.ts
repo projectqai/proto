@@ -371,6 +371,8 @@ export declare type GeoSpatialComponent = Message<"world.GeoSpatialComponent"> &
   altitude?: number;
 
   /**
+   * covariance in meters² (local ENU frame): xx=east², yy=north², zz=up²
+   *
    * @generated from field: optional world.CovarianceMatrix covariance = 4;
    */
   covariance?: CovarianceMatrix;
@@ -648,6 +650,13 @@ export declare type Quaternion = Message<"world.Quaternion"> & {
 export declare const QuaternionSchema: GenMessage<Quaternion>;
 
 /**
+ * Symmetric 3x3 covariance matrix (upper triangle).
+ * Units depend on the coordinate frame this matrix is attached to:
+ *   - GeoSpatialComponent: meters² (ENU frame)
+ *   - CartesianOffset:     meters² (east/north/up)
+ *   - PolarOffset:         x=degrees², z=meters² (azimuth/elevation/range)
+ *   - KinematicsEnu:       (m/s)² or (m/s²)²
+ *
  * @generated from message world.CovarianceMatrix
  */
 export declare type CovarianceMatrix = Message<"world.CovarianceMatrix"> & {
@@ -708,6 +717,8 @@ export declare type CartesianOffset = Message<"world.CartesianOffset"> & {
   upM?: number;
 
   /**
+   * covariance in meters²: xx=east², yy=north², zz=up²
+   *
    * @generated from field: optional world.CovarianceMatrix covariance = 4;
    */
   covariance?: CovarianceMatrix;
@@ -750,9 +761,31 @@ export declare type PolarOffset = Message<"world.PolarOffset"> & {
   range?: number;
 
   /**
-   * @generated from field: optional world.CovarianceMatrix covariance = 4;
+   * covariance: xx=degrees² (azimuth), yy=degrees² (elevation), zz=meters² (range)
+   * if error fields below are set, engine fills this automatically
+   *
+   * @generated from field: optional world.CovarianceMatrix covariance = 4 [deprecated = true];
+   * @deprecated
    */
   covariance?: CovarianceMatrix;
+
+  /**
+   * measurement uncertainties (1-sigma), alternative to covariance matrix
+   * engine normalizes: fills covariance from these if covariance is missing, or vice versa
+   *
+   * @generated from field: optional double azimuth_error_deg = 10;
+   */
+  azimuthErrorDeg?: number;
+
+  /**
+   * @generated from field: optional double elevation_error_deg = 11;
+   */
+  elevationErrorDeg?: number;
+
+  /**
+   * @generated from field: optional double range_error_m = 12;
+   */
+  rangeErrorM?: number;
 
   /**
    * @generated from field: optional world.Quaternion orientation = 5;

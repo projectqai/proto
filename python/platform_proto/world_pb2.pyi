@@ -513,18 +513,24 @@ class CartesianOffset(_message.Message):
     def __init__(self, east_m: _Optional[float] = ..., north_m: _Optional[float] = ..., up_m: _Optional[float] = ..., covariance: _Optional[_Union[CovarianceMatrix, _Mapping]] = ..., orientation: _Optional[_Union[Quaternion, _Mapping]] = ...) -> None: ...
 
 class PolarOffset(_message.Message):
-    __slots__ = ("azimuth", "elevation", "range", "covariance", "orientation")
+    __slots__ = ("azimuth", "elevation", "range", "covariance", "azimuth_error_deg", "elevation_error_deg", "range_error_m", "orientation")
     AZIMUTH_FIELD_NUMBER: _ClassVar[int]
     ELEVATION_FIELD_NUMBER: _ClassVar[int]
     RANGE_FIELD_NUMBER: _ClassVar[int]
     COVARIANCE_FIELD_NUMBER: _ClassVar[int]
+    AZIMUTH_ERROR_DEG_FIELD_NUMBER: _ClassVar[int]
+    ELEVATION_ERROR_DEG_FIELD_NUMBER: _ClassVar[int]
+    RANGE_ERROR_M_FIELD_NUMBER: _ClassVar[int]
     ORIENTATION_FIELD_NUMBER: _ClassVar[int]
     azimuth: float
     elevation: float
     range: float
     covariance: CovarianceMatrix
+    azimuth_error_deg: float
+    elevation_error_deg: float
+    range_error_m: float
     orientation: Quaternion
-    def __init__(self, azimuth: _Optional[float] = ..., elevation: _Optional[float] = ..., range: _Optional[float] = ..., covariance: _Optional[_Union[CovarianceMatrix, _Mapping]] = ..., orientation: _Optional[_Union[Quaternion, _Mapping]] = ...) -> None: ...
+    def __init__(self, azimuth: _Optional[float] = ..., elevation: _Optional[float] = ..., range: _Optional[float] = ..., covariance: _Optional[_Union[CovarianceMatrix, _Mapping]] = ..., azimuth_error_deg: _Optional[float] = ..., elevation_error_deg: _Optional[float] = ..., range_error_m: _Optional[float] = ..., orientation: _Optional[_Union[Quaternion, _Mapping]] = ...) -> None: ...
 
 class PoseComponent(_message.Message):
     __slots__ = ("parent", "cartesian", "polar")

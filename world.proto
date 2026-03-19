@@ -133,6 +133,7 @@ message GeoSpatialComponent {
   // height above ellipsoid (WGS84) in meters
   optional double altitude = 3;
 
+  // covariance in meters² (local ENU frame): xx=east², yy=north², zz=up²
   optional CovarianceMatrix covariance = 4;
 }
 
@@ -230,6 +231,12 @@ message Quaternion {
   double w = 4;
 }
 
+// Symmetric 3x3 covariance matrix (upper triangle).
+// Units depend on the coordinate frame this matrix is attached to:
+//   - GeoSpatialComponent: meters² (ENU frame)
+//   - CartesianOffset:     meters² (east/north/up)
+//   - PolarOffset:         x=degrees², z=meters² (azimuth/elevation/range)
+//   - KinematicsEnu:       (m/s)² or (m/s²)²
 message CovarianceMatrix {
   optional double mxx = 1;
   optional double mxy = 2;
@@ -243,6 +250,7 @@ message CartesianOffset {
   double east_m = 1;
   double north_m = 2;
   optional double up_m = 3;
+  // covariance in meters²: xx=east², yy=north², zz=up²
   optional CovarianceMatrix covariance = 4;
 
   optional Quaternion orientation = 5;
@@ -255,7 +263,16 @@ message PolarOffset {
   optional double elevation = 2;
   // distance in meters. omit for bearing-only (passive sensor)
   optional double range = 3;
-  optional CovarianceMatrix covariance = 4;
+
+  // covariance: xx=degrees² (azimuth), yy=degrees² (elevation), zz=meters² (range)
+  // if error fields below are set, engine fills this automatically
+  optional CovarianceMatrix covariance = 4 [deprecated = true];
+
+  // measurement uncertainties (1-sigma), alternative to covariance matrix
+  // engine normalizes: fills covariance from these if covariance is missing, or vice versa
+  optional double azimuth_error_deg = 10;
+  optional double elevation_error_deg = 11;
+  optional double range_error_m = 12;
 
   optional Quaternion orientation = 5;
 }
