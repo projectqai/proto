@@ -851,20 +851,22 @@ class DeviceComponent(_message.Message):
     def __init__(self, parent: _Optional[str] = ..., composition: _Optional[_Iterable[str]] = ..., unique_hardware_id: _Optional[str] = ..., state: _Optional[_Union[DeviceState, str]] = ..., error: _Optional[str] = ..., category: _Optional[str] = ..., node: _Optional[_Union[NodeDevice, _Mapping]] = ..., usb: _Optional[_Union[UsbDevice, _Mapping]] = ..., ip: _Optional[_Union[IpDevice, _Mapping]] = ..., serial: _Optional[_Union[SerialDevice, _Mapping]] = ..., ethernet: _Optional[_Union[EthernetDevice, _Mapping]] = ..., lpwan: _Optional[_Union[LPWANDevice, _Mapping]] = ..., meshtastic: _Optional[_Union[MeshtasticDevice, _Mapping]] = ..., **kwargs) -> None: ...
 
 class NodeDevice(_message.Message):
-    __slots__ = ("hostname", "os", "arch", "num_cpu", "os_version", "hydris_version")
+    __slots__ = ("hostname", "os", "arch", "num_cpu", "os_version", "hydris_version", "hydris_update_available")
     HOSTNAME_FIELD_NUMBER: _ClassVar[int]
     OS_FIELD_NUMBER: _ClassVar[int]
     ARCH_FIELD_NUMBER: _ClassVar[int]
     NUM_CPU_FIELD_NUMBER: _ClassVar[int]
     OS_VERSION_FIELD_NUMBER: _ClassVar[int]
     HYDRIS_VERSION_FIELD_NUMBER: _ClassVar[int]
+    HYDRIS_UPDATE_AVAILABLE_FIELD_NUMBER: _ClassVar[int]
     hostname: str
     os: str
     arch: str
     num_cpu: int
     os_version: str
     hydris_version: str
-    def __init__(self, hostname: _Optional[str] = ..., os: _Optional[str] = ..., arch: _Optional[str] = ..., num_cpu: _Optional[int] = ..., os_version: _Optional[str] = ..., hydris_version: _Optional[str] = ...) -> None: ...
+    hydris_update_available: str
+    def __init__(self, hostname: _Optional[str] = ..., os: _Optional[str] = ..., arch: _Optional[str] = ..., num_cpu: _Optional[int] = ..., os_version: _Optional[str] = ..., hydris_version: _Optional[str] = ..., hydris_update_available: _Optional[str] = ...) -> None: ...
 
 class UsbDevice(_message.Message):
     __slots__ = ("vendor_id", "product_id", "device_class", "device_subclass", "device_protocol", "manufacturer_name", "product_name", "serial_number")

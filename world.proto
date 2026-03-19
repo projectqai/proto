@@ -659,6 +659,7 @@ message NodeDevice {
   optional uint32 num_cpu = 4;
   optional string os_version = 5;
   optional string hydris_version = 6;
+  optional string hydris_update_available = 7;
 }
 
 message UsbDevice {

@@ -1801,6 +1801,11 @@ export declare type NodeDevice = Message<"world.NodeDevice"> & {
    * @generated from field: optional string hydris_version = 6;
    */
   hydrisVersion?: string;
+
+  /**
+   * @generated from field: optional string hydris_update_available = 7;
+   */
+  hydrisUpdateAvailable?: string;
 };
 
 /**
