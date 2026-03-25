@@ -263,6 +263,28 @@ export enum MetricKind {
   MetricKindPh = 104,
 
   /**
+   * CBRN hazard categories
+   *
+   * @generated from enum value: MetricKindRadiationHazard = 130;
+   */
+  MetricKindRadiationHazard = 130,
+
+  /**
+   * @generated from enum value: MetricKindChemicalHazard = 131;
+   */
+  MetricKindChemicalHazard = 131,
+
+  /**
+   * @generated from enum value: MetricKindBiologicalHazard = 132;
+   */
+  MetricKindBiologicalHazard = 132,
+
+  /**
+   * @generated from enum value: MetricKindNuclearHazard = 133;
+   */
+  MetricKindNuclearHazard = 133,
+
+  /**
    * Weight / mass
    *
    * @generated from enum value: MetricKindWeight = 110;
@@ -548,6 +570,72 @@ export enum MetricUnit {
    * @generated from enum value: MetricUnitMicrogramPerCubicMeter = 91;
    */
   MetricUnitMicrogramPerCubicMeter = 91,
+
+  /**
+   * Radiation dose / dose rate
+   *
+   * @generated from enum value: MetricUnitNanosievert = 130;
+   */
+  MetricUnitNanosievert = 130,
+
+  /**
+   * @generated from enum value: MetricUnitNanosievertPerHour = 131;
+   */
+  MetricUnitNanosievertPerHour = 131,
+
+  /**
+   * @generated from enum value: MetricUnitMicrosievert = 132;
+   */
+  MetricUnitMicrosievert = 132,
+
+  /**
+   * @generated from enum value: MetricUnitMicrosievertPerHour = 133;
+   */
+  MetricUnitMicrosievertPerHour = 133,
+
+  /**
+   * @generated from enum value: MetricUnitMillisievert = 134;
+   */
+  MetricUnitMillisievert = 134,
+
+  /**
+   * @generated from enum value: MetricUnitMillisievertPerHour = 135;
+   */
+  MetricUnitMillisievertPerHour = 135,
+
+  /**
+   * @generated from enum value: MetricUnitSievert = 136;
+   */
+  MetricUnitSievert = 136,
+
+  /**
+   * @generated from enum value: MetricUnitSievertPerHour = 137;
+   */
+  MetricUnitSievertPerHour = 137,
+
+  /**
+   * Chemical contamination
+   *
+   * @generated from enum value: MetricUnitPartsPerBillion = 138;
+   */
+  MetricUnitPartsPerBillion = 138,
+
+  /**
+   * @generated from enum value: MetricUnitMilligramPerCubicMeter = 139;
+   */
+  MetricUnitMilligramPerCubicMeter = 139,
+
+  /**
+   * @generated from enum value: MetricUnitMicrogramPerSquareMeter = 140;
+   */
+  MetricUnitMicrogramPerSquareMeter = 140,
+
+  /**
+   * Hazard threshold
+   *
+   * @generated from enum value: MetricUnitBin = 141;
+   */
+  MetricUnitBin = 141,
 
   /**
    * Precipitation

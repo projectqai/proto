@@ -39,6 +39,10 @@ class MetricKind(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     MetricKindPm10: _ClassVar[MetricKind]
     MetricKindAqi: _ClassVar[MetricKind]
     MetricKindPh: _ClassVar[MetricKind]
+    MetricKindRadiationHazard: _ClassVar[MetricKind]
+    MetricKindChemicalHazard: _ClassVar[MetricKind]
+    MetricKindBiologicalHazard: _ClassVar[MetricKind]
+    MetricKindNuclearHazard: _ClassVar[MetricKind]
     MetricKindWeight: _ClassVar[MetricKind]
     MetricKindVolume: _ClassVar[MetricKind]
     MetricKindVolumeFlowRate: _ClassVar[MetricKind]
@@ -91,6 +95,18 @@ class MetricUnit(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     MetricUnitGigabyte: _ClassVar[MetricUnit]
     MetricUnitPartsPerMillion: _ClassVar[MetricUnit]
     MetricUnitMicrogramPerCubicMeter: _ClassVar[MetricUnit]
+    MetricUnitNanosievert: _ClassVar[MetricUnit]
+    MetricUnitNanosievertPerHour: _ClassVar[MetricUnit]
+    MetricUnitMicrosievert: _ClassVar[MetricUnit]
+    MetricUnitMicrosievertPerHour: _ClassVar[MetricUnit]
+    MetricUnitMillisievert: _ClassVar[MetricUnit]
+    MetricUnitMillisievertPerHour: _ClassVar[MetricUnit]
+    MetricUnitSievert: _ClassVar[MetricUnit]
+    MetricUnitSievertPerHour: _ClassVar[MetricUnit]
+    MetricUnitPartsPerBillion: _ClassVar[MetricUnit]
+    MetricUnitMilligramPerCubicMeter: _ClassVar[MetricUnit]
+    MetricUnitMicrogramPerSquareMeter: _ClassVar[MetricUnit]
+    MetricUnitBin: _ClassVar[MetricUnit]
     MetricUnitMillimeter: _ClassVar[MetricUnit]
     MetricUnitMillimeterPerHour: _ClassVar[MetricUnit]
     MetricUnitDegree: _ClassVar[MetricUnit]
@@ -141,6 +157,10 @@ MetricKindPm25: MetricKind
 MetricKindPm10: MetricKind
 MetricKindAqi: MetricKind
 MetricKindPh: MetricKind
+MetricKindRadiationHazard: MetricKind
+MetricKindChemicalHazard: MetricKind
+MetricKindBiologicalHazard: MetricKind
+MetricKindNuclearHazard: MetricKind
 MetricKindWeight: MetricKind
 MetricKindVolume: MetricKind
 MetricKindVolumeFlowRate: MetricKind
@@ -190,6 +210,18 @@ MetricUnitMegabyte: MetricUnit
 MetricUnitGigabyte: MetricUnit
 MetricUnitPartsPerMillion: MetricUnit
 MetricUnitMicrogramPerCubicMeter: MetricUnit
+MetricUnitNanosievert: MetricUnit
+MetricUnitNanosievertPerHour: MetricUnit
+MetricUnitMicrosievert: MetricUnit
+MetricUnitMicrosievertPerHour: MetricUnit
+MetricUnitMillisievert: MetricUnit
+MetricUnitMillisievertPerHour: MetricUnit
+MetricUnitSievert: MetricUnit
+MetricUnitSievertPerHour: MetricUnit
+MetricUnitPartsPerBillion: MetricUnit
+MetricUnitMilligramPerCubicMeter: MetricUnit
+MetricUnitMicrogramPerSquareMeter: MetricUnit
+MetricUnitBin: MetricUnit
 MetricUnitMillimeter: MetricUnit
 MetricUnitMillimeterPerHour: MetricUnit
 MetricUnitDegree: MetricUnit

@@ -53,6 +53,12 @@ enum MetricKind {
   MetricKindAqi = 103;
   MetricKindPh = 104;
 
+  // CBRN hazard categories
+  MetricKindRadiationHazard = 130;
+  MetricKindChemicalHazard = 131;
+  MetricKindBiologicalHazard = 132;
+  MetricKindNuclearHazard = 133;
+
   // Weight / mass
   MetricKindWeight = 110;
 
@@ -134,6 +140,24 @@ enum MetricUnit {
   // Chemical / air quality
   MetricUnitPartsPerMillion = 90;
   MetricUnitMicrogramPerCubicMeter = 91;
+
+  // Radiation dose / dose rate
+  MetricUnitNanosievert = 130;
+  MetricUnitNanosievertPerHour = 131;
+  MetricUnitMicrosievert = 132;
+  MetricUnitMicrosievertPerHour = 133;
+  MetricUnitMillisievert = 134;
+  MetricUnitMillisievertPerHour = 135;
+  MetricUnitSievert = 136;
+  MetricUnitSievertPerHour = 137;
+
+  // Chemical contamination
+  MetricUnitPartsPerBillion = 138;
+  MetricUnitMilligramPerCubicMeter = 139;
+  MetricUnitMicrogramPerSquareMeter = 140;
+
+  // Hazard threshold
+  MetricUnitBin = 141;
 
   // Precipitation
   MetricUnitMillimeter = 94;
