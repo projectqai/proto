@@ -826,7 +826,7 @@ class ConfigurableComponent(_message.Message):
     def __init__(self, schema: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., value: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., state: _Optional[_Union[ConfigurableState, str]] = ..., error: _Optional[str] = ..., label: _Optional[str] = ..., applied_version: _Optional[int] = ..., supported_device_classes: _Optional[_Iterable[_Union[DeviceClassOption, _Mapping]]] = ..., scheduled_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class DeviceComponent(_message.Message):
-    __slots__ = ("parent", "composition", "unique_hardware_id", "state", "error", "category", "node", "usb", "ip", "serial", "ethernet", "lpwan", "meshtastic")
+    __slots__ = ("parent", "composition", "unique_hardware_id", "state", "error", "category", "node", "usb", "ip", "serial", "ethernet", "lpwan", "meshtastic", "ble")
     PARENT_FIELD_NUMBER: _ClassVar[int]
     COMPOSITION_FIELD_NUMBER: _ClassVar[int]
     UNIQUE_HARDWARE_ID_FIELD_NUMBER: _ClassVar[int]
@@ -841,6 +841,7 @@ class DeviceComponent(_message.Message):
     ETHERNET_FIELD_NUMBER: _ClassVar[int]
     LPWAN_FIELD_NUMBER: _ClassVar[int]
     MESHTASTIC_FIELD_NUMBER: _ClassVar[int]
+    BLE_FIELD_NUMBER: _ClassVar[int]
     parent: str
     composition: _containers.RepeatedScalarFieldContainer[str]
     unique_hardware_id: str
@@ -854,7 +855,8 @@ class DeviceComponent(_message.Message):
     ethernet: EthernetDevice
     lpwan: LPWANDevice
     meshtastic: MeshtasticDevice
-    def __init__(self, parent: _Optional[str] = ..., composition: _Optional[_Iterable[str]] = ..., unique_hardware_id: _Optional[str] = ..., state: _Optional[_Union[DeviceState, str]] = ..., error: _Optional[str] = ..., category: _Optional[str] = ..., node: _Optional[_Union[NodeDevice, _Mapping]] = ..., usb: _Optional[_Union[UsbDevice, _Mapping]] = ..., ip: _Optional[_Union[IpDevice, _Mapping]] = ..., serial: _Optional[_Union[SerialDevice, _Mapping]] = ..., ethernet: _Optional[_Union[EthernetDevice, _Mapping]] = ..., lpwan: _Optional[_Union[LPWANDevice, _Mapping]] = ..., meshtastic: _Optional[_Union[MeshtasticDevice, _Mapping]] = ..., **kwargs) -> None: ...
+    ble: BleDevice
+    def __init__(self, parent: _Optional[str] = ..., composition: _Optional[_Iterable[str]] = ..., unique_hardware_id: _Optional[str] = ..., state: _Optional[_Union[DeviceState, str]] = ..., error: _Optional[str] = ..., category: _Optional[str] = ..., node: _Optional[_Union[NodeDevice, _Mapping]] = ..., usb: _Optional[_Union[UsbDevice, _Mapping]] = ..., ip: _Optional[_Union[IpDevice, _Mapping]] = ..., serial: _Optional[_Union[SerialDevice, _Mapping]] = ..., ethernet: _Optional[_Union[EthernetDevice, _Mapping]] = ..., lpwan: _Optional[_Union[LPWANDevice, _Mapping]] = ..., meshtastic: _Optional[_Union[MeshtasticDevice, _Mapping]] = ..., ble: _Optional[_Union[BleDevice, _Mapping]] = ..., **kwargs) -> None: ...
 
 class NodeDevice(_message.Message):
     __slots__ = ("hostname", "os", "arch", "num_cpu", "os_version", "hydris_version", "hydris_update_available")
@@ -939,6 +941,16 @@ class LPWANDevice(_message.Message):
     eui: str
     address: str
     def __init__(self, eui: _Optional[str] = ..., address: _Optional[str] = ...) -> None: ...
+
+class BleDevice(_message.Message):
+    __slots__ = ("address", "name", "service_uuids")
+    ADDRESS_FIELD_NUMBER: _ClassVar[int]
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    SERVICE_UUIDS_FIELD_NUMBER: _ClassVar[int]
+    address: str
+    name: str
+    service_uuids: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, address: _Optional[str] = ..., name: _Optional[str] = ..., service_uuids: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class ConfigurationComponent(_message.Message):
     __slots__ = ("value", "version")
@@ -1027,12 +1039,48 @@ class GeoFilter(_message.Message):
     def __init__(self, geometry: _Optional[_Union[Geometry, _Mapping]] = ..., geoEntityId: _Optional[str] = ...) -> None: ...
 
 class DeviceFilter(_message.Message):
-    __slots__ = ("parent", "unique_hardware_id")
+    __slots__ = ("parent", "unique_hardware_id", "device_class", "ble", "usb")
     PARENT_FIELD_NUMBER: _ClassVar[int]
     UNIQUE_HARDWARE_ID_FIELD_NUMBER: _ClassVar[int]
+    DEVICE_CLASS_FIELD_NUMBER: _ClassVar[int]
+    BLE_FIELD_NUMBER: _ClassVar[int]
+    USB_FIELD_NUMBER: _ClassVar[int]
     parent: str
     unique_hardware_id: str
-    def __init__(self, parent: _Optional[str] = ..., unique_hardware_id: _Optional[str] = ...) -> None: ...
+    device_class: str
+    ble: BleDeviceFilter
+    usb: UsbDeviceFilter
+    def __init__(self, parent: _Optional[str] = ..., unique_hardware_id: _Optional[str] = ..., device_class: _Optional[str] = ..., ble: _Optional[_Union[BleDeviceFilter, _Mapping]] = ..., usb: _Optional[_Union[UsbDeviceFilter, _Mapping]] = ...) -> None: ...
+
+class BleDeviceFilter(_message.Message):
+    __slots__ = ("address", "name", "service_uuids")
+    ADDRESS_FIELD_NUMBER: _ClassVar[int]
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    SERVICE_UUIDS_FIELD_NUMBER: _ClassVar[int]
+    address: str
+    name: str
+    service_uuids: _containers.RepeatedScalarFieldContainer[str]
+    def __init__(self, address: _Optional[str] = ..., name: _Optional[str] = ..., service_uuids: _Optional[_Iterable[str]] = ...) -> None: ...
+
+class UsbDeviceFilter(_message.Message):
+    __slots__ = ("vendor_id", "product_id", "device_class", "device_subclass", "device_protocol", "manufacturer_name", "product_name", "serial_number")
+    VENDOR_ID_FIELD_NUMBER: _ClassVar[int]
+    PRODUCT_ID_FIELD_NUMBER: _ClassVar[int]
+    DEVICE_CLASS_FIELD_NUMBER: _ClassVar[int]
+    DEVICE_SUBCLASS_FIELD_NUMBER: _ClassVar[int]
+    DEVICE_PROTOCOL_FIELD_NUMBER: _ClassVar[int]
+    MANUFACTURER_NAME_FIELD_NUMBER: _ClassVar[int]
+    PRODUCT_NAME_FIELD_NUMBER: _ClassVar[int]
+    SERIAL_NUMBER_FIELD_NUMBER: _ClassVar[int]
+    vendor_id: int
+    product_id: int
+    device_class: int
+    device_subclass: int
+    device_protocol: int
+    manufacturer_name: str
+    product_name: str
+    serial_number: str
+    def __init__(self, vendor_id: _Optional[int] = ..., product_id: _Optional[int] = ..., device_class: _Optional[int] = ..., device_subclass: _Optional[int] = ..., device_protocol: _Optional[int] = ..., manufacturer_name: _Optional[str] = ..., product_name: _Optional[str] = ..., serial_number: _Optional[str] = ...) -> None: ...
 
 class ConfigurationFilter(_message.Message):
     __slots__ = ()

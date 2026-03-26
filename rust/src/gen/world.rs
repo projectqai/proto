@@ -1322,6 +1322,8 @@ pub struct DeviceComponent {
     pub lpwan: ::core::option::Option<LpwanDevice>,
     #[prost(message, optional, tag = "26")]
     pub meshtastic: ::core::option::Option<MeshtasticDevice>,
+    #[prost(message, optional, tag = "27")]
+    pub ble: ::core::option::Option<BleDevice>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NodeDevice {
@@ -1403,6 +1405,18 @@ pub struct LpwanDevice {
     /// network address assigned after join/activation (e.g. "012a7125")
     #[prost(string, optional, tag = "2")]
     pub address: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BleDevice {
+    /// MAC address or platform-specific identifier
+    #[prost(string, optional, tag = "1")]
+    pub address: ::core::option::Option<::prost::alloc::string::String>,
+    /// advertised device name
+    #[prost(string, optional, tag = "2")]
+    pub name: ::core::option::Option<::prost::alloc::string::String>,
+    /// advertised GATT service UUIDs
+    #[prost(string, repeated, tag = "4")]
+    pub service_uuids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 /// Configuration pushed onto an entity. The engine delivers entities with
 /// Config to the matching controller via Reconcile.
@@ -1520,6 +1534,45 @@ pub struct DeviceFilter {
     pub parent: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, optional, tag = "4")]
     pub unique_hardware_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// match device class string (e.g. "usb_serial", "radio")
+    #[prost(string, optional, tag = "5")]
+    pub device_class: ::core::option::Option<::prost::alloc::string::String>,
+    /// match BLE device properties
+    #[prost(message, optional, tag = "6")]
+    pub ble: ::core::option::Option<BleDeviceFilter>,
+    /// match USB device properties
+    #[prost(message, optional, tag = "7")]
+    pub usb: ::core::option::Option<UsbDeviceFilter>,
+}
+/// Matches against BleDevice fields. All set fields must match.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BleDeviceFilter {
+    #[prost(string, optional, tag = "1")]
+    pub address: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "2")]
+    pub name: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, repeated, tag = "4")]
+    pub service_uuids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+/// Matches against UsbDevice fields. All set fields must match.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UsbDeviceFilter {
+    #[prost(uint32, optional, tag = "1")]
+    pub vendor_id: ::core::option::Option<u32>,
+    #[prost(uint32, optional, tag = "2")]
+    pub product_id: ::core::option::Option<u32>,
+    #[prost(uint32, optional, tag = "3")]
+    pub device_class: ::core::option::Option<u32>,
+    #[prost(uint32, optional, tag = "4")]
+    pub device_subclass: ::core::option::Option<u32>,
+    #[prost(uint32, optional, tag = "5")]
+    pub device_protocol: ::core::option::Option<u32>,
+    #[prost(string, optional, tag = "6")]
+    pub manufacturer_name: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "7")]
+    pub product_name: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "8")]
+    pub serial_number: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ConfigurationFilter {}

@@ -321,33 +321,41 @@ export async function attach<S extends SchemaProperties>(opts: AttachOptions<S>)
 		})();
 	};
 
-	// Watch for config changes
-
-	const stream = client.watchEntities(
-		create(ListEntitiesRequestSchema, { filter: create(EntityFilterSchema, { id: entityID }) }),
-		...(opts.signal ? [{ signal: opts.signal }] : []),
-	);
+	// Watch for config changes — retry on transient stream errors
 
 	try {
-		for await (const event of stream) {
-			if (!event.entity) continue;
+		while (!outerAbort.signal.aborted) {
+			const stream = client.watchEntities(
+				create(ListEntitiesRequestSchema, { filter: create(EntityFilterSchema, { id: entityID }) }),
+				...(opts.signal ? [{ signal: opts.signal }] : []),
+			);
 
-			if (event.t === EntityChange.EntityChangeExpired || event.t === EntityChange.EntityChangeUnobserved) {
+			try {
+				for await (const event of stream) {
+					if (!event.entity) continue;
+
+					if (event.t === EntityChange.EntityChangeExpired || event.t === EntityChange.EntityChangeUnobserved) {
+						stop();
+						continue;
+					}
+					if (event.t !== EntityChange.EntityChangeUpdated) continue;
+
+					const e = event.entity;
+					if (!e.config) { stop(); continue; }
+					if (e.config.version === currentConfigVersion && runningAbort) continue;
+
+					stop();
+					currentConfigVersion = e.config.version;
+					start(e);
+				}
+				break; // clean end of stream
+			} catch (err) {
+				if (isCanceled(err) || opts.signal?.aborted) break;
+				console.error(`watch stream error, reconnecting entity=${entityID}`, err);
 				stop();
-				continue;
+				await sleep(5_000, outerAbort.signal);
 			}
-			if (event.t !== EntityChange.EntityChangeUpdated) continue;
-
-			const e = event.entity;
-			if (!e.config) { stop(); continue; }
-			if (e.config.version === currentConfigVersion && runningAbort) continue;
-
-			stop();
-			currentConfigVersion = e.config.version;
-			start(e);
 		}
-	} catch (err) {
-		if (!isCanceled(err)) throw err;
 	} finally {
 		stop();
 		outerAbort.abort();

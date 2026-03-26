@@ -667,6 +667,7 @@ message DeviceComponent {
   optional EthernetDevice ethernet = 24;
   optional LPWANDevice lpwan = 25;
   optional MeshtasticDevice meshtastic = 26;
+  optional BleDevice ble = 27;
 }
 
 message NodeDevice {
@@ -722,6 +723,17 @@ message LPWANDevice {
 
   // network address assigned after join/activation (e.g. "012a7125")
   optional string address = 2;
+}
+
+message BleDevice {
+  // MAC address or platform-specific identifier
+  optional string address = 1;
+
+  // advertised device name
+  optional string name = 2;
+
+  // advertised GATT service UUIDs
+  repeated string service_uuids = 4;
 }
 
 // Configuration pushed onto an entity. The engine delivers entities with
@@ -797,6 +809,34 @@ message DeviceFilter {
   optional string parent = 1;
 
   optional string unique_hardware_id = 4;
+
+  // match device class string (e.g. "usb_serial", "radio")
+  optional string device_class = 5;
+
+  // match BLE device properties
+  optional BleDeviceFilter ble = 6;
+
+  // match USB device properties
+  optional UsbDeviceFilter usb = 7;
+}
+
+// Matches against BleDevice fields. All set fields must match.
+message BleDeviceFilter {
+  optional string address = 1;
+  optional string name = 2;
+  repeated string service_uuids = 4;
+}
+
+// Matches against UsbDevice fields. All set fields must match.
+message UsbDeviceFilter {
+  optional uint32 vendor_id = 1;
+  optional uint32 product_id = 2;
+  optional uint32 device_class = 3;
+  optional uint32 device_subclass = 4;
+  optional uint32 device_protocol = 5;
+  optional string manufacturer_name = 6;
+  optional string product_name = 7;
+  optional string serial_number = 8;
 }
 
 message ConfigurationFilter {}

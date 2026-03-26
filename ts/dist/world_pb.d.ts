@@ -1793,6 +1793,11 @@ export declare type DeviceComponent = Message<"world.DeviceComponent"> & {
    * @generated from field: optional world.MeshtasticDevice meshtastic = 26;
    */
   meshtastic?: MeshtasticDevice;
+
+  /**
+   * @generated from field: optional world.BleDevice ble = 27;
+   */
+  ble?: BleDevice;
 };
 
 /**
@@ -2025,6 +2030,38 @@ export declare type LPWANDevice = Message<"world.LPWANDevice"> & {
  * Use `create(LPWANDeviceSchema)` to create a new message.
  */
 export declare const LPWANDeviceSchema: GenMessage<LPWANDevice>;
+
+/**
+ * @generated from message world.BleDevice
+ */
+export declare type BleDevice = Message<"world.BleDevice"> & {
+  /**
+   * MAC address or platform-specific identifier
+   *
+   * @generated from field: optional string address = 1;
+   */
+  address?: string;
+
+  /**
+   * advertised device name
+   *
+   * @generated from field: optional string name = 2;
+   */
+  name?: string;
+
+  /**
+   * advertised GATT service UUIDs
+   *
+   * @generated from field: repeated string service_uuids = 4;
+   */
+  serviceUuids: string[];
+};
+
+/**
+ * Describes the message world.BleDevice.
+ * Use `create(BleDeviceSchema)` to create a new message.
+ */
+export declare const BleDeviceSchema: GenMessage<BleDevice>;
 
 /**
  * Configuration pushed onto an entity. The engine delivers entities with
@@ -2315,6 +2352,27 @@ export declare type DeviceFilter = Message<"world.DeviceFilter"> & {
    * @generated from field: optional string unique_hardware_id = 4;
    */
   uniqueHardwareId?: string;
+
+  /**
+   * match device class string (e.g. "usb_serial", "radio")
+   *
+   * @generated from field: optional string device_class = 5;
+   */
+  deviceClass?: string;
+
+  /**
+   * match BLE device properties
+   *
+   * @generated from field: optional world.BleDeviceFilter ble = 6;
+   */
+  ble?: BleDeviceFilter;
+
+  /**
+   * match USB device properties
+   *
+   * @generated from field: optional world.UsbDeviceFilter usb = 7;
+   */
+  usb?: UsbDeviceFilter;
 };
 
 /**
@@ -2322,6 +2380,87 @@ export declare type DeviceFilter = Message<"world.DeviceFilter"> & {
  * Use `create(DeviceFilterSchema)` to create a new message.
  */
 export declare const DeviceFilterSchema: GenMessage<DeviceFilter>;
+
+/**
+ * Matches against BleDevice fields. All set fields must match.
+ *
+ * @generated from message world.BleDeviceFilter
+ */
+export declare type BleDeviceFilter = Message<"world.BleDeviceFilter"> & {
+  /**
+   * @generated from field: optional string address = 1;
+   */
+  address?: string;
+
+  /**
+   * @generated from field: optional string name = 2;
+   */
+  name?: string;
+
+  /**
+   * @generated from field: repeated string service_uuids = 4;
+   */
+  serviceUuids: string[];
+};
+
+/**
+ * Describes the message world.BleDeviceFilter.
+ * Use `create(BleDeviceFilterSchema)` to create a new message.
+ */
+export declare const BleDeviceFilterSchema: GenMessage<BleDeviceFilter>;
+
+/**
+ * Matches against UsbDevice fields. All set fields must match.
+ *
+ * @generated from message world.UsbDeviceFilter
+ */
+export declare type UsbDeviceFilter = Message<"world.UsbDeviceFilter"> & {
+  /**
+   * @generated from field: optional uint32 vendor_id = 1;
+   */
+  vendorId?: number;
+
+  /**
+   * @generated from field: optional uint32 product_id = 2;
+   */
+  productId?: number;
+
+  /**
+   * @generated from field: optional uint32 device_class = 3;
+   */
+  deviceClass?: number;
+
+  /**
+   * @generated from field: optional uint32 device_subclass = 4;
+   */
+  deviceSubclass?: number;
+
+  /**
+   * @generated from field: optional uint32 device_protocol = 5;
+   */
+  deviceProtocol?: number;
+
+  /**
+   * @generated from field: optional string manufacturer_name = 6;
+   */
+  manufacturerName?: string;
+
+  /**
+   * @generated from field: optional string product_name = 7;
+   */
+  productName?: string;
+
+  /**
+   * @generated from field: optional string serial_number = 8;
+   */
+  serialNumber?: string;
+};
+
+/**
+ * Describes the message world.UsbDeviceFilter.
+ * Use `create(UsbDeviceFilterSchema)` to create a new message.
+ */
+export declare const UsbDeviceFilterSchema: GenMessage<UsbDeviceFilter>;
 
 /**
  * @generated from message world.ConfigurationFilter
