@@ -58,6 +58,7 @@ message Entity {
   optional PoseComponent pose = 38;
   optional TaskExecutionComponent task_execution = 41;
   optional InteractivityComponent interactivity = 60;
+  optional ArtifactComponent artifact = 61;
   optional TargetPoseComponent target_pose = 62;
   optional ChatComponent chat = 39;
 }
@@ -201,10 +202,28 @@ message CameraComponent {
   optional double fov_tele = 7; // horizontal FOV at max zoom (degrees)
 }
 
+// reference to external system
+message ArtifactLocation {
+  string url = 1;
+}
+
+message ArtifactComponent {
+  string id = 1;
+  string content_type = 2;
+
+  repeated ArtifactLocation location = 3;
+
+  optional int64 size_bytes = 4;
+  optional string sha256 = 5;
+}
+
 message DetectionComponent {
   optional string detectorEntityId = 1;
   optional string classification = 2;
   optional google.protobuf.Timestamp lastMeasured = 3;
+
+  // entity ids of evidence that triggered or supports this detection
+  repeated string evidence = 4;
 }
 
 // Absolute bearing in the world, relative to the local ENU frame.
@@ -573,6 +592,9 @@ message CaptureComponent {
 
   // when the payload was captured
   optional google.protobuf.Timestamp captured_at = 5;
+
+  // more entities that are captured, such as artifacts when payload is too large
+  repeated string content = 6;
 }
 
 message PowerComponent {
@@ -940,6 +962,7 @@ enum EntityComponent {
   EntityComponentConfig = 51;
   EntityComponentConfigurable = 52;
   EntityComponentInteractivity = 60;
+  EntityComponentArtifact = 61;
   EntityComponentTargetPose = 62;
 }
 

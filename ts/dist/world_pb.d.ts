@@ -197,6 +197,11 @@ export declare type Entity = Message<"world.Entity"> & {
   interactivity?: InteractivityComponent;
 
   /**
+   * @generated from field: optional world.ArtifactComponent artifact = 61;
+   */
+  artifact?: ArtifactComponent;
+
+  /**
    * @generated from field: optional world.TargetPoseComponent target_pose = 62;
    */
   targetPose?: TargetPoseComponent;
@@ -545,6 +550,60 @@ export declare type CameraComponent = Message<"world.CameraComponent"> & {
 export declare const CameraComponentSchema: GenMessage<CameraComponent>;
 
 /**
+ * reference to external system
+ *
+ * @generated from message world.ArtifactLocation
+ */
+export declare type ArtifactLocation = Message<"world.ArtifactLocation"> & {
+  /**
+   * @generated from field: string url = 1;
+   */
+  url: string;
+};
+
+/**
+ * Describes the message world.ArtifactLocation.
+ * Use `create(ArtifactLocationSchema)` to create a new message.
+ */
+export declare const ArtifactLocationSchema: GenMessage<ArtifactLocation>;
+
+/**
+ * @generated from message world.ArtifactComponent
+ */
+export declare type ArtifactComponent = Message<"world.ArtifactComponent"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string content_type = 2;
+   */
+  contentType: string;
+
+  /**
+   * @generated from field: repeated world.ArtifactLocation location = 3;
+   */
+  location: ArtifactLocation[];
+
+  /**
+   * @generated from field: optional int64 size_bytes = 4;
+   */
+  sizeBytes?: bigint;
+
+  /**
+   * @generated from field: optional string sha256 = 5;
+   */
+  sha256?: string;
+};
+
+/**
+ * Describes the message world.ArtifactComponent.
+ * Use `create(ArtifactComponentSchema)` to create a new message.
+ */
+export declare const ArtifactComponentSchema: GenMessage<ArtifactComponent>;
+
+/**
  * @generated from message world.DetectionComponent
  */
 export declare type DetectionComponent = Message<"world.DetectionComponent"> & {
@@ -562,6 +621,13 @@ export declare type DetectionComponent = Message<"world.DetectionComponent"> & {
    * @generated from field: optional google.protobuf.Timestamp lastMeasured = 3;
    */
   lastMeasured?: Timestamp;
+
+  /**
+   * entity ids of evidence that triggered or supports this detection
+   *
+   * @generated from field: repeated string evidence = 4;
+   */
+  evidence: string[];
 };
 
 /**
@@ -1572,6 +1638,13 @@ export declare type CaptureComponent = Message<"world.CaptureComponent"> & {
    * @generated from field: optional google.protobuf.Timestamp captured_at = 5;
    */
   capturedAt?: Timestamp;
+
+  /**
+   * more entities that are captured, such as artifacts when payload is too large
+   *
+   * @generated from field: repeated string content = 6;
+   */
+  content: string[];
 };
 
 /**
@@ -3533,6 +3606,11 @@ export enum EntityComponent {
    * @generated from enum value: EntityComponentInteractivity = 60;
    */
   EntityComponentInteractivity = 60,
+
+  /**
+   * @generated from enum value: EntityComponentArtifact = 61;
+   */
+  EntityComponentArtifact = 61,
 
   /**
    * @generated from enum value: EntityComponentTargetPose = 62;

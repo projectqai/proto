@@ -684,6 +684,8 @@ pub struct Entity {
     pub task_execution: ::core::option::Option<TaskExecutionComponent>,
     #[prost(message, optional, tag = "60")]
     pub interactivity: ::core::option::Option<InteractivityComponent>,
+    #[prost(message, optional, tag = "61")]
+    pub artifact: ::core::option::Option<ArtifactComponent>,
     #[prost(message, optional, tag = "62")]
     pub target_pose: ::core::option::Option<TargetPoseComponent>,
     #[prost(message, optional, tag = "39")]
@@ -822,6 +824,25 @@ pub struct CameraComponent {
     #[prost(double, optional, tag = "7")]
     pub fov_tele: ::core::option::Option<f64>,
 }
+/// reference to external system
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ArtifactLocation {
+    #[prost(string, tag = "1")]
+    pub url: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ArtifactComponent {
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub content_type: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub location: ::prost::alloc::vec::Vec<ArtifactLocation>,
+    #[prost(int64, optional, tag = "4")]
+    pub size_bytes: ::core::option::Option<i64>,
+    #[prost(string, optional, tag = "5")]
+    pub sha256: ::core::option::Option<::prost::alloc::string::String>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DetectionComponent {
     #[prost(string, optional, tag = "1")]
@@ -830,6 +851,9 @@ pub struct DetectionComponent {
     pub classification: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(message, optional, tag = "3")]
     pub last_measured: ::core::option::Option<::prost_types::Timestamp>,
+    /// entity ids of evidence that triggered or supports this detection
+    #[prost(string, repeated, tag = "4")]
+    pub evidence: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 /// Absolute bearing in the world, relative to the local ENU frame.
 /// For root entities this is set directly; for child entities with a
@@ -1231,6 +1255,9 @@ pub struct CaptureComponent {
     /// when the payload was captured
     #[prost(message, optional, tag = "5")]
     pub captured_at: ::core::option::Option<::prost_types::Timestamp>,
+    /// more entities that are captured, such as artifacts when payload is too large
+    #[prost(string, repeated, tag = "6")]
+    pub content: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct PowerComponent {
@@ -2202,6 +2229,7 @@ pub enum EntityComponent {
     Config = 51,
     Configurable = 52,
     Interactivity = 60,
+    Artifact = 61,
     TargetPose = 62,
 }
 impl EntityComponent {
@@ -2247,6 +2275,7 @@ impl EntityComponent {
             Self::Config => "EntityComponentConfig",
             Self::Configurable => "EntityComponentConfigurable",
             Self::Interactivity => "EntityComponentInteractivity",
+            Self::Artifact => "EntityComponentArtifact",
             Self::TargetPose => "EntityComponentTargetPose",
         }
     }
@@ -2289,6 +2318,7 @@ impl EntityComponent {
             "EntityComponentConfig" => Some(Self::Config),
             "EntityComponentConfigurable" => Some(Self::Configurable),
             "EntityComponentInteractivity" => Some(Self::Interactivity),
+            "EntityComponentArtifact" => Some(Self::Artifact),
             "EntityComponentTargetPose" => Some(Self::TargetPose),
             _ => None,
         }
