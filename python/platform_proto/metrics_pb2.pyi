@@ -140,6 +140,13 @@ class MetricUnit(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     MetricUnitCubicMeterPerHour: _ClassVar[MetricUnit]
     MetricUnitDecibelMilliwatt: _ClassVar[MetricUnit]
     MetricUnitWattPerSquareMeter: _ClassVar[MetricUnit]
+
+class AlertLevel(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    AlertLevelNone: _ClassVar[AlertLevel]
+    AlertLevelWarning: _ClassVar[AlertLevel]
+    AlertLevelAlarm: _ClassVar[AlertLevel]
+    AlertLevelCritical: _ClassVar[AlertLevel]
 MetricKindUnspecified: MetricKind
 MetricKindTemperature: MetricKind
 MetricKindPressure: MetricKind
@@ -268,9 +275,13 @@ MetricUnitLiterPerMinute: MetricUnit
 MetricUnitCubicMeterPerHour: MetricUnit
 MetricUnitDecibelMilliwatt: MetricUnit
 MetricUnitWattPerSquareMeter: MetricUnit
+AlertLevelNone: AlertLevel
+AlertLevelWarning: AlertLevel
+AlertLevelAlarm: AlertLevel
+AlertLevelCritical: AlertLevel
 
 class Metric(_message.Message):
-    __slots__ = ("unit", "id", "kind", "label", "measured_at", "double", "float", "sint64", "uint64")
+    __slots__ = ("unit", "id", "kind", "label", "measured_at", "double", "float", "sint64", "uint64", "alerting")
     UNIT_FIELD_NUMBER: _ClassVar[int]
     ID_FIELD_NUMBER: _ClassVar[int]
     KIND_FIELD_NUMBER: _ClassVar[int]
@@ -280,6 +291,7 @@ class Metric(_message.Message):
     FLOAT_FIELD_NUMBER: _ClassVar[int]
     SINT64_FIELD_NUMBER: _ClassVar[int]
     UINT64_FIELD_NUMBER: _ClassVar[int]
+    ALERTING_FIELD_NUMBER: _ClassVar[int]
     unit: MetricUnit
     id: int
     kind: MetricKind
@@ -289,7 +301,8 @@ class Metric(_message.Message):
     float: float
     sint64: int
     uint64: int
-    def __init__(self, unit: _Optional[_Union[MetricUnit, str]] = ..., id: _Optional[int] = ..., kind: _Optional[_Union[MetricKind, str]] = ..., label: _Optional[str] = ..., measured_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., double: _Optional[float] = ..., float: _Optional[float] = ..., sint64: _Optional[int] = ..., uint64: _Optional[int] = ...) -> None: ...
+    alerting: AlertLevel
+    def __init__(self, unit: _Optional[_Union[MetricUnit, str]] = ..., id: _Optional[int] = ..., kind: _Optional[_Union[MetricKind, str]] = ..., label: _Optional[str] = ..., measured_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., double: _Optional[float] = ..., float: _Optional[float] = ..., sint64: _Optional[int] = ..., uint64: _Optional[int] = ..., alerting: _Optional[_Union[AlertLevel, str]] = ...) -> None: ...
 
 class MetricComponent(_message.Message):
     __slots__ = ("metrics",)

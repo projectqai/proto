@@ -226,6 +226,15 @@ message Metric {
     sint64 sint64 = 12;
     uint64 uint64 = 13;
   }
+
+  optional AlertLevel alerting = 20;
+}
+
+enum AlertLevel {
+  AlertLevelNone = 0;
+  AlertLevelWarning = 1;
+  AlertLevelAlarm = 2;
+  AlertLevelCritical = 3;
 }
 
 message MetricComponent {

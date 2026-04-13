@@ -1,6 +1,6 @@
 {
   "name": "@projectqai/proto",
-  "version": "0.0.36",
+  "version": "0.0.42",
   "author": "projectq-release-bot",
   "type": "module",
   "exports": {

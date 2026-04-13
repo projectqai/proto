@@ -521,6 +521,58 @@ func (MetricUnit) EnumDescriptor() ([]byte, []int) {
 	return file_metrics_proto_rawDescGZIP(), []int{1}
 }
 
+type AlertLevel int32
+
+const (
+	AlertLevel_AlertLevelNone     AlertLevel = 0
+	AlertLevel_AlertLevelWarning  AlertLevel = 1
+	AlertLevel_AlertLevelAlarm    AlertLevel = 2
+	AlertLevel_AlertLevelCritical AlertLevel = 3
+)
+
+// Enum value maps for AlertLevel.
+var (
+	AlertLevel_name = map[int32]string{
+		0: "AlertLevelNone",
+		1: "AlertLevelWarning",
+		2: "AlertLevelAlarm",
+		3: "AlertLevelCritical",
+	}
+	AlertLevel_value = map[string]int32{
+		"AlertLevelNone":     0,
+		"AlertLevelWarning":  1,
+		"AlertLevelAlarm":    2,
+		"AlertLevelCritical": 3,
+	}
+)
+
+func (x AlertLevel) Enum() *AlertLevel {
+	p := new(AlertLevel)
+	*p = x
+	return p
+}
+
+func (x AlertLevel) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (AlertLevel) Descriptor() protoreflect.EnumDescriptor {
+	return file_metrics_proto_enumTypes[2].Descriptor()
+}
+
+func (AlertLevel) Type() protoreflect.EnumType {
+	return &file_metrics_proto_enumTypes[2]
+}
+
+func (x AlertLevel) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use AlertLevel.Descriptor instead.
+func (AlertLevel) EnumDescriptor() ([]byte, []int) {
+	return file_metrics_proto_rawDescGZIP(), []int{2}
+}
+
 type Metric struct {
 	state      protoimpl.MessageState `protogen:"open.v1"`
 	Unit       MetricUnit             `protobuf:"varint,1,opt,name=unit,proto3,enum=world.MetricUnit" json:"unit,omitempty"`
@@ -535,6 +587,7 @@ type Metric struct {
 	//	*Metric_Sint64
 	//	*Metric_Uint64
 	Val           isMetric_Val `protobuf_oneof:"val"`
+	Alerting      *AlertLevel  `protobuf:"varint,20,opt,name=alerting,proto3,enum=world.AlertLevel,oneof" json:"alerting,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -647,6 +700,13 @@ func (x *Metric) GetUint64() uint64 {
 	return 0
 }
 
+func (x *Metric) GetAlerting() AlertLevel {
+	if x != nil && x.Alerting != nil {
+		return *x.Alerting
+	}
+	return AlertLevel_AlertLevelNone
+}
+
 type isMetric_Val interface {
 	isMetric_Val()
 }
@@ -723,7 +783,7 @@ var File_metrics_proto protoreflect.FileDescriptor
 
 const file_metrics_proto_rawDesc = "" +
 	"\n" +
-	"\rmetrics.proto\x12\x05world\x1a\x1fgoogle/protobuf/timestamp.proto\"\xe4\x02\n" +
+	"\rmetrics.proto\x12\x05world\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa5\x03\n" +
 	"\x06Metric\x12%\n" +
 	"\x04unit\x18\x01 \x01(\x0e2\x11.world.MetricUnitR\x04unit\x12\x13\n" +
 	"\x02id\x18\x02 \x01(\rH\x01R\x02id\x88\x01\x01\x12*\n" +
@@ -735,12 +795,14 @@ const file_metrics_proto_rawDesc = "" +
 	" \x01(\x01H\x00R\x06double\x12\x16\n" +
 	"\x05float\x18\v \x01(\x02H\x00R\x05float\x12\x18\n" +
 	"\x06sint64\x18\f \x01(\x12H\x00R\x06sint64\x12\x18\n" +
-	"\x06uint64\x18\r \x01(\x04H\x00R\x06uint64B\x05\n" +
+	"\x06uint64\x18\r \x01(\x04H\x00R\x06uint64\x122\n" +
+	"\balerting\x18\x14 \x01(\x0e2\x11.world.AlertLevelH\x05R\balerting\x88\x01\x01B\x05\n" +
 	"\x03valB\x05\n" +
 	"\x03_idB\a\n" +
 	"\x05_kindB\b\n" +
 	"\x06_labelB\x0e\n" +
-	"\f_measured_at\":\n" +
+	"\f_measured_atB\v\n" +
+	"\t_alerting\":\n" +
 	"\x0fMetricComponent\x12'\n" +
 	"\ametrics\x18\x01 \x03(\v2\r.world.MetricR\ametrics*\x95\b\n" +
 	"\n" +
@@ -875,7 +937,13 @@ const file_metrics_proto_rawDesc = "" +
 	"\x18MetricUnitLiterPerMinute\x10y\x12\x1f\n" +
 	"\x1bMetricUnitCubicMeterPerHour\x10z\x12\x1e\n" +
 	"\x1aMetricUnitDecibelMilliwatt\x10{\x12 \n" +
-	"\x1cMetricUnitWattPerSquareMeter\x10|B Z\x1egithub.com/projectqai/proto/gob\x06proto3"
+	"\x1cMetricUnitWattPerSquareMeter\x10|*d\n" +
+	"\n" +
+	"AlertLevel\x12\x12\n" +
+	"\x0eAlertLevelNone\x10\x00\x12\x15\n" +
+	"\x11AlertLevelWarning\x10\x01\x12\x13\n" +
+	"\x0fAlertLevelAlarm\x10\x02\x12\x16\n" +
+	"\x12AlertLevelCritical\x10\x03B Z\x1egithub.com/projectqai/proto/gob\x06proto3"
 
 var (
 	file_metrics_proto_rawDescOnce sync.Once
@@ -889,25 +957,27 @@ func file_metrics_proto_rawDescGZIP() []byte {
 	return file_metrics_proto_rawDescData
 }
 
-var file_metrics_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_metrics_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
 var file_metrics_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_metrics_proto_goTypes = []any{
 	(MetricKind)(0),               // 0: world.MetricKind
 	(MetricUnit)(0),               // 1: world.MetricUnit
-	(*Metric)(nil),                // 2: world.Metric
-	(*MetricComponent)(nil),       // 3: world.MetricComponent
-	(*timestamppb.Timestamp)(nil), // 4: google.protobuf.Timestamp
+	(AlertLevel)(0),               // 2: world.AlertLevel
+	(*Metric)(nil),                // 3: world.Metric
+	(*MetricComponent)(nil),       // 4: world.MetricComponent
+	(*timestamppb.Timestamp)(nil), // 5: google.protobuf.Timestamp
 }
 var file_metrics_proto_depIdxs = []int32{
 	1, // 0: world.Metric.unit:type_name -> world.MetricUnit
 	0, // 1: world.Metric.kind:type_name -> world.MetricKind
-	4, // 2: world.Metric.measured_at:type_name -> google.protobuf.Timestamp
-	2, // 3: world.MetricComponent.metrics:type_name -> world.Metric
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	5, // 2: world.Metric.measured_at:type_name -> google.protobuf.Timestamp
+	2, // 3: world.Metric.alerting:type_name -> world.AlertLevel
+	3, // 4: world.MetricComponent.metrics:type_name -> world.Metric
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_metrics_proto_init() }
@@ -926,7 +996,7 @@ func file_metrics_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_metrics_proto_rawDesc), len(file_metrics_proto_rawDesc)),
-			NumEnums:      2,
+			NumEnums:      3,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,

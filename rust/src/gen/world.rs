@@ -166,6 +166,8 @@ pub struct Metric {
     pub label: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(message, optional, tag = "5")]
     pub measured_at: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(enumeration = "AlertLevel", optional, tag = "20")]
+    pub alerting: ::core::option::Option<i32>,
     #[prost(oneof = "metric::Val", tags = "10, 11, 12, 13")]
     pub val: ::core::option::Option<metric::Val>,
 }
@@ -647,6 +649,38 @@ impl MetricUnit {
             "MetricUnitCubicMeterPerHour" => Some(Self::CubicMeterPerHour),
             "MetricUnitDecibelMilliwatt" => Some(Self::DecibelMilliwatt),
             "MetricUnitWattPerSquareMeter" => Some(Self::WattPerSquareMeter),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum AlertLevel {
+    None = 0,
+    Warning = 1,
+    Alarm = 2,
+    Critical = 3,
+}
+impl AlertLevel {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::None => "AlertLevelNone",
+            Self::Warning => "AlertLevelWarning",
+            Self::Alarm => "AlertLevelAlarm",
+            Self::Critical => "AlertLevelCritical",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "AlertLevelNone" => Some(Self::None),
+            "AlertLevelWarning" => Some(Self::Warning),
+            "AlertLevelAlarm" => Some(Self::Alarm),
+            "AlertLevelCritical" => Some(Self::Critical),
             _ => None,
         }
     }

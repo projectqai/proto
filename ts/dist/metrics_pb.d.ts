@@ -72,6 +72,11 @@ export declare type Metric = Message<"world.Metric"> & {
     value: bigint;
     case: "uint64";
   } | { case: undefined; value?: undefined };
+
+  /**
+   * @generated from field: optional world.AlertLevel alerting = 20;
+   */
+  alerting?: AlertLevel;
 };
 
 /**
@@ -831,4 +836,34 @@ export enum MetricUnit {
  * Describes the enum world.MetricUnit.
  */
 export declare const MetricUnitSchema: GenEnum<MetricUnit>;
+
+/**
+ * @generated from enum world.AlertLevel
+ */
+export enum AlertLevel {
+  /**
+   * @generated from enum value: AlertLevelNone = 0;
+   */
+  AlertLevelNone = 0,
+
+  /**
+   * @generated from enum value: AlertLevelWarning = 1;
+   */
+  AlertLevelWarning = 1,
+
+  /**
+   * @generated from enum value: AlertLevelAlarm = 2;
+   */
+  AlertLevelAlarm = 2,
+
+  /**
+   * @generated from enum value: AlertLevelCritical = 3;
+   */
+  AlertLevelCritical = 3,
+}
+
+/**
+ * Describes the enum world.AlertLevel.
+ */
+export declare const AlertLevelSchema: GenEnum<AlertLevel>;
 
