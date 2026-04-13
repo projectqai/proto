@@ -54,10 +54,14 @@ enum MetricKind {
   MetricKindPh = 104;
 
   // CBRN hazard categories
-  MetricKindRadiationHazard = 130;
   MetricKindChemicalHazard = 131;
   MetricKindBiologicalHazard = 132;
-  MetricKindNuclearHazard = 133;
+
+  // CBRN radiation measurement types (aligned with ANSI N42.42-2020)
+  MetricKindDoseRate = 140;           // ambient dose equivalent rate (N42.42: DoseRate)
+  MetricKindAccumulatedDose = 141;    // total accumulated dose since reset (N42.42: TotalDose)
+  MetricKindContaminationRate = 142;  // particle detection rate, filtered (N42.42: RadDetectorState characteristic)
+  MetricKindContaminationCount = 143; // raw detector pulse count per interval (N42.42: GrossCounts)
 
   // Weight / mass
   MetricKindWeight = 110;
@@ -150,6 +154,20 @@ enum MetricUnit {
   MetricUnitMillisievertPerHour = 135;
   MetricUnitSievert = 136;
   MetricUnitSievertPerHour = 137;
+
+  // Radiation dose / dose rate (Gray — absorbed dose)
+  MetricUnitNanogray = 150;
+  MetricUnitNanograyPerHour = 151;
+  MetricUnitMicrogray = 152;
+  MetricUnitMicrograyPerHour = 153;
+  MetricUnitMilligray = 154;
+  MetricUnitMilligrayPerHour = 155;
+  MetricUnitGray = 156;
+  MetricUnitGrayPerHour = 157;
+  MetricUnitCentigray = 158;          // MOSFET gamma initial dose, neutron dose
+
+  // Radiation contamination
+  MetricUnitCountsPerSecond = 160;    // filtered particle detection rate (cps)
 
   // Chemical contamination
   MetricUnitPartsPerBillion = 138;
