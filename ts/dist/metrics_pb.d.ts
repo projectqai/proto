@@ -263,7 +263,17 @@ export enum MetricKind {
   MetricKindPh = 104,
 
   /**
-   * CBRN hazard categories
+   * @generated from enum value: MetricKindRadon = 105;
+   */
+  MetricKindRadon = 105,
+
+  /**
+   * @generated from enum value: MetricKindOxygen = 106;
+   */
+  MetricKindOxygen = 106,
+
+  /**
+   * CBRN hazards
    *
    * @generated from enum value: MetricKindRadiationHazard = 130;
    */
@@ -572,7 +582,12 @@ export enum MetricUnit {
   MetricUnitMicrogramPerCubicMeter = 91,
 
   /**
-   * Radiation dose / dose rate
+   * @generated from enum value: MetricUnitBecquerelPerCubicMeter = 92;
+   */
+  MetricUnitBecquerelPerCubicMeter = 92,
+
+  /**
+   * Radiation — dose equivalent (Sievert)
    *
    * @generated from enum value: MetricUnitNanosievert = 130;
    */
@@ -612,6 +627,60 @@ export enum MetricUnit {
    * @generated from enum value: MetricUnitSievertPerHour = 137;
    */
   MetricUnitSievertPerHour = 137,
+
+  /**
+   * Radiation — absorbed dose (Gray)
+   *
+   * @generated from enum value: MetricUnitNanogray = 150;
+   */
+  MetricUnitNanogray = 150,
+
+  /**
+   * @generated from enum value: MetricUnitNanograyPerHour = 151;
+   */
+  MetricUnitNanograyPerHour = 151,
+
+  /**
+   * @generated from enum value: MetricUnitMicrogray = 152;
+   */
+  MetricUnitMicrogray = 152,
+
+  /**
+   * @generated from enum value: MetricUnitMicrograyPerHour = 153;
+   */
+  MetricUnitMicrograyPerHour = 153,
+
+  /**
+   * @generated from enum value: MetricUnitMilligray = 154;
+   */
+  MetricUnitMilligray = 154,
+
+  /**
+   * @generated from enum value: MetricUnitMilligrayPerHour = 155;
+   */
+  MetricUnitMilligrayPerHour = 155,
+
+  /**
+   * @generated from enum value: MetricUnitGray = 156;
+   */
+  MetricUnitGray = 156,
+
+  /**
+   * @generated from enum value: MetricUnitGrayPerHour = 157;
+   */
+  MetricUnitGrayPerHour = 157,
+
+  /**
+   * @generated from enum value: MetricUnitCentigray = 158;
+   */
+  MetricUnitCentigray = 158,
+
+  /**
+   * Radiation — detection
+   *
+   * @generated from enum value: MetricUnitCountsPerSecond = 160;
+   */
+  MetricUnitCountsPerSecond = 160,
 
   /**
    * Chemical contamination

@@ -52,16 +52,14 @@ enum MetricKind {
   MetricKindPm10 = 102;
   MetricKindAqi = 103;
   MetricKindPh = 104;
+  MetricKindRadon = 105;
+  MetricKindOxygen = 106;
 
-  // CBRN hazard categories
+  // CBRN hazards
+  MetricKindRadiationHazard = 130;
   MetricKindChemicalHazard = 131;
   MetricKindBiologicalHazard = 132;
-
-  // CBRN radiation measurement types (aligned with ANSI N42.42-2020)
-  MetricKindDoseRate = 140;           // ambient dose equivalent rate (N42.42: DoseRate)
-  MetricKindAccumulatedDose = 141;    // total accumulated dose since reset (N42.42: TotalDose)
-  MetricKindContaminationRate = 142;  // particle detection rate, filtered (N42.42: RadDetectorState characteristic)
-  MetricKindContaminationCount = 143; // raw detector pulse count per interval (N42.42: GrossCounts)
+  MetricKindNuclearHazard = 133;
 
   // Weight / mass
   MetricKindWeight = 110;
@@ -133,8 +131,6 @@ enum MetricUnit {
   MetricUnitKilobitPerSecond = 81;
   MetricUnitMegabitPerSecond = 82;
 
-  // Misc
-
   // Data size
   MetricUnitByte = 84;
   MetricUnitKilobyte = 85;
@@ -144,8 +140,9 @@ enum MetricUnit {
   // Chemical / air quality
   MetricUnitPartsPerMillion = 90;
   MetricUnitMicrogramPerCubicMeter = 91;
+  MetricUnitBecquerelPerCubicMeter = 92;
 
-  // Radiation dose / dose rate
+  // Radiation — dose equivalent (Sievert)
   MetricUnitNanosievert = 130;
   MetricUnitNanosievertPerHour = 131;
   MetricUnitMicrosievert = 132;
@@ -155,7 +152,7 @@ enum MetricUnit {
   MetricUnitSievert = 136;
   MetricUnitSievertPerHour = 137;
 
-  // Radiation dose / dose rate (Gray — absorbed dose)
+  // Radiation — absorbed dose (Gray)
   MetricUnitNanogray = 150;
   MetricUnitNanograyPerHour = 151;
   MetricUnitMicrogray = 152;
@@ -164,10 +161,10 @@ enum MetricUnit {
   MetricUnitMilligrayPerHour = 155;
   MetricUnitGray = 156;
   MetricUnitGrayPerHour = 157;
-  MetricUnitCentigray = 158;          // MOSFET gamma initial dose, neutron dose
+  MetricUnitCentigray = 158;
 
-  // Radiation contamination
-  MetricUnitCountsPerSecond = 160;    // filtered particle detection rate (cps)
+  // Radiation — detection
+  MetricUnitCountsPerSecond = 160;
 
   // Chemical contamination
   MetricUnitPartsPerBillion = 138;

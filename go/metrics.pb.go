@@ -56,12 +56,14 @@ const (
 	MetricKind_MetricKindLatency  MetricKind = 81
 	MetricKind_MetricKindDataSize MetricKind = 82
 	// Chemical / air quality
-	MetricKind_MetricKindCo2  MetricKind = 100
-	MetricKind_MetricKindPm25 MetricKind = 101
-	MetricKind_MetricKindPm10 MetricKind = 102
-	MetricKind_MetricKindAqi  MetricKind = 103
-	MetricKind_MetricKindPh   MetricKind = 104
-	// CBRN hazard categories
+	MetricKind_MetricKindCo2    MetricKind = 100
+	MetricKind_MetricKindPm25   MetricKind = 101
+	MetricKind_MetricKindPm10   MetricKind = 102
+	MetricKind_MetricKindAqi    MetricKind = 103
+	MetricKind_MetricKindPh     MetricKind = 104
+	MetricKind_MetricKindRadon  MetricKind = 105
+	MetricKind_MetricKindOxygen MetricKind = 106
+	// CBRN hazards
 	MetricKind_MetricKindRadiationHazard  MetricKind = 130
 	MetricKind_MetricKindChemicalHazard   MetricKind = 131
 	MetricKind_MetricKindBiologicalHazard MetricKind = 132
@@ -111,6 +113,8 @@ var (
 		102: "MetricKindPm10",
 		103: "MetricKindAqi",
 		104: "MetricKindPh",
+		105: "MetricKindRadon",
+		106: "MetricKindOxygen",
 		130: "MetricKindRadiationHazard",
 		131: "MetricKindChemicalHazard",
 		132: "MetricKindBiologicalHazard",
@@ -153,6 +157,8 @@ var (
 		"MetricKindPm10":             102,
 		"MetricKindAqi":              103,
 		"MetricKindPh":               104,
+		"MetricKindRadon":            105,
+		"MetricKindOxygen":           106,
 		"MetricKindRadiationHazard":  130,
 		"MetricKindChemicalHazard":   131,
 		"MetricKindBiologicalHazard": 132,
@@ -249,7 +255,8 @@ const (
 	// Chemical / air quality
 	MetricUnit_MetricUnitPartsPerMillion        MetricUnit = 90
 	MetricUnit_MetricUnitMicrogramPerCubicMeter MetricUnit = 91
-	// Radiation dose / dose rate
+	MetricUnit_MetricUnitBecquerelPerCubicMeter MetricUnit = 92
+	// Radiation — dose equivalent (Sievert)
 	MetricUnit_MetricUnitNanosievert         MetricUnit = 130
 	MetricUnit_MetricUnitNanosievertPerHour  MetricUnit = 131
 	MetricUnit_MetricUnitMicrosievert        MetricUnit = 132
@@ -258,6 +265,18 @@ const (
 	MetricUnit_MetricUnitMillisievertPerHour MetricUnit = 135
 	MetricUnit_MetricUnitSievert             MetricUnit = 136
 	MetricUnit_MetricUnitSievertPerHour      MetricUnit = 137
+	// Radiation — absorbed dose (Gray)
+	MetricUnit_MetricUnitNanogray         MetricUnit = 150
+	MetricUnit_MetricUnitNanograyPerHour  MetricUnit = 151
+	MetricUnit_MetricUnitMicrogray        MetricUnit = 152
+	MetricUnit_MetricUnitMicrograyPerHour MetricUnit = 153
+	MetricUnit_MetricUnitMilligray        MetricUnit = 154
+	MetricUnit_MetricUnitMilligrayPerHour MetricUnit = 155
+	MetricUnit_MetricUnitGray             MetricUnit = 156
+	MetricUnit_MetricUnitGrayPerHour      MetricUnit = 157
+	MetricUnit_MetricUnitCentigray        MetricUnit = 158
+	// Radiation — detection
+	MetricUnit_MetricUnitCountsPerSecond MetricUnit = 160
 	// Chemical contamination
 	MetricUnit_MetricUnitPartsPerBillion         MetricUnit = 138
 	MetricUnit_MetricUnitMilligramPerCubicMeter  MetricUnit = 139
@@ -341,6 +360,7 @@ var (
 		87:  "MetricUnitGigabyte",
 		90:  "MetricUnitPartsPerMillion",
 		91:  "MetricUnitMicrogramPerCubicMeter",
+		92:  "MetricUnitBecquerelPerCubicMeter",
 		130: "MetricUnitNanosievert",
 		131: "MetricUnitNanosievertPerHour",
 		132: "MetricUnitMicrosievert",
@@ -349,6 +369,16 @@ var (
 		135: "MetricUnitMillisievertPerHour",
 		136: "MetricUnitSievert",
 		137: "MetricUnitSievertPerHour",
+		150: "MetricUnitNanogray",
+		151: "MetricUnitNanograyPerHour",
+		152: "MetricUnitMicrogray",
+		153: "MetricUnitMicrograyPerHour",
+		154: "MetricUnitMilligray",
+		155: "MetricUnitMilligrayPerHour",
+		156: "MetricUnitGray",
+		157: "MetricUnitGrayPerHour",
+		158: "MetricUnitCentigray",
+		160: "MetricUnitCountsPerSecond",
 		138: "MetricUnitPartsPerBillion",
 		139: "MetricUnitMilligramPerCubicMeter",
 		140: "MetricUnitMicrogramPerSquareMeter",
@@ -418,6 +448,7 @@ var (
 		"MetricUnitGigabyte":                87,
 		"MetricUnitPartsPerMillion":         90,
 		"MetricUnitMicrogramPerCubicMeter":  91,
+		"MetricUnitBecquerelPerCubicMeter":  92,
 		"MetricUnitNanosievert":             130,
 		"MetricUnitNanosievertPerHour":      131,
 		"MetricUnitMicrosievert":            132,
@@ -426,6 +457,16 @@ var (
 		"MetricUnitMillisievertPerHour":     135,
 		"MetricUnitSievert":                 136,
 		"MetricUnitSievertPerHour":          137,
+		"MetricUnitNanogray":                150,
+		"MetricUnitNanograyPerHour":         151,
+		"MetricUnitMicrogray":               152,
+		"MetricUnitMicrograyPerHour":        153,
+		"MetricUnitMilligray":               154,
+		"MetricUnitMilligrayPerHour":        155,
+		"MetricUnitGray":                    156,
+		"MetricUnitGrayPerHour":             157,
+		"MetricUnitCentigray":               158,
+		"MetricUnitCountsPerSecond":         160,
 		"MetricUnitPartsPerBillion":         138,
 		"MetricUnitMilligramPerCubicMeter":  139,
 		"MetricUnitMicrogramPerSquareMeter": 140,
@@ -701,7 +742,7 @@ const file_metrics_proto_rawDesc = "" +
 	"\x06_labelB\x0e\n" +
 	"\f_measured_at\":\n" +
 	"\x0fMetricComponent\x12'\n" +
-	"\ametrics\x18\x01 \x03(\v2\r.world.MetricR\ametrics*\xea\a\n" +
+	"\ametrics\x18\x01 \x03(\v2\r.world.MetricR\ametrics*\x95\b\n" +
 	"\n" +
 	"MetricKind\x12\x19\n" +
 	"\x15MetricKindUnspecified\x10\x00\x12\x19\n" +
@@ -733,7 +774,9 @@ const file_metrics_proto_rawDesc = "" +
 	"\x0eMetricKindPm25\x10e\x12\x12\n" +
 	"\x0eMetricKindPm10\x10f\x12\x11\n" +
 	"\rMetricKindAqi\x10g\x12\x10\n" +
-	"\fMetricKindPh\x10h\x12\x1e\n" +
+	"\fMetricKindPh\x10h\x12\x13\n" +
+	"\x0fMetricKindRadon\x10i\x12\x14\n" +
+	"\x10MetricKindOxygen\x10j\x12\x1e\n" +
 	"\x19MetricKindRadiationHazard\x10\x82\x01\x12\x1d\n" +
 	"\x18MetricKindChemicalHazard\x10\x83\x01\x12\x1f\n" +
 	"\x1aMetricKindBiologicalHazard\x10\x84\x01\x12\x1c\n" +
@@ -743,7 +786,7 @@ const file_metrics_proto_rawDesc = "" +
 	"\x18MetricKindVolumeFlowRate\x10q\x12\x1c\n" +
 	"\x18MetricKindSignalStrength\x10s\x12\x16\n" +
 	"\x12MetricKindDuration\x10v\x12\x13\n" +
-	"\x0fMetricKindCount\x10x*\xa6\x0f\n" +
+	"\x0fMetricKindCount\x10x*\xe6\x11\n" +
 	"\n" +
 	"MetricUnit\x12\x19\n" +
 	"\x15MetricUnitUnspecified\x10\x00\x12\x15\n" +
@@ -789,7 +832,8 @@ const file_metrics_proto_rawDesc = "" +
 	"\x12MetricUnitMegabyte\x10V\x12\x16\n" +
 	"\x12MetricUnitGigabyte\x10W\x12\x1d\n" +
 	"\x19MetricUnitPartsPerMillion\x10Z\x12$\n" +
-	" MetricUnitMicrogramPerCubicMeter\x10[\x12\x1a\n" +
+	" MetricUnitMicrogramPerCubicMeter\x10[\x12$\n" +
+	" MetricUnitBecquerelPerCubicMeter\x10\\\x12\x1a\n" +
 	"\x15MetricUnitNanosievert\x10\x82\x01\x12!\n" +
 	"\x1cMetricUnitNanosievertPerHour\x10\x83\x01\x12\x1b\n" +
 	"\x16MetricUnitMicrosievert\x10\x84\x01\x12\"\n" +
@@ -797,7 +841,17 @@ const file_metrics_proto_rawDesc = "" +
 	"\x16MetricUnitMillisievert\x10\x86\x01\x12\"\n" +
 	"\x1dMetricUnitMillisievertPerHour\x10\x87\x01\x12\x16\n" +
 	"\x11MetricUnitSievert\x10\x88\x01\x12\x1d\n" +
-	"\x18MetricUnitSievertPerHour\x10\x89\x01\x12\x1e\n" +
+	"\x18MetricUnitSievertPerHour\x10\x89\x01\x12\x17\n" +
+	"\x12MetricUnitNanogray\x10\x96\x01\x12\x1e\n" +
+	"\x19MetricUnitNanograyPerHour\x10\x97\x01\x12\x18\n" +
+	"\x13MetricUnitMicrogray\x10\x98\x01\x12\x1f\n" +
+	"\x1aMetricUnitMicrograyPerHour\x10\x99\x01\x12\x18\n" +
+	"\x13MetricUnitMilligray\x10\x9a\x01\x12\x1f\n" +
+	"\x1aMetricUnitMilligrayPerHour\x10\x9b\x01\x12\x13\n" +
+	"\x0eMetricUnitGray\x10\x9c\x01\x12\x1a\n" +
+	"\x15MetricUnitGrayPerHour\x10\x9d\x01\x12\x18\n" +
+	"\x13MetricUnitCentigray\x10\x9e\x01\x12\x1e\n" +
+	"\x19MetricUnitCountsPerSecond\x10\xa0\x01\x12\x1e\n" +
 	"\x19MetricUnitPartsPerBillion\x10\x8a\x01\x12%\n" +
 	" MetricUnitMilligramPerCubicMeter\x10\x8b\x01\x12&\n" +
 	"!MetricUnitMicrogramPerSquareMeter\x10\x8c\x01\x12\x12\n" +

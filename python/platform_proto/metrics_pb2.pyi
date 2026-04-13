@@ -39,6 +39,8 @@ class MetricKind(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     MetricKindPm10: _ClassVar[MetricKind]
     MetricKindAqi: _ClassVar[MetricKind]
     MetricKindPh: _ClassVar[MetricKind]
+    MetricKindRadon: _ClassVar[MetricKind]
+    MetricKindOxygen: _ClassVar[MetricKind]
     MetricKindRadiationHazard: _ClassVar[MetricKind]
     MetricKindChemicalHazard: _ClassVar[MetricKind]
     MetricKindBiologicalHazard: _ClassVar[MetricKind]
@@ -95,6 +97,7 @@ class MetricUnit(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     MetricUnitGigabyte: _ClassVar[MetricUnit]
     MetricUnitPartsPerMillion: _ClassVar[MetricUnit]
     MetricUnitMicrogramPerCubicMeter: _ClassVar[MetricUnit]
+    MetricUnitBecquerelPerCubicMeter: _ClassVar[MetricUnit]
     MetricUnitNanosievert: _ClassVar[MetricUnit]
     MetricUnitNanosievertPerHour: _ClassVar[MetricUnit]
     MetricUnitMicrosievert: _ClassVar[MetricUnit]
@@ -103,6 +106,16 @@ class MetricUnit(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     MetricUnitMillisievertPerHour: _ClassVar[MetricUnit]
     MetricUnitSievert: _ClassVar[MetricUnit]
     MetricUnitSievertPerHour: _ClassVar[MetricUnit]
+    MetricUnitNanogray: _ClassVar[MetricUnit]
+    MetricUnitNanograyPerHour: _ClassVar[MetricUnit]
+    MetricUnitMicrogray: _ClassVar[MetricUnit]
+    MetricUnitMicrograyPerHour: _ClassVar[MetricUnit]
+    MetricUnitMilligray: _ClassVar[MetricUnit]
+    MetricUnitMilligrayPerHour: _ClassVar[MetricUnit]
+    MetricUnitGray: _ClassVar[MetricUnit]
+    MetricUnitGrayPerHour: _ClassVar[MetricUnit]
+    MetricUnitCentigray: _ClassVar[MetricUnit]
+    MetricUnitCountsPerSecond: _ClassVar[MetricUnit]
     MetricUnitPartsPerBillion: _ClassVar[MetricUnit]
     MetricUnitMilligramPerCubicMeter: _ClassVar[MetricUnit]
     MetricUnitMicrogramPerSquareMeter: _ClassVar[MetricUnit]
@@ -157,6 +170,8 @@ MetricKindPm25: MetricKind
 MetricKindPm10: MetricKind
 MetricKindAqi: MetricKind
 MetricKindPh: MetricKind
+MetricKindRadon: MetricKind
+MetricKindOxygen: MetricKind
 MetricKindRadiationHazard: MetricKind
 MetricKindChemicalHazard: MetricKind
 MetricKindBiologicalHazard: MetricKind
@@ -210,6 +225,7 @@ MetricUnitMegabyte: MetricUnit
 MetricUnitGigabyte: MetricUnit
 MetricUnitPartsPerMillion: MetricUnit
 MetricUnitMicrogramPerCubicMeter: MetricUnit
+MetricUnitBecquerelPerCubicMeter: MetricUnit
 MetricUnitNanosievert: MetricUnit
 MetricUnitNanosievertPerHour: MetricUnit
 MetricUnitMicrosievert: MetricUnit
@@ -218,6 +234,16 @@ MetricUnitMillisievert: MetricUnit
 MetricUnitMillisievertPerHour: MetricUnit
 MetricUnitSievert: MetricUnit
 MetricUnitSievertPerHour: MetricUnit
+MetricUnitNanogray: MetricUnit
+MetricUnitNanograyPerHour: MetricUnit
+MetricUnitMicrogray: MetricUnit
+MetricUnitMicrograyPerHour: MetricUnit
+MetricUnitMilligray: MetricUnit
+MetricUnitMilligrayPerHour: MetricUnit
+MetricUnitGray: MetricUnit
+MetricUnitGrayPerHour: MetricUnit
+MetricUnitCentigray: MetricUnit
+MetricUnitCountsPerSecond: MetricUnit
 MetricUnitPartsPerBillion: MetricUnit
 MetricUnitMilligramPerCubicMeter: MetricUnit
 MetricUnitMicrogramPerSquareMeter: MetricUnit
