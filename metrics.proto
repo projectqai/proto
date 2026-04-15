@@ -71,6 +71,11 @@ enum MetricKind {
   // Signal
   MetricKindSignalStrength = 115;
 
+  // Vital signs
+  MetricKindHeartRate = 140;
+  MetricKindOxygenSaturation = 141;
+  MetricKindBodyTemperature = 142;
+
   // Misc
   MetricKindDuration = 118;
   MetricKindCount = 120;
@@ -199,6 +204,9 @@ enum MetricUnit {
   MetricUnitCubicMeter = 118;
   MetricUnitGallon = 119;
 
+  // Vital signs
+  MetricUnitBeatsPerMinute = 170;
+
   // Generic
   MetricUnitCount = 120;
 
@@ -211,6 +219,13 @@ enum MetricUnit {
 
   // Irradiance
   MetricUnitWattPerSquareMeter = 124;
+}
+
+enum AlertLevel {
+  AlertLevelNone = 0;
+  AlertLevelWarning = 1;
+  AlertLevelAlarm = 2;
+  AlertLevelCritical = 3;
 }
 
 message Metric {
@@ -226,6 +241,8 @@ message Metric {
     sint64 sint64 = 12;
     uint64 uint64 = 13;
   }
+
+  optional AlertLevel alerting = 20;
 }
 
 message MetricComponent {
