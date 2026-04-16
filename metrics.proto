@@ -71,6 +71,11 @@ enum MetricKind {
   // Signal
   MetricKindSignalStrength = 115;
 
+  // Vital signs
+  MetricKindHeartRate = 140;
+  MetricKindOxygenSaturation = 141;
+  MetricKindBodyTemperature = 142;
+
   // Misc
   MetricKindDuration = 118;
   MetricKindCount = 120;
@@ -198,6 +203,9 @@ enum MetricUnit {
   MetricUnitMilliliter = 117;
   MetricUnitCubicMeter = 118;
   MetricUnitGallon = 119;
+
+  // Vital signs
+  MetricUnitBeatsPerMinute = 170;
 
   // Generic
   MetricUnitCount = 120;

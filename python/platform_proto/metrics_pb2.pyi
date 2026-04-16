@@ -49,6 +49,9 @@ class MetricKind(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     MetricKindVolume: _ClassVar[MetricKind]
     MetricKindVolumeFlowRate: _ClassVar[MetricKind]
     MetricKindSignalStrength: _ClassVar[MetricKind]
+    MetricKindHeartRate: _ClassVar[MetricKind]
+    MetricKindOxygenSaturation: _ClassVar[MetricKind]
+    MetricKindBodyTemperature: _ClassVar[MetricKind]
     MetricKindDuration: _ClassVar[MetricKind]
     MetricKindCount: _ClassVar[MetricKind]
 
@@ -135,6 +138,7 @@ class MetricUnit(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     MetricUnitMilliliter: _ClassVar[MetricUnit]
     MetricUnitCubicMeter: _ClassVar[MetricUnit]
     MetricUnitGallon: _ClassVar[MetricUnit]
+    MetricUnitBeatsPerMinute: _ClassVar[MetricUnit]
     MetricUnitCount: _ClassVar[MetricUnit]
     MetricUnitLiterPerMinute: _ClassVar[MetricUnit]
     MetricUnitCubicMeterPerHour: _ClassVar[MetricUnit]
@@ -187,6 +191,9 @@ MetricKindWeight: MetricKind
 MetricKindVolume: MetricKind
 MetricKindVolumeFlowRate: MetricKind
 MetricKindSignalStrength: MetricKind
+MetricKindHeartRate: MetricKind
+MetricKindOxygenSaturation: MetricKind
+MetricKindBodyTemperature: MetricKind
 MetricKindDuration: MetricKind
 MetricKindCount: MetricKind
 MetricUnitUnspecified: MetricUnit
@@ -270,6 +277,7 @@ MetricUnitLiter: MetricUnit
 MetricUnitMilliliter: MetricUnit
 MetricUnitCubicMeter: MetricUnit
 MetricUnitGallon: MetricUnit
+MetricUnitBeatsPerMinute: MetricUnit
 MetricUnitCount: MetricUnit
 MetricUnitLiterPerMinute: MetricUnit
 MetricUnitCubicMeterPerHour: MetricUnit

@@ -326,6 +326,23 @@ export enum MetricKind {
   MetricKindSignalStrength = 115,
 
   /**
+   * Vital signs
+   *
+   * @generated from enum value: MetricKindHeartRate = 140;
+   */
+  MetricKindHeartRate = 140,
+
+  /**
+   * @generated from enum value: MetricKindOxygenSaturation = 141;
+   */
+  MetricKindOxygenSaturation = 141,
+
+  /**
+   * @generated from enum value: MetricKindBodyTemperature = 142;
+   */
+  MetricKindBodyTemperature = 142,
+
+  /**
    * Misc
    *
    * @generated from enum value: MetricKindDuration = 118;
@@ -795,6 +812,13 @@ export enum MetricUnit {
    * @generated from enum value: MetricUnitGallon = 119;
    */
   MetricUnitGallon = 119,
+
+  /**
+   * Vital signs
+   *
+   * @generated from enum value: MetricUnitBeatsPerMinute = 170;
+   */
+  MetricUnitBeatsPerMinute = 170,
 
   /**
    * Generic

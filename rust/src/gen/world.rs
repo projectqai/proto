@@ -243,6 +243,10 @@ pub enum MetricKind {
     VolumeFlowRate = 113,
     /// Signal
     SignalStrength = 115,
+    /// Vital signs
+    HeartRate = 140,
+    OxygenSaturation = 141,
+    BodyTemperature = 142,
     /// Misc
     Duration = 118,
     Count = 120,
@@ -294,6 +298,9 @@ impl MetricKind {
             Self::Volume => "MetricKindVolume",
             Self::VolumeFlowRate => "MetricKindVolumeFlowRate",
             Self::SignalStrength => "MetricKindSignalStrength",
+            Self::HeartRate => "MetricKindHeartRate",
+            Self::OxygenSaturation => "MetricKindOxygenSaturation",
+            Self::BodyTemperature => "MetricKindBodyTemperature",
             Self::Duration => "MetricKindDuration",
             Self::Count => "MetricKindCount",
         }
@@ -341,6 +348,9 @@ impl MetricKind {
             "MetricKindVolume" => Some(Self::Volume),
             "MetricKindVolumeFlowRate" => Some(Self::VolumeFlowRate),
             "MetricKindSignalStrength" => Some(Self::SignalStrength),
+            "MetricKindHeartRate" => Some(Self::HeartRate),
+            "MetricKindOxygenSaturation" => Some(Self::OxygenSaturation),
+            "MetricKindBodyTemperature" => Some(Self::BodyTemperature),
             "MetricKindDuration" => Some(Self::Duration),
             "MetricKindCount" => Some(Self::Count),
             _ => None,
@@ -453,6 +463,8 @@ pub enum MetricUnit {
     Milliliter = 117,
     CubicMeter = 118,
     Gallon = 119,
+    /// Vital signs
+    BeatsPerMinute = 170,
     /// Generic
     Count = 120,
     /// Volume flow
@@ -553,6 +565,7 @@ impl MetricUnit {
             Self::Milliliter => "MetricUnitMilliliter",
             Self::CubicMeter => "MetricUnitCubicMeter",
             Self::Gallon => "MetricUnitGallon",
+            Self::BeatsPerMinute => "MetricUnitBeatsPerMinute",
             Self::Count => "MetricUnitCount",
             Self::LiterPerMinute => "MetricUnitLiterPerMinute",
             Self::CubicMeterPerHour => "MetricUnitCubicMeterPerHour",
@@ -644,6 +657,7 @@ impl MetricUnit {
             "MetricUnitMilliliter" => Some(Self::Milliliter),
             "MetricUnitCubicMeter" => Some(Self::CubicMeter),
             "MetricUnitGallon" => Some(Self::Gallon),
+            "MetricUnitBeatsPerMinute" => Some(Self::BeatsPerMinute),
             "MetricUnitCount" => Some(Self::Count),
             "MetricUnitLiterPerMinute" => Some(Self::LiterPerMinute),
             "MetricUnitCubicMeterPerHour" => Some(Self::CubicMeterPerHour),
