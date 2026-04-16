@@ -954,6 +954,7 @@ type Entity struct {
 	Artifact      *ArtifactComponent      `protobuf:"bytes,61,opt,name=artifact,proto3,oneof" json:"artifact,omitempty"`
 	TargetPose    *TargetPoseComponent    `protobuf:"bytes,62,opt,name=target_pose,json=targetPose,proto3,oneof" json:"target_pose,omitempty"`
 	Chat          *ChatComponent          `protobuf:"bytes,39,opt,name=chat,proto3,oneof" json:"chat,omitempty"`
+	Assembly      *AssemblyComponent      `protobuf:"bytes,40,opt,name=assembly,proto3,oneof" json:"assembly,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1250,6 +1251,13 @@ func (x *Entity) GetTargetPose() *TargetPoseComponent {
 func (x *Entity) GetChat() *ChatComponent {
 	if x != nil {
 		return x.Chat
+	}
+	return nil
+}
+
+func (x *Entity) GetAssembly() *AssemblyComponent {
+	if x != nil {
+		return x.Assembly
 	}
 	return nil
 }
@@ -3731,6 +3739,8 @@ type AdministrativeComponent struct {
 	Model         *string                `protobuf:"bytes,5,opt,name=model,proto3,oneof" json:"model,omitempty"`
 	YearBuilt     *uint32                `protobuf:"varint,6,opt,name=year_built,json=yearBuilt,proto3,oneof" json:"year_built,omitempty"`
 	LengthM       *float32               `protobuf:"fixed32,7,opt,name=length_m,json=lengthM,proto3,oneof" json:"length_m,omitempty"`
+	WidthM        *float32               `protobuf:"fixed32,10,opt,name=width_m,json=widthM,proto3,oneof" json:"width_m,omitempty"`    // beam / lateral extent
+	HeightM       *float32               `protobuf:"fixed32,11,opt,name=height_m,json=heightM,proto3,oneof" json:"height_m,omitempty"` // vertical extent (e.g. air draft)
 	TonnageGt     *float32               `protobuf:"fixed32,8,opt,name=tonnage_gt,json=tonnageGt,proto3,oneof" json:"tonnage_gt,omitempty"`
 	EnginePowerKw *float32               `protobuf:"fixed32,9,opt,name=engine_power_kw,json=enginePowerKw,proto3,oneof" json:"engine_power_kw,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -3812,6 +3822,20 @@ func (x *AdministrativeComponent) GetYearBuilt() uint32 {
 func (x *AdministrativeComponent) GetLengthM() float32 {
 	if x != nil && x.LengthM != nil {
 		return *x.LengthM
+	}
+	return 0
+}
+
+func (x *AdministrativeComponent) GetWidthM() float32 {
+	if x != nil && x.WidthM != nil {
+		return *x.WidthM
+	}
+	return 0
+}
+
+func (x *AdministrativeComponent) GetHeightM() float32 {
+	if x != nil && x.HeightM != nil {
+		return *x.HeightM
 	}
 	return 0
 }
@@ -5238,6 +5262,60 @@ func (x *ChatComponent) GetReaction() bool {
 	return false
 }
 
+type AssemblyComponent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// if set, this entity is part of some other bigger entity, like a vehicle
+	Parent *string `protobuf:"bytes,1,opt,name=parent,proto3,oneof" json:"parent,omitempty"`
+	// pointer to ids of GeoShapeComponent entities that describe the outline of this assembly
+	Outline       []string `protobuf:"bytes,2,rep,name=outline,proto3" json:"outline,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AssemblyComponent) Reset() {
+	*x = AssemblyComponent{}
+	mi := &file_world_proto_msgTypes[58]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AssemblyComponent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AssemblyComponent) ProtoMessage() {}
+
+func (x *AssemblyComponent) ProtoReflect() protoreflect.Message {
+	mi := &file_world_proto_msgTypes[58]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AssemblyComponent.ProtoReflect.Descriptor instead.
+func (*AssemblyComponent) Descriptor() ([]byte, []int) {
+	return file_world_proto_rawDescGZIP(), []int{58}
+}
+
+func (x *AssemblyComponent) GetParent() string {
+	if x != nil && x.Parent != nil {
+		return *x.Parent
+	}
+	return ""
+}
+
+func (x *AssemblyComponent) GetOutline() []string {
+	if x != nil {
+		return x.Outline
+	}
+	return nil
+}
+
 type EntityFilter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            *string                `protobuf:"bytes,1,opt,name=id,proto3,oneof" json:"id,omitempty"`       // exact match on entity id
@@ -5259,7 +5337,7 @@ type EntityFilter struct {
 
 func (x *EntityFilter) Reset() {
 	*x = EntityFilter{}
-	mi := &file_world_proto_msgTypes[58]
+	mi := &file_world_proto_msgTypes[59]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5271,7 +5349,7 @@ func (x *EntityFilter) String() string {
 func (*EntityFilter) ProtoMessage() {}
 
 func (x *EntityFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[58]
+	mi := &file_world_proto_msgTypes[59]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5284,7 +5362,7 @@ func (x *EntityFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityFilter.ProtoReflect.Descriptor instead.
 func (*EntityFilter) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{58}
+	return file_world_proto_rawDescGZIP(), []int{59}
 }
 
 func (x *EntityFilter) GetId() string {
@@ -5387,7 +5465,7 @@ type ControllerFilter struct {
 
 func (x *ControllerFilter) Reset() {
 	*x = ControllerFilter{}
-	mi := &file_world_proto_msgTypes[59]
+	mi := &file_world_proto_msgTypes[60]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5399,7 +5477,7 @@ func (x *ControllerFilter) String() string {
 func (*ControllerFilter) ProtoMessage() {}
 
 func (x *ControllerFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[59]
+	mi := &file_world_proto_msgTypes[60]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5412,7 +5490,7 @@ func (x *ControllerFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ControllerFilter.ProtoReflect.Descriptor instead.
 func (*ControllerFilter) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{59}
+	return file_world_proto_rawDescGZIP(), []int{60}
 }
 
 func (x *ControllerFilter) GetId() string {
@@ -5431,7 +5509,7 @@ type TrackFilter struct {
 
 func (x *TrackFilter) Reset() {
 	*x = TrackFilter{}
-	mi := &file_world_proto_msgTypes[60]
+	mi := &file_world_proto_msgTypes[61]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5443,7 +5521,7 @@ func (x *TrackFilter) String() string {
 func (*TrackFilter) ProtoMessage() {}
 
 func (x *TrackFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[60]
+	mi := &file_world_proto_msgTypes[61]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5456,7 +5534,7 @@ func (x *TrackFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TrackFilter.ProtoReflect.Descriptor instead.
 func (*TrackFilter) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{60}
+	return file_world_proto_rawDescGZIP(), []int{61}
 }
 
 func (x *TrackFilter) GetTracker() string {
@@ -5478,7 +5556,7 @@ type MissionFilter struct {
 
 func (x *MissionFilter) Reset() {
 	*x = MissionFilter{}
-	mi := &file_world_proto_msgTypes[61]
+	mi := &file_world_proto_msgTypes[62]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5490,7 +5568,7 @@ func (x *MissionFilter) String() string {
 func (*MissionFilter) ProtoMessage() {}
 
 func (x *MissionFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[61]
+	mi := &file_world_proto_msgTypes[62]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5503,7 +5581,7 @@ func (x *MissionFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MissionFilter.ProtoReflect.Descriptor instead.
 func (*MissionFilter) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{61}
+	return file_world_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *MissionFilter) GetMissionId() string {
@@ -5530,7 +5608,7 @@ type TaskableFilter struct {
 
 func (x *TaskableFilter) Reset() {
 	*x = TaskableFilter{}
-	mi := &file_world_proto_msgTypes[62]
+	mi := &file_world_proto_msgTypes[63]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5542,7 +5620,7 @@ func (x *TaskableFilter) String() string {
 func (*TaskableFilter) ProtoMessage() {}
 
 func (x *TaskableFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[62]
+	mi := &file_world_proto_msgTypes[63]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5555,7 +5633,7 @@ func (x *TaskableFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskableFilter.ProtoReflect.Descriptor instead.
 func (*TaskableFilter) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{62}
+	return file_world_proto_rawDescGZIP(), []int{63}
 }
 
 func (x *TaskableFilter) GetContext() *TaskableContext {
@@ -5585,7 +5663,7 @@ type GeoFilter struct {
 
 func (x *GeoFilter) Reset() {
 	*x = GeoFilter{}
-	mi := &file_world_proto_msgTypes[63]
+	mi := &file_world_proto_msgTypes[64]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5597,7 +5675,7 @@ func (x *GeoFilter) String() string {
 func (*GeoFilter) ProtoMessage() {}
 
 func (x *GeoFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[63]
+	mi := &file_world_proto_msgTypes[64]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5610,7 +5688,7 @@ func (x *GeoFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GeoFilter.ProtoReflect.Descriptor instead.
 func (*GeoFilter) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{63}
+	return file_world_proto_rawDescGZIP(), []int{64}
 }
 
 func (x *GeoFilter) GetGeo() isGeoFilter_Geo {
@@ -5671,7 +5749,7 @@ type DeviceFilter struct {
 
 func (x *DeviceFilter) Reset() {
 	*x = DeviceFilter{}
-	mi := &file_world_proto_msgTypes[64]
+	mi := &file_world_proto_msgTypes[65]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5683,7 +5761,7 @@ func (x *DeviceFilter) String() string {
 func (*DeviceFilter) ProtoMessage() {}
 
 func (x *DeviceFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[64]
+	mi := &file_world_proto_msgTypes[65]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5696,7 +5774,7 @@ func (x *DeviceFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeviceFilter.ProtoReflect.Descriptor instead.
 func (*DeviceFilter) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{64}
+	return file_world_proto_rawDescGZIP(), []int{65}
 }
 
 func (x *DeviceFilter) GetParent() string {
@@ -5746,7 +5824,7 @@ type BleDeviceFilter struct {
 
 func (x *BleDeviceFilter) Reset() {
 	*x = BleDeviceFilter{}
-	mi := &file_world_proto_msgTypes[65]
+	mi := &file_world_proto_msgTypes[66]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5758,7 +5836,7 @@ func (x *BleDeviceFilter) String() string {
 func (*BleDeviceFilter) ProtoMessage() {}
 
 func (x *BleDeviceFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[65]
+	mi := &file_world_proto_msgTypes[66]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5771,7 +5849,7 @@ func (x *BleDeviceFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BleDeviceFilter.ProtoReflect.Descriptor instead.
 func (*BleDeviceFilter) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{65}
+	return file_world_proto_rawDescGZIP(), []int{66}
 }
 
 func (x *BleDeviceFilter) GetAddress() string {
@@ -5812,7 +5890,7 @@ type UsbDeviceFilter struct {
 
 func (x *UsbDeviceFilter) Reset() {
 	*x = UsbDeviceFilter{}
-	mi := &file_world_proto_msgTypes[66]
+	mi := &file_world_proto_msgTypes[67]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5824,7 +5902,7 @@ func (x *UsbDeviceFilter) String() string {
 func (*UsbDeviceFilter) ProtoMessage() {}
 
 func (x *UsbDeviceFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[66]
+	mi := &file_world_proto_msgTypes[67]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5837,7 +5915,7 @@ func (x *UsbDeviceFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UsbDeviceFilter.ProtoReflect.Descriptor instead.
 func (*UsbDeviceFilter) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{66}
+	return file_world_proto_rawDescGZIP(), []int{67}
 }
 
 func (x *UsbDeviceFilter) GetVendorId() uint32 {
@@ -5904,7 +5982,7 @@ type ConfigurationFilter struct {
 
 func (x *ConfigurationFilter) Reset() {
 	*x = ConfigurationFilter{}
-	mi := &file_world_proto_msgTypes[67]
+	mi := &file_world_proto_msgTypes[68]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5916,7 +5994,7 @@ func (x *ConfigurationFilter) String() string {
 func (*ConfigurationFilter) ProtoMessage() {}
 
 func (x *ConfigurationFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[67]
+	mi := &file_world_proto_msgTypes[68]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5929,7 +6007,7 @@ func (x *ConfigurationFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConfigurationFilter.ProtoReflect.Descriptor instead.
 func (*ConfigurationFilter) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{67}
+	return file_world_proto_rawDescGZIP(), []int{68}
 }
 
 type ChannelFilter struct {
@@ -5942,7 +6020,7 @@ type ChannelFilter struct {
 
 func (x *ChannelFilter) Reset() {
 	*x = ChannelFilter{}
-	mi := &file_world_proto_msgTypes[68]
+	mi := &file_world_proto_msgTypes[69]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5954,7 +6032,7 @@ func (x *ChannelFilter) String() string {
 func (*ChannelFilter) ProtoMessage() {}
 
 func (x *ChannelFilter) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[68]
+	mi := &file_world_proto_msgTypes[69]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5967,7 +6045,7 @@ func (x *ChannelFilter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChannelFilter.ProtoReflect.Descriptor instead.
 func (*ChannelFilter) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{68}
+	return file_world_proto_rawDescGZIP(), []int{69}
 }
 
 func (x *ChannelFilter) GetName() string {
@@ -5995,7 +6073,7 @@ type WatchBehavior struct {
 
 func (x *WatchBehavior) Reset() {
 	*x = WatchBehavior{}
-	mi := &file_world_proto_msgTypes[69]
+	mi := &file_world_proto_msgTypes[70]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6007,7 +6085,7 @@ func (x *WatchBehavior) String() string {
 func (*WatchBehavior) ProtoMessage() {}
 
 func (x *WatchBehavior) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[69]
+	mi := &file_world_proto_msgTypes[70]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6020,7 +6098,7 @@ func (x *WatchBehavior) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WatchBehavior.ProtoReflect.Descriptor instead.
 func (*WatchBehavior) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{69}
+	return file_world_proto_rawDescGZIP(), []int{70}
 }
 
 func (x *WatchBehavior) GetMaxRateHz() float32 {
@@ -6054,7 +6132,7 @@ type ListEntitiesRequest struct {
 
 func (x *ListEntitiesRequest) Reset() {
 	*x = ListEntitiesRequest{}
-	mi := &file_world_proto_msgTypes[70]
+	mi := &file_world_proto_msgTypes[71]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6066,7 +6144,7 @@ func (x *ListEntitiesRequest) String() string {
 func (*ListEntitiesRequest) ProtoMessage() {}
 
 func (x *ListEntitiesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[70]
+	mi := &file_world_proto_msgTypes[71]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6079,7 +6157,7 @@ func (x *ListEntitiesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListEntitiesRequest.ProtoReflect.Descriptor instead.
 func (*ListEntitiesRequest) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{70}
+	return file_world_proto_rawDescGZIP(), []int{71}
 }
 
 func (x *ListEntitiesRequest) GetFilter() *EntityFilter {
@@ -6105,7 +6183,7 @@ type ListEntitiesResponse struct {
 
 func (x *ListEntitiesResponse) Reset() {
 	*x = ListEntitiesResponse{}
-	mi := &file_world_proto_msgTypes[71]
+	mi := &file_world_proto_msgTypes[72]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6117,7 +6195,7 @@ func (x *ListEntitiesResponse) String() string {
 func (*ListEntitiesResponse) ProtoMessage() {}
 
 func (x *ListEntitiesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[71]
+	mi := &file_world_proto_msgTypes[72]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6130,7 +6208,7 @@ func (x *ListEntitiesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListEntitiesResponse.ProtoReflect.Descriptor instead.
 func (*ListEntitiesResponse) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{71}
+	return file_world_proto_rawDescGZIP(), []int{72}
 }
 
 func (x *ListEntitiesResponse) GetEntities() []*Entity {
@@ -6155,7 +6233,7 @@ type EntityChangeRequest struct {
 
 func (x *EntityChangeRequest) Reset() {
 	*x = EntityChangeRequest{}
-	mi := &file_world_proto_msgTypes[72]
+	mi := &file_world_proto_msgTypes[73]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6167,7 +6245,7 @@ func (x *EntityChangeRequest) String() string {
 func (*EntityChangeRequest) ProtoMessage() {}
 
 func (x *EntityChangeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[72]
+	mi := &file_world_proto_msgTypes[73]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6180,7 +6258,7 @@ func (x *EntityChangeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityChangeRequest.ProtoReflect.Descriptor instead.
 func (*EntityChangeRequest) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{72}
+	return file_world_proto_rawDescGZIP(), []int{73}
 }
 
 func (x *EntityChangeRequest) GetChanges() []*Entity {
@@ -6206,7 +6284,7 @@ type ExpireEntityRequest struct {
 
 func (x *ExpireEntityRequest) Reset() {
 	*x = ExpireEntityRequest{}
-	mi := &file_world_proto_msgTypes[73]
+	mi := &file_world_proto_msgTypes[74]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6218,7 +6296,7 @@ func (x *ExpireEntityRequest) String() string {
 func (*ExpireEntityRequest) ProtoMessage() {}
 
 func (x *ExpireEntityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[73]
+	mi := &file_world_proto_msgTypes[74]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6231,7 +6309,7 @@ func (x *ExpireEntityRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExpireEntityRequest.ProtoReflect.Descriptor instead.
 func (*ExpireEntityRequest) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{73}
+	return file_world_proto_rawDescGZIP(), []int{74}
 }
 
 func (x *ExpireEntityRequest) GetId() string {
@@ -6249,7 +6327,7 @@ type ExpireEntityResponse struct {
 
 func (x *ExpireEntityResponse) Reset() {
 	*x = ExpireEntityResponse{}
-	mi := &file_world_proto_msgTypes[74]
+	mi := &file_world_proto_msgTypes[75]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6261,7 +6339,7 @@ func (x *ExpireEntityResponse) String() string {
 func (*ExpireEntityResponse) ProtoMessage() {}
 
 func (x *ExpireEntityResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[74]
+	mi := &file_world_proto_msgTypes[75]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6274,7 +6352,7 @@ func (x *ExpireEntityResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExpireEntityResponse.ProtoReflect.Descriptor instead.
 func (*ExpireEntityResponse) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{74}
+	return file_world_proto_rawDescGZIP(), []int{75}
 }
 
 type EntityChangeResponse struct {
@@ -6287,7 +6365,7 @@ type EntityChangeResponse struct {
 
 func (x *EntityChangeResponse) Reset() {
 	*x = EntityChangeResponse{}
-	mi := &file_world_proto_msgTypes[75]
+	mi := &file_world_proto_msgTypes[76]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6299,7 +6377,7 @@ func (x *EntityChangeResponse) String() string {
 func (*EntityChangeResponse) ProtoMessage() {}
 
 func (x *EntityChangeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[75]
+	mi := &file_world_proto_msgTypes[76]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6312,7 +6390,7 @@ func (x *EntityChangeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityChangeResponse.ProtoReflect.Descriptor instead.
 func (*EntityChangeResponse) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{75}
+	return file_world_proto_rawDescGZIP(), []int{76}
 }
 
 func (x *EntityChangeResponse) GetAccepted() bool {
@@ -6339,7 +6417,7 @@ type EntityChangeEvent struct {
 
 func (x *EntityChangeEvent) Reset() {
 	*x = EntityChangeEvent{}
-	mi := &file_world_proto_msgTypes[76]
+	mi := &file_world_proto_msgTypes[77]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6351,7 +6429,7 @@ func (x *EntityChangeEvent) String() string {
 func (*EntityChangeEvent) ProtoMessage() {}
 
 func (x *EntityChangeEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[76]
+	mi := &file_world_proto_msgTypes[77]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6364,7 +6442,7 @@ func (x *EntityChangeEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityChangeEvent.ProtoReflect.Descriptor instead.
 func (*EntityChangeEvent) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{76}
+	return file_world_proto_rawDescGZIP(), []int{77}
 }
 
 func (x *EntityChangeEvent) GetEntity() *Entity {
@@ -6390,7 +6468,7 @@ type EntityChangeBatch struct {
 
 func (x *EntityChangeBatch) Reset() {
 	*x = EntityChangeBatch{}
-	mi := &file_world_proto_msgTypes[77]
+	mi := &file_world_proto_msgTypes[78]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6402,7 +6480,7 @@ func (x *EntityChangeBatch) String() string {
 func (*EntityChangeBatch) ProtoMessage() {}
 
 func (x *EntityChangeBatch) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[77]
+	mi := &file_world_proto_msgTypes[78]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6415,7 +6493,7 @@ func (x *EntityChangeBatch) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EntityChangeBatch.ProtoReflect.Descriptor instead.
 func (*EntityChangeBatch) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{77}
+	return file_world_proto_rawDescGZIP(), []int{78}
 }
 
 func (x *EntityChangeBatch) GetEvents() []*EntityChangeEvent {
@@ -6434,7 +6512,7 @@ type GetEntityRequest struct {
 
 func (x *GetEntityRequest) Reset() {
 	*x = GetEntityRequest{}
-	mi := &file_world_proto_msgTypes[78]
+	mi := &file_world_proto_msgTypes[79]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6446,7 +6524,7 @@ func (x *GetEntityRequest) String() string {
 func (*GetEntityRequest) ProtoMessage() {}
 
 func (x *GetEntityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[78]
+	mi := &file_world_proto_msgTypes[79]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6459,7 +6537,7 @@ func (x *GetEntityRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEntityRequest.ProtoReflect.Descriptor instead.
 func (*GetEntityRequest) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{78}
+	return file_world_proto_rawDescGZIP(), []int{79}
 }
 
 func (x *GetEntityRequest) GetId() string {
@@ -6478,7 +6556,7 @@ type GetEntityResponse struct {
 
 func (x *GetEntityResponse) Reset() {
 	*x = GetEntityResponse{}
-	mi := &file_world_proto_msgTypes[79]
+	mi := &file_world_proto_msgTypes[80]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6490,7 +6568,7 @@ func (x *GetEntityResponse) String() string {
 func (*GetEntityResponse) ProtoMessage() {}
 
 func (x *GetEntityResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[79]
+	mi := &file_world_proto_msgTypes[80]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6503,7 +6581,7 @@ func (x *GetEntityResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEntityResponse.ProtoReflect.Descriptor instead.
 func (*GetEntityResponse) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{79}
+	return file_world_proto_rawDescGZIP(), []int{80}
 }
 
 func (x *GetEntityResponse) GetEntity() *Entity {
@@ -6521,7 +6599,7 @@ type GetLocalNodeRequest struct {
 
 func (x *GetLocalNodeRequest) Reset() {
 	*x = GetLocalNodeRequest{}
-	mi := &file_world_proto_msgTypes[80]
+	mi := &file_world_proto_msgTypes[81]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6533,7 +6611,7 @@ func (x *GetLocalNodeRequest) String() string {
 func (*GetLocalNodeRequest) ProtoMessage() {}
 
 func (x *GetLocalNodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[80]
+	mi := &file_world_proto_msgTypes[81]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6546,7 +6624,7 @@ func (x *GetLocalNodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLocalNodeRequest.ProtoReflect.Descriptor instead.
 func (*GetLocalNodeRequest) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{80}
+	return file_world_proto_rawDescGZIP(), []int{81}
 }
 
 type GetLocalNodeResponse struct {
@@ -6559,7 +6637,7 @@ type GetLocalNodeResponse struct {
 
 func (x *GetLocalNodeResponse) Reset() {
 	*x = GetLocalNodeResponse{}
-	mi := &file_world_proto_msgTypes[81]
+	mi := &file_world_proto_msgTypes[82]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6571,7 +6649,7 @@ func (x *GetLocalNodeResponse) String() string {
 func (*GetLocalNodeResponse) ProtoMessage() {}
 
 func (x *GetLocalNodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[81]
+	mi := &file_world_proto_msgTypes[82]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6584,7 +6662,7 @@ func (x *GetLocalNodeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLocalNodeResponse.ProtoReflect.Descriptor instead.
 func (*GetLocalNodeResponse) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{81}
+	return file_world_proto_rawDescGZIP(), []int{82}
 }
 
 func (x *GetLocalNodeResponse) GetEntity() *Entity {
@@ -6609,7 +6687,7 @@ type ObserverRequest struct {
 
 func (x *ObserverRequest) Reset() {
 	*x = ObserverRequest{}
-	mi := &file_world_proto_msgTypes[82]
+	mi := &file_world_proto_msgTypes[83]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6621,7 +6699,7 @@ func (x *ObserverRequest) String() string {
 func (*ObserverRequest) ProtoMessage() {}
 
 func (x *ObserverRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[82]
+	mi := &file_world_proto_msgTypes[83]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6634,7 +6712,7 @@ func (x *ObserverRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ObserverRequest.ProtoReflect.Descriptor instead.
 func (*ObserverRequest) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{82}
+	return file_world_proto_rawDescGZIP(), []int{83}
 }
 
 type ObserverState struct {
@@ -6647,7 +6725,7 @@ type ObserverState struct {
 
 func (x *ObserverState) Reset() {
 	*x = ObserverState{}
-	mi := &file_world_proto_msgTypes[83]
+	mi := &file_world_proto_msgTypes[84]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6659,7 +6737,7 @@ func (x *ObserverState) String() string {
 func (*ObserverState) ProtoMessage() {}
 
 func (x *ObserverState) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[83]
+	mi := &file_world_proto_msgTypes[84]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6672,7 +6750,7 @@ func (x *ObserverState) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ObserverState.ProtoReflect.Descriptor instead.
 func (*ObserverState) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{83}
+	return file_world_proto_rawDescGZIP(), []int{84}
 }
 
 func (x *ObserverState) GetGeo() *Geometry {
@@ -6700,7 +6778,7 @@ type RunTaskRequest struct {
 
 func (x *RunTaskRequest) Reset() {
 	*x = RunTaskRequest{}
-	mi := &file_world_proto_msgTypes[84]
+	mi := &file_world_proto_msgTypes[85]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6712,7 +6790,7 @@ func (x *RunTaskRequest) String() string {
 func (*RunTaskRequest) ProtoMessage() {}
 
 func (x *RunTaskRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[84]
+	mi := &file_world_proto_msgTypes[85]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6725,7 +6803,7 @@ func (x *RunTaskRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RunTaskRequest.ProtoReflect.Descriptor instead.
 func (*RunTaskRequest) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{84}
+	return file_world_proto_rawDescGZIP(), []int{85}
 }
 
 func (x *RunTaskRequest) GetEntityId() string {
@@ -6753,7 +6831,7 @@ type RunTaskResponse struct {
 
 func (x *RunTaskResponse) Reset() {
 	*x = RunTaskResponse{}
-	mi := &file_world_proto_msgTypes[85]
+	mi := &file_world_proto_msgTypes[86]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6765,7 +6843,7 @@ func (x *RunTaskResponse) String() string {
 func (*RunTaskResponse) ProtoMessage() {}
 
 func (x *RunTaskResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[85]
+	mi := &file_world_proto_msgTypes[86]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6778,7 +6856,7 @@ func (x *RunTaskResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RunTaskResponse.ProtoReflect.Descriptor instead.
 func (*RunTaskResponse) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{85}
+	return file_world_proto_rawDescGZIP(), []int{86}
 }
 
 func (x *RunTaskResponse) GetExecutionId() string {
@@ -6810,7 +6888,7 @@ type HardResetRequest struct {
 
 func (x *HardResetRequest) Reset() {
 	*x = HardResetRequest{}
-	mi := &file_world_proto_msgTypes[86]
+	mi := &file_world_proto_msgTypes[87]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6822,7 +6900,7 @@ func (x *HardResetRequest) String() string {
 func (*HardResetRequest) ProtoMessage() {}
 
 func (x *HardResetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[86]
+	mi := &file_world_proto_msgTypes[87]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6835,7 +6913,7 @@ func (x *HardResetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HardResetRequest.ProtoReflect.Descriptor instead.
 func (*HardResetRequest) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{86}
+	return file_world_proto_rawDescGZIP(), []int{87}
 }
 
 type HardResetResponse struct {
@@ -6846,7 +6924,7 @@ type HardResetResponse struct {
 
 func (x *HardResetResponse) Reset() {
 	*x = HardResetResponse{}
-	mi := &file_world_proto_msgTypes[87]
+	mi := &file_world_proto_msgTypes[88]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6858,7 +6936,7 @@ func (x *HardResetResponse) String() string {
 func (*HardResetResponse) ProtoMessage() {}
 
 func (x *HardResetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[87]
+	mi := &file_world_proto_msgTypes[88]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6871,14 +6949,14 @@ func (x *HardResetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HardResetResponse.ProtoReflect.Descriptor instead.
 func (*HardResetResponse) Descriptor() ([]byte, []int) {
-	return file_world_proto_rawDescGZIP(), []int{87}
+	return file_world_proto_rawDescGZIP(), []int{88}
 }
 
 var File_world_proto protoreflect.FileDescriptor
 
 const file_world_proto_rawDesc = "" +
 	"\n" +
-	"\vworld.proto\x12\x05world\x1a\x0egeometry.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\rmetrics.proto\"\xcd\x14\n" +
+	"\vworld.proto\x12\x05world\x1a\x0egeometry.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\rmetrics.proto\"\x95\x15\n" +
 	"\x06Entity\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x19\n" +
 	"\x05label\x18\x02 \x01(\tH\x00R\x05label\x88\x01\x01\x126\n" +
@@ -6926,7 +7004,8 @@ const file_world_proto_rawDesc = "" +
 	"\bartifact\x18= \x01(\v2\x18.world.ArtifactComponentH\"R\bartifact\x88\x01\x01\x12@\n" +
 	"\vtarget_pose\x18> \x01(\v2\x1a.world.TargetPoseComponentH#R\n" +
 	"targetPose\x88\x01\x01\x12-\n" +
-	"\x04chat\x18' \x01(\v2\x14.world.ChatComponentH$R\x04chat\x88\x01\x01B\b\n" +
+	"\x04chat\x18' \x01(\v2\x14.world.ChatComponentH$R\x04chat\x88\x01\x01\x129\n" +
+	"\bassembly\x18( \x01(\v2\x18.world.AssemblyComponentH%R\bassembly\x88\x01\x01B\b\n" +
 	"\x06_labelB\r\n" +
 	"\v_controllerB\v\n" +
 	"\t_lifetimeB\v\n" +
@@ -6969,7 +7048,8 @@ const file_world_proto_rawDesc = "" +
 	"\x0e_interactivityB\v\n" +
 	"\t_artifactB\x0e\n" +
 	"\f_target_poseB\a\n" +
-	"\x05_chatJ\x04\b\b\x10\tJ\x04\b\t\x10\n" +
+	"\x05_chatB\v\n" +
+	"\t_assemblyJ\x04\b\b\x10\tJ\x04\b\t\x10\n" +
 	"J\x04\b\n" +
 	"\x10\v\"r\n" +
 	"\n" +
@@ -7243,7 +7323,7 @@ const file_world_proto_rawDesc = "" +
 	"\x03ais\x18\x01 \x01(\v2\x15.world.TransponderAISH\x00R\x03ais\x88\x01\x01\x12/\n" +
 	"\x04adsb\x18\x02 \x01(\v2\x16.world.TransponderADSBH\x01R\x04adsb\x88\x01\x01B\x06\n" +
 	"\x04_aisB\a\n" +
-	"\x05_adsb\"\xaf\x03\n" +
+	"\x05_adsb\"\x86\x04\n" +
 	"\x17AdministrativeComponent\x12\x13\n" +
 	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12\x17\n" +
 	"\x04flag\x18\x02 \x01(\tH\x01R\x04flag\x88\x01\x01\x12\x19\n" +
@@ -7252,17 +7332,24 @@ const file_world_proto_rawDesc = "" +
 	"\x05model\x18\x05 \x01(\tH\x04R\x05model\x88\x01\x01\x12\"\n" +
 	"\n" +
 	"year_built\x18\x06 \x01(\rH\x05R\tyearBuilt\x88\x01\x01\x12\x1e\n" +
-	"\blength_m\x18\a \x01(\x02H\x06R\alengthM\x88\x01\x01\x12\"\n" +
+	"\blength_m\x18\a \x01(\x02H\x06R\alengthM\x88\x01\x01\x12\x1c\n" +
+	"\awidth_m\x18\n" +
+	" \x01(\x02H\aR\x06widthM\x88\x01\x01\x12\x1e\n" +
+	"\bheight_m\x18\v \x01(\x02H\bR\aheightM\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"tonnage_gt\x18\b \x01(\x02H\aR\ttonnageGt\x88\x01\x01\x12+\n" +
-	"\x0fengine_power_kw\x18\t \x01(\x02H\bR\renginePowerKw\x88\x01\x01B\x05\n" +
+	"tonnage_gt\x18\b \x01(\x02H\tR\ttonnageGt\x88\x01\x01\x12+\n" +
+	"\x0fengine_power_kw\x18\t \x01(\x02H\n" +
+	"R\renginePowerKw\x88\x01\x01B\x05\n" +
 	"\x03_idB\a\n" +
 	"\x05_flagB\b\n" +
 	"\x06_ownerB\x0f\n" +
 	"\r_manufacturerB\b\n" +
 	"\x06_modelB\r\n" +
 	"\v_year_builtB\v\n" +
-	"\t_length_mB\r\n" +
+	"\t_length_mB\n" +
+	"\n" +
+	"\b_width_mB\v\n" +
+	"\t_height_mB\r\n" +
 	"\v_tonnage_gtB\x12\n" +
 	"\x10_engine_power_kw\"\xa8\x02\n" +
 	"\x13NavigationComponent\x12.\n" +
@@ -7465,7 +7552,11 @@ const file_world_proto_rawDesc = "" +
 	"\a_senderB\x05\n" +
 	"\x03_toB\v\n" +
 	"\t_reply_toB\v\n" +
-	"\t_reaction\"\xb8\x05\n" +
+	"\t_reaction\"U\n" +
+	"\x11AssemblyComponent\x12\x1b\n" +
+	"\x06parent\x18\x01 \x01(\tH\x00R\x06parent\x88\x01\x01\x12\x18\n" +
+	"\aoutline\x18\x02 \x03(\tR\aoutlineB\t\n" +
+	"\a_parent\"\xb8\x05\n" +
 	"\fEntityFilter\x12\x13\n" +
 	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12\x19\n" +
 	"\x05label\x18\x02 \x01(\tH\x01R\x05label\x88\x01\x01\x12'\n" +
@@ -7754,7 +7845,7 @@ func file_world_proto_rawDescGZIP() []byte {
 }
 
 var file_world_proto_enumTypes = make([]protoimpl.EnumInfo, 14)
-var file_world_proto_msgTypes = make([]protoimpl.MessageInfo, 89)
+var file_world_proto_msgTypes = make([]protoimpl.MessageInfo, 90)
 var file_world_proto_goTypes = []any{
 	(Priority)(0),                      // 0: world.Priority
 	(MediaStreamProtocol)(0),           // 1: world.MediaStreamProtocol
@@ -7828,42 +7919,43 @@ var file_world_proto_goTypes = []any{
 	(*BleDevice)(nil),                  // 69: world.BleDevice
 	(*ConfigurationComponent)(nil),     // 70: world.ConfigurationComponent
 	(*ChatComponent)(nil),              // 71: world.ChatComponent
-	(*EntityFilter)(nil),               // 72: world.EntityFilter
-	(*ControllerFilter)(nil),           // 73: world.ControllerFilter
-	(*TrackFilter)(nil),                // 74: world.TrackFilter
-	(*MissionFilter)(nil),              // 75: world.MissionFilter
-	(*TaskableFilter)(nil),             // 76: world.TaskableFilter
-	(*GeoFilter)(nil),                  // 77: world.GeoFilter
-	(*DeviceFilter)(nil),               // 78: world.DeviceFilter
-	(*BleDeviceFilter)(nil),            // 79: world.BleDeviceFilter
-	(*UsbDeviceFilter)(nil),            // 80: world.UsbDeviceFilter
-	(*ConfigurationFilter)(nil),        // 81: world.ConfigurationFilter
-	(*ChannelFilter)(nil),              // 82: world.ChannelFilter
-	(*WatchBehavior)(nil),              // 83: world.WatchBehavior
-	(*ListEntitiesRequest)(nil),        // 84: world.ListEntitiesRequest
-	(*ListEntitiesResponse)(nil),       // 85: world.ListEntitiesResponse
-	(*EntityChangeRequest)(nil),        // 86: world.EntityChangeRequest
-	(*ExpireEntityRequest)(nil),        // 87: world.ExpireEntityRequest
-	(*ExpireEntityResponse)(nil),       // 88: world.ExpireEntityResponse
-	(*EntityChangeResponse)(nil),       // 89: world.EntityChangeResponse
-	(*EntityChangeEvent)(nil),          // 90: world.EntityChangeEvent
-	(*EntityChangeBatch)(nil),          // 91: world.EntityChangeBatch
-	(*GetEntityRequest)(nil),           // 92: world.GetEntityRequest
-	(*GetEntityResponse)(nil),          // 93: world.GetEntityResponse
-	(*GetLocalNodeRequest)(nil),        // 94: world.GetLocalNodeRequest
-	(*GetLocalNodeResponse)(nil),       // 95: world.GetLocalNodeResponse
-	(*ObserverRequest)(nil),            // 96: world.ObserverRequest
-	(*ObserverState)(nil),              // 97: world.ObserverState
-	(*RunTaskRequest)(nil),             // 98: world.RunTaskRequest
-	(*RunTaskResponse)(nil),            // 99: world.RunTaskResponse
-	(*HardResetRequest)(nil),           // 100: world.HardResetRequest
-	(*HardResetResponse)(nil),          // 101: world.HardResetResponse
-	nil,                                // 102: world.Lifetime.ComponentsEntry
-	(*MetricComponent)(nil),            // 103: world.MetricComponent
-	(*timestamppb.Timestamp)(nil),      // 104: google.protobuf.Timestamp
-	(*structpb.Struct)(nil),            // 105: google.protobuf.Struct
-	(*PlanarGeometry)(nil),             // 106: world.PlanarGeometry
-	(*LocalGeometry)(nil),              // 107: world.LocalGeometry
+	(*AssemblyComponent)(nil),          // 72: world.AssemblyComponent
+	(*EntityFilter)(nil),               // 73: world.EntityFilter
+	(*ControllerFilter)(nil),           // 74: world.ControllerFilter
+	(*TrackFilter)(nil),                // 75: world.TrackFilter
+	(*MissionFilter)(nil),              // 76: world.MissionFilter
+	(*TaskableFilter)(nil),             // 77: world.TaskableFilter
+	(*GeoFilter)(nil),                  // 78: world.GeoFilter
+	(*DeviceFilter)(nil),               // 79: world.DeviceFilter
+	(*BleDeviceFilter)(nil),            // 80: world.BleDeviceFilter
+	(*UsbDeviceFilter)(nil),            // 81: world.UsbDeviceFilter
+	(*ConfigurationFilter)(nil),        // 82: world.ConfigurationFilter
+	(*ChannelFilter)(nil),              // 83: world.ChannelFilter
+	(*WatchBehavior)(nil),              // 84: world.WatchBehavior
+	(*ListEntitiesRequest)(nil),        // 85: world.ListEntitiesRequest
+	(*ListEntitiesResponse)(nil),       // 86: world.ListEntitiesResponse
+	(*EntityChangeRequest)(nil),        // 87: world.EntityChangeRequest
+	(*ExpireEntityRequest)(nil),        // 88: world.ExpireEntityRequest
+	(*ExpireEntityResponse)(nil),       // 89: world.ExpireEntityResponse
+	(*EntityChangeResponse)(nil),       // 90: world.EntityChangeResponse
+	(*EntityChangeEvent)(nil),          // 91: world.EntityChangeEvent
+	(*EntityChangeBatch)(nil),          // 92: world.EntityChangeBatch
+	(*GetEntityRequest)(nil),           // 93: world.GetEntityRequest
+	(*GetEntityResponse)(nil),          // 94: world.GetEntityResponse
+	(*GetLocalNodeRequest)(nil),        // 95: world.GetLocalNodeRequest
+	(*GetLocalNodeResponse)(nil),       // 96: world.GetLocalNodeResponse
+	(*ObserverRequest)(nil),            // 97: world.ObserverRequest
+	(*ObserverState)(nil),              // 98: world.ObserverState
+	(*RunTaskRequest)(nil),             // 99: world.RunTaskRequest
+	(*RunTaskResponse)(nil),            // 100: world.RunTaskResponse
+	(*HardResetRequest)(nil),           // 101: world.HardResetRequest
+	(*HardResetResponse)(nil),          // 102: world.HardResetResponse
+	nil,                                // 103: world.Lifetime.ComponentsEntry
+	(*MetricComponent)(nil),            // 104: world.MetricComponent
+	(*timestamppb.Timestamp)(nil),      // 105: google.protobuf.Timestamp
+	(*structpb.Struct)(nil),            // 106: google.protobuf.Struct
+	(*PlanarGeometry)(nil),             // 107: world.PlanarGeometry
+	(*LocalGeometry)(nil),              // 108: world.LocalGeometry
 }
 var file_world_proto_depIdxs = []int32{
 	15,  // 0: world.Entity.controller:type_name -> world.Controller
@@ -7893,7 +7985,7 @@ var file_world_proto_depIdxs = []int32{
 	60,  // 24: world.Entity.configurable:type_name -> world.ConfigurableComponent
 	55,  // 25: world.Entity.mission:type_name -> world.MissionComponent
 	56,  // 26: world.Entity.link:type_name -> world.LinkComponent
-	103, // 27: world.Entity.metric:type_name -> world.MetricComponent
+	104, // 27: world.Entity.metric:type_name -> world.MetricComponent
 	29,  // 28: world.Entity.sensor:type_name -> world.SensorComponent
 	48,  // 29: world.Entity.local_shape:type_name -> world.LocalShapeComponent
 	34,  // 30: world.Entity.pose:type_name -> world.PoseComponent
@@ -7902,116 +7994,117 @@ var file_world_proto_depIdxs = []int32{
 	26,  // 33: world.Entity.artifact:type_name -> world.ArtifactComponent
 	35,  // 34: world.Entity.target_pose:type_name -> world.TargetPoseComponent
 	71,  // 35: world.Entity.chat:type_name -> world.ChatComponent
-	104, // 36: world.Lease.expires:type_name -> google.protobuf.Timestamp
-	104, // 37: world.Lifetime.from:type_name -> google.protobuf.Timestamp
-	104, // 38: world.Lifetime.until:type_name -> google.protobuf.Timestamp
-	104, // 39: world.Lifetime.fresh:type_name -> google.protobuf.Timestamp
-	102, // 40: world.Lifetime.components:type_name -> world.Lifetime.ComponentsEntry
-	18,  // 41: world.Routing.channels:type_name -> world.Channel
-	31,  // 42: world.GeoSpatialComponent.covariance:type_name -> world.CovarianceMatrix
-	1,   // 43: world.MediaStream.protocol:type_name -> world.MediaStreamProtocol
-	2,   // 44: world.MediaStream.role:type_name -> world.MediaStreamRole
-	23,  // 45: world.CameraComponent.streams:type_name -> world.MediaStream
-	25,  // 46: world.ArtifactComponent.location:type_name -> world.ArtifactLocation
-	104, // 47: world.DetectionComponent.lastMeasured:type_name -> google.protobuf.Timestamp
-	31,  // 48: world.CartesianOffset.covariance:type_name -> world.CovarianceMatrix
-	30,  // 49: world.CartesianOffset.orientation:type_name -> world.Quaternion
-	31,  // 50: world.PolarOffset.covariance:type_name -> world.CovarianceMatrix
-	30,  // 51: world.PolarOffset.orientation:type_name -> world.Quaternion
-	32,  // 52: world.PoseComponent.cartesian:type_name -> world.CartesianOffset
-	33,  // 53: world.PoseComponent.polar:type_name -> world.PolarOffset
-	32,  // 54: world.TargetPoseComponent.cartesian:type_name -> world.CartesianOffset
-	33,  // 55: world.TargetPoseComponent.polar:type_name -> world.PolarOffset
-	30,  // 56: world.OrientationComponent.orientation:type_name -> world.Quaternion
-	31,  // 57: world.OrientationComponent.covariance:type_name -> world.CovarianceMatrix
-	40,  // 58: world.TaskableComponent.context:type_name -> world.TaskableContext
-	41,  // 59: world.TaskableComponent.assignee:type_name -> world.TaskableAssignee
-	105, // 60: world.TaskableComponent.schema:type_name -> google.protobuf.Struct
-	3,   // 61: world.TaskableComponent.mode:type_name -> world.TaskableMode
-	105, // 62: world.TaskExecutionComponent.parameters:type_name -> google.protobuf.Struct
-	4,   // 63: world.TaskExecutionComponent.state:type_name -> world.TaskExecutionState
-	31,  // 64: world.KinematicsEnu.covariance:type_name -> world.CovarianceMatrix
-	44,  // 65: world.KinematicsComponent.velocityEnu:type_name -> world.KinematicsEnu
-	44,  // 66: world.KinematicsComponent.accelerationEnu:type_name -> world.KinematicsEnu
-	36,  // 67: world.KinematicsComponent.angularVelocityBody:type_name -> world.AngularVelocity
-	106, // 68: world.Geometry.planar:type_name -> world.PlanarGeometry
-	46,  // 69: world.GeoShapeComponent.geometry:type_name -> world.Geometry
-	107, // 70: world.LocalShapeComponent.geometry:type_name -> world.LocalGeometry
-	6,   // 71: world.ClassificationComponent.dimension:type_name -> world.ClassificationBattleDimension
-	5,   // 72: world.ClassificationComponent.identity:type_name -> world.ClassificationIdentity
-	50,  // 73: world.TransponderComponent.ais:type_name -> world.TransponderAIS
-	51,  // 74: world.TransponderComponent.adsb:type_name -> world.TransponderADSB
-	7,   // 75: world.NavigationComponent.mode:type_name -> world.NavigationMode
-	104, // 76: world.MissionComponent.eta:type_name -> google.protobuf.Timestamp
-	8,   // 77: world.LinkComponent.status:type_name -> world.LinkStatus
-	104, // 78: world.LinkComponent.last_seen:type_name -> google.protobuf.Timestamp
-	104, // 79: world.CaptureComponent.captured_at:type_name -> google.protobuf.Timestamp
-	105, // 80: world.ConfigurableComponent.schema:type_name -> google.protobuf.Struct
-	105, // 81: world.ConfigurableComponent.value:type_name -> google.protobuf.Struct
-	10,  // 82: world.ConfigurableComponent.state:type_name -> world.ConfigurableState
-	59,  // 83: world.ConfigurableComponent.supported_device_classes:type_name -> world.DeviceClassOption
-	104, // 84: world.ConfigurableComponent.scheduled_at:type_name -> google.protobuf.Timestamp
-	9,   // 85: world.DeviceComponent.state:type_name -> world.DeviceState
-	62,  // 86: world.DeviceComponent.node:type_name -> world.NodeDevice
-	63,  // 87: world.DeviceComponent.usb:type_name -> world.UsbDevice
-	64,  // 88: world.DeviceComponent.ip:type_name -> world.IpDevice
-	66,  // 89: world.DeviceComponent.serial:type_name -> world.SerialDevice
-	65,  // 90: world.DeviceComponent.ethernet:type_name -> world.EthernetDevice
-	68,  // 91: world.DeviceComponent.lpwan:type_name -> world.LPWANDevice
-	67,  // 92: world.DeviceComponent.meshtastic:type_name -> world.MeshtasticDevice
-	69,  // 93: world.DeviceComponent.ble:type_name -> world.BleDevice
-	105, // 94: world.ConfigurationComponent.value:type_name -> google.protobuf.Struct
-	77,  // 95: world.EntityFilter.geo:type_name -> world.GeoFilter
-	76,  // 96: world.EntityFilter.taskable:type_name -> world.TaskableFilter
-	73,  // 97: world.EntityFilter.controller:type_name -> world.ControllerFilter
-	74,  // 98: world.EntityFilter.track:type_name -> world.TrackFilter
-	75,  // 99: world.EntityFilter.mission:type_name -> world.MissionFilter
-	82,  // 100: world.EntityFilter.channel:type_name -> world.ChannelFilter
-	78,  // 101: world.EntityFilter.device:type_name -> world.DeviceFilter
-	81,  // 102: world.EntityFilter.config:type_name -> world.ConfigurationFilter
-	72,  // 103: world.EntityFilter.or:type_name -> world.EntityFilter
-	72,  // 104: world.EntityFilter.not:type_name -> world.EntityFilter
-	40,  // 105: world.TaskableFilter.context:type_name -> world.TaskableContext
-	41,  // 106: world.TaskableFilter.assignee:type_name -> world.TaskableAssignee
-	46,  // 107: world.GeoFilter.geometry:type_name -> world.Geometry
-	79,  // 108: world.DeviceFilter.ble:type_name -> world.BleDeviceFilter
-	80,  // 109: world.DeviceFilter.usb:type_name -> world.UsbDeviceFilter
-	0,   // 110: world.WatchBehavior.min_priority:type_name -> world.Priority
-	72,  // 111: world.ListEntitiesRequest.filter:type_name -> world.EntityFilter
-	83,  // 112: world.ListEntitiesRequest.behaviour:type_name -> world.WatchBehavior
-	14,  // 113: world.ListEntitiesResponse.entities:type_name -> world.Entity
-	14,  // 114: world.EntityChangeRequest.changes:type_name -> world.Entity
-	14,  // 115: world.EntityChangeRequest.replacements:type_name -> world.Entity
-	14,  // 116: world.EntityChangeEvent.entity:type_name -> world.Entity
-	11,  // 117: world.EntityChangeEvent.t:type_name -> world.EntityChange
-	90,  // 118: world.EntityChangeBatch.events:type_name -> world.EntityChangeEvent
-	14,  // 119: world.GetEntityResponse.entity:type_name -> world.Entity
-	14,  // 120: world.GetLocalNodeResponse.entity:type_name -> world.Entity
-	46,  // 121: world.ObserverState.geo:type_name -> world.Geometry
-	104, // 122: world.ObserverState.viewHistory:type_name -> google.protobuf.Timestamp
-	13,  // 123: world.RunTaskResponse.status:type_name -> world.TaskStatus
-	17,  // 124: world.Lifetime.ComponentsEntry.value:type_name -> world.Lifetime
-	84,  // 125: world.WorldService.ListEntities:input_type -> world.ListEntitiesRequest
-	92,  // 126: world.WorldService.GetEntity:input_type -> world.GetEntityRequest
-	84,  // 127: world.WorldService.WatchEntities:input_type -> world.ListEntitiesRequest
-	86,  // 128: world.WorldService.Push:input_type -> world.EntityChangeRequest
-	87,  // 129: world.WorldService.ExpireEntity:input_type -> world.ExpireEntityRequest
-	94,  // 130: world.WorldService.GetLocalNode:input_type -> world.GetLocalNodeRequest
-	98,  // 131: world.WorldService.RunTask:input_type -> world.RunTaskRequest
-	100, // 132: world.WorldService.HardReset:input_type -> world.HardResetRequest
-	85,  // 133: world.WorldService.ListEntities:output_type -> world.ListEntitiesResponse
-	93,  // 134: world.WorldService.GetEntity:output_type -> world.GetEntityResponse
-	90,  // 135: world.WorldService.WatchEntities:output_type -> world.EntityChangeEvent
-	89,  // 136: world.WorldService.Push:output_type -> world.EntityChangeResponse
-	88,  // 137: world.WorldService.ExpireEntity:output_type -> world.ExpireEntityResponse
-	95,  // 138: world.WorldService.GetLocalNode:output_type -> world.GetLocalNodeResponse
-	99,  // 139: world.WorldService.RunTask:output_type -> world.RunTaskResponse
-	101, // 140: world.WorldService.HardReset:output_type -> world.HardResetResponse
-	133, // [133:141] is the sub-list for method output_type
-	125, // [125:133] is the sub-list for method input_type
-	125, // [125:125] is the sub-list for extension type_name
-	125, // [125:125] is the sub-list for extension extendee
-	0,   // [0:125] is the sub-list for field type_name
+	72,  // 36: world.Entity.assembly:type_name -> world.AssemblyComponent
+	105, // 37: world.Lease.expires:type_name -> google.protobuf.Timestamp
+	105, // 38: world.Lifetime.from:type_name -> google.protobuf.Timestamp
+	105, // 39: world.Lifetime.until:type_name -> google.protobuf.Timestamp
+	105, // 40: world.Lifetime.fresh:type_name -> google.protobuf.Timestamp
+	103, // 41: world.Lifetime.components:type_name -> world.Lifetime.ComponentsEntry
+	18,  // 42: world.Routing.channels:type_name -> world.Channel
+	31,  // 43: world.GeoSpatialComponent.covariance:type_name -> world.CovarianceMatrix
+	1,   // 44: world.MediaStream.protocol:type_name -> world.MediaStreamProtocol
+	2,   // 45: world.MediaStream.role:type_name -> world.MediaStreamRole
+	23,  // 46: world.CameraComponent.streams:type_name -> world.MediaStream
+	25,  // 47: world.ArtifactComponent.location:type_name -> world.ArtifactLocation
+	105, // 48: world.DetectionComponent.lastMeasured:type_name -> google.protobuf.Timestamp
+	31,  // 49: world.CartesianOffset.covariance:type_name -> world.CovarianceMatrix
+	30,  // 50: world.CartesianOffset.orientation:type_name -> world.Quaternion
+	31,  // 51: world.PolarOffset.covariance:type_name -> world.CovarianceMatrix
+	30,  // 52: world.PolarOffset.orientation:type_name -> world.Quaternion
+	32,  // 53: world.PoseComponent.cartesian:type_name -> world.CartesianOffset
+	33,  // 54: world.PoseComponent.polar:type_name -> world.PolarOffset
+	32,  // 55: world.TargetPoseComponent.cartesian:type_name -> world.CartesianOffset
+	33,  // 56: world.TargetPoseComponent.polar:type_name -> world.PolarOffset
+	30,  // 57: world.OrientationComponent.orientation:type_name -> world.Quaternion
+	31,  // 58: world.OrientationComponent.covariance:type_name -> world.CovarianceMatrix
+	40,  // 59: world.TaskableComponent.context:type_name -> world.TaskableContext
+	41,  // 60: world.TaskableComponent.assignee:type_name -> world.TaskableAssignee
+	106, // 61: world.TaskableComponent.schema:type_name -> google.protobuf.Struct
+	3,   // 62: world.TaskableComponent.mode:type_name -> world.TaskableMode
+	106, // 63: world.TaskExecutionComponent.parameters:type_name -> google.protobuf.Struct
+	4,   // 64: world.TaskExecutionComponent.state:type_name -> world.TaskExecutionState
+	31,  // 65: world.KinematicsEnu.covariance:type_name -> world.CovarianceMatrix
+	44,  // 66: world.KinematicsComponent.velocityEnu:type_name -> world.KinematicsEnu
+	44,  // 67: world.KinematicsComponent.accelerationEnu:type_name -> world.KinematicsEnu
+	36,  // 68: world.KinematicsComponent.angularVelocityBody:type_name -> world.AngularVelocity
+	107, // 69: world.Geometry.planar:type_name -> world.PlanarGeometry
+	46,  // 70: world.GeoShapeComponent.geometry:type_name -> world.Geometry
+	108, // 71: world.LocalShapeComponent.geometry:type_name -> world.LocalGeometry
+	6,   // 72: world.ClassificationComponent.dimension:type_name -> world.ClassificationBattleDimension
+	5,   // 73: world.ClassificationComponent.identity:type_name -> world.ClassificationIdentity
+	50,  // 74: world.TransponderComponent.ais:type_name -> world.TransponderAIS
+	51,  // 75: world.TransponderComponent.adsb:type_name -> world.TransponderADSB
+	7,   // 76: world.NavigationComponent.mode:type_name -> world.NavigationMode
+	105, // 77: world.MissionComponent.eta:type_name -> google.protobuf.Timestamp
+	8,   // 78: world.LinkComponent.status:type_name -> world.LinkStatus
+	105, // 79: world.LinkComponent.last_seen:type_name -> google.protobuf.Timestamp
+	105, // 80: world.CaptureComponent.captured_at:type_name -> google.protobuf.Timestamp
+	106, // 81: world.ConfigurableComponent.schema:type_name -> google.protobuf.Struct
+	106, // 82: world.ConfigurableComponent.value:type_name -> google.protobuf.Struct
+	10,  // 83: world.ConfigurableComponent.state:type_name -> world.ConfigurableState
+	59,  // 84: world.ConfigurableComponent.supported_device_classes:type_name -> world.DeviceClassOption
+	105, // 85: world.ConfigurableComponent.scheduled_at:type_name -> google.protobuf.Timestamp
+	9,   // 86: world.DeviceComponent.state:type_name -> world.DeviceState
+	62,  // 87: world.DeviceComponent.node:type_name -> world.NodeDevice
+	63,  // 88: world.DeviceComponent.usb:type_name -> world.UsbDevice
+	64,  // 89: world.DeviceComponent.ip:type_name -> world.IpDevice
+	66,  // 90: world.DeviceComponent.serial:type_name -> world.SerialDevice
+	65,  // 91: world.DeviceComponent.ethernet:type_name -> world.EthernetDevice
+	68,  // 92: world.DeviceComponent.lpwan:type_name -> world.LPWANDevice
+	67,  // 93: world.DeviceComponent.meshtastic:type_name -> world.MeshtasticDevice
+	69,  // 94: world.DeviceComponent.ble:type_name -> world.BleDevice
+	106, // 95: world.ConfigurationComponent.value:type_name -> google.protobuf.Struct
+	78,  // 96: world.EntityFilter.geo:type_name -> world.GeoFilter
+	77,  // 97: world.EntityFilter.taskable:type_name -> world.TaskableFilter
+	74,  // 98: world.EntityFilter.controller:type_name -> world.ControllerFilter
+	75,  // 99: world.EntityFilter.track:type_name -> world.TrackFilter
+	76,  // 100: world.EntityFilter.mission:type_name -> world.MissionFilter
+	83,  // 101: world.EntityFilter.channel:type_name -> world.ChannelFilter
+	79,  // 102: world.EntityFilter.device:type_name -> world.DeviceFilter
+	82,  // 103: world.EntityFilter.config:type_name -> world.ConfigurationFilter
+	73,  // 104: world.EntityFilter.or:type_name -> world.EntityFilter
+	73,  // 105: world.EntityFilter.not:type_name -> world.EntityFilter
+	40,  // 106: world.TaskableFilter.context:type_name -> world.TaskableContext
+	41,  // 107: world.TaskableFilter.assignee:type_name -> world.TaskableAssignee
+	46,  // 108: world.GeoFilter.geometry:type_name -> world.Geometry
+	80,  // 109: world.DeviceFilter.ble:type_name -> world.BleDeviceFilter
+	81,  // 110: world.DeviceFilter.usb:type_name -> world.UsbDeviceFilter
+	0,   // 111: world.WatchBehavior.min_priority:type_name -> world.Priority
+	73,  // 112: world.ListEntitiesRequest.filter:type_name -> world.EntityFilter
+	84,  // 113: world.ListEntitiesRequest.behaviour:type_name -> world.WatchBehavior
+	14,  // 114: world.ListEntitiesResponse.entities:type_name -> world.Entity
+	14,  // 115: world.EntityChangeRequest.changes:type_name -> world.Entity
+	14,  // 116: world.EntityChangeRequest.replacements:type_name -> world.Entity
+	14,  // 117: world.EntityChangeEvent.entity:type_name -> world.Entity
+	11,  // 118: world.EntityChangeEvent.t:type_name -> world.EntityChange
+	91,  // 119: world.EntityChangeBatch.events:type_name -> world.EntityChangeEvent
+	14,  // 120: world.GetEntityResponse.entity:type_name -> world.Entity
+	14,  // 121: world.GetLocalNodeResponse.entity:type_name -> world.Entity
+	46,  // 122: world.ObserverState.geo:type_name -> world.Geometry
+	105, // 123: world.ObserverState.viewHistory:type_name -> google.protobuf.Timestamp
+	13,  // 124: world.RunTaskResponse.status:type_name -> world.TaskStatus
+	17,  // 125: world.Lifetime.ComponentsEntry.value:type_name -> world.Lifetime
+	85,  // 126: world.WorldService.ListEntities:input_type -> world.ListEntitiesRequest
+	93,  // 127: world.WorldService.GetEntity:input_type -> world.GetEntityRequest
+	85,  // 128: world.WorldService.WatchEntities:input_type -> world.ListEntitiesRequest
+	87,  // 129: world.WorldService.Push:input_type -> world.EntityChangeRequest
+	88,  // 130: world.WorldService.ExpireEntity:input_type -> world.ExpireEntityRequest
+	95,  // 131: world.WorldService.GetLocalNode:input_type -> world.GetLocalNodeRequest
+	99,  // 132: world.WorldService.RunTask:input_type -> world.RunTaskRequest
+	101, // 133: world.WorldService.HardReset:input_type -> world.HardResetRequest
+	86,  // 134: world.WorldService.ListEntities:output_type -> world.ListEntitiesResponse
+	94,  // 135: world.WorldService.GetEntity:output_type -> world.GetEntityResponse
+	91,  // 136: world.WorldService.WatchEntities:output_type -> world.EntityChangeEvent
+	90,  // 137: world.WorldService.Push:output_type -> world.EntityChangeResponse
+	89,  // 138: world.WorldService.ExpireEntity:output_type -> world.ExpireEntityResponse
+	96,  // 139: world.WorldService.GetLocalNode:output_type -> world.GetLocalNodeResponse
+	100, // 140: world.WorldService.RunTask:output_type -> world.RunTaskResponse
+	102, // 141: world.WorldService.HardReset:output_type -> world.HardResetResponse
+	134, // [134:142] is the sub-list for method output_type
+	126, // [126:134] is the sub-list for method input_type
+	126, // [126:126] is the sub-list for extension type_name
+	126, // [126:126] is the sub-list for extension extendee
+	0,   // [0:126] is the sub-list for field type_name
 }
 
 func init() { file_world_proto_init() }
@@ -8079,25 +8172,26 @@ func file_world_proto_init() {
 	file_world_proto_msgTypes[60].OneofWrappers = []any{}
 	file_world_proto_msgTypes[61].OneofWrappers = []any{}
 	file_world_proto_msgTypes[62].OneofWrappers = []any{}
-	file_world_proto_msgTypes[63].OneofWrappers = []any{
+	file_world_proto_msgTypes[63].OneofWrappers = []any{}
+	file_world_proto_msgTypes[64].OneofWrappers = []any{
 		(*GeoFilter_Geometry)(nil),
 		(*GeoFilter_GeoEntityId)(nil),
 	}
-	file_world_proto_msgTypes[64].OneofWrappers = []any{}
 	file_world_proto_msgTypes[65].OneofWrappers = []any{}
 	file_world_proto_msgTypes[66].OneofWrappers = []any{}
-	file_world_proto_msgTypes[69].OneofWrappers = []any{}
+	file_world_proto_msgTypes[67].OneofWrappers = []any{}
 	file_world_proto_msgTypes[70].OneofWrappers = []any{}
-	file_world_proto_msgTypes[83].OneofWrappers = []any{}
+	file_world_proto_msgTypes[71].OneofWrappers = []any{}
 	file_world_proto_msgTypes[84].OneofWrappers = []any{}
 	file_world_proto_msgTypes[85].OneofWrappers = []any{}
+	file_world_proto_msgTypes[86].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_world_proto_rawDesc), len(file_world_proto_rawDesc)),
 			NumEnums:      14,
-			NumMessages:   89,
+			NumMessages:   90,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

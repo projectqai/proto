@@ -210,6 +210,11 @@ export declare type Entity = Message<"world.Entity"> & {
    * @generated from field: optional world.ChatComponent chat = 39;
    */
   chat?: ChatComponent;
+
+  /**
+   * @generated from field: optional world.AssemblyComponent assembly = 40;
+   */
+  assembly?: AssemblyComponent;
 };
 
 /**
@@ -1445,6 +1450,20 @@ export declare type AdministrativeComponent = Message<"world.AdministrativeCompo
   lengthM?: number;
 
   /**
+   * beam / lateral extent
+   *
+   * @generated from field: optional float width_m = 10;
+   */
+  widthM?: number;
+
+  /**
+   * vertical extent (e.g. air draft)
+   *
+   * @generated from field: optional float height_m = 11;
+   */
+  heightM?: number;
+
+  /**
    * @generated from field: optional float tonnage_gt = 8;
    */
   tonnageGt?: number;
@@ -2209,6 +2228,31 @@ export declare type ChatComponent = Message<"world.ChatComponent"> & {
  * Use `create(ChatComponentSchema)` to create a new message.
  */
 export declare const ChatComponentSchema: GenMessage<ChatComponent>;
+
+/**
+ * @generated from message world.AssemblyComponent
+ */
+export declare type AssemblyComponent = Message<"world.AssemblyComponent"> & {
+  /**
+   * if set, this entity is part of some other bigger entity, like a vehicle
+   *
+   * @generated from field: optional string parent = 1;
+   */
+  parent?: string;
+
+  /**
+   * pointer to ids of GeoShapeComponent entities that describe the outline of this assembly
+   *
+   * @generated from field: repeated string outline = 2;
+   */
+  outline: string[];
+};
+
+/**
+ * Describes the message world.AssemblyComponent.
+ * Use `create(AssemblyComponentSchema)` to create a new message.
+ */
+export declare const AssemblyComponentSchema: GenMessage<AssemblyComponent>;
 
 /**
  * @generated from message world.EntityFilter

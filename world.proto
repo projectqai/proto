@@ -61,6 +61,7 @@ message Entity {
   optional ArtifactComponent artifact = 61;
   optional TargetPoseComponent target_pose = 62;
   optional ChatComponent chat = 39;
+  optional AssemblyComponent assembly = 40;
 }
 
 // A controller owns an entity.
@@ -505,6 +506,8 @@ message AdministrativeComponent {
   optional string model = 5;
   optional uint32 year_built = 6;
   optional float length_m = 7;
+  optional float width_m = 10; // beam / lateral extent
+  optional float height_m = 11; // vertical extent (e.g. air draft)
   optional float tonnage_gt = 8;
   optional float engine_power_kw = 9;
 }
@@ -775,6 +778,14 @@ message ChatComponent {
   string message = 4; // message text
   optional string reply_to = 5; // id of chat message this is a reply to. if the downstream doesnt support replys, it'll appear as regular message
   optional bool reaction = 6; // this message is a reaction rather than text reply. if the downstream doesnt support reactions, it'll appear as regular reply
+}
+
+message AssemblyComponent {
+  // if set, this entity is part of some other bigger entity, like a vehicle
+  optional string parent = 1;
+
+  // pointer to ids of GeoShapeComponent entities that describe the outline of this assembly
+  repeated string outline = 2;
 }
 
 // ---------------------------------------------

@@ -779,6 +779,8 @@ pub struct Entity {
     pub target_pose: ::core::option::Option<TargetPoseComponent>,
     #[prost(message, optional, tag = "39")]
     pub chat: ::core::option::Option<ChatComponent>,
+    #[prost(message, optional, tag = "40")]
+    pub assembly: ::core::option::Option<AssemblyComponent>,
 }
 /// A controller owns an entity.
 /// The engine normally rejects changes to the entity from non owners,
@@ -1268,6 +1270,12 @@ pub struct AdministrativeComponent {
     pub year_built: ::core::option::Option<u32>,
     #[prost(float, optional, tag = "7")]
     pub length_m: ::core::option::Option<f32>,
+    /// beam / lateral extent
+    #[prost(float, optional, tag = "10")]
+    pub width_m: ::core::option::Option<f32>,
+    /// vertical extent (e.g. air draft)
+    #[prost(float, optional, tag = "11")]
+    pub height_m: ::core::option::Option<f32>,
     #[prost(float, optional, tag = "8")]
     pub tonnage_gt: ::core::option::Option<f32>,
     #[prost(float, optional, tag = "9")]
@@ -1563,6 +1571,15 @@ pub struct ChatComponent {
     /// this message is a reaction rather than text reply. if the downstream doesnt support reactions, it'll appear as regular reply
     #[prost(bool, optional, tag = "6")]
     pub reaction: ::core::option::Option<bool>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AssemblyComponent {
+    /// if set, this entity is part of some other bigger entity, like a vehicle
+    #[prost(string, optional, tag = "1")]
+    pub parent: ::core::option::Option<::prost::alloc::string::String>,
+    /// pointer to ids of GeoShapeComponent entities that describe the outline of this assembly
+    #[prost(string, repeated, tag = "2")]
+    pub outline: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EntityFilter {
