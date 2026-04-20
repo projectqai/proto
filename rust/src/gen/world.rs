@@ -748,6 +748,8 @@ pub struct Entity {
     pub power: ::core::option::Option<PowerComponent>,
     #[prost(message, optional, tag = "35")]
     pub capture: ::core::option::Option<CaptureComponent>,
+    #[prost(message, optional, tag = "42")]
+    pub gnss: ::core::option::Option<GnssComponent>,
     /// experimental, dont use yet externally
     #[prost(message, optional, tag = "23")]
     pub taskable: ::core::option::Option<TaskableComponent>,
@@ -849,6 +851,21 @@ pub struct GeoSpatialComponent {
     /// covariance in meters² (local ENU frame): xx=east², yy=north², zz=up²
     #[prost(message, optional, tag = "4")]
     pub covariance: ::core::option::Option<CovarianceMatrix>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct GnssComponent {
+    #[prost(enumeration = "GnssFixType", optional, tag = "1")]
+    pub fix_type: ::core::option::Option<i32>,
+    #[prost(uint32, optional, tag = "2")]
+    pub satellites_visible: ::core::option::Option<u32>,
+    #[prost(uint32, optional, tag = "3")]
+    pub satellites_used: ::core::option::Option<u32>,
+    #[prost(float, optional, tag = "4")]
+    pub hdop: ::core::option::Option<f32>,
+    #[prost(float, optional, tag = "5")]
+    pub vdop: ::core::option::Option<f32>,
+    #[prost(float, optional, tag = "6")]
+    pub pdop: ::core::option::Option<f32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SymbolComponent {
@@ -1334,6 +1351,21 @@ pub struct LinkComponent {
     /// last time data was received over this link
     #[prost(message, optional, tag = "8")]
     pub last_seen: ::core::option::Option<::prost_types::Timestamp>,
+    /// link quality as percentage (0-100)
+    #[prost(uint32, optional, tag = "9")]
+    pub link_quality_percent: ::core::option::Option<u32>,
+    /// transmit power in milliwatts
+    #[prost(uint32, optional, tag = "10")]
+    pub tx_power_mw: ::core::option::Option<u32>,
+    /// active antenna index (e.g. 0 or 1 for antenna diversity)
+    #[prost(uint32, optional, tag = "11")]
+    pub active_antenna: ::core::option::Option<u32>,
+    /// protocol-specific RF mode label (e.g. "250Hz", "50Hz")
+    #[prost(string, optional, tag = "12")]
+    pub rf_mode: ::core::option::Option<::prost::alloc::string::String>,
+    /// packet rate in Hz
+    #[prost(uint32, optional, tag = "13")]
+    pub packet_rate_hz: ::core::option::Option<u32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CaptureComponent {
@@ -1367,6 +1399,12 @@ pub struct PowerComponent {
     /// estimated remaining operating time in seconds
     #[prost(uint32, optional, tag = "3")]
     pub remaining_seconds: ::core::option::Option<u32>,
+    /// instantaneous current draw in amps
+    #[prost(float, optional, tag = "4")]
+    pub current_a: ::core::option::Option<f32>,
+    /// cumulative battery capacity consumed in milliamp-hours
+    #[prost(float, optional, tag = "5")]
+    pub capacity_used_mah: ::core::option::Option<f32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DeviceClassOption {
@@ -1450,6 +1488,14 @@ pub struct DeviceComponent {
     pub ble: ::core::option::Option<BleDevice>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct MissionKit {
+    #[prost(map = "string, string", tag = "1")]
+    pub layouts: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        ::prost::alloc::string::String,
+    >,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NodeDevice {
     #[prost(string, optional, tag = "1")]
     pub hostname: ::core::option::Option<::prost::alloc::string::String>,
@@ -1465,6 +1511,8 @@ pub struct NodeDevice {
     pub hydris_version: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, optional, tag = "7")]
     pub hydris_update_available: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "8")]
+    pub mission_kit: ::core::option::Option<MissionKit>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UsbDevice {
@@ -1865,6 +1913,44 @@ impl Priority {
             "PriorityRoutine" => Some(Self::Routine),
             "PriorityImmediate" => Some(Self::Immediate),
             "PriorityFlash" => Some(Self::Flash),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum GnssFixType {
+    None = 0,
+    GnssFixType2D = 1,
+    GnssFixType3D = 2,
+    Dgps = 3,
+    RtkFloat = 4,
+    RtkFixed = 5,
+}
+impl GnssFixType {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::None => "GnssFixTypeNone",
+            Self::GnssFixType2D => "GnssFixType2D",
+            Self::GnssFixType3D => "GnssFixType3D",
+            Self::Dgps => "GnssFixTypeDGPS",
+            Self::RtkFloat => "GnssFixTypeRtkFloat",
+            Self::RtkFixed => "GnssFixTypeRtkFixed",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "GnssFixTypeNone" => Some(Self::None),
+            "GnssFixType2D" => Some(Self::GnssFixType2D),
+            "GnssFixType3D" => Some(Self::GnssFixType3D),
+            "GnssFixTypeDGPS" => Some(Self::Dgps),
+            "GnssFixTypeRtkFloat" => Some(Self::RtkFloat),
+            "GnssFixTypeRtkFixed" => Some(Self::RtkFixed),
             _ => None,
         }
     }
@@ -2331,6 +2417,7 @@ pub enum EntityComponent {
     Pose = 38,
     Chat = 39,
     TaskExecution = 41,
+    Gnss = 42,
     Device = 50,
     Config = 51,
     Configurable = 52,
@@ -2377,6 +2464,7 @@ impl EntityComponent {
             Self::Pose => "EntityComponentPose",
             Self::Chat => "EntityComponentChat",
             Self::TaskExecution => "EntityComponentTaskExecution",
+            Self::Gnss => "EntityComponentGnss",
             Self::Device => "EntityComponentDevice",
             Self::Config => "EntityComponentConfig",
             Self::Configurable => "EntityComponentConfigurable",
@@ -2420,6 +2508,7 @@ impl EntityComponent {
             "EntityComponentPose" => Some(Self::Pose),
             "EntityComponentChat" => Some(Self::Chat),
             "EntityComponentTaskExecution" => Some(Self::TaskExecution),
+            "EntityComponentGnss" => Some(Self::Gnss),
             "EntityComponentDevice" => Some(Self::Device),
             "EntityComponentConfig" => Some(Self::Config),
             "EntityComponentConfigurable" => Some(Self::Configurable),

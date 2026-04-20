@@ -135,6 +135,11 @@ export declare type Entity = Message<"world.Entity"> & {
   capture?: CaptureComponent;
 
   /**
+   * @generated from field: optional world.GnssComponent gnss = 42;
+   */
+  gnss?: GnssComponent;
+
+  /**
    * experimental, dont use yet externally
    *
    * @generated from field: optional world.TaskableComponent taskable = 23;
@@ -393,6 +398,47 @@ export declare type GeoSpatialComponent = Message<"world.GeoSpatialComponent"> &
  * Use `create(GeoSpatialComponentSchema)` to create a new message.
  */
 export declare const GeoSpatialComponentSchema: GenMessage<GeoSpatialComponent>;
+
+/**
+ * @generated from message world.GnssComponent
+ */
+export declare type GnssComponent = Message<"world.GnssComponent"> & {
+  /**
+   * @generated from field: optional world.GnssFixType fix_type = 1;
+   */
+  fixType?: GnssFixType;
+
+  /**
+   * @generated from field: optional uint32 satellites_visible = 2;
+   */
+  satellitesVisible?: number;
+
+  /**
+   * @generated from field: optional uint32 satellites_used = 3;
+   */
+  satellitesUsed?: number;
+
+  /**
+   * @generated from field: optional float hdop = 4;
+   */
+  hdop?: number;
+
+  /**
+   * @generated from field: optional float vdop = 5;
+   */
+  vdop?: number;
+
+  /**
+   * @generated from field: optional float pdop = 6;
+   */
+  pdop?: number;
+};
+
+/**
+ * Describes the message world.GnssComponent.
+ * Use `create(GnssComponentSchema)` to create a new message.
+ */
+export declare const GnssComponentSchema: GenMessage<GnssComponent>;
 
 /**
  * @generated from message world.SymbolComponent
@@ -1611,6 +1657,41 @@ export declare type LinkComponent = Message<"world.LinkComponent"> & {
    * @generated from field: optional google.protobuf.Timestamp last_seen = 8;
    */
   lastSeen?: Timestamp;
+
+  /**
+   * link quality as percentage (0-100)
+   *
+   * @generated from field: optional uint32 link_quality_percent = 9;
+   */
+  linkQualityPercent?: number;
+
+  /**
+   * transmit power in milliwatts
+   *
+   * @generated from field: optional uint32 tx_power_mw = 10;
+   */
+  txPowerMw?: number;
+
+  /**
+   * active antenna index (e.g. 0 or 1 for antenna diversity)
+   *
+   * @generated from field: optional uint32 active_antenna = 11;
+   */
+  activeAntenna?: number;
+
+  /**
+   * protocol-specific RF mode label (e.g. "250Hz", "50Hz")
+   *
+   * @generated from field: optional string rf_mode = 12;
+   */
+  rfMode?: string;
+
+  /**
+   * packet rate in Hz
+   *
+   * @generated from field: optional uint32 packet_rate_hz = 13;
+   */
+  packetRateHz?: number;
 };
 
 /**
@@ -1696,6 +1777,20 @@ export declare type PowerComponent = Message<"world.PowerComponent"> & {
    * @generated from field: optional uint32 remaining_seconds = 3;
    */
   remainingSeconds?: number;
+
+  /**
+   * instantaneous current draw in amps
+   *
+   * @generated from field: optional float current_a = 4;
+   */
+  currentA?: number;
+
+  /**
+   * cumulative battery capacity consumed in milliamp-hours
+   *
+   * @generated from field: optional float capacity_used_mah = 5;
+   */
+  capacityUsedMah?: number;
 };
 
 /**
@@ -1899,6 +1994,22 @@ export declare type DeviceComponent = Message<"world.DeviceComponent"> & {
 export declare const DeviceComponentSchema: GenMessage<DeviceComponent>;
 
 /**
+ * @generated from message world.MissionKit
+ */
+export declare type MissionKit = Message<"world.MissionKit"> & {
+  /**
+   * @generated from field: map<string, string> layouts = 1;
+   */
+  layouts: { [key: string]: string };
+};
+
+/**
+ * Describes the message world.MissionKit.
+ * Use `create(MissionKitSchema)` to create a new message.
+ */
+export declare const MissionKitSchema: GenMessage<MissionKit>;
+
+/**
  * @generated from message world.NodeDevice
  */
 export declare type NodeDevice = Message<"world.NodeDevice"> & {
@@ -1936,6 +2047,11 @@ export declare type NodeDevice = Message<"world.NodeDevice"> & {
    * @generated from field: optional string hydris_update_available = 7;
    */
   hydrisUpdateAvailable?: string;
+
+  /**
+   * @generated from field: optional world.MissionKit mission_kit = 8;
+   */
+  missionKit?: MissionKit;
 };
 
 /**
@@ -3008,6 +3124,46 @@ export enum Priority {
 export declare const PrioritySchema: GenEnum<Priority>;
 
 /**
+ * @generated from enum world.GnssFixType
+ */
+export enum GnssFixType {
+  /**
+   * @generated from enum value: GnssFixTypeNone = 0;
+   */
+  GnssFixTypeNone = 0,
+
+  /**
+   * @generated from enum value: GnssFixType2D = 1;
+   */
+  GnssFixType2D = 1,
+
+  /**
+   * @generated from enum value: GnssFixType3D = 2;
+   */
+  GnssFixType3D = 2,
+
+  /**
+   * @generated from enum value: GnssFixTypeDGPS = 3;
+   */
+  GnssFixTypeDGPS = 3,
+
+  /**
+   * @generated from enum value: GnssFixTypeRtkFloat = 4;
+   */
+  GnssFixTypeRtkFloat = 4,
+
+  /**
+   * @generated from enum value: GnssFixTypeRtkFixed = 5;
+   */
+  GnssFixTypeRtkFixed = 5,
+}
+
+/**
+ * Describes the enum world.GnssFixType.
+ */
+export declare const GnssFixTypeSchema: GenEnum<GnssFixType>;
+
+/**
  * @generated from enum world.MediaStreamProtocol
  */
 export enum MediaStreamProtocol {
@@ -3630,6 +3786,11 @@ export enum EntityComponent {
    * @generated from enum value: EntityComponentTaskExecution = 41;
    */
   EntityComponentTaskExecution = 41,
+
+  /**
+   * @generated from enum value: EntityComponentGnss = 42;
+   */
+  EntityComponentGnss = 42,
 
   /**
    * @generated from enum value: EntityComponentDevice = 50;

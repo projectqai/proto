@@ -17,6 +17,15 @@ class Priority(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     PriorityImmediate: _ClassVar[Priority]
     PriorityFlash: _ClassVar[Priority]
 
+class GnssFixType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    GnssFixTypeNone: _ClassVar[GnssFixType]
+    GnssFixType2D: _ClassVar[GnssFixType]
+    GnssFixType3D: _ClassVar[GnssFixType]
+    GnssFixTypeDGPS: _ClassVar[GnssFixType]
+    GnssFixTypeRtkFloat: _ClassVar[GnssFixType]
+    GnssFixTypeRtkFixed: _ClassVar[GnssFixType]
+
 class MediaStreamProtocol(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
     MediaStreamProtocolUnspecified: _ClassVar[MediaStreamProtocol]
@@ -142,6 +151,7 @@ class EntityComponent(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     EntityComponentPose: _ClassVar[EntityComponent]
     EntityComponentChat: _ClassVar[EntityComponent]
     EntityComponentTaskExecution: _ClassVar[EntityComponent]
+    EntityComponentGnss: _ClassVar[EntityComponent]
     EntityComponentDevice: _ClassVar[EntityComponent]
     EntityComponentConfig: _ClassVar[EntityComponent]
     EntityComponentConfigurable: _ClassVar[EntityComponent]
@@ -159,6 +169,12 @@ PriorityUnspecified: Priority
 PriorityRoutine: Priority
 PriorityImmediate: Priority
 PriorityFlash: Priority
+GnssFixTypeNone: GnssFixType
+GnssFixType2D: GnssFixType
+GnssFixType3D: GnssFixType
+GnssFixTypeDGPS: GnssFixType
+GnssFixTypeRtkFloat: GnssFixType
+GnssFixTypeRtkFixed: GnssFixType
 MediaStreamProtocolUnspecified: MediaStreamProtocol
 MediaStreamProtocolWebrtc: MediaStreamProtocol
 MediaStreamProtocolHls: MediaStreamProtocol
@@ -249,6 +265,7 @@ EntityComponentSensor: EntityComponent
 EntityComponentPose: EntityComponent
 EntityComponentChat: EntityComponent
 EntityComponentTaskExecution: EntityComponent
+EntityComponentGnss: EntityComponent
 EntityComponentDevice: EntityComponent
 EntityComponentConfig: EntityComponent
 EntityComponentConfigurable: EntityComponent
@@ -261,7 +278,7 @@ TaskStatusCompleted: TaskStatus
 TaskStatusFailed: TaskStatus
 
 class Entity(_message.Message):
-    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "taskable", "device", "config", "configurable", "mission", "link", "metric", "sensor", "local_shape", "pose", "task_execution", "interactivity", "artifact", "target_pose", "chat", "assembly")
+    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "gnss", "taskable", "device", "config", "configurable", "mission", "link", "metric", "sensor", "local_shape", "pose", "task_execution", "interactivity", "artifact", "target_pose", "chat", "assembly")
     ID_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     CONTROLLER_FIELD_NUMBER: _ClassVar[int]
@@ -285,6 +302,7 @@ class Entity(_message.Message):
     NAVIGATION_FIELD_NUMBER: _ClassVar[int]
     POWER_FIELD_NUMBER: _ClassVar[int]
     CAPTURE_FIELD_NUMBER: _ClassVar[int]
+    GNSS_FIELD_NUMBER: _ClassVar[int]
     TASKABLE_FIELD_NUMBER: _ClassVar[int]
     DEVICE_FIELD_NUMBER: _ClassVar[int]
     CONFIG_FIELD_NUMBER: _ClassVar[int]
@@ -324,6 +342,7 @@ class Entity(_message.Message):
     navigation: NavigationComponent
     power: PowerComponent
     capture: CaptureComponent
+    gnss: GnssComponent
     taskable: TaskableComponent
     device: DeviceComponent
     config: ConfigurationComponent
@@ -340,7 +359,7 @@ class Entity(_message.Message):
     target_pose: TargetPoseComponent
     chat: ChatComponent
     assembly: AssemblyComponent
-    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., gnss: _Optional[_Union[GnssComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ...) -> None: ...
 
 class Controller(_message.Message):
     __slots__ = ("id", "node", "origin")
@@ -401,6 +420,22 @@ class GeoSpatialComponent(_message.Message):
     altitude: float
     covariance: CovarianceMatrix
     def __init__(self, longitude: _Optional[float] = ..., latitude: _Optional[float] = ..., altitude: _Optional[float] = ..., covariance: _Optional[_Union[CovarianceMatrix, _Mapping]] = ...) -> None: ...
+
+class GnssComponent(_message.Message):
+    __slots__ = ("fix_type", "satellites_visible", "satellites_used", "hdop", "vdop", "pdop")
+    FIX_TYPE_FIELD_NUMBER: _ClassVar[int]
+    SATELLITES_VISIBLE_FIELD_NUMBER: _ClassVar[int]
+    SATELLITES_USED_FIELD_NUMBER: _ClassVar[int]
+    HDOP_FIELD_NUMBER: _ClassVar[int]
+    VDOP_FIELD_NUMBER: _ClassVar[int]
+    PDOP_FIELD_NUMBER: _ClassVar[int]
+    fix_type: GnssFixType
+    satellites_visible: int
+    satellites_used: int
+    hdop: float
+    vdop: float
+    pdop: float
+    def __init__(self, fix_type: _Optional[_Union[GnssFixType, str]] = ..., satellites_visible: _Optional[int] = ..., satellites_used: _Optional[int] = ..., hdop: _Optional[float] = ..., vdop: _Optional[float] = ..., pdop: _Optional[float] = ...) -> None: ...
 
 class SymbolComponent(_message.Message):
     __slots__ = ("milStd2525C",)
@@ -789,7 +824,7 @@ class MissionComponent(_message.Message):
     def __init__(self, members: _Optional[_Iterable[str]] = ..., description: _Optional[str] = ..., destination: _Optional[str] = ..., eta: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class LinkComponent(_message.Message):
-    __slots__ = ("status", "rssi_dbm", "snr_db", "via", "last_latency_ms", "avg_latency_ms", "last_seen")
+    __slots__ = ("status", "rssi_dbm", "snr_db", "via", "last_latency_ms", "avg_latency_ms", "last_seen", "link_quality_percent", "tx_power_mw", "active_antenna", "rf_mode", "packet_rate_hz")
     STATUS_FIELD_NUMBER: _ClassVar[int]
     RSSI_DBM_FIELD_NUMBER: _ClassVar[int]
     SNR_DB_FIELD_NUMBER: _ClassVar[int]
@@ -797,6 +832,11 @@ class LinkComponent(_message.Message):
     LAST_LATENCY_MS_FIELD_NUMBER: _ClassVar[int]
     AVG_LATENCY_MS_FIELD_NUMBER: _ClassVar[int]
     LAST_SEEN_FIELD_NUMBER: _ClassVar[int]
+    LINK_QUALITY_PERCENT_FIELD_NUMBER: _ClassVar[int]
+    TX_POWER_MW_FIELD_NUMBER: _ClassVar[int]
+    ACTIVE_ANTENNA_FIELD_NUMBER: _ClassVar[int]
+    RF_MODE_FIELD_NUMBER: _ClassVar[int]
+    PACKET_RATE_HZ_FIELD_NUMBER: _ClassVar[int]
     status: LinkStatus
     rssi_dbm: int
     snr_db: int
@@ -804,7 +844,12 @@ class LinkComponent(_message.Message):
     last_latency_ms: int
     avg_latency_ms: int
     last_seen: _timestamp_pb2.Timestamp
-    def __init__(self, status: _Optional[_Union[LinkStatus, str]] = ..., rssi_dbm: _Optional[int] = ..., snr_db: _Optional[int] = ..., via: _Optional[str] = ..., last_latency_ms: _Optional[int] = ..., avg_latency_ms: _Optional[int] = ..., last_seen: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    link_quality_percent: int
+    tx_power_mw: int
+    active_antenna: int
+    rf_mode: str
+    packet_rate_hz: int
+    def __init__(self, status: _Optional[_Union[LinkStatus, str]] = ..., rssi_dbm: _Optional[int] = ..., snr_db: _Optional[int] = ..., via: _Optional[str] = ..., last_latency_ms: _Optional[int] = ..., avg_latency_ms: _Optional[int] = ..., last_seen: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., link_quality_percent: _Optional[int] = ..., tx_power_mw: _Optional[int] = ..., active_antenna: _Optional[int] = ..., rf_mode: _Optional[str] = ..., packet_rate_hz: _Optional[int] = ...) -> None: ...
 
 class CaptureComponent(_message.Message):
     __slots__ = ("payload", "port", "content_type", "captured_by", "captured_at", "content")
@@ -823,14 +868,18 @@ class CaptureComponent(_message.Message):
     def __init__(self, payload: _Optional[bytes] = ..., port: _Optional[int] = ..., content_type: _Optional[str] = ..., captured_by: _Optional[str] = ..., captured_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., content: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class PowerComponent(_message.Message):
-    __slots__ = ("battery_charge_remaining", "voltage", "remaining_seconds")
+    __slots__ = ("battery_charge_remaining", "voltage", "remaining_seconds", "current_a", "capacity_used_mah")
     BATTERY_CHARGE_REMAINING_FIELD_NUMBER: _ClassVar[int]
     VOLTAGE_FIELD_NUMBER: _ClassVar[int]
     REMAINING_SECONDS_FIELD_NUMBER: _ClassVar[int]
+    CURRENT_A_FIELD_NUMBER: _ClassVar[int]
+    CAPACITY_USED_MAH_FIELD_NUMBER: _ClassVar[int]
     battery_charge_remaining: float
     voltage: float
     remaining_seconds: int
-    def __init__(self, battery_charge_remaining: _Optional[float] = ..., voltage: _Optional[float] = ..., remaining_seconds: _Optional[int] = ...) -> None: ...
+    current_a: float
+    capacity_used_mah: float
+    def __init__(self, battery_charge_remaining: _Optional[float] = ..., voltage: _Optional[float] = ..., remaining_seconds: _Optional[int] = ..., current_a: _Optional[float] = ..., capacity_used_mah: _Optional[float] = ...) -> None: ...
 
 class DeviceClassOption(_message.Message):
     __slots__ = ("label",)
@@ -892,8 +941,21 @@ class DeviceComponent(_message.Message):
     ble: BleDevice
     def __init__(self, parent: _Optional[str] = ..., composition: _Optional[_Iterable[str]] = ..., unique_hardware_id: _Optional[str] = ..., state: _Optional[_Union[DeviceState, str]] = ..., error: _Optional[str] = ..., category: _Optional[str] = ..., node: _Optional[_Union[NodeDevice, _Mapping]] = ..., usb: _Optional[_Union[UsbDevice, _Mapping]] = ..., ip: _Optional[_Union[IpDevice, _Mapping]] = ..., serial: _Optional[_Union[SerialDevice, _Mapping]] = ..., ethernet: _Optional[_Union[EthernetDevice, _Mapping]] = ..., lpwan: _Optional[_Union[LPWANDevice, _Mapping]] = ..., meshtastic: _Optional[_Union[MeshtasticDevice, _Mapping]] = ..., ble: _Optional[_Union[BleDevice, _Mapping]] = ..., **kwargs) -> None: ...
 
+class MissionKit(_message.Message):
+    __slots__ = ("layouts",)
+    class LayoutsEntry(_message.Message):
+        __slots__ = ("key", "value")
+        KEY_FIELD_NUMBER: _ClassVar[int]
+        VALUE_FIELD_NUMBER: _ClassVar[int]
+        key: str
+        value: str
+        def __init__(self, key: _Optional[str] = ..., value: _Optional[str] = ...) -> None: ...
+    LAYOUTS_FIELD_NUMBER: _ClassVar[int]
+    layouts: _containers.ScalarMap[str, str]
+    def __init__(self, layouts: _Optional[_Mapping[str, str]] = ...) -> None: ...
+
 class NodeDevice(_message.Message):
-    __slots__ = ("hostname", "os", "arch", "num_cpu", "os_version", "hydris_version", "hydris_update_available")
+    __slots__ = ("hostname", "os", "arch", "num_cpu", "os_version", "hydris_version", "hydris_update_available", "mission_kit")
     HOSTNAME_FIELD_NUMBER: _ClassVar[int]
     OS_FIELD_NUMBER: _ClassVar[int]
     ARCH_FIELD_NUMBER: _ClassVar[int]
@@ -901,6 +963,7 @@ class NodeDevice(_message.Message):
     OS_VERSION_FIELD_NUMBER: _ClassVar[int]
     HYDRIS_VERSION_FIELD_NUMBER: _ClassVar[int]
     HYDRIS_UPDATE_AVAILABLE_FIELD_NUMBER: _ClassVar[int]
+    MISSION_KIT_FIELD_NUMBER: _ClassVar[int]
     hostname: str
     os: str
     arch: str
@@ -908,7 +971,8 @@ class NodeDevice(_message.Message):
     os_version: str
     hydris_version: str
     hydris_update_available: str
-    def __init__(self, hostname: _Optional[str] = ..., os: _Optional[str] = ..., arch: _Optional[str] = ..., num_cpu: _Optional[int] = ..., os_version: _Optional[str] = ..., hydris_version: _Optional[str] = ..., hydris_update_available: _Optional[str] = ...) -> None: ...
+    mission_kit: MissionKit
+    def __init__(self, hostname: _Optional[str] = ..., os: _Optional[str] = ..., arch: _Optional[str] = ..., num_cpu: _Optional[int] = ..., os_version: _Optional[str] = ..., hydris_version: _Optional[str] = ..., hydris_update_available: _Optional[str] = ..., mission_kit: _Optional[_Union[MissionKit, _Mapping]] = ...) -> None: ...
 
 class UsbDevice(_message.Message):
     __slots__ = ("vendor_id", "product_id", "device_class", "device_subclass", "device_protocol", "manufacturer_name", "product_name", "serial_number")

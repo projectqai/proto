@@ -44,6 +44,7 @@ message Entity {
   optional NavigationComponent navigation = 34;
   optional PowerComponent power = 33;
   optional CaptureComponent capture = 35;
+  optional GnssComponent gnss = 42;
 
   // experimental, dont use yet externally
   optional TaskableComponent taskable = 23;
@@ -137,6 +138,24 @@ message GeoSpatialComponent {
 
   // covariance in meters² (local ENU frame): xx=east², yy=north², zz=up²
   optional CovarianceMatrix covariance = 4;
+}
+
+enum GnssFixType {
+  GnssFixTypeNone = 0;
+  GnssFixType2D = 1;
+  GnssFixType3D = 2;
+  GnssFixTypeDGPS = 3;
+  GnssFixTypeRtkFloat = 4;
+  GnssFixTypeRtkFixed = 5;
+}
+
+message GnssComponent {
+  optional GnssFixType fix_type = 1;
+  optional uint32 satellites_visible = 2;
+  optional uint32 satellites_used = 3;
+  optional float hdop = 4;
+  optional float vdop = 5;
+  optional float pdop = 6;
 }
 
 message SymbolComponent {
@@ -578,6 +597,21 @@ message LinkComponent {
 
   // last time data was received over this link
   optional google.protobuf.Timestamp last_seen = 8;
+
+  // link quality as percentage (0-100)
+  optional uint32 link_quality_percent = 9;
+
+  // transmit power in milliwatts
+  optional uint32 tx_power_mw = 10;
+
+  // active antenna index (e.g. 0 or 1 for antenna diversity)
+  optional uint32 active_antenna = 11;
+
+  // protocol-specific RF mode label (e.g. "250Hz", "50Hz")
+  optional string rf_mode = 12;
+
+  // packet rate in Hz
+  optional uint32 packet_rate_hz = 13;
 }
 
 message CaptureComponent {
@@ -609,6 +643,12 @@ message PowerComponent {
 
   // estimated remaining operating time in seconds
   optional uint32 remaining_seconds = 3;
+
+  // instantaneous current draw in amps
+  optional float current_a = 4;
+
+  // cumulative battery capacity consumed in milliamp-hours
+  optional float capacity_used_mah = 5;
 }
 
 enum DeviceState {
@@ -695,6 +735,10 @@ message DeviceComponent {
   optional BleDevice ble = 27;
 }
 
+message MissionKit {
+  map<string, string> layouts = 1;
+}
+
 message NodeDevice {
   optional string hostname = 1;
   optional string os = 2;
@@ -703,6 +747,7 @@ message NodeDevice {
   optional string os_version = 5;
   optional string hydris_version = 6;
   optional string hydris_update_available = 7;
+  optional MissionKit mission_kit = 8;
 }
 
 message UsbDevice {
@@ -969,6 +1014,7 @@ enum EntityComponent {
   EntityComponentPose = 38;
   EntityComponentChat = 39;
   EntityComponentTaskExecution = 41;
+  EntityComponentGnss = 42;
   EntityComponentDevice = 50;
   EntityComponentConfig = 51;
   EntityComponentConfigurable = 52;
