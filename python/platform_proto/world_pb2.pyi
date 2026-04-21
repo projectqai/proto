@@ -1317,8 +1317,10 @@ class RunTaskResponse(_message.Message):
     def __init__(self, executionId: _Optional[str] = ..., status: _Optional[_Union[TaskStatus, str]] = ..., humanReadableReason: _Optional[str] = ...) -> None: ...
 
 class HardResetRequest(_message.Message):
-    __slots__ = ()
-    def __init__(self) -> None: ...
+    __slots__ = ("mission_id",)
+    MISSION_ID_FIELD_NUMBER: _ClassVar[int]
+    mission_id: str
+    def __init__(self, mission_id: _Optional[str] = ...) -> None: ...
 
 class HardResetResponse(_message.Message):
     __slots__ = ()

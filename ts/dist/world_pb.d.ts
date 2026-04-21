@@ -3063,6 +3063,10 @@ export declare const RunTaskResponseSchema: GenMessage<RunTaskResponse>;
  * @generated from message world.HardResetRequest
  */
 export declare type HardResetRequest = Message<"world.HardResetRequest"> & {
+  /**
+   * @generated from field: optional string mission_id = 1;
+   */
+  missionId?: string;
 };
 
 /**

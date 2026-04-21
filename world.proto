@@ -1074,7 +1074,9 @@ message RunTaskResponse {
   optional string humanReadableReason = 3;
 }
 
-message HardResetRequest {}
+message HardResetRequest {
+  optional string mission_id = 1;
+}
 
 message HardResetResponse {}
 

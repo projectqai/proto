@@ -1874,8 +1874,11 @@ pub struct RunTaskResponse {
     #[prost(string, optional, tag = "3")]
     pub human_readable_reason: ::core::option::Option<::prost::alloc::string::String>,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct HardResetRequest {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct HardResetRequest {
+    #[prost(string, optional, tag = "1")]
+    pub mission_id: ::core::option::Option<::prost::alloc::string::String>,
+}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct HardResetResponse {}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

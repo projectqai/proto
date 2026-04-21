@@ -7150,6 +7150,7 @@ func (x *RunTaskResponse) GetHumanReadableReason() string {
 
 type HardResetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	MissionId     *string                `protobuf:"bytes,1,opt,name=mission_id,json=missionId,proto3,oneof" json:"mission_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -7182,6 +7183,13 @@ func (x *HardResetRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use HardResetRequest.ProtoReflect.Descriptor instead.
 func (*HardResetRequest) Descriptor() ([]byte, []int) {
 	return file_world_proto_rawDescGZIP(), []int{89}
+}
+
+func (x *HardResetRequest) GetMissionId() string {
+	if x != nil && x.MissionId != nil {
+		return *x.MissionId
+	}
+	return ""
 }
 
 type HardResetResponse struct {
@@ -8009,8 +8017,11 @@ const file_world_proto_rawDesc = "" +
 	"\vexecutionId\x18\x01 \x01(\tR\vexecutionId\x12)\n" +
 	"\x06status\x18\x02 \x01(\x0e2\x11.world.TaskStatusR\x06status\x125\n" +
 	"\x13humanReadableReason\x18\x03 \x01(\tH\x00R\x13humanReadableReason\x88\x01\x01B\x16\n" +
-	"\x14_humanReadableReason\"\x12\n" +
-	"\x10HardResetRequest\"\x13\n" +
+	"\x14_humanReadableReason\"E\n" +
+	"\x10HardResetRequest\x12\"\n" +
+	"\n" +
+	"mission_id\x18\x01 \x01(\tH\x00R\tmissionId\x88\x01\x01B\r\n" +
+	"\v_mission_id\"\x13\n" +
 	"\x11HardResetResponse*b\n" +
 	"\bPriority\x12\x17\n" +
 	"\x13PriorityUnspecified\x10\x00\x12\x13\n" +
@@ -8512,6 +8523,7 @@ func file_world_proto_init() {
 	file_world_proto_msgTypes[86].OneofWrappers = []any{}
 	file_world_proto_msgTypes[87].OneofWrappers = []any{}
 	file_world_proto_msgTypes[88].OneofWrappers = []any{}
+	file_world_proto_msgTypes[89].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
