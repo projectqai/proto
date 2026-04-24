@@ -12,6 +12,75 @@ import type { Timestamp } from "@bufbuild/protobuf/wkt";
 export declare const file_metrics: GenFile;
 
 /**
+ * @generated from message world.MetricRange
+ */
+export declare type MetricRange = Message<"world.MetricRange"> & {
+  /**
+   * @generated from oneof world.MetricRange.min
+   */
+  min: {
+    /**
+     * @generated from field: double min_double = 1;
+     */
+    value: number;
+    case: "minDouble";
+  } | {
+    /**
+     * @generated from field: float min_float = 2;
+     */
+    value: number;
+    case: "minFloat";
+  } | {
+    /**
+     * @generated from field: sint64 min_sint64 = 3;
+     */
+    value: bigint;
+    case: "minSint64";
+  } | {
+    /**
+     * @generated from field: uint64 min_uint64 = 4;
+     */
+    value: bigint;
+    case: "minUint64";
+  } | { case: undefined; value?: undefined };
+
+  /**
+   * @generated from oneof world.MetricRange.max
+   */
+  max: {
+    /**
+     * @generated from field: double max_double = 10;
+     */
+    value: number;
+    case: "maxDouble";
+  } | {
+    /**
+     * @generated from field: float max_float = 11;
+     */
+    value: number;
+    case: "maxFloat";
+  } | {
+    /**
+     * @generated from field: sint64 max_sint64 = 12;
+     */
+    value: bigint;
+    case: "maxSint64";
+  } | {
+    /**
+     * @generated from field: uint64 max_uint64 = 13;
+     */
+    value: bigint;
+    case: "maxUint64";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message world.MetricRange.
+ * Use `create(MetricRangeSchema)` to create a new message.
+ */
+export declare const MetricRangeSchema: GenMessage<MetricRange>;
+
+/**
  * @generated from message world.Metric
  */
 export declare type Metric = Message<"world.Metric"> & {
@@ -43,6 +112,16 @@ export declare type Metric = Message<"world.Metric"> & {
    * @generated from field: optional google.protobuf.Timestamp measured_at = 5;
    */
   measuredAt?: Timestamp;
+
+  /**
+   * @generated from field: optional world.MetricRange range = 6;
+   */
+  range?: MetricRange;
+
+  /**
+   * @generated from field: optional world.SensorClip clipping = 7;
+   */
+  clipping?: SensorClip;
 
   /**
    * @generated from oneof world.Metric.val
@@ -860,6 +939,35 @@ export enum MetricUnit {
  * Describes the enum world.MetricUnit.
  */
 export declare const MetricUnitSchema: GenEnum<MetricUnit>;
+
+/**
+ * @generated from enum world.SensorClip
+ */
+export enum SensorClip {
+  /**
+   * @generated from enum value: SensorClipNone = 0;
+   */
+  SensorClipNone = 0,
+
+  /**
+   * actual value may be higher than reported due to sensor range exceeded
+   *
+   * @generated from enum value: SensorClipHigh = 1;
+   */
+  SensorClipHigh = 1,
+
+  /**
+   * actual value may be lower than reported due to sensor range exceeded
+   *
+   * @generated from enum value: SensorClipLow = 2;
+   */
+  SensorClipLow = 2,
+}
+
+/**
+ * Describes the enum world.SensorClip.
+ */
+export declare const SensorClipSchema: GenEnum<SensorClip>;
 
 /**
  * @generated from enum world.AlertLevel

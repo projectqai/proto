@@ -145,6 +145,12 @@ class MetricUnit(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     MetricUnitDecibelMilliwatt: _ClassVar[MetricUnit]
     MetricUnitWattPerSquareMeter: _ClassVar[MetricUnit]
 
+class SensorClip(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    SensorClipNone: _ClassVar[SensorClip]
+    SensorClipHigh: _ClassVar[SensorClip]
+    SensorClipLow: _ClassVar[SensorClip]
+
 class AlertLevel(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
     AlertLevelNone: _ClassVar[AlertLevel]
@@ -283,18 +289,43 @@ MetricUnitLiterPerMinute: MetricUnit
 MetricUnitCubicMeterPerHour: MetricUnit
 MetricUnitDecibelMilliwatt: MetricUnit
 MetricUnitWattPerSquareMeter: MetricUnit
+SensorClipNone: SensorClip
+SensorClipHigh: SensorClip
+SensorClipLow: SensorClip
 AlertLevelNone: AlertLevel
 AlertLevelWarning: AlertLevel
 AlertLevelAlarm: AlertLevel
 AlertLevelCritical: AlertLevel
 
+class MetricRange(_message.Message):
+    __slots__ = ("min_double", "min_float", "min_sint64", "min_uint64", "max_double", "max_float", "max_sint64", "max_uint64")
+    MIN_DOUBLE_FIELD_NUMBER: _ClassVar[int]
+    MIN_FLOAT_FIELD_NUMBER: _ClassVar[int]
+    MIN_SINT64_FIELD_NUMBER: _ClassVar[int]
+    MIN_UINT64_FIELD_NUMBER: _ClassVar[int]
+    MAX_DOUBLE_FIELD_NUMBER: _ClassVar[int]
+    MAX_FLOAT_FIELD_NUMBER: _ClassVar[int]
+    MAX_SINT64_FIELD_NUMBER: _ClassVar[int]
+    MAX_UINT64_FIELD_NUMBER: _ClassVar[int]
+    min_double: float
+    min_float: float
+    min_sint64: int
+    min_uint64: int
+    max_double: float
+    max_float: float
+    max_sint64: int
+    max_uint64: int
+    def __init__(self, min_double: _Optional[float] = ..., min_float: _Optional[float] = ..., min_sint64: _Optional[int] = ..., min_uint64: _Optional[int] = ..., max_double: _Optional[float] = ..., max_float: _Optional[float] = ..., max_sint64: _Optional[int] = ..., max_uint64: _Optional[int] = ...) -> None: ...
+
 class Metric(_message.Message):
-    __slots__ = ("unit", "id", "kind", "label", "measured_at", "double", "float", "sint64", "uint64", "alerting")
+    __slots__ = ("unit", "id", "kind", "label", "measured_at", "range", "clipping", "double", "float", "sint64", "uint64", "alerting")
     UNIT_FIELD_NUMBER: _ClassVar[int]
     ID_FIELD_NUMBER: _ClassVar[int]
     KIND_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     MEASURED_AT_FIELD_NUMBER: _ClassVar[int]
+    RANGE_FIELD_NUMBER: _ClassVar[int]
+    CLIPPING_FIELD_NUMBER: _ClassVar[int]
     DOUBLE_FIELD_NUMBER: _ClassVar[int]
     FLOAT_FIELD_NUMBER: _ClassVar[int]
     SINT64_FIELD_NUMBER: _ClassVar[int]
@@ -305,12 +336,14 @@ class Metric(_message.Message):
     kind: MetricKind
     label: str
     measured_at: _timestamp_pb2.Timestamp
+    range: MetricRange
+    clipping: SensorClip
     double: float
     float: float
     sint64: int
     uint64: int
     alerting: AlertLevel
-    def __init__(self, unit: _Optional[_Union[MetricUnit, str]] = ..., id: _Optional[int] = ..., kind: _Optional[_Union[MetricKind, str]] = ..., label: _Optional[str] = ..., measured_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., double: _Optional[float] = ..., float: _Optional[float] = ..., sint64: _Optional[int] = ..., uint64: _Optional[int] = ..., alerting: _Optional[_Union[AlertLevel, str]] = ...) -> None: ...
+    def __init__(self, unit: _Optional[_Union[MetricUnit, str]] = ..., id: _Optional[int] = ..., kind: _Optional[_Union[MetricKind, str]] = ..., label: _Optional[str] = ..., measured_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., range: _Optional[_Union[MetricRange, _Mapping]] = ..., clipping: _Optional[_Union[SensorClip, str]] = ..., double: _Optional[float] = ..., float: _Optional[float] = ..., sint64: _Optional[int] = ..., uint64: _Optional[int] = ..., alerting: _Optional[_Union[AlertLevel, str]] = ...) -> None: ...
 
 class MetricComponent(_message.Message):
     __slots__ = ("metrics",)

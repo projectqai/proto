@@ -535,6 +535,57 @@ func (MetricUnit) EnumDescriptor() ([]byte, []int) {
 	return file_metrics_proto_rawDescGZIP(), []int{1}
 }
 
+type SensorClip int32
+
+const (
+	SensorClip_SensorClipNone SensorClip = 0
+	// actual value may be higher than reported due to sensor range exceeded
+	SensorClip_SensorClipHigh SensorClip = 1
+	// actual value may be lower than reported due to sensor range exceeded
+	SensorClip_SensorClipLow SensorClip = 2
+)
+
+// Enum value maps for SensorClip.
+var (
+	SensorClip_name = map[int32]string{
+		0: "SensorClipNone",
+		1: "SensorClipHigh",
+		2: "SensorClipLow",
+	}
+	SensorClip_value = map[string]int32{
+		"SensorClipNone": 0,
+		"SensorClipHigh": 1,
+		"SensorClipLow":  2,
+	}
+)
+
+func (x SensorClip) Enum() *SensorClip {
+	p := new(SensorClip)
+	*p = x
+	return p
+}
+
+func (x SensorClip) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SensorClip) Descriptor() protoreflect.EnumDescriptor {
+	return file_metrics_proto_enumTypes[2].Descriptor()
+}
+
+func (SensorClip) Type() protoreflect.EnumType {
+	return &file_metrics_proto_enumTypes[2]
+}
+
+func (x SensorClip) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SensorClip.Descriptor instead.
+func (SensorClip) EnumDescriptor() ([]byte, []int) {
+	return file_metrics_proto_rawDescGZIP(), []int{2}
+}
+
 type AlertLevel int32
 
 const (
@@ -571,11 +622,11 @@ func (x AlertLevel) String() string {
 }
 
 func (AlertLevel) Descriptor() protoreflect.EnumDescriptor {
-	return file_metrics_proto_enumTypes[2].Descriptor()
+	return file_metrics_proto_enumTypes[3].Descriptor()
 }
 
 func (AlertLevel) Type() protoreflect.EnumType {
-	return &file_metrics_proto_enumTypes[2]
+	return &file_metrics_proto_enumTypes[3]
 }
 
 func (x AlertLevel) Number() protoreflect.EnumNumber {
@@ -584,8 +635,200 @@ func (x AlertLevel) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use AlertLevel.Descriptor instead.
 func (AlertLevel) EnumDescriptor() ([]byte, []int) {
-	return file_metrics_proto_rawDescGZIP(), []int{2}
+	return file_metrics_proto_rawDescGZIP(), []int{3}
 }
+
+type MetricRange struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Min:
+	//
+	//	*MetricRange_MinDouble
+	//	*MetricRange_MinFloat
+	//	*MetricRange_MinSint64
+	//	*MetricRange_MinUint64
+	Min isMetricRange_Min `protobuf_oneof:"min"`
+	// Types that are valid to be assigned to Max:
+	//
+	//	*MetricRange_MaxDouble
+	//	*MetricRange_MaxFloat
+	//	*MetricRange_MaxSint64
+	//	*MetricRange_MaxUint64
+	Max           isMetricRange_Max `protobuf_oneof:"max"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MetricRange) Reset() {
+	*x = MetricRange{}
+	mi := &file_metrics_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MetricRange) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MetricRange) ProtoMessage() {}
+
+func (x *MetricRange) ProtoReflect() protoreflect.Message {
+	mi := &file_metrics_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MetricRange.ProtoReflect.Descriptor instead.
+func (*MetricRange) Descriptor() ([]byte, []int) {
+	return file_metrics_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *MetricRange) GetMin() isMetricRange_Min {
+	if x != nil {
+		return x.Min
+	}
+	return nil
+}
+
+func (x *MetricRange) GetMinDouble() float64 {
+	if x != nil {
+		if x, ok := x.Min.(*MetricRange_MinDouble); ok {
+			return x.MinDouble
+		}
+	}
+	return 0
+}
+
+func (x *MetricRange) GetMinFloat() float32 {
+	if x != nil {
+		if x, ok := x.Min.(*MetricRange_MinFloat); ok {
+			return x.MinFloat
+		}
+	}
+	return 0
+}
+
+func (x *MetricRange) GetMinSint64() int64 {
+	if x != nil {
+		if x, ok := x.Min.(*MetricRange_MinSint64); ok {
+			return x.MinSint64
+		}
+	}
+	return 0
+}
+
+func (x *MetricRange) GetMinUint64() uint64 {
+	if x != nil {
+		if x, ok := x.Min.(*MetricRange_MinUint64); ok {
+			return x.MinUint64
+		}
+	}
+	return 0
+}
+
+func (x *MetricRange) GetMax() isMetricRange_Max {
+	if x != nil {
+		return x.Max
+	}
+	return nil
+}
+
+func (x *MetricRange) GetMaxDouble() float64 {
+	if x != nil {
+		if x, ok := x.Max.(*MetricRange_MaxDouble); ok {
+			return x.MaxDouble
+		}
+	}
+	return 0
+}
+
+func (x *MetricRange) GetMaxFloat() float32 {
+	if x != nil {
+		if x, ok := x.Max.(*MetricRange_MaxFloat); ok {
+			return x.MaxFloat
+		}
+	}
+	return 0
+}
+
+func (x *MetricRange) GetMaxSint64() int64 {
+	if x != nil {
+		if x, ok := x.Max.(*MetricRange_MaxSint64); ok {
+			return x.MaxSint64
+		}
+	}
+	return 0
+}
+
+func (x *MetricRange) GetMaxUint64() uint64 {
+	if x != nil {
+		if x, ok := x.Max.(*MetricRange_MaxUint64); ok {
+			return x.MaxUint64
+		}
+	}
+	return 0
+}
+
+type isMetricRange_Min interface {
+	isMetricRange_Min()
+}
+
+type MetricRange_MinDouble struct {
+	MinDouble float64 `protobuf:"fixed64,1,opt,name=min_double,json=minDouble,proto3,oneof"`
+}
+
+type MetricRange_MinFloat struct {
+	MinFloat float32 `protobuf:"fixed32,2,opt,name=min_float,json=minFloat,proto3,oneof"`
+}
+
+type MetricRange_MinSint64 struct {
+	MinSint64 int64 `protobuf:"zigzag64,3,opt,name=min_sint64,json=minSint64,proto3,oneof"`
+}
+
+type MetricRange_MinUint64 struct {
+	MinUint64 uint64 `protobuf:"varint,4,opt,name=min_uint64,json=minUint64,proto3,oneof"`
+}
+
+func (*MetricRange_MinDouble) isMetricRange_Min() {}
+
+func (*MetricRange_MinFloat) isMetricRange_Min() {}
+
+func (*MetricRange_MinSint64) isMetricRange_Min() {}
+
+func (*MetricRange_MinUint64) isMetricRange_Min() {}
+
+type isMetricRange_Max interface {
+	isMetricRange_Max()
+}
+
+type MetricRange_MaxDouble struct {
+	MaxDouble float64 `protobuf:"fixed64,10,opt,name=max_double,json=maxDouble,proto3,oneof"`
+}
+
+type MetricRange_MaxFloat struct {
+	MaxFloat float32 `protobuf:"fixed32,11,opt,name=max_float,json=maxFloat,proto3,oneof"`
+}
+
+type MetricRange_MaxSint64 struct {
+	MaxSint64 int64 `protobuf:"zigzag64,12,opt,name=max_sint64,json=maxSint64,proto3,oneof"`
+}
+
+type MetricRange_MaxUint64 struct {
+	MaxUint64 uint64 `protobuf:"varint,13,opt,name=max_uint64,json=maxUint64,proto3,oneof"`
+}
+
+func (*MetricRange_MaxDouble) isMetricRange_Max() {}
+
+func (*MetricRange_MaxFloat) isMetricRange_Max() {}
+
+func (*MetricRange_MaxSint64) isMetricRange_Max() {}
+
+func (*MetricRange_MaxUint64) isMetricRange_Max() {}
 
 type Metric struct {
 	state      protoimpl.MessageState `protogen:"open.v1"`
@@ -594,6 +837,8 @@ type Metric struct {
 	Kind       *MetricKind            `protobuf:"varint,3,opt,name=kind,proto3,enum=world.MetricKind,oneof" json:"kind,omitempty"`
 	Label      *string                `protobuf:"bytes,4,opt,name=label,proto3,oneof" json:"label,omitempty"` // human-readable display name, e.g. "Engine Bay Temperature"
 	MeasuredAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=measured_at,json=measuredAt,proto3,oneof" json:"measured_at,omitempty"`
+	Range      *MetricRange           `protobuf:"bytes,6,opt,name=range,proto3,oneof" json:"range,omitempty"`
+	Clipping   *SensorClip            `protobuf:"varint,7,opt,name=clipping,proto3,enum=world.SensorClip,oneof" json:"clipping,omitempty"`
 	// Types that are valid to be assigned to Val:
 	//
 	//	*Metric_Double
@@ -608,7 +853,7 @@ type Metric struct {
 
 func (x *Metric) Reset() {
 	*x = Metric{}
-	mi := &file_metrics_proto_msgTypes[0]
+	mi := &file_metrics_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -620,7 +865,7 @@ func (x *Metric) String() string {
 func (*Metric) ProtoMessage() {}
 
 func (x *Metric) ProtoReflect() protoreflect.Message {
-	mi := &file_metrics_proto_msgTypes[0]
+	mi := &file_metrics_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -633,7 +878,7 @@ func (x *Metric) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Metric.ProtoReflect.Descriptor instead.
 func (*Metric) Descriptor() ([]byte, []int) {
-	return file_metrics_proto_rawDescGZIP(), []int{0}
+	return file_metrics_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Metric) GetUnit() MetricUnit {
@@ -669,6 +914,20 @@ func (x *Metric) GetMeasuredAt() *timestamppb.Timestamp {
 		return x.MeasuredAt
 	}
 	return nil
+}
+
+func (x *Metric) GetRange() *MetricRange {
+	if x != nil {
+		return x.Range
+	}
+	return nil
+}
+
+func (x *Metric) GetClipping() SensorClip {
+	if x != nil && x.Clipping != nil {
+		return *x.Clipping
+	}
+	return SensorClip_SensorClipNone
 }
 
 func (x *Metric) GetVal() isMetric_Val {
@@ -758,7 +1017,7 @@ type MetricComponent struct {
 
 func (x *MetricComponent) Reset() {
 	*x = MetricComponent{}
-	mi := &file_metrics_proto_msgTypes[1]
+	mi := &file_metrics_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -770,7 +1029,7 @@ func (x *MetricComponent) String() string {
 func (*MetricComponent) ProtoMessage() {}
 
 func (x *MetricComponent) ProtoReflect() protoreflect.Message {
-	mi := &file_metrics_proto_msgTypes[1]
+	mi := &file_metrics_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -783,7 +1042,7 @@ func (x *MetricComponent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MetricComponent.ProtoReflect.Descriptor instead.
 func (*MetricComponent) Descriptor() ([]byte, []int) {
-	return file_metrics_proto_rawDescGZIP(), []int{1}
+	return file_metrics_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *MetricComponent) GetMetrics() []*Metric {
@@ -797,25 +1056,47 @@ var File_metrics_proto protoreflect.FileDescriptor
 
 const file_metrics_proto_rawDesc = "" +
 	"\n" +
-	"\rmetrics.proto\x12\x05world\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa5\x03\n" +
+	"\rmetrics.proto\x12\x05world\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9f\x02\n" +
+	"\vMetricRange\x12\x1f\n" +
+	"\n" +
+	"min_double\x18\x01 \x01(\x01H\x00R\tminDouble\x12\x1d\n" +
+	"\tmin_float\x18\x02 \x01(\x02H\x00R\bminFloat\x12\x1f\n" +
+	"\n" +
+	"min_sint64\x18\x03 \x01(\x12H\x00R\tminSint64\x12\x1f\n" +
+	"\n" +
+	"min_uint64\x18\x04 \x01(\x04H\x00R\tminUint64\x12\x1f\n" +
+	"\n" +
+	"max_double\x18\n" +
+	" \x01(\x01H\x01R\tmaxDouble\x12\x1d\n" +
+	"\tmax_float\x18\v \x01(\x02H\x01R\bmaxFloat\x12\x1f\n" +
+	"\n" +
+	"max_sint64\x18\f \x01(\x12H\x01R\tmaxSint64\x12\x1f\n" +
+	"\n" +
+	"max_uint64\x18\r \x01(\x04H\x01R\tmaxUint64B\x05\n" +
+	"\x03minB\x05\n" +
+	"\x03max\"\x9f\x04\n" +
 	"\x06Metric\x12%\n" +
 	"\x04unit\x18\x01 \x01(\x0e2\x11.world.MetricUnitR\x04unit\x12\x13\n" +
 	"\x02id\x18\x02 \x01(\rH\x01R\x02id\x88\x01\x01\x12*\n" +
 	"\x04kind\x18\x03 \x01(\x0e2\x11.world.MetricKindH\x02R\x04kind\x88\x01\x01\x12\x19\n" +
 	"\x05label\x18\x04 \x01(\tH\x03R\x05label\x88\x01\x01\x12@\n" +
 	"\vmeasured_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampH\x04R\n" +
-	"measuredAt\x88\x01\x01\x12\x18\n" +
+	"measuredAt\x88\x01\x01\x12-\n" +
+	"\x05range\x18\x06 \x01(\v2\x12.world.MetricRangeH\x05R\x05range\x88\x01\x01\x122\n" +
+	"\bclipping\x18\a \x01(\x0e2\x11.world.SensorClipH\x06R\bclipping\x88\x01\x01\x12\x18\n" +
 	"\x06double\x18\n" +
 	" \x01(\x01H\x00R\x06double\x12\x16\n" +
 	"\x05float\x18\v \x01(\x02H\x00R\x05float\x12\x18\n" +
 	"\x06sint64\x18\f \x01(\x12H\x00R\x06sint64\x12\x18\n" +
 	"\x06uint64\x18\r \x01(\x04H\x00R\x06uint64\x122\n" +
-	"\balerting\x18\x14 \x01(\x0e2\x11.world.AlertLevelH\x05R\balerting\x88\x01\x01B\x05\n" +
+	"\balerting\x18\x14 \x01(\x0e2\x11.world.AlertLevelH\aR\balerting\x88\x01\x01B\x05\n" +
 	"\x03valB\x05\n" +
 	"\x03_idB\a\n" +
 	"\x05_kindB\b\n" +
 	"\x06_labelB\x0e\n" +
-	"\f_measured_atB\v\n" +
+	"\f_measured_atB\b\n" +
+	"\x06_rangeB\v\n" +
+	"\t_clippingB\v\n" +
 	"\t_alerting\":\n" +
 	"\x0fMetricComponent\x12'\n" +
 	"\ametrics\x18\x01 \x03(\v2\r.world.MetricR\ametrics*\xf0\b\n" +
@@ -955,7 +1236,12 @@ const file_metrics_proto_rawDesc = "" +
 	"\x18MetricUnitLiterPerMinute\x10y\x12\x1f\n" +
 	"\x1bMetricUnitCubicMeterPerHour\x10z\x12\x1e\n" +
 	"\x1aMetricUnitDecibelMilliwatt\x10{\x12 \n" +
-	"\x1cMetricUnitWattPerSquareMeter\x10|*d\n" +
+	"\x1cMetricUnitWattPerSquareMeter\x10|*G\n" +
+	"\n" +
+	"SensorClip\x12\x12\n" +
+	"\x0eSensorClipNone\x10\x00\x12\x12\n" +
+	"\x0eSensorClipHigh\x10\x01\x12\x11\n" +
+	"\rSensorClipLow\x10\x02*d\n" +
 	"\n" +
 	"AlertLevel\x12\x12\n" +
 	"\x0eAlertLevelNone\x10\x00\x12\x15\n" +
@@ -975,27 +1261,31 @@ func file_metrics_proto_rawDescGZIP() []byte {
 	return file_metrics_proto_rawDescData
 }
 
-var file_metrics_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_metrics_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_metrics_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
+var file_metrics_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_metrics_proto_goTypes = []any{
 	(MetricKind)(0),               // 0: world.MetricKind
 	(MetricUnit)(0),               // 1: world.MetricUnit
-	(AlertLevel)(0),               // 2: world.AlertLevel
-	(*Metric)(nil),                // 3: world.Metric
-	(*MetricComponent)(nil),       // 4: world.MetricComponent
-	(*timestamppb.Timestamp)(nil), // 5: google.protobuf.Timestamp
+	(SensorClip)(0),               // 2: world.SensorClip
+	(AlertLevel)(0),               // 3: world.AlertLevel
+	(*MetricRange)(nil),           // 4: world.MetricRange
+	(*Metric)(nil),                // 5: world.Metric
+	(*MetricComponent)(nil),       // 6: world.MetricComponent
+	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
 }
 var file_metrics_proto_depIdxs = []int32{
 	1, // 0: world.Metric.unit:type_name -> world.MetricUnit
 	0, // 1: world.Metric.kind:type_name -> world.MetricKind
-	5, // 2: world.Metric.measured_at:type_name -> google.protobuf.Timestamp
-	2, // 3: world.Metric.alerting:type_name -> world.AlertLevel
-	3, // 4: world.MetricComponent.metrics:type_name -> world.Metric
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	7, // 2: world.Metric.measured_at:type_name -> google.protobuf.Timestamp
+	4, // 3: world.Metric.range:type_name -> world.MetricRange
+	2, // 4: world.Metric.clipping:type_name -> world.SensorClip
+	3, // 5: world.Metric.alerting:type_name -> world.AlertLevel
+	5, // 6: world.MetricComponent.metrics:type_name -> world.Metric
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_metrics_proto_init() }
@@ -1004,6 +1294,16 @@ func file_metrics_proto_init() {
 		return
 	}
 	file_metrics_proto_msgTypes[0].OneofWrappers = []any{
+		(*MetricRange_MinDouble)(nil),
+		(*MetricRange_MinFloat)(nil),
+		(*MetricRange_MinSint64)(nil),
+		(*MetricRange_MinUint64)(nil),
+		(*MetricRange_MaxDouble)(nil),
+		(*MetricRange_MaxFloat)(nil),
+		(*MetricRange_MaxSint64)(nil),
+		(*MetricRange_MaxUint64)(nil),
+	}
+	file_metrics_proto_msgTypes[1].OneofWrappers = []any{
 		(*Metric_Double)(nil),
 		(*Metric_Float)(nil),
 		(*Metric_Sint64)(nil),
@@ -1014,8 +1314,8 @@ func file_metrics_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_metrics_proto_rawDesc), len(file_metrics_proto_rawDesc)),
-			NumEnums:      3,
-			NumMessages:   2,
+			NumEnums:      4,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

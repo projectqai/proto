@@ -152,6 +152,38 @@ impl LineStyle {
         }
     }
 }
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct MetricRange {
+    #[prost(oneof = "metric_range::Min", tags = "1, 2, 3, 4")]
+    pub min: ::core::option::Option<metric_range::Min>,
+    #[prost(oneof = "metric_range::Max", tags = "10, 11, 12, 13")]
+    pub max: ::core::option::Option<metric_range::Max>,
+}
+/// Nested message and enum types in `MetricRange`.
+pub mod metric_range {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Min {
+        #[prost(double, tag = "1")]
+        MinDouble(f64),
+        #[prost(float, tag = "2")]
+        MinFloat(f32),
+        #[prost(sint64, tag = "3")]
+        MinSint64(i64),
+        #[prost(uint64, tag = "4")]
+        MinUint64(u64),
+    }
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Max {
+        #[prost(double, tag = "10")]
+        MaxDouble(f64),
+        #[prost(float, tag = "11")]
+        MaxFloat(f32),
+        #[prost(sint64, tag = "12")]
+        MaxSint64(i64),
+        #[prost(uint64, tag = "13")]
+        MaxUint64(u64),
+    }
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Metric {
     #[prost(enumeration = "MetricUnit", tag = "1")]
@@ -166,6 +198,10 @@ pub struct Metric {
     pub label: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(message, optional, tag = "5")]
     pub measured_at: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "6")]
+    pub range: ::core::option::Option<MetricRange>,
+    #[prost(enumeration = "SensorClip", optional, tag = "7")]
+    pub clipping: ::core::option::Option<i32>,
     #[prost(enumeration = "AlertLevel", optional, tag = "20")]
     pub alerting: ::core::option::Option<i32>,
     #[prost(oneof = "metric::Val", tags = "10, 11, 12, 13")]
@@ -663,6 +699,37 @@ impl MetricUnit {
             "MetricUnitCubicMeterPerHour" => Some(Self::CubicMeterPerHour),
             "MetricUnitDecibelMilliwatt" => Some(Self::DecibelMilliwatt),
             "MetricUnitWattPerSquareMeter" => Some(Self::WattPerSquareMeter),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SensorClip {
+    None = 0,
+    /// actual value may be higher than reported due to sensor range exceeded
+    High = 1,
+    /// actual value may be lower than reported due to sensor range exceeded
+    Low = 2,
+}
+impl SensorClip {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::None => "SensorClipNone",
+            Self::High => "SensorClipHigh",
+            Self::Low => "SensorClipLow",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SensorClipNone" => Some(Self::None),
+            "SensorClipHigh" => Some(Self::High),
+            "SensorClipLow" => Some(Self::Low),
             _ => None,
         }
     }
