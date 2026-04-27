@@ -1,7 +1,7 @@
 import { createClient, type Client, ConnectError, Code } from "@connectrpc/connect";
 import { createTransport } from "@connectrpc/connect/protocol-connect";
 import type { UniversalClientFn } from "@connectrpc/connect/protocol";
-import { create, clone } from "@bufbuild/protobuf";
+import { create, clone, type JsonObject, type JsonValue } from "@bufbuild/protobuf";
 import {
 	WorldService,
 	EntitySchema,
@@ -114,14 +114,14 @@ export function push(client: WorldClient, ...entities: Entity[]) {
 
 // Schema → typed config inference
 
-type SchemaProperty = { readonly type: string; readonly default?: unknown; readonly [key: string]: unknown };
+type SchemaProperty = Record<string, JsonValue> & { readonly type: string; readonly default?: JsonValue };
 type SchemaProperties = Readonly<Record<string, SchemaProperty>>;
 
 type InferProperty<P extends SchemaProperty> =
 	P extends { type: "string" } ? string :
 	P extends { type: "boolean" } ? boolean :
 	P extends { type: "number" | "integer" } ? number :
-	unknown;
+	JsonValue;
 
 export type InferConfig<S extends SchemaProperties> = {
 	[K in keyof S]?: InferProperty<S[K]>;
@@ -141,13 +141,13 @@ function extractConfig<S extends SchemaProperties>(entity: Entity, schema: S): I
 
 export type HealthResult = boolean | Record<number, { label: string; value: number | bigint }>;
 
-export interface AttachOptions<S extends SchemaProperties> {
+export interface AttachOptions<S extends SchemaProperties = Record<string, never>> {
 	id: string;
 	label?: string;
 	controller?: string;
 	device?: { category?: string };
 	icon?: string;
-	schema: S;
+	schema?: S;
 	/** Default config to push on attach so the plugin starts without manual
 	 *  configuration. Pushed with fresh=0 so it won't overwrite an existing config. */
 	config?: InferConfig<S>;
@@ -182,11 +182,12 @@ function sleep(ms: number, signal: AbortSignal): Promise<void> {
  * `false` to skip the heartbeat (device expires via TTL), or a metrics map
  * to push metrics alongside the heartbeat.
  */
-export async function attach<S extends SchemaProperties>(opts: AttachOptions<S>) {
+export async function attach<S extends SchemaProperties = Record<string, never>>(opts: AttachOptions<S>) {
 	const client = connect();
 	const entityID = opts.id;
 	const interval = opts.interval ?? DEFAULT_INTERVAL;
 	const health = opts.health ?? (() => true);
+	const schema = (opts.schema ?? {}) as S;
 
 	const entity = create(EntitySchema, {
 		id: entityID,
@@ -195,7 +196,7 @@ export async function attach<S extends SchemaProperties>(opts: AttachOptions<S>)
 		...(opts.device && { device: create(DeviceComponentSchema, opts.device) }),
 		...(opts.icon && { interactivity: create(InteractivityComponentSchema, { icon: opts.icon }) }),
 		configurable: create(ConfigurableComponentSchema, {
-			schema: { type: "object", properties: opts.schema as Record<string, unknown> },
+			schema: { type: "object", properties: schema } as JsonObject,
 		}),
 	});
 
@@ -208,7 +209,7 @@ export async function attach<S extends SchemaProperties>(opts: AttachOptions<S>)
 		await push(client, create(EntitySchema, {
 			id: entityID,
 			config: create(ConfigurationComponentSchema, {
-				value: opts.config as Record<string, unknown>,
+				value: opts.config as JsonObject,
 			}),
 			lifetime: create(LifetimeSchema, {
 				fresh: create(TimestampSchema, { seconds: 0n }),
@@ -226,9 +227,11 @@ export async function attach<S extends SchemaProperties>(opts: AttachOptions<S>)
 
 	const pushHeartbeat = (result?: Record<number, { label: string; value: number | bigint }>) => {
 		const state = initialized ? DeviceState.DeviceStateActive : DeviceState.DeviceStatePending;
+		const device = entity.device ? clone(DeviceComponentSchema, entity.device) : create(DeviceComponentSchema);
+		device.state = state;
 		const e = create(EntitySchema, {
 			id: entityID,
-			device: create(DeviceComponentSchema, { ...entity.device, state }),
+			device,
 			lifetime: create(LifetimeSchema, {
 				until: create(TimestampSchema, { seconds: BigInt(Math.floor((Date.now() + interval + 1_000) / 1000)) }),
 			}),
@@ -238,7 +241,7 @@ export async function attach<S extends SchemaProperties>(opts: AttachOptions<S>)
 				metrics: Object.entries(result).map(([idStr, { label, value }]) =>
 					typeof value === "bigint"
 						? create(MetricSchema, { id: Number(idStr), label, kind: MetricKind.MetricKindCount, unit: MetricUnit.MetricUnitCount, val: { case: "uint64", value } })
-						: create(MetricSchema, { id: Number(idStr), label, kind: MetricKind.MetricKindGauge, unit: MetricUnit.MetricUnitNone, val: { case: "float", value } }),
+						: create(MetricSchema, { id: Number(idStr), label, kind: MetricKind.MetricKindUnspecified, unit: MetricUnit.MetricUnitUnspecified, val: { case: "float", value } }),
 				),
 			});
 		}
@@ -296,7 +299,7 @@ export async function attach<S extends SchemaProperties>(opts: AttachOptions<S>)
 				await pushState(e, ConfigurableState.ConfigurableStateStarting);
 
 				try {
-					if (opts.init) await opts.init(client, extractConfig(e, opts.schema), childSignal);
+					if (opts.init) await opts.init(client, extractConfig(e, schema), childSignal);
 				} catch (err) {
 					if (childSignal.aborted || isCanceled(err)) return;
 					console.error(`init failed entity=${entityID}`, err);
@@ -309,7 +312,7 @@ export async function attach<S extends SchemaProperties>(opts: AttachOptions<S>)
 				await pushState(e, ConfigurableState.ConfigurableStateActive);
 
 				try {
-					await opts.run(client, extractConfig(e, opts.schema), childSignal);
+					await opts.run(client, extractConfig(e, schema), childSignal);
 				} catch (err) {
 					if (childSignal.aborted || isCanceled(err)) return;
 					console.error(`error, restarting entity=${entityID}`, err);
