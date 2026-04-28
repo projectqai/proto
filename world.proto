@@ -924,6 +924,73 @@ message ChannelFilter {
   string name = 1;
 }
 
+enum SortField {
+  SortFieldUnspecified = 0;
+  SortFieldLabel = 1;
+  SortFieldPriority = 2;
+
+  // lifetime
+  SortFieldLifetimeFrom = 10;
+  SortFieldLifetimeUntil = 11;
+  SortFieldLifetimeFresh = 12;
+
+  // geo
+  SortFieldGeoLatitude = 20;
+  SortFieldGeoLongitude = 21;
+  SortFieldGeoAltitude = 22;
+
+  // classification
+  SortFieldClassificationIdentity = 30;
+  SortFieldClassificationDimension = 31;
+
+  // bearing
+  SortFieldBearingAzimuth = 50;
+  SortFieldBearingElevation = 51;
+
+  // administrative
+  SortFieldAdministrativeLength = 70;
+  SortFieldAdministrativeWidth = 71;
+  SortFieldAdministrativeHeight = 72;
+  SortFieldAdministrativeTonnage = 73;
+  SortFieldAdministrativeEnginePower = 74;
+  SortFieldAdministrativeYearBuilt = 75;
+
+  // link
+  SortFieldLinkRssi = 90;
+  SortFieldLinkSnr = 91;
+  SortFieldLinkLastLatency = 92;
+  SortFieldLinkAvgLatency = 93;
+  SortFieldLinkQuality = 94;
+  SortFieldLinkLastSeen = 95;
+  SortFieldLinkPacketRate = 96;
+
+  // power
+  SortFieldPowerBatteryCharge = 100;
+  SortFieldPowerVoltage = 101;
+  SortFieldPowerRemainingSeconds = 102;
+  SortFieldPowerCurrent = 103;
+  SortFieldPowerCapacityUsed = 104;
+
+  // device
+  SortFieldDeviceState = 130;
+
+  // metric
+  SortFieldMetricValue = 150;
+  SortFieldMetricMeasuredAt = 151;
+  SortFieldMetricAlertLevel = 152;
+}
+
+message SortOption {
+  SortField field = 1;
+  bool descending = 2;
+
+  // for SortFieldMetric*
+  oneof metric_selector {
+    uint32 metric_id = 20;
+    MetricKind metric_kind = 21;
+  }
+}
+
 message WatchBehavior {
   // Maximum non-flash message rate this consumer can handle (0 = unlimited)
   optional float max_rate_hz = 1;
@@ -942,6 +1009,9 @@ message WatchBehavior {
 message ListEntitiesRequest {
   reserved 1; //deprecated
   EntityFilter filter = 2;
+
+  // sort by. more than 2 are actually ignored
+  repeated SortOption sort = 3;
 
   optional WatchBehavior behaviour = 4;
 }

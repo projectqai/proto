@@ -1831,6 +1831,27 @@ pub struct ChannelFilter {
     pub name: ::prost::alloc::string::String,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct SortOption {
+    #[prost(enumeration = "SortField", tag = "1")]
+    pub field: i32,
+    #[prost(bool, tag = "2")]
+    pub descending: bool,
+    /// for SortFieldMetric*
+    #[prost(oneof = "sort_option::MetricSelector", tags = "20, 21")]
+    pub metric_selector: ::core::option::Option<sort_option::MetricSelector>,
+}
+/// Nested message and enum types in `SortOption`.
+pub mod sort_option {
+    /// for SortFieldMetric*
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum MetricSelector {
+        #[prost(uint32, tag = "20")]
+        MetricId(u32),
+        #[prost(enumeration = "super::MetricKind", tag = "21")]
+        MetricKind(i32),
+    }
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct WatchBehavior {
     /// Maximum non-flash message rate this consumer can handle (0 = unlimited)
     #[prost(float, optional, tag = "1")]
@@ -1850,6 +1871,9 @@ pub struct WatchBehavior {
 pub struct ListEntitiesRequest {
     #[prost(message, optional, tag = "2")]
     pub filter: ::core::option::Option<EntityFilter>,
+    /// sort by. more than 2 are actually ignored
+    #[prost(message, repeated, tag = "3")]
+    pub sort: ::prost::alloc::vec::Vec<SortOption>,
     #[prost(message, optional, tag = "4")]
     pub behaviour: ::core::option::Option<WatchBehavior>,
 }
@@ -2414,6 +2438,140 @@ impl ConfigurableState {
             "ConfigurableStateFailed" => Some(Self::Failed),
             "ConfigurableStateConflict" => Some(Self::Conflict),
             "ConfigurableStateScheduled" => Some(Self::Scheduled),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SortField {
+    Unspecified = 0,
+    Label = 1,
+    Priority = 2,
+    /// lifetime
+    LifetimeFrom = 10,
+    LifetimeUntil = 11,
+    LifetimeFresh = 12,
+    /// geo
+    GeoLatitude = 20,
+    GeoLongitude = 21,
+    GeoAltitude = 22,
+    /// classification
+    ClassificationIdentity = 30,
+    ClassificationDimension = 31,
+    /// bearing
+    BearingAzimuth = 50,
+    BearingElevation = 51,
+    /// administrative
+    AdministrativeLength = 70,
+    AdministrativeWidth = 71,
+    AdministrativeHeight = 72,
+    AdministrativeTonnage = 73,
+    AdministrativeEnginePower = 74,
+    AdministrativeYearBuilt = 75,
+    /// link
+    LinkRssi = 90,
+    LinkSnr = 91,
+    LinkLastLatency = 92,
+    LinkAvgLatency = 93,
+    LinkQuality = 94,
+    LinkLastSeen = 95,
+    LinkPacketRate = 96,
+    /// power
+    PowerBatteryCharge = 100,
+    PowerVoltage = 101,
+    PowerRemainingSeconds = 102,
+    PowerCurrent = 103,
+    PowerCapacityUsed = 104,
+    /// device
+    DeviceState = 130,
+    /// metric
+    MetricValue = 150,
+    MetricMeasuredAt = 151,
+    MetricAlertLevel = 152,
+}
+impl SortField {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SortFieldUnspecified",
+            Self::Label => "SortFieldLabel",
+            Self::Priority => "SortFieldPriority",
+            Self::LifetimeFrom => "SortFieldLifetimeFrom",
+            Self::LifetimeUntil => "SortFieldLifetimeUntil",
+            Self::LifetimeFresh => "SortFieldLifetimeFresh",
+            Self::GeoLatitude => "SortFieldGeoLatitude",
+            Self::GeoLongitude => "SortFieldGeoLongitude",
+            Self::GeoAltitude => "SortFieldGeoAltitude",
+            Self::ClassificationIdentity => "SortFieldClassificationIdentity",
+            Self::ClassificationDimension => "SortFieldClassificationDimension",
+            Self::BearingAzimuth => "SortFieldBearingAzimuth",
+            Self::BearingElevation => "SortFieldBearingElevation",
+            Self::AdministrativeLength => "SortFieldAdministrativeLength",
+            Self::AdministrativeWidth => "SortFieldAdministrativeWidth",
+            Self::AdministrativeHeight => "SortFieldAdministrativeHeight",
+            Self::AdministrativeTonnage => "SortFieldAdministrativeTonnage",
+            Self::AdministrativeEnginePower => "SortFieldAdministrativeEnginePower",
+            Self::AdministrativeYearBuilt => "SortFieldAdministrativeYearBuilt",
+            Self::LinkRssi => "SortFieldLinkRssi",
+            Self::LinkSnr => "SortFieldLinkSnr",
+            Self::LinkLastLatency => "SortFieldLinkLastLatency",
+            Self::LinkAvgLatency => "SortFieldLinkAvgLatency",
+            Self::LinkQuality => "SortFieldLinkQuality",
+            Self::LinkLastSeen => "SortFieldLinkLastSeen",
+            Self::LinkPacketRate => "SortFieldLinkPacketRate",
+            Self::PowerBatteryCharge => "SortFieldPowerBatteryCharge",
+            Self::PowerVoltage => "SortFieldPowerVoltage",
+            Self::PowerRemainingSeconds => "SortFieldPowerRemainingSeconds",
+            Self::PowerCurrent => "SortFieldPowerCurrent",
+            Self::PowerCapacityUsed => "SortFieldPowerCapacityUsed",
+            Self::DeviceState => "SortFieldDeviceState",
+            Self::MetricValue => "SortFieldMetricValue",
+            Self::MetricMeasuredAt => "SortFieldMetricMeasuredAt",
+            Self::MetricAlertLevel => "SortFieldMetricAlertLevel",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SortFieldUnspecified" => Some(Self::Unspecified),
+            "SortFieldLabel" => Some(Self::Label),
+            "SortFieldPriority" => Some(Self::Priority),
+            "SortFieldLifetimeFrom" => Some(Self::LifetimeFrom),
+            "SortFieldLifetimeUntil" => Some(Self::LifetimeUntil),
+            "SortFieldLifetimeFresh" => Some(Self::LifetimeFresh),
+            "SortFieldGeoLatitude" => Some(Self::GeoLatitude),
+            "SortFieldGeoLongitude" => Some(Self::GeoLongitude),
+            "SortFieldGeoAltitude" => Some(Self::GeoAltitude),
+            "SortFieldClassificationIdentity" => Some(Self::ClassificationIdentity),
+            "SortFieldClassificationDimension" => Some(Self::ClassificationDimension),
+            "SortFieldBearingAzimuth" => Some(Self::BearingAzimuth),
+            "SortFieldBearingElevation" => Some(Self::BearingElevation),
+            "SortFieldAdministrativeLength" => Some(Self::AdministrativeLength),
+            "SortFieldAdministrativeWidth" => Some(Self::AdministrativeWidth),
+            "SortFieldAdministrativeHeight" => Some(Self::AdministrativeHeight),
+            "SortFieldAdministrativeTonnage" => Some(Self::AdministrativeTonnage),
+            "SortFieldAdministrativeEnginePower" => Some(Self::AdministrativeEnginePower),
+            "SortFieldAdministrativeYearBuilt" => Some(Self::AdministrativeYearBuilt),
+            "SortFieldLinkRssi" => Some(Self::LinkRssi),
+            "SortFieldLinkSnr" => Some(Self::LinkSnr),
+            "SortFieldLinkLastLatency" => Some(Self::LinkLastLatency),
+            "SortFieldLinkAvgLatency" => Some(Self::LinkAvgLatency),
+            "SortFieldLinkQuality" => Some(Self::LinkQuality),
+            "SortFieldLinkLastSeen" => Some(Self::LinkLastSeen),
+            "SortFieldLinkPacketRate" => Some(Self::LinkPacketRate),
+            "SortFieldPowerBatteryCharge" => Some(Self::PowerBatteryCharge),
+            "SortFieldPowerVoltage" => Some(Self::PowerVoltage),
+            "SortFieldPowerRemainingSeconds" => Some(Self::PowerRemainingSeconds),
+            "SortFieldPowerCurrent" => Some(Self::PowerCurrent),
+            "SortFieldPowerCapacityUsed" => Some(Self::PowerCapacityUsed),
+            "SortFieldDeviceState" => Some(Self::DeviceState),
+            "SortFieldMetricValue" => Some(Self::MetricValue),
+            "SortFieldMetricMeasuredAt" => Some(Self::MetricMeasuredAt),
+            "SortFieldMetricAlertLevel" => Some(Self::MetricAlertLevel),
             _ => None,
         }
     }
