@@ -1,7 +1,7 @@
 .PHONY: generate clean
 
 generate:
-	go generate ./...
+	buf generate
 
 clean:
 	rm -f *_pb.go *_grpc.pb.go *connect.go
