@@ -4,7 +4,7 @@
 
 import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { JsonObject, Message } from "@bufbuild/protobuf";
-import type { MetricComponent } from "./metrics_pb.js";
+import type { MetricComponent, MetricKind } from "./metrics_pb.js";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { LocalGeometry, PlanarGeometry } from "./geometry_pb.js";
 
@@ -2726,6 +2726,46 @@ export declare type ChannelFilter = Message<"world.ChannelFilter"> & {
 export declare const ChannelFilterSchema: GenMessage<ChannelFilter>;
 
 /**
+ * @generated from message world.SortOption
+ */
+export declare type SortOption = Message<"world.SortOption"> & {
+  /**
+   * @generated from field: world.SortField field = 1;
+   */
+  field: SortField;
+
+  /**
+   * @generated from field: bool descending = 2;
+   */
+  descending: boolean;
+
+  /**
+   * for SortFieldMetric*
+   *
+   * @generated from oneof world.SortOption.metric_selector
+   */
+  metricSelector: {
+    /**
+     * @generated from field: uint32 metric_id = 20;
+     */
+    value: number;
+    case: "metricId";
+  } | {
+    /**
+     * @generated from field: world.MetricKind metric_kind = 21;
+     */
+    value: MetricKind;
+    case: "metricKind";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message world.SortOption.
+ * Use `create(SortOptionSchema)` to create a new message.
+ */
+export declare const SortOptionSchema: GenMessage<SortOption>;
+
+/**
  * @generated from message world.WatchBehavior
  */
 export declare type WatchBehavior = Message<"world.WatchBehavior"> & {
@@ -2769,6 +2809,13 @@ export declare type ListEntitiesRequest = Message<"world.ListEntitiesRequest"> &
    * @generated from field: world.EntityFilter filter = 2;
    */
   filter?: EntityFilter;
+
+  /**
+   * sort by. more than 2 are actually ignored
+   *
+   * @generated from field: repeated world.SortOption sort = 3;
+   */
+  sort: SortOption[];
 
   /**
    * @generated from field: optional world.WatchBehavior behaviour = 4;
@@ -3593,6 +3640,209 @@ export enum ConfigurableState {
  * Describes the enum world.ConfigurableState.
  */
 export declare const ConfigurableStateSchema: GenEnum<ConfigurableState>;
+
+/**
+ * @generated from enum world.SortField
+ */
+export enum SortField {
+  /**
+   * @generated from enum value: SortFieldUnspecified = 0;
+   */
+  SortFieldUnspecified = 0,
+
+  /**
+   * @generated from enum value: SortFieldLabel = 1;
+   */
+  SortFieldLabel = 1,
+
+  /**
+   * @generated from enum value: SortFieldPriority = 2;
+   */
+  SortFieldPriority = 2,
+
+  /**
+   * lifetime
+   *
+   * @generated from enum value: SortFieldLifetimeFrom = 10;
+   */
+  SortFieldLifetimeFrom = 10,
+
+  /**
+   * @generated from enum value: SortFieldLifetimeUntil = 11;
+   */
+  SortFieldLifetimeUntil = 11,
+
+  /**
+   * @generated from enum value: SortFieldLifetimeFresh = 12;
+   */
+  SortFieldLifetimeFresh = 12,
+
+  /**
+   * geo
+   *
+   * @generated from enum value: SortFieldGeoLatitude = 20;
+   */
+  SortFieldGeoLatitude = 20,
+
+  /**
+   * @generated from enum value: SortFieldGeoLongitude = 21;
+   */
+  SortFieldGeoLongitude = 21,
+
+  /**
+   * @generated from enum value: SortFieldGeoAltitude = 22;
+   */
+  SortFieldGeoAltitude = 22,
+
+  /**
+   * classification
+   *
+   * @generated from enum value: SortFieldClassificationIdentity = 30;
+   */
+  SortFieldClassificationIdentity = 30,
+
+  /**
+   * @generated from enum value: SortFieldClassificationDimension = 31;
+   */
+  SortFieldClassificationDimension = 31,
+
+  /**
+   * bearing
+   *
+   * @generated from enum value: SortFieldBearingAzimuth = 50;
+   */
+  SortFieldBearingAzimuth = 50,
+
+  /**
+   * @generated from enum value: SortFieldBearingElevation = 51;
+   */
+  SortFieldBearingElevation = 51,
+
+  /**
+   * administrative
+   *
+   * @generated from enum value: SortFieldAdministrativeLength = 70;
+   */
+  SortFieldAdministrativeLength = 70,
+
+  /**
+   * @generated from enum value: SortFieldAdministrativeWidth = 71;
+   */
+  SortFieldAdministrativeWidth = 71,
+
+  /**
+   * @generated from enum value: SortFieldAdministrativeHeight = 72;
+   */
+  SortFieldAdministrativeHeight = 72,
+
+  /**
+   * @generated from enum value: SortFieldAdministrativeTonnage = 73;
+   */
+  SortFieldAdministrativeTonnage = 73,
+
+  /**
+   * @generated from enum value: SortFieldAdministrativeEnginePower = 74;
+   */
+  SortFieldAdministrativeEnginePower = 74,
+
+  /**
+   * @generated from enum value: SortFieldAdministrativeYearBuilt = 75;
+   */
+  SortFieldAdministrativeYearBuilt = 75,
+
+  /**
+   * link
+   *
+   * @generated from enum value: SortFieldLinkRssi = 90;
+   */
+  SortFieldLinkRssi = 90,
+
+  /**
+   * @generated from enum value: SortFieldLinkSnr = 91;
+   */
+  SortFieldLinkSnr = 91,
+
+  /**
+   * @generated from enum value: SortFieldLinkLastLatency = 92;
+   */
+  SortFieldLinkLastLatency = 92,
+
+  /**
+   * @generated from enum value: SortFieldLinkAvgLatency = 93;
+   */
+  SortFieldLinkAvgLatency = 93,
+
+  /**
+   * @generated from enum value: SortFieldLinkQuality = 94;
+   */
+  SortFieldLinkQuality = 94,
+
+  /**
+   * @generated from enum value: SortFieldLinkLastSeen = 95;
+   */
+  SortFieldLinkLastSeen = 95,
+
+  /**
+   * @generated from enum value: SortFieldLinkPacketRate = 96;
+   */
+  SortFieldLinkPacketRate = 96,
+
+  /**
+   * power
+   *
+   * @generated from enum value: SortFieldPowerBatteryCharge = 100;
+   */
+  SortFieldPowerBatteryCharge = 100,
+
+  /**
+   * @generated from enum value: SortFieldPowerVoltage = 101;
+   */
+  SortFieldPowerVoltage = 101,
+
+  /**
+   * @generated from enum value: SortFieldPowerRemainingSeconds = 102;
+   */
+  SortFieldPowerRemainingSeconds = 102,
+
+  /**
+   * @generated from enum value: SortFieldPowerCurrent = 103;
+   */
+  SortFieldPowerCurrent = 103,
+
+  /**
+   * @generated from enum value: SortFieldPowerCapacityUsed = 104;
+   */
+  SortFieldPowerCapacityUsed = 104,
+
+  /**
+   * device
+   *
+   * @generated from enum value: SortFieldDeviceState = 130;
+   */
+  SortFieldDeviceState = 130,
+
+  /**
+   * metric
+   *
+   * @generated from enum value: SortFieldMetricValue = 150;
+   */
+  SortFieldMetricValue = 150,
+
+  /**
+   * @generated from enum value: SortFieldMetricMeasuredAt = 151;
+   */
+  SortFieldMetricMeasuredAt = 151,
+
+  /**
+   * @generated from enum value: SortFieldMetricAlertLevel = 152;
+   */
+  SortFieldMetricAlertLevel = 152,
+}
+
+/**
+ * Describes the enum world.SortField.
+ */
+export declare const SortFieldSchema: GenEnum<SortField>;
 
 /**
  * @generated from enum world.EntityChange

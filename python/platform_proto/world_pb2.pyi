@@ -110,6 +110,44 @@ class ConfigurableState(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     ConfigurableStateConflict: _ClassVar[ConfigurableState]
     ConfigurableStateScheduled: _ClassVar[ConfigurableState]
 
+class SortField(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    SortFieldUnspecified: _ClassVar[SortField]
+    SortFieldLabel: _ClassVar[SortField]
+    SortFieldPriority: _ClassVar[SortField]
+    SortFieldLifetimeFrom: _ClassVar[SortField]
+    SortFieldLifetimeUntil: _ClassVar[SortField]
+    SortFieldLifetimeFresh: _ClassVar[SortField]
+    SortFieldGeoLatitude: _ClassVar[SortField]
+    SortFieldGeoLongitude: _ClassVar[SortField]
+    SortFieldGeoAltitude: _ClassVar[SortField]
+    SortFieldClassificationIdentity: _ClassVar[SortField]
+    SortFieldClassificationDimension: _ClassVar[SortField]
+    SortFieldBearingAzimuth: _ClassVar[SortField]
+    SortFieldBearingElevation: _ClassVar[SortField]
+    SortFieldAdministrativeLength: _ClassVar[SortField]
+    SortFieldAdministrativeWidth: _ClassVar[SortField]
+    SortFieldAdministrativeHeight: _ClassVar[SortField]
+    SortFieldAdministrativeTonnage: _ClassVar[SortField]
+    SortFieldAdministrativeEnginePower: _ClassVar[SortField]
+    SortFieldAdministrativeYearBuilt: _ClassVar[SortField]
+    SortFieldLinkRssi: _ClassVar[SortField]
+    SortFieldLinkSnr: _ClassVar[SortField]
+    SortFieldLinkLastLatency: _ClassVar[SortField]
+    SortFieldLinkAvgLatency: _ClassVar[SortField]
+    SortFieldLinkQuality: _ClassVar[SortField]
+    SortFieldLinkLastSeen: _ClassVar[SortField]
+    SortFieldLinkPacketRate: _ClassVar[SortField]
+    SortFieldPowerBatteryCharge: _ClassVar[SortField]
+    SortFieldPowerVoltage: _ClassVar[SortField]
+    SortFieldPowerRemainingSeconds: _ClassVar[SortField]
+    SortFieldPowerCurrent: _ClassVar[SortField]
+    SortFieldPowerCapacityUsed: _ClassVar[SortField]
+    SortFieldDeviceState: _ClassVar[SortField]
+    SortFieldMetricValue: _ClassVar[SortField]
+    SortFieldMetricMeasuredAt: _ClassVar[SortField]
+    SortFieldMetricAlertLevel: _ClassVar[SortField]
+
 class EntityChange(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
     EntityChangeInvalid: _ClassVar[EntityChange]
@@ -229,6 +267,41 @@ ConfigurableStateActive: ConfigurableState
 ConfigurableStateFailed: ConfigurableState
 ConfigurableStateConflict: ConfigurableState
 ConfigurableStateScheduled: ConfigurableState
+SortFieldUnspecified: SortField
+SortFieldLabel: SortField
+SortFieldPriority: SortField
+SortFieldLifetimeFrom: SortField
+SortFieldLifetimeUntil: SortField
+SortFieldLifetimeFresh: SortField
+SortFieldGeoLatitude: SortField
+SortFieldGeoLongitude: SortField
+SortFieldGeoAltitude: SortField
+SortFieldClassificationIdentity: SortField
+SortFieldClassificationDimension: SortField
+SortFieldBearingAzimuth: SortField
+SortFieldBearingElevation: SortField
+SortFieldAdministrativeLength: SortField
+SortFieldAdministrativeWidth: SortField
+SortFieldAdministrativeHeight: SortField
+SortFieldAdministrativeTonnage: SortField
+SortFieldAdministrativeEnginePower: SortField
+SortFieldAdministrativeYearBuilt: SortField
+SortFieldLinkRssi: SortField
+SortFieldLinkSnr: SortField
+SortFieldLinkLastLatency: SortField
+SortFieldLinkAvgLatency: SortField
+SortFieldLinkQuality: SortField
+SortFieldLinkLastSeen: SortField
+SortFieldLinkPacketRate: SortField
+SortFieldPowerBatteryCharge: SortField
+SortFieldPowerVoltage: SortField
+SortFieldPowerRemainingSeconds: SortField
+SortFieldPowerCurrent: SortField
+SortFieldPowerCapacityUsed: SortField
+SortFieldDeviceState: SortField
+SortFieldMetricValue: SortField
+SortFieldMetricMeasuredAt: SortField
+SortFieldMetricAlertLevel: SortField
 EntityChangeInvalid: EntityChange
 EntityChangeUpdated: EntityChange
 EntityChangeExpired: EntityChange
@@ -1198,6 +1271,18 @@ class ChannelFilter(_message.Message):
     name: str
     def __init__(self, name: _Optional[str] = ...) -> None: ...
 
+class SortOption(_message.Message):
+    __slots__ = ("field", "descending", "metric_id", "metric_kind")
+    FIELD_FIELD_NUMBER: _ClassVar[int]
+    DESCENDING_FIELD_NUMBER: _ClassVar[int]
+    METRIC_ID_FIELD_NUMBER: _ClassVar[int]
+    METRIC_KIND_FIELD_NUMBER: _ClassVar[int]
+    field: SortField
+    descending: bool
+    metric_id: int
+    metric_kind: _metrics_pb2.MetricKind
+    def __init__(self, field: _Optional[_Union[SortField, str]] = ..., descending: bool = ..., metric_id: _Optional[int] = ..., metric_kind: _Optional[_Union[_metrics_pb2.MetricKind, str]] = ...) -> None: ...
+
 class WatchBehavior(_message.Message):
     __slots__ = ("max_rate_hz", "min_priority", "keepalive_interval_ms")
     MAX_RATE_HZ_FIELD_NUMBER: _ClassVar[int]
@@ -1209,12 +1294,14 @@ class WatchBehavior(_message.Message):
     def __init__(self, max_rate_hz: _Optional[float] = ..., min_priority: _Optional[_Union[Priority, str]] = ..., keepalive_interval_ms: _Optional[int] = ...) -> None: ...
 
 class ListEntitiesRequest(_message.Message):
-    __slots__ = ("filter", "behaviour")
+    __slots__ = ("filter", "sort", "behaviour")
     FILTER_FIELD_NUMBER: _ClassVar[int]
+    SORT_FIELD_NUMBER: _ClassVar[int]
     BEHAVIOUR_FIELD_NUMBER: _ClassVar[int]
     filter: EntityFilter
+    sort: _containers.RepeatedCompositeFieldContainer[SortOption]
     behaviour: WatchBehavior
-    def __init__(self, filter: _Optional[_Union[EntityFilter, _Mapping]] = ..., behaviour: _Optional[_Union[WatchBehavior, _Mapping]] = ...) -> None: ...
+    def __init__(self, filter: _Optional[_Union[EntityFilter, _Mapping]] = ..., sort: _Optional[_Iterable[_Union[SortOption, _Mapping]]] = ..., behaviour: _Optional[_Union[WatchBehavior, _Mapping]] = ...) -> None: ...
 
 class ListEntitiesResponse(_message.Message):
     __slots__ = ("entities",)
