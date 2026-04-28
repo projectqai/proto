@@ -1131,13 +1131,54 @@ export declare type TaskableAssignee = Message<"world.TaskableAssignee"> & {
 export declare const TaskableAssigneeSchema: GenMessage<TaskableAssignee>;
 
 /**
+ * @generated from message world.TaskableTarget
+ */
+export declare type TaskableTarget = Message<"world.TaskableTarget"> & {
+  /**
+   * if set, the task prefers entities in this list as target.
+   *
+   * @generated from field: optional world.EntityFilter filter = 1;
+   */
+  filter?: EntityFilter;
+
+  /**
+   * if set, the task prefers entities that are inside the geo regions defined by these entities
+   *
+   * @generated from field: repeated string within = 2;
+   */
+  within: string[];
+
+  /**
+   * maximum number of targets per execution. default = 1
+   *
+   * @generated from field: optional uint32 max_targets = 3;
+   */
+  maxTargets?: number;
+
+  /**
+   * if set, the task accepts an arbitrary geo position
+   *
+   * @generated from field: optional bool position = 4;
+   */
+  position?: boolean;
+};
+
+/**
+ * Describes the message world.TaskableTarget.
+ * Use `create(TaskableTargetSchema)` to create a new message.
+ */
+export declare const TaskableTargetSchema: GenMessage<TaskableTarget>;
+
+/**
  * @generated from message world.TaskableComponent
  */
 export declare type TaskableComponent = Message<"world.TaskableComponent"> & {
   /**
-   * @generated from field: optional string reserved = 1;
+   * priority for which task should be shown first. higher = more important
+   *
+   * @generated from field: optional uint32 priority = 1;
    */
-  reserved?: string;
+  priority?: number;
 
   /**
    * @generated from field: optional string label = 2;
@@ -1163,6 +1204,40 @@ export declare type TaskableComponent = Message<"world.TaskableComponent"> & {
    * @generated from field: world.TaskableMode mode = 6;
    */
   mode: TaskableMode;
+
+  /**
+   * @generated from field: optional world.TaskableTarget target = 7;
+   */
+  target?: TaskableTarget;
+
+  /**
+   * @generated from field: optional string icon = 8;
+   */
+  icon?: string;
+
+  /**
+   * a human or LLM readable description of the effect this task will have.
+   * similar to llm tool descriptions, i.e. "power up the sensor", "closes the entry gate"
+   *
+   * @generated from field: optional string effect = 9;
+   */
+  effect?: string;
+
+  /**
+   * this can be used by task providers to emit multiple alternative options of the same task ranked by priority
+   * for example [ {grouping: target.gate, assignee: camera1, grouping_priority: 1000 } ,
+   *    {grouping: target.gate, assignee: camera2, grouping_priority:1001 }]
+   * would show only the camera thats closer or less busy as option first _after_ determining if the task is shown at all
+   * a ui might also decide to display all alternatives.
+   *
+   * @generated from field: optional string grouping = 10;
+   */
+  grouping?: string;
+
+  /**
+   * @generated from field: optional uint32 grouping_priority = 11;
+   */
+  groupingPriority?: number;
 };
 
 /**
@@ -1176,6 +1251,27 @@ export declare const TaskableComponentSchema: GenMessage<TaskableComponent>;
  * Created by RunTask, referencing a TaskableComponent entity as the definition.
  * The controller that owns the taskable watches for these and executes them.
  *
+ * @generated from message world.TaskExecutionTarget
+ */
+export declare type TaskExecutionTarget = Message<"world.TaskExecutionTarget"> & {
+  /**
+   * @generated from field: repeated string entity = 1;
+   */
+  entity: string[];
+
+  /**
+   * @generated from field: optional world.Geometry position = 2;
+   */
+  position?: Geometry;
+};
+
+/**
+ * Describes the message world.TaskExecutionTarget.
+ * Use `create(TaskExecutionTargetSchema)` to create a new message.
+ */
+export declare const TaskExecutionTargetSchema: GenMessage<TaskExecutionTarget>;
+
+/**
  * @generated from message world.TaskExecutionComponent
  */
 export declare type TaskExecutionComponent = Message<"world.TaskExecutionComponent"> & {
@@ -1213,6 +1309,11 @@ export declare type TaskExecutionComponent = Message<"world.TaskExecutionCompone
    * @generated from field: optional uint32 priority = 5;
    */
   priority?: number;
+
+  /**
+   * @generated from field: optional world.TaskExecutionTarget target = 6;
+   */
+  target?: TaskExecutionTarget;
 };
 
 /**
@@ -3072,6 +3173,11 @@ export declare type RunTaskRequest = Message<"world.RunTaskRequest"> & {
    * @generated from field: optional uint32 priority = 2;
    */
   priority?: number;
+
+  /**
+   * @generated from field: optional world.TaskExecutionTarget target = 6;
+   */
+  target?: TaskExecutionTarget;
 };
 
 /**

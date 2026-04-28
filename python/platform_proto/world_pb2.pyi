@@ -734,35 +734,67 @@ class TaskableAssignee(_message.Message):
     entityId: str
     def __init__(self, entityId: _Optional[str] = ...) -> None: ...
 
+class TaskableTarget(_message.Message):
+    __slots__ = ("filter", "within", "max_targets", "position")
+    FILTER_FIELD_NUMBER: _ClassVar[int]
+    WITHIN_FIELD_NUMBER: _ClassVar[int]
+    MAX_TARGETS_FIELD_NUMBER: _ClassVar[int]
+    POSITION_FIELD_NUMBER: _ClassVar[int]
+    filter: EntityFilter
+    within: _containers.RepeatedScalarFieldContainer[str]
+    max_targets: int
+    position: bool
+    def __init__(self, filter: _Optional[_Union[EntityFilter, _Mapping]] = ..., within: _Optional[_Iterable[str]] = ..., max_targets: _Optional[int] = ..., position: bool = ...) -> None: ...
+
 class TaskableComponent(_message.Message):
-    __slots__ = ("reserved", "label", "context", "assignee", "schema", "mode")
-    RESERVED_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ("priority", "label", "context", "assignee", "schema", "mode", "target", "icon", "effect", "grouping", "grouping_priority")
+    PRIORITY_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     CONTEXT_FIELD_NUMBER: _ClassVar[int]
     ASSIGNEE_FIELD_NUMBER: _ClassVar[int]
     SCHEMA_FIELD_NUMBER: _ClassVar[int]
     MODE_FIELD_NUMBER: _ClassVar[int]
-    reserved: str
+    TARGET_FIELD_NUMBER: _ClassVar[int]
+    ICON_FIELD_NUMBER: _ClassVar[int]
+    EFFECT_FIELD_NUMBER: _ClassVar[int]
+    GROUPING_FIELD_NUMBER: _ClassVar[int]
+    GROUPING_PRIORITY_FIELD_NUMBER: _ClassVar[int]
+    priority: int
     label: str
     context: _containers.RepeatedCompositeFieldContainer[TaskableContext]
     assignee: _containers.RepeatedCompositeFieldContainer[TaskableAssignee]
     schema: _struct_pb2.Struct
     mode: TaskableMode
-    def __init__(self, reserved: _Optional[str] = ..., label: _Optional[str] = ..., context: _Optional[_Iterable[_Union[TaskableContext, _Mapping]]] = ..., assignee: _Optional[_Iterable[_Union[TaskableAssignee, _Mapping]]] = ..., schema: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., mode: _Optional[_Union[TaskableMode, str]] = ...) -> None: ...
+    target: TaskableTarget
+    icon: str
+    effect: str
+    grouping: str
+    grouping_priority: int
+    def __init__(self, priority: _Optional[int] = ..., label: _Optional[str] = ..., context: _Optional[_Iterable[_Union[TaskableContext, _Mapping]]] = ..., assignee: _Optional[_Iterable[_Union[TaskableAssignee, _Mapping]]] = ..., schema: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., mode: _Optional[_Union[TaskableMode, str]] = ..., target: _Optional[_Union[TaskableTarget, _Mapping]] = ..., icon: _Optional[str] = ..., effect: _Optional[str] = ..., grouping: _Optional[str] = ..., grouping_priority: _Optional[int] = ...) -> None: ...
+
+class TaskExecutionTarget(_message.Message):
+    __slots__ = ("entity", "position")
+    ENTITY_FIELD_NUMBER: _ClassVar[int]
+    POSITION_FIELD_NUMBER: _ClassVar[int]
+    entity: _containers.RepeatedScalarFieldContainer[str]
+    position: Geometry
+    def __init__(self, entity: _Optional[_Iterable[str]] = ..., position: _Optional[_Union[Geometry, _Mapping]] = ...) -> None: ...
 
 class TaskExecutionComponent(_message.Message):
-    __slots__ = ("task", "parameters", "state", "reason", "priority")
+    __slots__ = ("task", "parameters", "state", "reason", "priority", "target")
     TASK_FIELD_NUMBER: _ClassVar[int]
     PARAMETERS_FIELD_NUMBER: _ClassVar[int]
     STATE_FIELD_NUMBER: _ClassVar[int]
     REASON_FIELD_NUMBER: _ClassVar[int]
     PRIORITY_FIELD_NUMBER: _ClassVar[int]
+    TARGET_FIELD_NUMBER: _ClassVar[int]
     task: str
     parameters: _struct_pb2.Struct
     state: TaskExecutionState
     reason: str
     priority: int
-    def __init__(self, task: _Optional[str] = ..., parameters: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., state: _Optional[_Union[TaskExecutionState, str]] = ..., reason: _Optional[str] = ..., priority: _Optional[int] = ...) -> None: ...
+    target: TaskExecutionTarget
+    def __init__(self, task: _Optional[str] = ..., parameters: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., state: _Optional[_Union[TaskExecutionState, str]] = ..., reason: _Optional[str] = ..., priority: _Optional[int] = ..., target: _Optional[_Union[TaskExecutionTarget, _Mapping]] = ...) -> None: ...
 
 class KinematicsEnu(_message.Message):
     __slots__ = ("east", "north", "up", "covariance")
@@ -1386,12 +1418,14 @@ class ObserverState(_message.Message):
     def __init__(self, geo: _Optional[_Union[Geometry, _Mapping]] = ..., viewHistory: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class RunTaskRequest(_message.Message):
-    __slots__ = ("entityId", "priority")
+    __slots__ = ("entityId", "priority", "target")
     ENTITYID_FIELD_NUMBER: _ClassVar[int]
     PRIORITY_FIELD_NUMBER: _ClassVar[int]
+    TARGET_FIELD_NUMBER: _ClassVar[int]
     entityId: str
     priority: int
-    def __init__(self, entityId: _Optional[str] = ..., priority: _Optional[int] = ...) -> None: ...
+    target: TaskExecutionTarget
+    def __init__(self, entityId: _Optional[str] = ..., priority: _Optional[int] = ..., target: _Optional[_Union[TaskExecutionTarget, _Mapping]] = ...) -> None: ...
 
 class RunTaskResponse(_message.Message):
     __slots__ = ("executionId", "status", "humanReadableReason")

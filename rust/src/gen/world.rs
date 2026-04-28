@@ -1213,9 +1213,25 @@ pub struct TaskableAssignee {
     pub entity_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TaskableTarget {
+    /// if set, the task prefers entities in this list as target.
+    #[prost(message, optional, tag = "1")]
+    pub filter: ::core::option::Option<EntityFilter>,
+    /// if set, the task prefers entities that are inside the geo regions defined by these entities
+    #[prost(string, repeated, tag = "2")]
+    pub within: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// maximum number of targets per execution. default = 1
+    #[prost(uint32, optional, tag = "3")]
+    pub max_targets: ::core::option::Option<u32>,
+    /// if set, the task accepts an arbitrary geo position
+    #[prost(bool, optional, tag = "4")]
+    pub position: ::core::option::Option<bool>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskableComponent {
-    #[prost(string, optional, tag = "1")]
-    pub reserved: ::core::option::Option<::prost::alloc::string::String>,
+    /// priority for which task should be shown first. higher = more important
+    #[prost(uint32, optional, tag = "1")]
+    pub priority: ::core::option::Option<u32>,
     #[prost(string, optional, tag = "2")]
     pub label: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(message, repeated, tag = "3")]
@@ -1226,10 +1242,34 @@ pub struct TaskableComponent {
     pub schema: ::core::option::Option<::prost_types::Struct>,
     #[prost(enumeration = "TaskableMode", tag = "6")]
     pub mode: i32,
+    #[prost(message, optional, tag = "7")]
+    pub target: ::core::option::Option<TaskableTarget>,
+    #[prost(string, optional, tag = "8")]
+    pub icon: ::core::option::Option<::prost::alloc::string::String>,
+    /// a human or LLM readable description of the effect this task will have.
+    /// similar to llm tool descriptions, i.e. "power up the sensor", "closes the entry gate"
+    #[prost(string, optional, tag = "9")]
+    pub effect: ::core::option::Option<::prost::alloc::string::String>,
+    /// this can be used by task providers to emit multiple alternative options of the same task ranked by priority
+    /// for example [ {grouping: target.gate, assignee: camera1, grouping_priority: 1000 } ,
+    ///     {grouping: target.gate, assignee: camera2, grouping_priority:1001 }]
+    /// would show only the camera thats closer or less busy as option first _after_ determining if the task is shown at all
+    /// a ui might also decide to display all alternatives.
+    #[prost(string, optional, tag = "10")]
+    pub grouping: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(uint32, optional, tag = "11")]
+    pub grouping_priority: ::core::option::Option<u32>,
 }
 /// An instance of a task being executed.
 /// Created by RunTask, referencing a TaskableComponent entity as the definition.
 /// The controller that owns the taskable watches for these and executes them.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TaskExecutionTarget {
+    #[prost(string, repeated, tag = "1")]
+    pub entity: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "2")]
+    pub position: ::core::option::Option<Geometry>,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskExecutionComponent {
     /// entity ID of the TaskableComponent that defines this task
@@ -1247,6 +1287,8 @@ pub struct TaskExecutionComponent {
     /// priority level for PriorityQueue mode (higher = more important)
     #[prost(uint32, optional, tag = "5")]
     pub priority: ::core::option::Option<u32>,
+    #[prost(message, optional, tag = "6")]
+    pub target: ::core::option::Option<TaskExecutionTarget>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct KinematicsEnu {
@@ -1955,6 +1997,8 @@ pub struct RunTaskRequest {
     /// priority for PriorityQueue mode (higher = more important)
     #[prost(uint32, optional, tag = "2")]
     pub priority: ::core::option::Option<u32>,
+    #[prost(message, optional, tag = "6")]
+    pub target: ::core::option::Option<TaskExecutionTarget>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct RunTaskResponse {

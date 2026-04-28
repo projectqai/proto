@@ -397,13 +397,44 @@ enum TaskableMode {
   TaskableModePriorityQueue = 3;
 }
 
+message TaskableTarget {
+  // if set, the task prefers entities in this list as target.
+  optional EntityFilter filter = 1;
+
+  // if set, the task prefers entities (or positions) that are inside the geo regions defined by these entities
+  repeated string within = 2;
+
+  // maximum number of targets per execution. default = 1
+  optional uint32 max_targets = 3;
+
+  // if set, the task accepts an arbitrary geo position
+  optional bool position = 4;
+}
+
 message TaskableComponent {
-  optional string reserved = 1;
+  // priority for which task should be shown first. higher = more important
+  optional uint32 priority = 1;
+
   optional string label = 2;
   repeated TaskableContext context = 3;
   repeated TaskableAssignee assignee = 4;
   google.protobuf.Struct schema = 5;
   TaskableMode mode = 6;
+  optional TaskableTarget target = 7;
+
+  optional string icon = 8;
+
+  // a human or LLM readable description of the effect this task will have.
+  // similar to llm tool descriptions, i.e. "power up the sensor", "closes the entry gate"
+  optional string effect = 9;
+
+  // this can be used by task providers to emit multiple alternative options of the same task ranked by priority
+  // for example [ {grouping: target.gate, assignee: camera1, grouping_priority: 1000 } ,
+  //    {grouping: target.gate, assignee: camera2, grouping_priority:1001 }]
+  // would show only the camera thats closer or less busy as option first _after_ determining if the task is shown at all
+  // a ui might also decide to display all alternatives.
+  optional string grouping = 10;
+  optional uint32 grouping_priority = 11;
 }
 
 enum TaskExecutionState {
@@ -416,6 +447,11 @@ enum TaskExecutionState {
 // An instance of a task being executed.
 // Created by RunTask, referencing a TaskableComponent entity as the definition.
 // The controller that owns the taskable watches for these and executes them.
+message TaskExecutionTarget {
+  repeated string entity = 1;
+  optional Geometry position = 2;
+}
+
 message TaskExecutionComponent {
   // entity ID of the TaskableComponent that defines this task
   string task = 1;
@@ -431,6 +467,8 @@ message TaskExecutionComponent {
 
   // priority level for PriorityQueue mode (higher = more important)
   optional uint32 priority = 5;
+
+  optional TaskExecutionTarget target = 6;
 }
 
 message KinematicsEnu {
@@ -1129,6 +1167,8 @@ message RunTaskRequest {
 
   // priority for PriorityQueue mode (higher = more important)
   optional uint32 priority = 2;
+
+  optional TaskExecutionTarget target = 6;
 }
 
 enum TaskStatus {
