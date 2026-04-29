@@ -1217,7 +1217,7 @@ pub struct TaskableTarget {
     /// if set, the task prefers entities in this list as target.
     #[prost(message, optional, tag = "1")]
     pub filter: ::core::option::Option<EntityFilter>,
-    /// if set, the task prefers entities that are inside the geo regions defined by these entities
+    /// if set, the task prefers entities (or positions) that are inside the geo regions defined by these entities
     #[prost(string, repeated, tag = "2")]
     pub within: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     /// maximum number of targets per execution. default = 1
@@ -2016,6 +2016,20 @@ pub struct HardResetRequest {
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct HardResetResponse {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TimeSyncRequest {
+    #[prost(message, optional, tag = "1")]
+    pub t1: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TimeSyncResponse {
+    #[prost(message, optional, tag = "1")]
+    pub t1: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "2")]
+    pub t2: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "3")]
+    pub t3: ::core::option::Option<::prost_types::Timestamp>,
+}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum Priority {
@@ -3112,6 +3126,31 @@ pub mod world_service_client {
                 .insert(GrpcMethod::new("world.WorldService", "HardReset"));
             self.inner.unary(req, path, codec).await
         }
+        /// NTP-style time synchronization for federation clock offset estimation
+        pub async fn time_sync(
+            &mut self,
+            request: impl tonic::IntoRequest<super::TimeSyncRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::TimeSyncResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/world.WorldService/TimeSync",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("world.WorldService", "TimeSync"));
+            self.inner.unary(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -3192,6 +3231,14 @@ pub mod world_service_server {
             request: tonic::Request<super::HardResetRequest>,
         ) -> std::result::Result<
             tonic::Response<super::HardResetResponse>,
+            tonic::Status,
+        >;
+        /// NTP-style time synchronization for federation clock offset estimation
+        async fn time_sync(
+            &self,
+            request: tonic::Request<super::TimeSyncRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::TimeSyncResponse>,
             tonic::Status,
         >;
     }
@@ -3618,6 +3665,51 @@ pub mod world_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = HardResetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/world.WorldService/TimeSync" => {
+                    #[allow(non_camel_case_types)]
+                    struct TimeSyncSvc<T: WorldService>(pub Arc<T>);
+                    impl<
+                        T: WorldService,
+                    > tonic::server::UnaryService<super::TimeSyncRequest>
+                    for TimeSyncSvc<T> {
+                        type Response = super::TimeSyncResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::TimeSyncRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as WorldService>::time_sync(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = TimeSyncSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

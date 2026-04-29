@@ -27,6 +27,7 @@ const (
 	WorldService_GetLocalNode_FullMethodName  = "/world.WorldService/GetLocalNode"
 	WorldService_RunTask_FullMethodName       = "/world.WorldService/RunTask"
 	WorldService_HardReset_FullMethodName     = "/world.WorldService/HardReset"
+	WorldService_TimeSync_FullMethodName      = "/world.WorldService/TimeSync"
 )
 
 // WorldServiceClient is the client API for WorldService service.
@@ -51,6 +52,8 @@ type WorldServiceClient interface {
 	RunTask(ctx context.Context, in *RunTaskRequest, opts ...grpc.CallOption) (*RunTaskResponse, error)
 	// clear all engine state including persistence
 	HardReset(ctx context.Context, in *HardResetRequest, opts ...grpc.CallOption) (*HardResetResponse, error)
+	// NTP-style time synchronization for federation clock offset estimation
+	TimeSync(ctx context.Context, in *TimeSyncRequest, opts ...grpc.CallOption) (*TimeSyncResponse, error)
 }
 
 type worldServiceClient struct {
@@ -150,6 +153,16 @@ func (c *worldServiceClient) HardReset(ctx context.Context, in *HardResetRequest
 	return out, nil
 }
 
+func (c *worldServiceClient) TimeSync(ctx context.Context, in *TimeSyncRequest, opts ...grpc.CallOption) (*TimeSyncResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(TimeSyncResponse)
+	err := c.cc.Invoke(ctx, WorldService_TimeSync_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorldServiceServer is the server API for WorldService service.
 // All implementations must embed UnimplementedWorldServiceServer
 // for forward compatibility.
@@ -172,6 +185,8 @@ type WorldServiceServer interface {
 	RunTask(context.Context, *RunTaskRequest) (*RunTaskResponse, error)
 	// clear all engine state including persistence
 	HardReset(context.Context, *HardResetRequest) (*HardResetResponse, error)
+	// NTP-style time synchronization for federation clock offset estimation
+	TimeSync(context.Context, *TimeSyncRequest) (*TimeSyncResponse, error)
 	mustEmbedUnimplementedWorldServiceServer()
 }
 
@@ -205,6 +220,9 @@ func (UnimplementedWorldServiceServer) RunTask(context.Context, *RunTaskRequest)
 }
 func (UnimplementedWorldServiceServer) HardReset(context.Context, *HardResetRequest) (*HardResetResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method HardReset not implemented")
+}
+func (UnimplementedWorldServiceServer) TimeSync(context.Context, *TimeSyncRequest) (*TimeSyncResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method TimeSync not implemented")
 }
 func (UnimplementedWorldServiceServer) mustEmbedUnimplementedWorldServiceServer() {}
 func (UnimplementedWorldServiceServer) testEmbeddedByValue()                      {}
@@ -364,6 +382,24 @@ func _WorldService_HardReset_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorldService_TimeSync_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TimeSyncRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorldServiceServer).TimeSync(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorldService_TimeSync_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorldServiceServer).TimeSync(ctx, req.(*TimeSyncRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorldService_ServiceDesc is the grpc.ServiceDesc for WorldService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -398,6 +434,10 @@ var WorldService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "HardReset",
 			Handler:    _WorldService_HardReset_Handler,
+		},
+		{
+			MethodName: "TimeSync",
+			Handler:    _WorldService_TimeSync_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

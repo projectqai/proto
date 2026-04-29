@@ -1190,6 +1190,16 @@ message HardResetRequest {
 
 message HardResetResponse {}
 
+message TimeSyncRequest {
+  google.protobuf.Timestamp t1 = 1;
+}
+
+message TimeSyncResponse {
+  google.protobuf.Timestamp t1 = 1;
+  google.protobuf.Timestamp t2 = 2;
+  google.protobuf.Timestamp t3 = 3;
+}
+
 // interact with the world model
 service WorldService {
   // list entities present in the world once
@@ -1215,4 +1225,7 @@ service WorldService {
 
   // clear all engine state including persistence
   rpc HardReset(HardResetRequest) returns (HardResetResponse);
+
+  // NTP-style time synchronization for federation clock offset estimation
+  rpc TimeSync(TimeSyncRequest) returns (TimeSyncResponse);
 }

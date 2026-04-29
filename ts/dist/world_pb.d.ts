@@ -1142,7 +1142,7 @@ export declare type TaskableTarget = Message<"world.TaskableTarget"> & {
   filter?: EntityFilter;
 
   /**
-   * if set, the task prefers entities that are inside the geo regions defined by these entities
+   * if set, the task prefers entities (or positions) that are inside the geo regions defined by these entities
    *
    * @generated from field: repeated string within = 2;
    */
@@ -3241,6 +3241,48 @@ export declare type HardResetResponse = Message<"world.HardResetResponse"> & {
 export declare const HardResetResponseSchema: GenMessage<HardResetResponse>;
 
 /**
+ * @generated from message world.TimeSyncRequest
+ */
+export declare type TimeSyncRequest = Message<"world.TimeSyncRequest"> & {
+  /**
+   * @generated from field: google.protobuf.Timestamp t1 = 1;
+   */
+  t1?: Timestamp;
+};
+
+/**
+ * Describes the message world.TimeSyncRequest.
+ * Use `create(TimeSyncRequestSchema)` to create a new message.
+ */
+export declare const TimeSyncRequestSchema: GenMessage<TimeSyncRequest>;
+
+/**
+ * @generated from message world.TimeSyncResponse
+ */
+export declare type TimeSyncResponse = Message<"world.TimeSyncResponse"> & {
+  /**
+   * @generated from field: google.protobuf.Timestamp t1 = 1;
+   */
+  t1?: Timestamp;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp t2 = 2;
+   */
+  t2?: Timestamp;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp t3 = 3;
+   */
+  t3?: Timestamp;
+};
+
+/**
+ * Describes the message world.TimeSyncResponse.
+ * Use `create(TimeSyncResponseSchema)` to create a new message.
+ */
+export declare const TimeSyncResponseSchema: GenMessage<TimeSyncResponse>;
+
+/**
  * @generated from enum world.Priority
  */
 export enum Priority {
@@ -4303,6 +4345,16 @@ export declare const WorldService: GenService<{
     methodKind: "unary";
     input: typeof HardResetRequestSchema;
     output: typeof HardResetResponseSchema;
+  },
+  /**
+   * NTP-style time synchronization for federation clock offset estimation
+   *
+   * @generated from rpc world.WorldService.TimeSync
+   */
+  timeSync: {
+    methodKind: "unary";
+    input: typeof TimeSyncRequestSchema;
+    output: typeof TimeSyncResponseSchema;
   },
 }>;
 

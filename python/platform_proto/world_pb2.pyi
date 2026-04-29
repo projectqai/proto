@@ -1446,3 +1446,19 @@ class HardResetRequest(_message.Message):
 class HardResetResponse(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
+
+class TimeSyncRequest(_message.Message):
+    __slots__ = ("t1",)
+    T1_FIELD_NUMBER: _ClassVar[int]
+    t1: _timestamp_pb2.Timestamp
+    def __init__(self, t1: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+
+class TimeSyncResponse(_message.Message):
+    __slots__ = ("t1", "t2", "t3")
+    T1_FIELD_NUMBER: _ClassVar[int]
+    T2_FIELD_NUMBER: _ClassVar[int]
+    T3_FIELD_NUMBER: _ClassVar[int]
+    t1: _timestamp_pb2.Timestamp
+    t2: _timestamp_pb2.Timestamp
+    t3: _timestamp_pb2.Timestamp
+    def __init__(self, t1: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., t2: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., t3: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...

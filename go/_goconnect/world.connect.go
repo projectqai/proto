@@ -53,6 +53,8 @@ const (
 	WorldServiceRunTaskProcedure = "/world.WorldService/RunTask"
 	// WorldServiceHardResetProcedure is the fully-qualified name of the WorldService's HardReset RPC.
 	WorldServiceHardResetProcedure = "/world.WorldService/HardReset"
+	// WorldServiceTimeSyncProcedure is the fully-qualified name of the WorldService's TimeSync RPC.
+	WorldServiceTimeSyncProcedure = "/world.WorldService/TimeSync"
 )
 
 // WorldServiceClient is a client for the world.WorldService service.
@@ -73,6 +75,8 @@ type WorldServiceClient interface {
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
 	// clear all engine state including persistence
 	HardReset(context.Context, *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error)
+	// NTP-style time synchronization for federation clock offset estimation
+	TimeSync(context.Context, *connect.Request[_go.TimeSyncRequest]) (*connect.Response[_go.TimeSyncResponse], error)
 }
 
 // NewWorldServiceClient constructs a client for the world.WorldService service. By default, it uses
@@ -134,6 +138,12 @@ func NewWorldServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(worldServiceMethods.ByName("HardReset")),
 			connect.WithClientOptions(opts...),
 		),
+		timeSync: connect.NewClient[_go.TimeSyncRequest, _go.TimeSyncResponse](
+			httpClient,
+			baseURL+WorldServiceTimeSyncProcedure,
+			connect.WithSchema(worldServiceMethods.ByName("TimeSync")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -147,6 +157,7 @@ type worldServiceClient struct {
 	getLocalNode  *connect.Client[_go.GetLocalNodeRequest, _go.GetLocalNodeResponse]
 	runTask       *connect.Client[_go.RunTaskRequest, _go.RunTaskResponse]
 	hardReset     *connect.Client[_go.HardResetRequest, _go.HardResetResponse]
+	timeSync      *connect.Client[_go.TimeSyncRequest, _go.TimeSyncResponse]
 }
 
 // ListEntities calls world.WorldService.ListEntities.
@@ -189,6 +200,11 @@ func (c *worldServiceClient) HardReset(ctx context.Context, req *connect.Request
 	return c.hardReset.CallUnary(ctx, req)
 }
 
+// TimeSync calls world.WorldService.TimeSync.
+func (c *worldServiceClient) TimeSync(ctx context.Context, req *connect.Request[_go.TimeSyncRequest]) (*connect.Response[_go.TimeSyncResponse], error) {
+	return c.timeSync.CallUnary(ctx, req)
+}
+
 // WorldServiceHandler is an implementation of the world.WorldService service.
 type WorldServiceHandler interface {
 	// list entities present in the world once
@@ -207,6 +223,8 @@ type WorldServiceHandler interface {
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
 	// clear all engine state including persistence
 	HardReset(context.Context, *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error)
+	// NTP-style time synchronization for federation clock offset estimation
+	TimeSync(context.Context, *connect.Request[_go.TimeSyncRequest]) (*connect.Response[_go.TimeSyncResponse], error)
 }
 
 // NewWorldServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -264,6 +282,12 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(worldServiceMethods.ByName("HardReset")),
 		connect.WithHandlerOptions(opts...),
 	)
+	worldServiceTimeSyncHandler := connect.NewUnaryHandler(
+		WorldServiceTimeSyncProcedure,
+		svc.TimeSync,
+		connect.WithSchema(worldServiceMethods.ByName("TimeSync")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/world.WorldService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case WorldServiceListEntitiesProcedure:
@@ -282,6 +306,8 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 			worldServiceRunTaskHandler.ServeHTTP(w, r)
 		case WorldServiceHardResetProcedure:
 			worldServiceHardResetHandler.ServeHTTP(w, r)
+		case WorldServiceTimeSyncProcedure:
+			worldServiceTimeSyncHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -321,4 +347,8 @@ func (UnimplementedWorldServiceHandler) RunTask(context.Context, *connect.Reques
 
 func (UnimplementedWorldServiceHandler) HardReset(context.Context, *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.HardReset is not implemented"))
+}
+
+func (UnimplementedWorldServiceHandler) TimeSync(context.Context, *connect.Request[_go.TimeSyncRequest]) (*connect.Response[_go.TimeSyncResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.TimeSync is not implemented"))
 }
