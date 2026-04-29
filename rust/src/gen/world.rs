@@ -850,6 +850,8 @@ pub struct Entity {
     pub chat: ::core::option::Option<ChatComponent>,
     #[prost(message, optional, tag = "40")]
     pub assembly: ::core::option::Option<AssemblyComponent>,
+    #[prost(message, optional, tag = "63")]
+    pub raster: ::core::option::Option<RasterComponent>,
 }
 /// A controller owns an entity.
 /// The engine normally rejects changes to the entity from non owners,
@@ -1737,6 +1739,33 @@ pub struct AssemblyComponent {
     /// pointer to ids of GeoShapeComponent entities that describe the outline of this assembly
     #[prost(string, repeated, tag = "2")]
     pub outline: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+/// Toggleable map raster.
+/// If north == 0 the url is treated as an XYZ tile template
+/// (e.g. "<https://.../{z}/{x}/{y}.png">).
+/// Otherwise it is a single bitmap covering \[west, south, east, north\] in WGS84.
+/// Live updates: re-push the entity with a different url to swap the image.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct RasterComponent {
+    #[prost(string, tag = "1")]
+    pub url: ::prost::alloc::string::String,
+    #[prost(double, tag = "2")]
+    pub west: f64,
+    #[prost(double, tag = "3")]
+    pub south: f64,
+    #[prost(double, tag = "4")]
+    pub east: f64,
+    #[prost(double, tag = "5")]
+    pub north: f64,
+    /// 0..1
+    #[prost(float, tag = "6")]
+    pub opacity: f32,
+    /// optional human-readable description
+    #[prost(string, tag = "7")]
+    pub description: ::prost::alloc::string::String,
+    /// higher renders on top
+    #[prost(int32, tag = "8")]
+    pub z_index: i32,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EntityFilter {
@@ -2710,6 +2739,7 @@ pub enum EntityComponent {
     Interactivity = 60,
     Artifact = 61,
     TargetPose = 62,
+    Raster = 63,
 }
 impl EntityComponent {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -2757,6 +2787,7 @@ impl EntityComponent {
             Self::Interactivity => "EntityComponentInteractivity",
             Self::Artifact => "EntityComponentArtifact",
             Self::TargetPose => "EntityComponentTargetPose",
+            Self::Raster => "EntityComponentRaster",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -2801,6 +2832,7 @@ impl EntityComponent {
             "EntityComponentInteractivity" => Some(Self::Interactivity),
             "EntityComponentArtifact" => Some(Self::Artifact),
             "EntityComponentTargetPose" => Some(Self::TargetPose),
+            "EntityComponentRaster" => Some(Self::Raster),
             _ => None,
         }
     }

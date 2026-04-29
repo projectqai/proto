@@ -63,6 +63,7 @@ message Entity {
   optional TargetPoseComponent target_pose = 62;
   optional ChatComponent chat = 39;
   optional AssemblyComponent assembly = 40;
+  optional RasterComponent raster = 63;
 }
 
 // A controller owns an entity.
@@ -871,6 +872,22 @@ message AssemblyComponent {
   repeated string outline = 2;
 }
 
+// Toggleable map raster.
+// If north == 0 the url is treated as an XYZ tile template
+// (e.g. "https://.../{z}/{x}/{y}.png").
+// Otherwise it is a single bitmap covering [west, south, east, north] in WGS84.
+// Live updates: re-push the entity with a different url to swap the image.
+message RasterComponent {
+  string url = 1;
+  double west = 2;
+  double south = 3;
+  double east = 4;
+  double north = 5;
+  float opacity = 6; // 0..1
+  string description = 7; // optional human-readable description
+  int32 z_index = 8; // higher renders on top
+}
+
 // ---------------------------------------------
 
 message EntityFilter {
@@ -1129,6 +1146,7 @@ enum EntityComponent {
   EntityComponentInteractivity = 60;
   EntityComponentArtifact = 61;
   EntityComponentTargetPose = 62;
+  EntityComponentRaster = 63;
 }
 
 message EntityChangeEvent {

@@ -220,6 +220,11 @@ export declare type Entity = Message<"world.Entity"> & {
    * @generated from field: optional world.AssemblyComponent assembly = 40;
    */
   assembly?: AssemblyComponent;
+
+  /**
+   * @generated from field: optional world.RasterComponent raster = 63;
+   */
+  raster?: RasterComponent;
 };
 
 /**
@@ -2472,6 +2477,69 @@ export declare type AssemblyComponent = Message<"world.AssemblyComponent"> & {
 export declare const AssemblyComponentSchema: GenMessage<AssemblyComponent>;
 
 /**
+ * Toggleable map raster.
+ * If north == 0 the url is treated as an XYZ tile template
+ * (e.g. "https://.../{z}/{x}/{y}.png").
+ * Otherwise it is a single bitmap covering [west, south, east, north] in WGS84.
+ * Live updates: re-push the entity with a different url to swap the image.
+ *
+ * @generated from message world.RasterComponent
+ */
+export declare type RasterComponent = Message<"world.RasterComponent"> & {
+  /**
+   * @generated from field: string url = 1;
+   */
+  url: string;
+
+  /**
+   * @generated from field: double west = 2;
+   */
+  west: number;
+
+  /**
+   * @generated from field: double south = 3;
+   */
+  south: number;
+
+  /**
+   * @generated from field: double east = 4;
+   */
+  east: number;
+
+  /**
+   * @generated from field: double north = 5;
+   */
+  north: number;
+
+  /**
+   * 0..1
+   *
+   * @generated from field: float opacity = 6;
+   */
+  opacity: number;
+
+  /**
+   * optional human-readable description
+   *
+   * @generated from field: string description = 7;
+   */
+  description: string;
+
+  /**
+   * higher renders on top
+   *
+   * @generated from field: int32 z_index = 8;
+   */
+  zIndex: number;
+};
+
+/**
+ * Describes the message world.RasterComponent.
+ * Use `create(RasterComponentSchema)` to create a new message.
+ */
+export declare const RasterComponentSchema: GenMessage<RasterComponent>;
+
+/**
  * @generated from message world.EntityFilter
  */
 export declare type EntityFilter = Message<"world.EntityFilter"> & {
@@ -4223,6 +4291,11 @@ export enum EntityComponent {
    * @generated from enum value: EntityComponentTargetPose = 62;
    */
   EntityComponentTargetPose = 62,
+
+  /**
+   * @generated from enum value: EntityComponentRaster = 63;
+   */
+  EntityComponentRaster = 63,
 }
 
 /**

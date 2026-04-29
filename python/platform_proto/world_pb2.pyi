@@ -196,6 +196,7 @@ class EntityComponent(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     EntityComponentInteractivity: _ClassVar[EntityComponent]
     EntityComponentArtifact: _ClassVar[EntityComponent]
     EntityComponentTargetPose: _ClassVar[EntityComponent]
+    EntityComponentRaster: _ClassVar[EntityComponent]
 
 class TaskStatus(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -345,13 +346,14 @@ EntityComponentConfigurable: EntityComponent
 EntityComponentInteractivity: EntityComponent
 EntityComponentArtifact: EntityComponent
 EntityComponentTargetPose: EntityComponent
+EntityComponentRaster: EntityComponent
 TaskStatusInvalid: TaskStatus
 TaskStatusRunning: TaskStatus
 TaskStatusCompleted: TaskStatus
 TaskStatusFailed: TaskStatus
 
 class Entity(_message.Message):
-    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "gnss", "taskable", "device", "config", "configurable", "mission", "link", "metric", "sensor", "local_shape", "pose", "task_execution", "interactivity", "artifact", "target_pose", "chat", "assembly")
+    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "gnss", "taskable", "device", "config", "configurable", "mission", "link", "metric", "sensor", "local_shape", "pose", "task_execution", "interactivity", "artifact", "target_pose", "chat", "assembly", "raster")
     ID_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     CONTROLLER_FIELD_NUMBER: _ClassVar[int]
@@ -392,6 +394,7 @@ class Entity(_message.Message):
     TARGET_POSE_FIELD_NUMBER: _ClassVar[int]
     CHAT_FIELD_NUMBER: _ClassVar[int]
     ASSEMBLY_FIELD_NUMBER: _ClassVar[int]
+    RASTER_FIELD_NUMBER: _ClassVar[int]
     id: str
     label: str
     controller: Controller
@@ -432,7 +435,8 @@ class Entity(_message.Message):
     target_pose: TargetPoseComponent
     chat: ChatComponent
     assembly: AssemblyComponent
-    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., gnss: _Optional[_Union[GnssComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ...) -> None: ...
+    raster: RasterComponent
+    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., gnss: _Optional[_Union[GnssComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ..., raster: _Optional[_Union[RasterComponent, _Mapping]] = ...) -> None: ...
 
 class Controller(_message.Message):
     __slots__ = ("id", "node", "origin")
@@ -1184,6 +1188,26 @@ class AssemblyComponent(_message.Message):
     parent: str
     outline: _containers.RepeatedScalarFieldContainer[str]
     def __init__(self, parent: _Optional[str] = ..., outline: _Optional[_Iterable[str]] = ...) -> None: ...
+
+class RasterComponent(_message.Message):
+    __slots__ = ("url", "west", "south", "east", "north", "opacity", "description", "z_index")
+    URL_FIELD_NUMBER: _ClassVar[int]
+    WEST_FIELD_NUMBER: _ClassVar[int]
+    SOUTH_FIELD_NUMBER: _ClassVar[int]
+    EAST_FIELD_NUMBER: _ClassVar[int]
+    NORTH_FIELD_NUMBER: _ClassVar[int]
+    OPACITY_FIELD_NUMBER: _ClassVar[int]
+    DESCRIPTION_FIELD_NUMBER: _ClassVar[int]
+    Z_INDEX_FIELD_NUMBER: _ClassVar[int]
+    url: str
+    west: float
+    south: float
+    east: float
+    north: float
+    opacity: float
+    description: str
+    z_index: int
+    def __init__(self, url: _Optional[str] = ..., west: _Optional[float] = ..., south: _Optional[float] = ..., east: _Optional[float] = ..., north: _Optional[float] = ..., opacity: _Optional[float] = ..., description: _Optional[str] = ..., z_index: _Optional[int] = ...) -> None: ...
 
 class EntityFilter(_message.Message):
     __slots__ = ("id", "label", "geo", "taskable", "component", "controller", "track", "mission", "channel", "device", "config")
