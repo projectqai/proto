@@ -817,41 +817,41 @@ pub struct Entity {
     pub capture: ::core::option::Option<CaptureComponent>,
     #[prost(message, optional, tag = "42")]
     pub gnss: ::core::option::Option<GnssComponent>,
-    /// experimental, dont use yet externally
-    #[prost(message, optional, tag = "23")]
-    pub taskable: ::core::option::Option<TaskableComponent>,
     #[prost(message, optional, tag = "50")]
     pub device: ::core::option::Option<DeviceComponent>,
+    #[prost(message, optional, tag = "32")]
+    pub link: ::core::option::Option<LinkComponent>,
+    #[prost(message, optional, tag = "38")]
+    pub pose: ::core::option::Option<PoseComponent>,
+    #[prost(message, optional, tag = "62")]
+    pub target_pose: ::core::option::Option<TargetPoseComponent>,
+    #[prost(message, optional, tag = "29")]
+    pub local_shape: ::core::option::Option<LocalShapeComponent>,
+    #[prost(message, optional, tag = "36")]
+    pub metric: ::core::option::Option<MetricComponent>,
     #[prost(message, optional, tag = "51")]
     pub config: ::core::option::Option<ConfigurationComponent>,
     #[prost(message, optional, tag = "52")]
     pub configurable: ::core::option::Option<ConfigurableComponent>,
-    #[prost(message, optional, tag = "31")]
-    pub mission: ::core::option::Option<MissionComponent>,
-    #[prost(message, optional, tag = "32")]
-    pub link: ::core::option::Option<LinkComponent>,
-    #[prost(message, optional, tag = "36")]
-    pub metric: ::core::option::Option<MetricComponent>,
-    #[prost(message, optional, tag = "37")]
-    pub sensor: ::core::option::Option<SensorComponent>,
-    #[prost(message, optional, tag = "29")]
-    pub local_shape: ::core::option::Option<LocalShapeComponent>,
-    #[prost(message, optional, tag = "38")]
-    pub pose: ::core::option::Option<PoseComponent>,
+    /// experimental, dont use yet externally
+    #[prost(message, optional, tag = "23")]
+    pub taskable: ::core::option::Option<TaskableComponent>,
     #[prost(message, optional, tag = "41")]
     pub task_execution: ::core::option::Option<TaskExecutionComponent>,
+    #[prost(message, optional, tag = "31")]
+    pub mission: ::core::option::Option<MissionComponent>,
+    #[prost(message, optional, tag = "37")]
+    pub sensor: ::core::option::Option<SensorComponent>,
     #[prost(message, optional, tag = "60")]
     pub interactivity: ::core::option::Option<InteractivityComponent>,
     #[prost(message, optional, tag = "61")]
     pub artifact: ::core::option::Option<ArtifactComponent>,
-    #[prost(message, optional, tag = "62")]
-    pub target_pose: ::core::option::Option<TargetPoseComponent>,
     #[prost(message, optional, tag = "39")]
     pub chat: ::core::option::Option<ChatComponent>,
     #[prost(message, optional, tag = "40")]
     pub assembly: ::core::option::Option<AssemblyComponent>,
     #[prost(message, optional, tag = "63")]
-    pub raster: ::core::option::Option<RasterComponent>,
+    pub map_layer: ::core::option::Option<MapLayerComponent>,
 }
 /// A controller owns an entity.
 /// The engine normally rejects changes to the entity from non owners,
@@ -1740,32 +1740,40 @@ pub struct AssemblyComponent {
     #[prost(string, repeated, tag = "2")]
     pub outline: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
-/// Toggleable map raster.
-/// If north == 0 the url is treated as an XYZ tile template
-/// (e.g. "<https://.../{z}/{x}/{y}.png">).
-/// Otherwise it is a single bitmap covering \[west, south, east, north\] in WGS84.
-/// Live updates: re-push the entity with a different url to swap the image.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct RasterComponent {
-    #[prost(string, tag = "1")]
-    pub url: ::prost::alloc::string::String,
-    #[prost(double, tag = "2")]
-    pub west: f64,
-    #[prost(double, tag = "3")]
-    pub south: f64,
-    #[prost(double, tag = "4")]
-    pub east: f64,
-    #[prost(double, tag = "5")]
-    pub north: f64,
-    /// 0..1
-    #[prost(float, tag = "6")]
-    pub opacity: f32,
-    /// optional human-readable description
-    #[prost(string, tag = "7")]
-    pub description: ::prost::alloc::string::String,
-    /// higher renders on top
-    #[prost(int32, tag = "8")]
+pub struct MapLayerComponent {
+    #[prost(int32, tag = "1")]
     pub z_index: i32,
+    #[prost(oneof = "map_layer_component::Source", tags = "10, 11")]
+    pub source: ::core::option::Option<map_layer_component::Source>,
+}
+/// Nested message and enum types in `MapLayerComponent`.
+pub mod map_layer_component {
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct Tile {
+        #[prost(string, tag = "1")]
+        pub url: ::prost::alloc::string::String,
+    }
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct Image {
+        #[prost(string, tag = "1")]
+        pub url: ::prost::alloc::string::String,
+        #[prost(double, tag = "2")]
+        pub west: f64,
+        #[prost(double, tag = "3")]
+        pub south: f64,
+        #[prost(double, tag = "4")]
+        pub east: f64,
+        #[prost(double, tag = "5")]
+        pub north: f64,
+    }
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Source {
+        #[prost(message, tag = "10")]
+        Tiles(Tile),
+        #[prost(message, tag = "11")]
+        Image(Image),
+    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EntityFilter {
@@ -2739,7 +2747,7 @@ pub enum EntityComponent {
     Interactivity = 60,
     Artifact = 61,
     TargetPose = 62,
-    Raster = 63,
+    MapLayer = 63,
 }
 impl EntityComponent {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -2787,7 +2795,7 @@ impl EntityComponent {
             Self::Interactivity => "EntityComponentInteractivity",
             Self::Artifact => "EntityComponentArtifact",
             Self::TargetPose => "EntityComponentTargetPose",
-            Self::Raster => "EntityComponentRaster",
+            Self::MapLayer => "EntityComponentMapLayer",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -2832,7 +2840,7 @@ impl EntityComponent {
             "EntityComponentInteractivity" => Some(Self::Interactivity),
             "EntityComponentArtifact" => Some(Self::Artifact),
             "EntityComponentTargetPose" => Some(Self::TargetPose),
-            "EntityComponentRaster" => Some(Self::Raster),
+            "EntityComponentMapLayer" => Some(Self::MapLayer),
             _ => None,
         }
     }

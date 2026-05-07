@@ -140,16 +140,34 @@ export declare type Entity = Message<"world.Entity"> & {
   gnss?: GnssComponent;
 
   /**
-   * experimental, dont use yet externally
-   *
-   * @generated from field: optional world.TaskableComponent taskable = 23;
-   */
-  taskable?: TaskableComponent;
-
-  /**
    * @generated from field: optional world.DeviceComponent device = 50;
    */
   device?: DeviceComponent;
+
+  /**
+   * @generated from field: optional world.LinkComponent link = 32;
+   */
+  link?: LinkComponent;
+
+  /**
+   * @generated from field: optional world.PoseComponent pose = 38;
+   */
+  pose?: PoseComponent;
+
+  /**
+   * @generated from field: optional world.TargetPoseComponent target_pose = 62;
+   */
+  targetPose?: TargetPoseComponent;
+
+  /**
+   * @generated from field: optional world.LocalShapeComponent local_shape = 29;
+   */
+  localShape?: LocalShapeComponent;
+
+  /**
+   * @generated from field: optional world.MetricComponent metric = 36;
+   */
+  metric?: MetricComponent;
 
   /**
    * @generated from field: optional world.ConfigurationComponent config = 51;
@@ -162,39 +180,26 @@ export declare type Entity = Message<"world.Entity"> & {
   configurable?: ConfigurableComponent;
 
   /**
-   * @generated from field: optional world.MissionComponent mission = 31;
+   * experimental, dont use yet externally
+   *
+   * @generated from field: optional world.TaskableComponent taskable = 23;
    */
-  mission?: MissionComponent;
-
-  /**
-   * @generated from field: optional world.LinkComponent link = 32;
-   */
-  link?: LinkComponent;
-
-  /**
-   * @generated from field: optional world.MetricComponent metric = 36;
-   */
-  metric?: MetricComponent;
-
-  /**
-   * @generated from field: optional world.SensorComponent sensor = 37;
-   */
-  sensor?: SensorComponent;
-
-  /**
-   * @generated from field: optional world.LocalShapeComponent local_shape = 29;
-   */
-  localShape?: LocalShapeComponent;
-
-  /**
-   * @generated from field: optional world.PoseComponent pose = 38;
-   */
-  pose?: PoseComponent;
+  taskable?: TaskableComponent;
 
   /**
    * @generated from field: optional world.TaskExecutionComponent task_execution = 41;
    */
   taskExecution?: TaskExecutionComponent;
+
+  /**
+   * @generated from field: optional world.MissionComponent mission = 31;
+   */
+  mission?: MissionComponent;
+
+  /**
+   * @generated from field: optional world.SensorComponent sensor = 37;
+   */
+  sensor?: SensorComponent;
 
   /**
    * @generated from field: optional world.InteractivityComponent interactivity = 60;
@@ -207,11 +212,6 @@ export declare type Entity = Message<"world.Entity"> & {
   artifact?: ArtifactComponent;
 
   /**
-   * @generated from field: optional world.TargetPoseComponent target_pose = 62;
-   */
-  targetPose?: TargetPoseComponent;
-
-  /**
    * @generated from field: optional world.ChatComponent chat = 39;
    */
   chat?: ChatComponent;
@@ -222,9 +222,9 @@ export declare type Entity = Message<"world.Entity"> & {
   assembly?: AssemblyComponent;
 
   /**
-   * @generated from field: optional world.RasterComponent raster = 63;
+   * @generated from field: optional world.MapLayerComponent map_layer = 63;
    */
-  raster?: RasterComponent;
+  mapLayer?: MapLayerComponent;
 };
 
 /**
@@ -2477,15 +2477,58 @@ export declare type AssemblyComponent = Message<"world.AssemblyComponent"> & {
 export declare const AssemblyComponentSchema: GenMessage<AssemblyComponent>;
 
 /**
- * Toggleable map raster.
- * If north == 0 the url is treated as an XYZ tile template
- * (e.g. "https://.../{z}/{x}/{y}.png").
- * Otherwise it is a single bitmap covering [west, south, east, north] in WGS84.
- * Live updates: re-push the entity with a different url to swap the image.
- *
- * @generated from message world.RasterComponent
+ * @generated from message world.MapLayerComponent
  */
-export declare type RasterComponent = Message<"world.RasterComponent"> & {
+export declare type MapLayerComponent = Message<"world.MapLayerComponent"> & {
+  /**
+   * @generated from field: int32 z_index = 1;
+   */
+  zIndex: number;
+
+  /**
+   * @generated from oneof world.MapLayerComponent.source
+   */
+  source: {
+    /**
+     * @generated from field: world.MapLayerComponent.Tile tiles = 10;
+     */
+    value: MapLayerComponent_Tile;
+    case: "tiles";
+  } | {
+    /**
+     * @generated from field: world.MapLayerComponent.Image image = 11;
+     */
+    value: MapLayerComponent_Image;
+    case: "image";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message world.MapLayerComponent.
+ * Use `create(MapLayerComponentSchema)` to create a new message.
+ */
+export declare const MapLayerComponentSchema: GenMessage<MapLayerComponent>;
+
+/**
+ * @generated from message world.MapLayerComponent.Tile
+ */
+export declare type MapLayerComponent_Tile = Message<"world.MapLayerComponent.Tile"> & {
+  /**
+   * @generated from field: string url = 1;
+   */
+  url: string;
+};
+
+/**
+ * Describes the message world.MapLayerComponent.Tile.
+ * Use `create(MapLayerComponent_TileSchema)` to create a new message.
+ */
+export declare const MapLayerComponent_TileSchema: GenMessage<MapLayerComponent_Tile>;
+
+/**
+ * @generated from message world.MapLayerComponent.Image
+ */
+export declare type MapLayerComponent_Image = Message<"world.MapLayerComponent.Image"> & {
   /**
    * @generated from field: string url = 1;
    */
@@ -2510,34 +2553,13 @@ export declare type RasterComponent = Message<"world.RasterComponent"> & {
    * @generated from field: double north = 5;
    */
   north: number;
-
-  /**
-   * 0..1
-   *
-   * @generated from field: float opacity = 6;
-   */
-  opacity: number;
-
-  /**
-   * optional human-readable description
-   *
-   * @generated from field: string description = 7;
-   */
-  description: string;
-
-  /**
-   * higher renders on top
-   *
-   * @generated from field: int32 z_index = 8;
-   */
-  zIndex: number;
 };
 
 /**
- * Describes the message world.RasterComponent.
- * Use `create(RasterComponentSchema)` to create a new message.
+ * Describes the message world.MapLayerComponent.Image.
+ * Use `create(MapLayerComponent_ImageSchema)` to create a new message.
  */
-export declare const RasterComponentSchema: GenMessage<RasterComponent>;
+export declare const MapLayerComponent_ImageSchema: GenMessage<MapLayerComponent_Image>;
 
 /**
  * @generated from message world.EntityFilter
@@ -4293,9 +4315,9 @@ export enum EntityComponent {
   EntityComponentTargetPose = 62,
 
   /**
-   * @generated from enum value: EntityComponentRaster = 63;
+   * @generated from enum value: EntityComponentMapLayer = 63;
    */
-  EntityComponentRaster = 63,
+  EntityComponentMapLayer = 63,
 }
 
 /**
