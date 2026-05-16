@@ -7,6 +7,7 @@ import type { JsonObject, Message } from "@bufbuild/protobuf";
 import type { MetricComponent, MetricKind } from "./metrics_pb.js";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { LocalGeometry, PlanarGeometry } from "./geometry_pb.js";
+import type { ClassificationTaxonomy } from "./taxonomy_pb.js";
 
 /**
  * Describes the file world.proto.
@@ -1473,14 +1474,21 @@ export declare const LocalShapeComponentSchema: GenMessage<LocalShapeComponent>;
  */
 export declare type ClassificationComponent = Message<"world.ClassificationComponent"> & {
   /**
-   * @generated from field: optional world.ClassificationBattleDimension dimension = 1;
+   * @generated from field: optional world.ClassificationBattleDimension dimension = 1 [deprecated = true];
+   * @deprecated
    */
   dimension?: ClassificationBattleDimension;
 
   /**
-   * @generated from field: optional world.ClassificationIdentity identity = 2;
+   * @generated from field: optional world.ClassificationIdentity identity = 2 [deprecated = true];
+   * @deprecated
    */
   identity?: ClassificationIdentity;
+
+  /**
+   * @generated from field: repeated world.ClassificationTaxonomy taxonomy = 3;
+   */
+  taxonomy: ClassificationTaxonomy[];
 };
 
 /**
@@ -1488,6 +1496,22 @@ export declare type ClassificationComponent = Message<"world.ClassificationCompo
  * Use `create(ClassificationComponentSchema)` to create a new message.
  */
 export declare const ClassificationComponentSchema: GenMessage<ClassificationComponent>;
+
+/**
+ * @generated from message world.IdentityComponent
+ */
+export declare type IdentityComponent = Message<"world.IdentityComponent"> & {
+  /**
+   * @generated from field: optional world.Affiliation affiliation = 1;
+   */
+  affiliation?: Affiliation;
+};
+
+/**
+ * Describes the message world.IdentityComponent.
+ * Use `create(IdentityComponentSchema)` to create a new message.
+ */
+export declare const IdentityComponentSchema: GenMessage<IdentityComponent>;
 
 /**
  * @generated from message world.TransponderAIS
@@ -3737,6 +3761,63 @@ export enum ClassificationBattleDimension {
  * Describes the enum world.ClassificationBattleDimension.
  */
 export declare const ClassificationBattleDimensionSchema: GenEnum<ClassificationBattleDimension>;
+
+/**
+ * @generated from enum world.Affiliation
+ */
+export enum Affiliation {
+  /**
+   * @generated from enum value: AffiliationInvalid = 0;
+   */
+  AffiliationInvalid = 0,
+
+  /**
+   * P
+   *
+   * @generated from enum value: AffiliationPending = 1;
+   */
+  AffiliationPending = 1,
+
+  /**
+   * U
+   *
+   * @generated from enum value: AffiliationUnknown = 2;
+   */
+  AffiliationUnknown = 2,
+
+  /**
+   * F
+   *
+   * @generated from enum value: AffiliationBlue = 3;
+   */
+  AffiliationBlue = 3,
+
+  /**
+   * N
+   *
+   * @generated from enum value: AffiliationNeutral = 4;
+   */
+  AffiliationNeutral = 4,
+
+  /**
+   * H
+   *
+   * @generated from enum value: AffiliationRed = 5;
+   */
+  AffiliationRed = 5,
+
+  /**
+   * S
+   *
+   * @generated from enum value: AffiliationSuspect = 6;
+   */
+  AffiliationSuspect = 6,
+}
+
+/**
+ * Describes the enum world.Affiliation.
+ */
+export declare const AffiliationSchema: GenEnum<Affiliation>;
 
 /**
  * @generated from enum world.NavigationMode

@@ -6,6 +6,7 @@ import "geometry.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "metrics.proto";
+import "taxonomy.proto";
 
 option go_package = "github.com/projectqai/proto/go";
 
@@ -535,8 +536,23 @@ enum ClassificationBattleDimension {
 }
 
 message ClassificationComponent {
-  optional ClassificationBattleDimension dimension = 1;
-  optional ClassificationIdentity identity = 2;
+  optional ClassificationBattleDimension dimension = 1 [deprecated = true];
+  optional ClassificationIdentity identity = 2 [deprecated = true];
+  repeated ClassificationTaxonomy taxonomy = 3;
+}
+
+enum Affiliation {
+  AffiliationInvalid = 0;
+  AffiliationPending = 1; // P
+  AffiliationUnknown = 2; // U
+  AffiliationBlue = 3; // F
+  AffiliationNeutral = 4; // N
+  AffiliationRed = 5; // H
+  AffiliationSuspect = 6; // S
+}
+
+message IdentityComponent {
+  optional Affiliation affiliation = 1;
 }
 
 message TransponderAIS {

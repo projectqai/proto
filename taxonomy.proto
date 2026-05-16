@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package world;
+
+option go_package = "github.com/projectqai/proto/go";
+
+message ClassificationTaxonomy {
+  ClassificationConfidence confidence = 1;
+
+  oneof kind {
+    PersonTaxonomy person = 10;
+    AnimalTaxonomy animal = 11;
+    InfrastructureTaxonomy infrastructure = 12;
+    VehicleTaxonomy vehicle = 13;
+    EquipmentTaxonomy equipment = 14;
+    EmitterTaxonomy emitter = 15;
+  }
+}
+
+message ClassificationConfidence {
+  float confidence = 1;
+  bool pending = 2;
+}
+
+/// ------------------ PERSON
+
+message PersonTaxonomy {}
+
+/// --------------- ANIMAL
+
+message AnimalTaxonomy {
+  oneof kind {
+    AnimalTaxonomyAir air = 1;
+    AnimalTaxonomyLand land = 2;
+  }
+}
+
+message AnimalTaxonomyBird {}
+message AnimalTaxonomyAir {
+  optional AnimalTaxonomyBird bird = 1;
+}
+
+message AnimalTaxonomyHorse {}
+message AnimalTaxonomyLand {
+  optional AnimalTaxonomyHorse horse = 1;
+}
+
+/// -------------- INFRASTRUCTURE
+
+message InfrastructureTaxonomy {
+  optional InfrastructureTaxonomyTower tower = 1;
+  optional InfrastructureTaxonomyBridge bridge = 2;
+  optional InfrastructureTaxonomyRoad road = 3;
+  optional InfrastructureTaxonomyDam dam = 4;
+}
+
+message InfrastructureTaxonomyTower {}
+message InfrastructureTaxonomyBridge {}
+message InfrastructureTaxonomyRoad {}
+message InfrastructureTaxonomyDam {}
+
+/// --------------- VEHICLE
+
+message VehicleTaxonomyUnmanned {}
+
+message VehicleTaxonomy {
+  optional VehicleTaxonomyUnmanned unmanned = 1;
+  oneof domain {
+    VehicleTaxonomyLand land = 10;
+    VehicleTaxonomyAir air = 11;
+    VehicleTaxonomySea sea = 12;
+    VehicleTaxonomySubsurface subsurface = 13;
+  }
+}
+
+/// --------------- VEHICLE LAND
+
+message VehicleTaxonomyTracked {}
+message VehicleTaxonomyTwoWheeled {}
+message VehicleTaxonomyMultiWheeled {}
+
+message VehicleTaxonomyLand {
+  oneof kind {
+    VehicleTaxonomyTracked tracked = 1;
+    VehicleTaxonomyTwoWheeled two_wheeled = 2;
+    VehicleTaxonomyMultiWheeled multi_wheeled = 3;
+  }
+}
+
+/// --------------- VEHICLE AIR
+
+message VehicleTaxonomyAirRotary {}
+message VehicleTaxonomyAirFixedWing {}
+message VehicleTaxonomyAirLighterThanAir {}
+
+message VehicleTaxonomyAir {
+  oneof kind {
+    VehicleTaxonomyAirFixedWing fixed_wing = 1;
+    VehicleTaxonomyAirLighterThanAir lighter_than_air = 2;
+    VehicleTaxonomyAirRotary rotary = 3;
+  }
+}
+
+/// --------------- VEHICLE SEA
+
+message VehicleTaxonomySea {}
+
+/// --------------- VEHICLE SUBSURFACE
+
+message VehicleTaxonomySubsurface {}
+
+/// --------------- EQUIPMENT
+
+message EquipmentTaxonomySensorRadar {}
+message EquipmentTaxonomySensorEW {}
+message EquipmentTaxonomySensorCBRN {}
+message EquipmentTaxonomySensorAcoustic {}
+message EquipmentTaxonomySensorElectroOptical {}
+message EquipmentTaxonomySensorEmplaced {}
+
+message EquipmentTaxonomySensor {
+  optional EquipmentTaxonomySensorEmplaced emplaced = 1;
+  oneof kind {
+    EquipmentTaxonomySensorRadar radar = 10;
+    EquipmentTaxonomySensorEW ew = 11;
+    EquipmentTaxonomySensorCBRN cbrn = 12;
+    EquipmentTaxonomySensorAcoustic acoustic = 13;
+    EquipmentTaxonomySensorElectroOptical electro_optical = 14;
+  }
+}
+
+message EquipmentTaxonomy {
+  optional EquipmentTaxonomySensor sensor = 1;
+}
+
+/// --------------- EMITTER
+
+message EmitterTaxonomy {}

@@ -2,6 +2,7 @@ import geometry_pb2 as _geometry_pb2
 from google.protobuf import struct_pb2 as _struct_pb2
 from google.protobuf import timestamp_pb2 as _timestamp_pb2
 import metrics_pb2 as _metrics_pb2
+import taxonomy_pb2 as _taxonomy_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
@@ -76,6 +77,16 @@ class ClassificationBattleDimension(int, metaclass=_enum_type_wrapper.EnumTypeWr
     ClassificationBattleDimensionGround: _ClassVar[ClassificationBattleDimension]
     ClassificationBattleDimensionSeaSurface: _ClassVar[ClassificationBattleDimension]
     ClassificationBattleDimensionSubsurface: _ClassVar[ClassificationBattleDimension]
+
+class Affiliation(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    AffiliationInvalid: _ClassVar[Affiliation]
+    AffiliationPending: _ClassVar[Affiliation]
+    AffiliationUnknown: _ClassVar[Affiliation]
+    AffiliationBlue: _ClassVar[Affiliation]
+    AffiliationNeutral: _ClassVar[Affiliation]
+    AffiliationRed: _ClassVar[Affiliation]
+    AffiliationSuspect: _ClassVar[Affiliation]
 
 class NavigationMode(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -247,6 +258,13 @@ ClassificationBattleDimensionAir: ClassificationBattleDimension
 ClassificationBattleDimensionGround: ClassificationBattleDimension
 ClassificationBattleDimensionSeaSurface: ClassificationBattleDimension
 ClassificationBattleDimensionSubsurface: ClassificationBattleDimension
+AffiliationInvalid: Affiliation
+AffiliationPending: Affiliation
+AffiliationUnknown: Affiliation
+AffiliationBlue: Affiliation
+AffiliationNeutral: Affiliation
+AffiliationRed: Affiliation
+AffiliationSuspect: Affiliation
 NavigationModeUnspecified: NavigationMode
 NavigationModePlanned: NavigationMode
 NavigationModeStationary: NavigationMode
@@ -845,12 +863,20 @@ class LocalShapeComponent(_message.Message):
     def __init__(self, relative_to: _Optional[str] = ..., geometry: _Optional[_Union[_geometry_pb2.LocalGeometry, _Mapping]] = ...) -> None: ...
 
 class ClassificationComponent(_message.Message):
-    __slots__ = ("dimension", "identity")
+    __slots__ = ("dimension", "identity", "taxonomy")
     DIMENSION_FIELD_NUMBER: _ClassVar[int]
     IDENTITY_FIELD_NUMBER: _ClassVar[int]
+    TAXONOMY_FIELD_NUMBER: _ClassVar[int]
     dimension: ClassificationBattleDimension
     identity: ClassificationIdentity
-    def __init__(self, dimension: _Optional[_Union[ClassificationBattleDimension, str]] = ..., identity: _Optional[_Union[ClassificationIdentity, str]] = ...) -> None: ...
+    taxonomy: _containers.RepeatedCompositeFieldContainer[_taxonomy_pb2.ClassificationTaxonomy]
+    def __init__(self, dimension: _Optional[_Union[ClassificationBattleDimension, str]] = ..., identity: _Optional[_Union[ClassificationIdentity, str]] = ..., taxonomy: _Optional[_Iterable[_Union[_taxonomy_pb2.ClassificationTaxonomy, _Mapping]]] = ...) -> None: ...
+
+class IdentityComponent(_message.Message):
+    __slots__ = ("affiliation",)
+    AFFILIATION_FIELD_NUMBER: _ClassVar[int]
+    affiliation: Affiliation
+    def __init__(self, affiliation: _Optional[_Union[Affiliation, str]] = ...) -> None: ...
 
 class TransponderAIS(_message.Message):
     __slots__ = ("mmsi", "imo", "callsign", "vessel_name")

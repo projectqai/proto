@@ -766,6 +766,203 @@ impl AlertLevel {
         }
     }
 }
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ClassificationTaxonomy {
+    #[prost(message, optional, tag = "1")]
+    pub confidence: ::core::option::Option<ClassificationConfidence>,
+    #[prost(oneof = "classification_taxonomy::Kind", tags = "10, 11, 12, 13, 14, 15")]
+    pub kind: ::core::option::Option<classification_taxonomy::Kind>,
+}
+/// Nested message and enum types in `ClassificationTaxonomy`.
+pub mod classification_taxonomy {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Kind {
+        #[prost(message, tag = "10")]
+        Person(super::PersonTaxonomy),
+        #[prost(message, tag = "11")]
+        Animal(super::AnimalTaxonomy),
+        #[prost(message, tag = "12")]
+        Infrastructure(super::InfrastructureTaxonomy),
+        #[prost(message, tag = "13")]
+        Vehicle(super::VehicleTaxonomy),
+        #[prost(message, tag = "14")]
+        Equipment(super::EquipmentTaxonomy),
+        #[prost(message, tag = "15")]
+        Emitter(super::EmitterTaxonomy),
+    }
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ClassificationConfidence {
+    #[prost(float, tag = "1")]
+    pub confidence: f32,
+    #[prost(bool, tag = "2")]
+    pub pending: bool,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct PersonTaxonomy {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct AnimalTaxonomy {
+    #[prost(oneof = "animal_taxonomy::Kind", tags = "1, 2")]
+    pub kind: ::core::option::Option<animal_taxonomy::Kind>,
+}
+/// Nested message and enum types in `AnimalTaxonomy`.
+pub mod animal_taxonomy {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Kind {
+        #[prost(message, tag = "1")]
+        Air(super::AnimalTaxonomyAir),
+        #[prost(message, tag = "2")]
+        Land(super::AnimalTaxonomyLand),
+    }
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct AnimalTaxonomyBird {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct AnimalTaxonomyAir {
+    #[prost(message, optional, tag = "1")]
+    pub bird: ::core::option::Option<AnimalTaxonomyBird>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct AnimalTaxonomyHorse {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct AnimalTaxonomyLand {
+    #[prost(message, optional, tag = "1")]
+    pub horse: ::core::option::Option<AnimalTaxonomyHorse>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct InfrastructureTaxonomy {
+    #[prost(message, optional, tag = "1")]
+    pub tower: ::core::option::Option<InfrastructureTaxonomyTower>,
+    #[prost(message, optional, tag = "2")]
+    pub bridge: ::core::option::Option<InfrastructureTaxonomyBridge>,
+    #[prost(message, optional, tag = "3")]
+    pub road: ::core::option::Option<InfrastructureTaxonomyRoad>,
+    #[prost(message, optional, tag = "4")]
+    pub dam: ::core::option::Option<InfrastructureTaxonomyDam>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct InfrastructureTaxonomyTower {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct InfrastructureTaxonomyBridge {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct InfrastructureTaxonomyRoad {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct InfrastructureTaxonomyDam {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomyUnmanned {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomy {
+    #[prost(message, optional, tag = "1")]
+    pub unmanned: ::core::option::Option<VehicleTaxonomyUnmanned>,
+    #[prost(oneof = "vehicle_taxonomy::Domain", tags = "10, 11, 12, 13")]
+    pub domain: ::core::option::Option<vehicle_taxonomy::Domain>,
+}
+/// Nested message and enum types in `VehicleTaxonomy`.
+pub mod vehicle_taxonomy {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Domain {
+        #[prost(message, tag = "10")]
+        Land(super::VehicleTaxonomyLand),
+        #[prost(message, tag = "11")]
+        Air(super::VehicleTaxonomyAir),
+        #[prost(message, tag = "12")]
+        Sea(super::VehicleTaxonomySea),
+        #[prost(message, tag = "13")]
+        Subsurface(super::VehicleTaxonomySubsurface),
+    }
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomyTracked {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomyTwoWheeled {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomyMultiWheeled {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomyLand {
+    #[prost(oneof = "vehicle_taxonomy_land::Kind", tags = "1, 2, 3")]
+    pub kind: ::core::option::Option<vehicle_taxonomy_land::Kind>,
+}
+/// Nested message and enum types in `VehicleTaxonomyLand`.
+pub mod vehicle_taxonomy_land {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Kind {
+        #[prost(message, tag = "1")]
+        Tracked(super::VehicleTaxonomyTracked),
+        #[prost(message, tag = "2")]
+        TwoWheeled(super::VehicleTaxonomyTwoWheeled),
+        #[prost(message, tag = "3")]
+        MultiWheeled(super::VehicleTaxonomyMultiWheeled),
+    }
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomyAirRotary {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomyAirFixedWing {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomyAirLighterThanAir {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomyAir {
+    #[prost(oneof = "vehicle_taxonomy_air::Kind", tags = "1, 2, 3")]
+    pub kind: ::core::option::Option<vehicle_taxonomy_air::Kind>,
+}
+/// Nested message and enum types in `VehicleTaxonomyAir`.
+pub mod vehicle_taxonomy_air {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Kind {
+        #[prost(message, tag = "1")]
+        FixedWing(super::VehicleTaxonomyAirFixedWing),
+        #[prost(message, tag = "2")]
+        LighterThanAir(super::VehicleTaxonomyAirLighterThanAir),
+        #[prost(message, tag = "3")]
+        Rotary(super::VehicleTaxonomyAirRotary),
+    }
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomySea {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomySubsurface {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EquipmentTaxonomySensorRadar {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EquipmentTaxonomySensorEw {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EquipmentTaxonomySensorCbrn {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EquipmentTaxonomySensorAcoustic {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EquipmentTaxonomySensorElectroOptical {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EquipmentTaxonomySensorEmplaced {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EquipmentTaxonomySensor {
+    #[prost(message, optional, tag = "1")]
+    pub emplaced: ::core::option::Option<EquipmentTaxonomySensorEmplaced>,
+    #[prost(oneof = "equipment_taxonomy_sensor::Kind", tags = "10, 11, 12, 13, 14")]
+    pub kind: ::core::option::Option<equipment_taxonomy_sensor::Kind>,
+}
+/// Nested message and enum types in `EquipmentTaxonomySensor`.
+pub mod equipment_taxonomy_sensor {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Kind {
+        #[prost(message, tag = "10")]
+        Radar(super::EquipmentTaxonomySensorRadar),
+        #[prost(message, tag = "11")]
+        Ew(super::EquipmentTaxonomySensorEw),
+        #[prost(message, tag = "12")]
+        Cbrn(super::EquipmentTaxonomySensorCbrn),
+        #[prost(message, tag = "13")]
+        Acoustic(super::EquipmentTaxonomySensorAcoustic),
+        #[prost(message, tag = "14")]
+        ElectroOptical(super::EquipmentTaxonomySensorElectroOptical),
+    }
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EquipmentTaxonomy {
+    #[prost(message, optional, tag = "1")]
+    pub sensor: ::core::option::Option<EquipmentTaxonomySensor>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EmitterTaxonomy {}
 /// metadata
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Entity {
@@ -1350,12 +1547,21 @@ pub struct LocalShapeComponent {
     #[prost(message, optional, tag = "1")]
     pub geometry: ::core::option::Option<LocalGeometry>,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ClassificationComponent {
+    #[deprecated]
     #[prost(enumeration = "ClassificationBattleDimension", optional, tag = "1")]
     pub dimension: ::core::option::Option<i32>,
+    #[deprecated]
     #[prost(enumeration = "ClassificationIdentity", optional, tag = "2")]
     pub identity: ::core::option::Option<i32>,
+    #[prost(message, repeated, tag = "3")]
+    pub taxonomy: ::prost::alloc::vec::Vec<ClassificationTaxonomy>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct IdentityComponent {
+    #[prost(enumeration = "Affiliation", optional, tag = "1")]
+    pub affiliation: ::core::option::Option<i32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TransponderAis {
@@ -2391,6 +2597,53 @@ impl ClassificationBattleDimension {
             "ClassificationBattleDimensionGround" => Some(Self::Ground),
             "ClassificationBattleDimensionSeaSurface" => Some(Self::SeaSurface),
             "ClassificationBattleDimensionSubsurface" => Some(Self::Subsurface),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum Affiliation {
+    Invalid = 0,
+    /// P
+    Pending = 1,
+    /// U
+    Unknown = 2,
+    /// F
+    Blue = 3,
+    /// N
+    Neutral = 4,
+    /// H
+    Red = 5,
+    /// S
+    Suspect = 6,
+}
+impl Affiliation {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Invalid => "AffiliationInvalid",
+            Self::Pending => "AffiliationPending",
+            Self::Unknown => "AffiliationUnknown",
+            Self::Blue => "AffiliationBlue",
+            Self::Neutral => "AffiliationNeutral",
+            Self::Red => "AffiliationRed",
+            Self::Suspect => "AffiliationSuspect",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "AffiliationInvalid" => Some(Self::Invalid),
+            "AffiliationPending" => Some(Self::Pending),
+            "AffiliationUnknown" => Some(Self::Unknown),
+            "AffiliationBlue" => Some(Self::Blue),
+            "AffiliationNeutral" => Some(Self::Neutral),
+            "AffiliationRed" => Some(Self::Red),
+            "AffiliationSuspect" => Some(Self::Suspect),
             _ => None,
         }
     }
