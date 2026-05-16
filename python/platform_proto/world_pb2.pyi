@@ -991,11 +991,13 @@ class PowerComponent(_message.Message):
     def __init__(self, battery_charge_remaining: _Optional[float] = ..., voltage: _Optional[float] = ..., remaining_seconds: _Optional[int] = ..., current_a: _Optional[float] = ..., capacity_used_mah: _Optional[float] = ...) -> None: ...
 
 class DeviceClassOption(_message.Message):
-    __slots__ = ("label",)
+    __slots__ = ("label", "description")
     CLASS_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
+    DESCRIPTION_FIELD_NUMBER: _ClassVar[int]
     label: str
-    def __init__(self, label: _Optional[str] = ..., **kwargs) -> None: ...
+    description: str
+    def __init__(self, label: _Optional[str] = ..., description: _Optional[str] = ..., **kwargs) -> None: ...
 
 class ConfigurableComponent(_message.Message):
     __slots__ = ("schema", "value", "state", "error", "label", "applied_version", "supported_device_classes", "scheduled_at")
@@ -1190,7 +1192,7 @@ class AssemblyComponent(_message.Message):
     def __init__(self, parent: _Optional[str] = ..., outline: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class MapLayerComponent(_message.Message):
-    __slots__ = ("z_index", "tiles", "image")
+    __slots__ = ("z_index", "opacity", "tiles", "image")
     class Tile(_message.Message):
         __slots__ = ("url",)
         URL_FIELD_NUMBER: _ClassVar[int]
@@ -1210,12 +1212,14 @@ class MapLayerComponent(_message.Message):
         north: float
         def __init__(self, url: _Optional[str] = ..., west: _Optional[float] = ..., south: _Optional[float] = ..., east: _Optional[float] = ..., north: _Optional[float] = ...) -> None: ...
     Z_INDEX_FIELD_NUMBER: _ClassVar[int]
+    OPACITY_FIELD_NUMBER: _ClassVar[int]
     TILES_FIELD_NUMBER: _ClassVar[int]
     IMAGE_FIELD_NUMBER: _ClassVar[int]
     z_index: int
+    opacity: float
     tiles: MapLayerComponent.Tile
     image: MapLayerComponent.Image
-    def __init__(self, z_index: _Optional[int] = ..., tiles: _Optional[_Union[MapLayerComponent.Tile, _Mapping]] = ..., image: _Optional[_Union[MapLayerComponent.Image, _Mapping]] = ...) -> None: ...
+    def __init__(self, z_index: _Optional[int] = ..., opacity: _Optional[float] = ..., tiles: _Optional[_Union[MapLayerComponent.Tile, _Mapping]] = ..., image: _Optional[_Union[MapLayerComponent.Image, _Mapping]] = ...) -> None: ...
 
 class EntityFilter(_message.Message):
     __slots__ = ("id", "label", "geo", "taskable", "component", "controller", "track", "mission", "channel", "device", "config")

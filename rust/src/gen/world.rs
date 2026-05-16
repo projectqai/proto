@@ -1524,6 +1524,9 @@ pub struct DeviceClassOption {
     /// Human-readable label for the UI select (e.g. "USB Serial Device")
     #[prost(string, tag = "2")]
     pub label: ::prost::alloc::string::String,
+    /// Long text for a human
+    #[prost(string, tag = "3")]
+    pub description: ::prost::alloc::string::String,
 }
 /// Presence of this component indicates a controller is managing this entity.
 /// It declares what can be configured and reports the controller's state.
@@ -1740,20 +1743,25 @@ pub struct AssemblyComponent {
     #[prost(string, repeated, tag = "2")]
     pub outline: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+/// Toggleable overlays over the base map
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MapLayerComponent {
     #[prost(int32, tag = "1")]
     pub z_index: i32,
+    #[prost(float, tag = "2")]
+    pub opacity: f32,
     #[prost(oneof = "map_layer_component::Source", tags = "10, 11")]
     pub source: ::core::option::Option<map_layer_component::Source>,
 }
 /// Nested message and enum types in `MapLayerComponent`.
 pub mod map_layer_component {
+    /// XYZ tile template e.g. "<https://.../{z}/{x}/{y}.png">
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct Tile {
         #[prost(string, tag = "1")]
         pub url: ::prost::alloc::string::String,
     }
+    /// single bitmap covering \[west, south, east, north\] in WGS84.
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct Image {
         #[prost(string, tag = "1")]

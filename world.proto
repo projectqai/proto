@@ -710,6 +710,9 @@ message DeviceClassOption {
 
   // Human-readable label for the UI select (e.g. "USB Serial Device")
   string label = 2;
+
+  // Long text for a human
+  string description = 3;
 }
 
 // Presence of this component indicates a controller is managing this entity.
@@ -874,7 +877,6 @@ message AssemblyComponent {
 
 // Toggleable overlays over the base map
 message MapLayerComponent {
-
   int32 z_index = 1;
   float opacity = 2;
 

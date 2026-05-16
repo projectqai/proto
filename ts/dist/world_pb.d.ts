@@ -1920,6 +1920,13 @@ export declare type DeviceClassOption = Message<"world.DeviceClassOption"> & {
    * @generated from field: string label = 2;
    */
   label: string;
+
+  /**
+   * Long text for a human
+   *
+   * @generated from field: string description = 3;
+   */
+  description: string;
 };
 
 /**
@@ -2477,6 +2484,8 @@ export declare type AssemblyComponent = Message<"world.AssemblyComponent"> & {
 export declare const AssemblyComponentSchema: GenMessage<AssemblyComponent>;
 
 /**
+ * Toggleable overlays over the base map
+ *
  * @generated from message world.MapLayerComponent
  */
 export declare type MapLayerComponent = Message<"world.MapLayerComponent"> & {
@@ -2484,6 +2493,11 @@ export declare type MapLayerComponent = Message<"world.MapLayerComponent"> & {
    * @generated from field: int32 z_index = 1;
    */
   zIndex: number;
+
+  /**
+   * @generated from field: float opacity = 2;
+   */
+  opacity: number;
 
   /**
    * @generated from oneof world.MapLayerComponent.source
@@ -2510,6 +2524,8 @@ export declare type MapLayerComponent = Message<"world.MapLayerComponent"> & {
 export declare const MapLayerComponentSchema: GenMessage<MapLayerComponent>;
 
 /**
+ * XYZ tile template e.g. "https://.../{z}/{x}/{y}.png"
+ *
  * @generated from message world.MapLayerComponent.Tile
  */
 export declare type MapLayerComponent_Tile = Message<"world.MapLayerComponent.Tile"> & {
@@ -2526,6 +2542,8 @@ export declare type MapLayerComponent_Tile = Message<"world.MapLayerComponent.Ti
 export declare const MapLayerComponent_TileSchema: GenMessage<MapLayerComponent_Tile>;
 
 /**
+ * single bitmap covering [west, south, east, north] in WGS84.
+ *
  * @generated from message world.MapLayerComponent.Image
  */
 export declare type MapLayerComponent_Image = Message<"world.MapLayerComponent.Image"> & {

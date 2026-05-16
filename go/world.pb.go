@@ -4823,7 +4823,9 @@ type DeviceClassOption struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	Class string                 `protobuf:"bytes,1,opt,name=class,proto3" json:"class,omitempty"`
 	// Human-readable label for the UI select (e.g. "USB Serial Device")
-	Label         string `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"`
+	Label string `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"`
+	// Long text for a human
+	Description   string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4868,6 +4870,13 @@ func (x *DeviceClassOption) GetClass() string {
 func (x *DeviceClassOption) GetLabel() string {
 	if x != nil {
 		return x.Label
+	}
+	return ""
+}
+
+func (x *DeviceClassOption) GetDescription() string {
+	if x != nil {
+		return x.Description
 	}
 	return ""
 }
@@ -5931,9 +5940,11 @@ func (x *AssemblyComponent) GetOutline() []string {
 	return nil
 }
 
+// Toggleable overlays over the base map
 type MapLayerComponent struct {
-	state  protoimpl.MessageState `protogen:"open.v1"`
-	ZIndex int32                  `protobuf:"varint,1,opt,name=z_index,json=zIndex,proto3" json:"z_index,omitempty"`
+	state   protoimpl.MessageState `protogen:"open.v1"`
+	ZIndex  int32                  `protobuf:"varint,1,opt,name=z_index,json=zIndex,proto3" json:"z_index,omitempty"`
+	Opacity float32                `protobuf:"fixed32,2,opt,name=opacity,proto3" json:"opacity,omitempty"`
 	// Types that are valid to be assigned to Source:
 	//
 	//	*MapLayerComponent_Tiles
@@ -5976,6 +5987,13 @@ func (*MapLayerComponent) Descriptor() ([]byte, []int) {
 func (x *MapLayerComponent) GetZIndex() int32 {
 	if x != nil {
 		return x.ZIndex
+	}
+	return 0
+}
+
+func (x *MapLayerComponent) GetOpacity() float32 {
+	if x != nil {
+		return x.Opacity
 	}
 	return 0
 }
@@ -7886,6 +7904,7 @@ func (x *TimeSyncResponse) GetT3() *timestamppb.Timestamp {
 	return nil
 }
 
+// XYZ tile template e.g. "https://.../{z}/{x}/{y}.png"
 type MapLayerComponent_Tile struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
@@ -7930,6 +7949,7 @@ func (x *MapLayerComponent_Tile) GetUrl() string {
 	return ""
 }
 
+// single bitmap covering [west, south, east, north] in WGS84.
 type MapLayerComponent_Image struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
@@ -8526,10 +8546,11 @@ const file_world_proto_rawDesc = "" +
 	"\x12_remaining_secondsB\f\n" +
 	"\n" +
 	"_current_aB\x14\n" +
-	"\x12_capacity_used_mah\"?\n" +
+	"\x12_capacity_used_mah\"a\n" +
 	"\x11DeviceClassOption\x12\x14\n" +
 	"\x05class\x18\x01 \x01(\tR\x05class\x12\x14\n" +
-	"\x05label\x18\x02 \x01(\tR\x05label\"\xc3\x03\n" +
+	"\x05label\x18\x02 \x01(\tR\x05label\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\"\xc3\x03\n" +
 	"\x15ConfigurableComponent\x12/\n" +
 	"\x06schema\x18\x01 \x01(\v2\x17.google.protobuf.StructR\x06schema\x12-\n" +
 	"\x05value\x18\x02 \x01(\v2\x17.google.protobuf.StructR\x05value\x12.\n" +
@@ -8681,9 +8702,10 @@ const file_world_proto_rawDesc = "" +
 	"\x11AssemblyComponent\x12\x1b\n" +
 	"\x06parent\x18\x01 \x01(\tH\x00R\x06parent\x88\x01\x01\x12\x18\n" +
 	"\aoutline\x18\x02 \x03(\tR\aoutlineB\t\n" +
-	"\a_parent\"\xae\x02\n" +
+	"\a_parent\"\xc8\x02\n" +
 	"\x11MapLayerComponent\x12\x17\n" +
-	"\az_index\x18\x01 \x01(\x05R\x06zIndex\x125\n" +
+	"\az_index\x18\x01 \x01(\x05R\x06zIndex\x12\x18\n" +
+	"\aopacity\x18\x02 \x01(\x02R\aopacity\x125\n" +
 	"\x05tiles\x18\n" +
 	" \x01(\v2\x1d.world.MapLayerComponent.TileH\x00R\x05tiles\x126\n" +
 	"\x05image\x18\v \x01(\v2\x1e.world.MapLayerComponent.ImageH\x00R\x05image\x1a\x18\n" +
