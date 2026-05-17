@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0etaxonomy.proto\x12\x05world\"\xe5\x02\n\x16\x43lassificationTaxonomy\x12\x33\n\nconfidence\x18\x01 \x01(\x0b\x32\x1f.world.ClassificationConfidence\x12\'\n\x06person\x18\n \x01(\x0b\x32\x15.world.PersonTaxonomyH\x00\x12\'\n\x06\x61nimal\x18\x0b \x01(\x0b\x32\x15.world.AnimalTaxonomyH\x00\x12\x37\n\x0einfrastructure\x18\x0c \x01(\x0b\x32\x1d.world.InfrastructureTaxonomyH\x00\x12)\n\x07vehicle\x18\r \x01(\x0b\x32\x16.world.VehicleTaxonomyH\x00\x12-\n\tequipment\x18\x0e \x01(\x0b\x32\x18.world.EquipmentTaxonomyH\x00\x12)\n\x07\x65mitter\x18\x0f \x01(\x0b\x32\x16.world.EmitterTaxonomyH\x00\x42\x06\n\x04kind\"?\n\x18\x43lassificationConfidence\x12\x12\n\nconfidence\x18\x01 \x01(\x02\x12\x0f\n\x07pending\x18\x02 \x01(\x08\"\x10\n\x0ePersonTaxonomy\"l\n\x0e\x41nimalTaxonomy\x12\'\n\x03\x61ir\x18\x01 \x01(\x0b\x32\x18.world.AnimalTaxonomyAirH\x00\x12)\n\x04land\x18\x02 \x01(\x0b\x32\x19.world.AnimalTaxonomyLandH\x00\x42\x06\n\x04kind\"\x14\n\x12\x41nimalTaxonomyBird\"J\n\x11\x41nimalTaxonomyAir\x12,\n\x04\x62ird\x18\x01 \x01(\x0b\x32\x19.world.AnimalTaxonomyBirdH\x00\x88\x01\x01\x42\x07\n\x05_bird\"\x15\n\x13\x41nimalTaxonomyHorse\"N\n\x12\x41nimalTaxonomyLand\x12.\n\x05horse\x18\x01 \x01(\x0b\x32\x1a.world.AnimalTaxonomyHorseH\x00\x88\x01\x01\x42\x08\n\x06_horse\"\x9a\x02\n\x16InfrastructureTaxonomy\x12\x36\n\x05tower\x18\x01 \x01(\x0b\x32\".world.InfrastructureTaxonomyTowerH\x00\x88\x01\x01\x12\x38\n\x06\x62ridge\x18\x02 \x01(\x0b\x32#.world.InfrastructureTaxonomyBridgeH\x01\x88\x01\x01\x12\x34\n\x04road\x18\x03 \x01(\x0b\x32!.world.InfrastructureTaxonomyRoadH\x02\x88\x01\x01\x12\x32\n\x03\x64\x61m\x18\x04 \x01(\x0b\x32 .world.InfrastructureTaxonomyDamH\x03\x88\x01\x01\x42\x08\n\x06_towerB\t\n\x07_bridgeB\x07\n\x05_roadB\x06\n\x04_dam\"\x1d\n\x1bInfrastructureTaxonomyTower\"\x1e\n\x1cInfrastructureTaxonomyBridge\"\x1c\n\x1aInfrastructureTaxonomyRoad\"\x1b\n\x19InfrastructureTaxonomyDam\"\x19\n\x17VehicleTaxonomyUnmanned\"\x97\x02\n\x0fVehicleTaxonomy\x12\x35\n\x08unmanned\x18\x01 \x01(\x0b\x32\x1e.world.VehicleTaxonomyUnmannedH\x01\x88\x01\x01\x12*\n\x04land\x18\n \x01(\x0b\x32\x1a.world.VehicleTaxonomyLandH\x00\x12(\n\x03\x61ir\x18\x0b \x01(\x0b\x32\x19.world.VehicleTaxonomyAirH\x00\x12(\n\x03sea\x18\x0c \x01(\x0b\x32\x19.world.VehicleTaxonomySeaH\x00\x12\x36\n\nsubsurface\x18\r \x01(\x0b\x32 .world.VehicleTaxonomySubsurfaceH\x00\x42\x08\n\x06\x64omainB\x0b\n\t_unmanned\"\x18\n\x16VehicleTaxonomyTracked\"\x1b\n\x19VehicleTaxonomyTwoWheeled\"\x1d\n\x1bVehicleTaxonomyMultiWheeled\"\xc5\x01\n\x13VehicleTaxonomyLand\x12\x30\n\x07tracked\x18\x01 \x01(\x0b\x32\x1d.world.VehicleTaxonomyTrackedH\x00\x12\x37\n\x0btwo_wheeled\x18\x02 \x01(\x0b\x32 .world.VehicleTaxonomyTwoWheeledH\x00\x12;\n\rmulti_wheeled\x18\x03 \x01(\x0b\x32\".world.VehicleTaxonomyMultiWheeledH\x00\x42\x06\n\x04kind\"\x1a\n\x18VehicleTaxonomyAirRotary\"\x1d\n\x1bVehicleTaxonomyAirFixedWing\"\"\n VehicleTaxonomyAirLighterThanAir\"\xce\x01\n\x12VehicleTaxonomyAir\x12\x38\n\nfixed_wing\x18\x01 \x01(\x0b\x32\".world.VehicleTaxonomyAirFixedWingH\x00\x12\x43\n\x10lighter_than_air\x18\x02 \x01(\x0b\x32\'.world.VehicleTaxonomyAirLighterThanAirH\x00\x12\x31\n\x06rotary\x18\x03 \x01(\x0b\x32\x1f.world.VehicleTaxonomyAirRotaryH\x00\x42\x06\n\x04kind\"\x14\n\x12VehicleTaxonomySea\"\x1b\n\x19VehicleTaxonomySubsurface\"\x1e\n\x1c\x45quipmentTaxonomySensorRadar\"\x1b\n\x19\x45quipmentTaxonomySensorEW\"\x1d\n\x1b\x45quipmentTaxonomySensorCBRN\"!\n\x1f\x45quipmentTaxonomySensorAcoustic\"\'\n%EquipmentTaxonomySensorElectroOptical\"!\n\x1f\x45quipmentTaxonomySensorEmplaced\"\x8c\x03\n\x17\x45quipmentTaxonomySensor\x12=\n\x08\x65mplaced\x18\x01 \x01(\x0b\x32&.world.EquipmentTaxonomySensorEmplacedH\x01\x88\x01\x01\x12\x34\n\x05radar\x18\n \x01(\x0b\x32#.world.EquipmentTaxonomySensorRadarH\x00\x12.\n\x02\x65w\x18\x0b \x01(\x0b\x32 .world.EquipmentTaxonomySensorEWH\x00\x12\x32\n\x04\x63\x62rn\x18\x0c \x01(\x0b\x32\".world.EquipmentTaxonomySensorCBRNH\x00\x12:\n\x08\x61\x63oustic\x18\r \x01(\x0b\x32&.world.EquipmentTaxonomySensorAcousticH\x00\x12G\n\x0f\x65lectro_optical\x18\x0e \x01(\x0b\x32,.world.EquipmentTaxonomySensorElectroOpticalH\x00\x42\x06\n\x04kindB\x0b\n\t_emplaced\"S\n\x11\x45quipmentTaxonomy\x12\x33\n\x06sensor\x18\x01 \x01(\x0b\x32\x1e.world.EquipmentTaxonomySensorH\x00\x88\x01\x01\x42\t\n\x07_sensor\"\x11\n\x0f\x45mitterTaxonomyB Z\x1egithub.com/projectqai/proto/gob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0etaxonomy.proto\x12\x05world\"\xe5\x02\n\x16\x43lassificationTaxonomy\x12\x33\n\nconfidence\x18\x01 \x01(\x0b\x32\x1f.world.ClassificationConfidence\x12\'\n\x06person\x18\n \x01(\x0b\x32\x15.world.PersonTaxonomyH\x00\x12\'\n\x06\x61nimal\x18\x0b \x01(\x0b\x32\x15.world.AnimalTaxonomyH\x00\x12\x37\n\x0einfrastructure\x18\x0c \x01(\x0b\x32\x1d.world.InfrastructureTaxonomyH\x00\x12)\n\x07vehicle\x18\r \x01(\x0b\x32\x16.world.VehicleTaxonomyH\x00\x12-\n\tequipment\x18\x0e \x01(\x0b\x32\x18.world.EquipmentTaxonomyH\x00\x12)\n\x07\x65mitter\x18\x0f \x01(\x0b\x32\x16.world.EmitterTaxonomyH\x00\x42\x06\n\x04kind\"?\n\x18\x43lassificationConfidence\x12\x12\n\nconfidence\x18\x01 \x01(\x02\x12\x0f\n\x07pending\x18\x02 \x01(\x08\"\x10\n\x0ePersonTaxonomy\"l\n\x0e\x41nimalTaxonomy\x12\'\n\x03\x61ir\x18\x01 \x01(\x0b\x32\x18.world.AnimalTaxonomyAirH\x00\x12)\n\x04land\x18\x02 \x01(\x0b\x32\x19.world.AnimalTaxonomyLandH\x00\x42\x06\n\x04kind\"\x14\n\x12\x41nimalTaxonomyBird\"J\n\x11\x41nimalTaxonomyAir\x12,\n\x04\x62ird\x18\x01 \x01(\x0b\x32\x19.world.AnimalTaxonomyBirdH\x00\x88\x01\x01\x42\x07\n\x05_bird\"\x15\n\x13\x41nimalTaxonomyHorse\"N\n\x12\x41nimalTaxonomyLand\x12.\n\x05horse\x18\x01 \x01(\x0b\x32\x1a.world.AnimalTaxonomyHorseH\x00\x88\x01\x01\x42\x08\n\x06_horse\"\x9a\x02\n\x16InfrastructureTaxonomy\x12\x36\n\x05tower\x18\x01 \x01(\x0b\x32\".world.InfrastructureTaxonomyTowerH\x00\x88\x01\x01\x12\x38\n\x06\x62ridge\x18\x02 \x01(\x0b\x32#.world.InfrastructureTaxonomyBridgeH\x01\x88\x01\x01\x12\x34\n\x04road\x18\x03 \x01(\x0b\x32!.world.InfrastructureTaxonomyRoadH\x02\x88\x01\x01\x12\x32\n\x03\x64\x61m\x18\x04 \x01(\x0b\x32 .world.InfrastructureTaxonomyDamH\x03\x88\x01\x01\x42\x08\n\x06_towerB\t\n\x07_bridgeB\x07\n\x05_roadB\x06\n\x04_dam\"\x1d\n\x1bInfrastructureTaxonomyTower\"\x1e\n\x1cInfrastructureTaxonomyBridge\"\x1c\n\x1aInfrastructureTaxonomyRoad\"\x1b\n\x19InfrastructureTaxonomyDam\"\x97\x02\n\x0fVehicleTaxonomy\x12\x35\n\x08unmanned\x18\x01 \x01(\x0b\x32\x1e.world.VehicleTaxonomyUnmannedH\x01\x88\x01\x01\x12*\n\x04land\x18\n \x01(\x0b\x32\x1a.world.VehicleTaxonomyLandH\x00\x12(\n\x03\x61ir\x18\x0b \x01(\x0b\x32\x19.world.VehicleTaxonomyAirH\x00\x12(\n\x03sea\x18\x0c \x01(\x0b\x32\x19.world.VehicleTaxonomySeaH\x00\x12\x36\n\nsubsurface\x18\r \x01(\x0b\x32 .world.VehicleTaxonomySubsurfaceH\x00\x42\x08\n\x06\x64omainB\x0b\n\t_unmanned\"\x19\n\x17VehicleTaxonomyUnmanned\"\xc5\x01\n\x13VehicleTaxonomyLand\x12\x30\n\x07tracked\x18\x01 \x01(\x0b\x32\x1d.world.VehicleTaxonomyTrackedH\x00\x12\x37\n\x0btwo_wheeled\x18\x02 \x01(\x0b\x32 .world.VehicleTaxonomyTwoWheeledH\x00\x12;\n\rmulti_wheeled\x18\x03 \x01(\x0b\x32\".world.VehicleTaxonomyMultiWheeledH\x00\x42\x06\n\x04kind\"\x18\n\x16VehicleTaxonomyTracked\"\x1b\n\x19VehicleTaxonomyTwoWheeled\"\x1d\n\x1bVehicleTaxonomyMultiWheeled\"\xce\x01\n\x12VehicleTaxonomyAir\x12\x38\n\nfixed_wing\x18\x01 \x01(\x0b\x32\".world.VehicleTaxonomyAirFixedWingH\x00\x12\x43\n\x10lighter_than_air\x18\x02 \x01(\x0b\x32\'.world.VehicleTaxonomyAirLighterThanAirH\x00\x12\x31\n\x06rotary\x18\x03 \x01(\x0b\x32\x1f.world.VehicleTaxonomyAirRotaryH\x00\x42\x06\n\x04kind\"\x1a\n\x18VehicleTaxonomyAirRotary\"\x1d\n\x1bVehicleTaxonomyAirFixedWing\"\"\n VehicleTaxonomyAirLighterThanAir\"\x14\n\x12VehicleTaxonomySea\"\x1b\n\x19VehicleTaxonomySubsurface\"S\n\x11\x45quipmentTaxonomy\x12\x33\n\x06sensor\x18\x01 \x01(\x0b\x32\x1e.world.EquipmentTaxonomySensorH\x00\x88\x01\x01\x42\t\n\x07_sensor\"\x8c\x03\n\x17\x45quipmentTaxonomySensor\x12=\n\x08\x65mplaced\x18\x01 \x01(\x0b\x32&.world.EquipmentTaxonomySensorEmplacedH\x01\x88\x01\x01\x12\x34\n\x05radar\x18\n \x01(\x0b\x32#.world.EquipmentTaxonomySensorRadarH\x00\x12.\n\x02\x65w\x18\x0b \x01(\x0b\x32 .world.EquipmentTaxonomySensorEWH\x00\x12\x32\n\x04\x63\x62rn\x18\x0c \x01(\x0b\x32\".world.EquipmentTaxonomySensorCBRNH\x00\x12:\n\x08\x61\x63oustic\x18\r \x01(\x0b\x32&.world.EquipmentTaxonomySensorAcousticH\x00\x12G\n\x0f\x65lectro_optical\x18\x0e \x01(\x0b\x32,.world.EquipmentTaxonomySensorElectroOpticalH\x00\x42\x06\n\x04kindB\x0b\n\t_emplaced\"\x1e\n\x1c\x45quipmentTaxonomySensorRadar\"\x1b\n\x19\x45quipmentTaxonomySensorEW\"\x1d\n\x1b\x45quipmentTaxonomySensorCBRN\"!\n\x1f\x45quipmentTaxonomySensorAcoustic\"\'\n%EquipmentTaxonomySensorElectroOptical\"!\n\x1f\x45quipmentTaxonomySensorEmplaced\"\x11\n\x0f\x45mitterTaxonomyB Z\x1egithub.com/projectqai/proto/gob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -58,46 +58,46 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_INFRASTRUCTURETAXONOMYROAD']._serialized_end=1155
   _globals['_INFRASTRUCTURETAXONOMYDAM']._serialized_start=1157
   _globals['_INFRASTRUCTURETAXONOMYDAM']._serialized_end=1184
-  _globals['_VEHICLETAXONOMYUNMANNED']._serialized_start=1186
-  _globals['_VEHICLETAXONOMYUNMANNED']._serialized_end=1211
-  _globals['_VEHICLETAXONOMY']._serialized_start=1214
-  _globals['_VEHICLETAXONOMY']._serialized_end=1493
-  _globals['_VEHICLETAXONOMYTRACKED']._serialized_start=1495
-  _globals['_VEHICLETAXONOMYTRACKED']._serialized_end=1519
-  _globals['_VEHICLETAXONOMYTWOWHEELED']._serialized_start=1521
-  _globals['_VEHICLETAXONOMYTWOWHEELED']._serialized_end=1548
-  _globals['_VEHICLETAXONOMYMULTIWHEELED']._serialized_start=1550
-  _globals['_VEHICLETAXONOMYMULTIWHEELED']._serialized_end=1579
-  _globals['_VEHICLETAXONOMYLAND']._serialized_start=1582
-  _globals['_VEHICLETAXONOMYLAND']._serialized_end=1779
-  _globals['_VEHICLETAXONOMYAIRROTARY']._serialized_start=1781
-  _globals['_VEHICLETAXONOMYAIRROTARY']._serialized_end=1807
-  _globals['_VEHICLETAXONOMYAIRFIXEDWING']._serialized_start=1809
-  _globals['_VEHICLETAXONOMYAIRFIXEDWING']._serialized_end=1838
-  _globals['_VEHICLETAXONOMYAIRLIGHTERTHANAIR']._serialized_start=1840
-  _globals['_VEHICLETAXONOMYAIRLIGHTERTHANAIR']._serialized_end=1874
-  _globals['_VEHICLETAXONOMYAIR']._serialized_start=1877
-  _globals['_VEHICLETAXONOMYAIR']._serialized_end=2083
+  _globals['_VEHICLETAXONOMY']._serialized_start=1187
+  _globals['_VEHICLETAXONOMY']._serialized_end=1466
+  _globals['_VEHICLETAXONOMYUNMANNED']._serialized_start=1468
+  _globals['_VEHICLETAXONOMYUNMANNED']._serialized_end=1493
+  _globals['_VEHICLETAXONOMYLAND']._serialized_start=1496
+  _globals['_VEHICLETAXONOMYLAND']._serialized_end=1693
+  _globals['_VEHICLETAXONOMYTRACKED']._serialized_start=1695
+  _globals['_VEHICLETAXONOMYTRACKED']._serialized_end=1719
+  _globals['_VEHICLETAXONOMYTWOWHEELED']._serialized_start=1721
+  _globals['_VEHICLETAXONOMYTWOWHEELED']._serialized_end=1748
+  _globals['_VEHICLETAXONOMYMULTIWHEELED']._serialized_start=1750
+  _globals['_VEHICLETAXONOMYMULTIWHEELED']._serialized_end=1779
+  _globals['_VEHICLETAXONOMYAIR']._serialized_start=1782
+  _globals['_VEHICLETAXONOMYAIR']._serialized_end=1988
+  _globals['_VEHICLETAXONOMYAIRROTARY']._serialized_start=1990
+  _globals['_VEHICLETAXONOMYAIRROTARY']._serialized_end=2016
+  _globals['_VEHICLETAXONOMYAIRFIXEDWING']._serialized_start=2018
+  _globals['_VEHICLETAXONOMYAIRFIXEDWING']._serialized_end=2047
+  _globals['_VEHICLETAXONOMYAIRLIGHTERTHANAIR']._serialized_start=2049
+  _globals['_VEHICLETAXONOMYAIRLIGHTERTHANAIR']._serialized_end=2083
   _globals['_VEHICLETAXONOMYSEA']._serialized_start=2085
   _globals['_VEHICLETAXONOMYSEA']._serialized_end=2105
   _globals['_VEHICLETAXONOMYSUBSURFACE']._serialized_start=2107
   _globals['_VEHICLETAXONOMYSUBSURFACE']._serialized_end=2134
-  _globals['_EQUIPMENTTAXONOMYSENSORRADAR']._serialized_start=2136
-  _globals['_EQUIPMENTTAXONOMYSENSORRADAR']._serialized_end=2166
-  _globals['_EQUIPMENTTAXONOMYSENSOREW']._serialized_start=2168
-  _globals['_EQUIPMENTTAXONOMYSENSOREW']._serialized_end=2195
-  _globals['_EQUIPMENTTAXONOMYSENSORCBRN']._serialized_start=2197
-  _globals['_EQUIPMENTTAXONOMYSENSORCBRN']._serialized_end=2226
-  _globals['_EQUIPMENTTAXONOMYSENSORACOUSTIC']._serialized_start=2228
-  _globals['_EQUIPMENTTAXONOMYSENSORACOUSTIC']._serialized_end=2261
-  _globals['_EQUIPMENTTAXONOMYSENSORELECTROOPTICAL']._serialized_start=2263
-  _globals['_EQUIPMENTTAXONOMYSENSORELECTROOPTICAL']._serialized_end=2302
-  _globals['_EQUIPMENTTAXONOMYSENSOREMPLACED']._serialized_start=2304
-  _globals['_EQUIPMENTTAXONOMYSENSOREMPLACED']._serialized_end=2337
-  _globals['_EQUIPMENTTAXONOMYSENSOR']._serialized_start=2340
-  _globals['_EQUIPMENTTAXONOMYSENSOR']._serialized_end=2736
-  _globals['_EQUIPMENTTAXONOMY']._serialized_start=2738
-  _globals['_EQUIPMENTTAXONOMY']._serialized_end=2821
+  _globals['_EQUIPMENTTAXONOMY']._serialized_start=2136
+  _globals['_EQUIPMENTTAXONOMY']._serialized_end=2219
+  _globals['_EQUIPMENTTAXONOMYSENSOR']._serialized_start=2222
+  _globals['_EQUIPMENTTAXONOMYSENSOR']._serialized_end=2618
+  _globals['_EQUIPMENTTAXONOMYSENSORRADAR']._serialized_start=2620
+  _globals['_EQUIPMENTTAXONOMYSENSORRADAR']._serialized_end=2650
+  _globals['_EQUIPMENTTAXONOMYSENSOREW']._serialized_start=2652
+  _globals['_EQUIPMENTTAXONOMYSENSOREW']._serialized_end=2679
+  _globals['_EQUIPMENTTAXONOMYSENSORCBRN']._serialized_start=2681
+  _globals['_EQUIPMENTTAXONOMYSENSORCBRN']._serialized_end=2710
+  _globals['_EQUIPMENTTAXONOMYSENSORACOUSTIC']._serialized_start=2712
+  _globals['_EQUIPMENTTAXONOMYSENSORACOUSTIC']._serialized_end=2745
+  _globals['_EQUIPMENTTAXONOMYSENSORELECTROOPTICAL']._serialized_start=2747
+  _globals['_EQUIPMENTTAXONOMYSENSORELECTROOPTICAL']._serialized_end=2786
+  _globals['_EQUIPMENTTAXONOMYSENSOREMPLACED']._serialized_start=2788
+  _globals['_EQUIPMENTTAXONOMYSENSOREMPLACED']._serialized_end=2821
   _globals['_EMITTERTAXONOMY']._serialized_start=2823
   _globals['_EMITTERTAXONOMY']._serialized_end=2840
 # @@protoc_insertion_point(module_scope)

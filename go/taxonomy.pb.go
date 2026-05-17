@@ -717,42 +717,6 @@ func (*InfrastructureTaxonomyDam) Descriptor() ([]byte, []int) {
 	return file_taxonomy_proto_rawDescGZIP(), []int{12}
 }
 
-type VehicleTaxonomyUnmanned struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *VehicleTaxonomyUnmanned) Reset() {
-	*x = VehicleTaxonomyUnmanned{}
-	mi := &file_taxonomy_proto_msgTypes[13]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *VehicleTaxonomyUnmanned) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VehicleTaxonomyUnmanned) ProtoMessage() {}
-
-func (x *VehicleTaxonomyUnmanned) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[13]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VehicleTaxonomyUnmanned.ProtoReflect.Descriptor instead.
-func (*VehicleTaxonomyUnmanned) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{13}
-}
-
 type VehicleTaxonomy struct {
 	state    protoimpl.MessageState   `protogen:"open.v1"`
 	Unmanned *VehicleTaxonomyUnmanned `protobuf:"bytes,1,opt,name=unmanned,proto3,oneof" json:"unmanned,omitempty"`
@@ -769,7 +733,7 @@ type VehicleTaxonomy struct {
 
 func (x *VehicleTaxonomy) Reset() {
 	*x = VehicleTaxonomy{}
-	mi := &file_taxonomy_proto_msgTypes[14]
+	mi := &file_taxonomy_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -781,7 +745,7 @@ func (x *VehicleTaxonomy) String() string {
 func (*VehicleTaxonomy) ProtoMessage() {}
 
 func (x *VehicleTaxonomy) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[14]
+	mi := &file_taxonomy_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -794,7 +758,7 @@ func (x *VehicleTaxonomy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomy.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomy) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{14}
+	return file_taxonomy_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *VehicleTaxonomy) GetUnmanned() *VehicleTaxonomyUnmanned {
@@ -875,27 +839,27 @@ func (*VehicleTaxonomy_Sea) isVehicleTaxonomy_Domain() {}
 
 func (*VehicleTaxonomy_Subsurface) isVehicleTaxonomy_Domain() {}
 
-type VehicleTaxonomyTracked struct {
+type VehicleTaxonomyUnmanned struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *VehicleTaxonomyTracked) Reset() {
-	*x = VehicleTaxonomyTracked{}
-	mi := &file_taxonomy_proto_msgTypes[15]
+func (x *VehicleTaxonomyUnmanned) Reset() {
+	*x = VehicleTaxonomyUnmanned{}
+	mi := &file_taxonomy_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *VehicleTaxonomyTracked) String() string {
+func (x *VehicleTaxonomyUnmanned) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*VehicleTaxonomyTracked) ProtoMessage() {}
+func (*VehicleTaxonomyUnmanned) ProtoMessage() {}
 
-func (x *VehicleTaxonomyTracked) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[15]
+func (x *VehicleTaxonomyUnmanned) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -906,81 +870,9 @@ func (x *VehicleTaxonomyTracked) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use VehicleTaxonomyTracked.ProtoReflect.Descriptor instead.
-func (*VehicleTaxonomyTracked) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{15}
-}
-
-type VehicleTaxonomyTwoWheeled struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *VehicleTaxonomyTwoWheeled) Reset() {
-	*x = VehicleTaxonomyTwoWheeled{}
-	mi := &file_taxonomy_proto_msgTypes[16]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *VehicleTaxonomyTwoWheeled) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VehicleTaxonomyTwoWheeled) ProtoMessage() {}
-
-func (x *VehicleTaxonomyTwoWheeled) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[16]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VehicleTaxonomyTwoWheeled.ProtoReflect.Descriptor instead.
-func (*VehicleTaxonomyTwoWheeled) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{16}
-}
-
-type VehicleTaxonomyMultiWheeled struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *VehicleTaxonomyMultiWheeled) Reset() {
-	*x = VehicleTaxonomyMultiWheeled{}
-	mi := &file_taxonomy_proto_msgTypes[17]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *VehicleTaxonomyMultiWheeled) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*VehicleTaxonomyMultiWheeled) ProtoMessage() {}
-
-func (x *VehicleTaxonomyMultiWheeled) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[17]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use VehicleTaxonomyMultiWheeled.ProtoReflect.Descriptor instead.
-func (*VehicleTaxonomyMultiWheeled) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{17}
+// Deprecated: Use VehicleTaxonomyUnmanned.ProtoReflect.Descriptor instead.
+func (*VehicleTaxonomyUnmanned) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{14}
 }
 
 type VehicleTaxonomyLand struct {
@@ -997,7 +889,7 @@ type VehicleTaxonomyLand struct {
 
 func (x *VehicleTaxonomyLand) Reset() {
 	*x = VehicleTaxonomyLand{}
-	mi := &file_taxonomy_proto_msgTypes[18]
+	mi := &file_taxonomy_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1009,7 +901,7 @@ func (x *VehicleTaxonomyLand) String() string {
 func (*VehicleTaxonomyLand) ProtoMessage() {}
 
 func (x *VehicleTaxonomyLand) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[18]
+	mi := &file_taxonomy_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1022,7 +914,7 @@ func (x *VehicleTaxonomyLand) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomyLand.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomyLand) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{18}
+	return file_taxonomy_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *VehicleTaxonomyLand) GetKind() isVehicleTaxonomyLand_Kind {
@@ -1081,27 +973,27 @@ func (*VehicleTaxonomyLand_TwoWheeled) isVehicleTaxonomyLand_Kind() {}
 
 func (*VehicleTaxonomyLand_MultiWheeled) isVehicleTaxonomyLand_Kind() {}
 
-type VehicleTaxonomyAirRotary struct {
+type VehicleTaxonomyTracked struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *VehicleTaxonomyAirRotary) Reset() {
-	*x = VehicleTaxonomyAirRotary{}
-	mi := &file_taxonomy_proto_msgTypes[19]
+func (x *VehicleTaxonomyTracked) Reset() {
+	*x = VehicleTaxonomyTracked{}
+	mi := &file_taxonomy_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *VehicleTaxonomyAirRotary) String() string {
+func (x *VehicleTaxonomyTracked) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*VehicleTaxonomyAirRotary) ProtoMessage() {}
+func (*VehicleTaxonomyTracked) ProtoMessage() {}
 
-func (x *VehicleTaxonomyAirRotary) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[19]
+func (x *VehicleTaxonomyTracked) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1112,32 +1004,32 @@ func (x *VehicleTaxonomyAirRotary) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use VehicleTaxonomyAirRotary.ProtoReflect.Descriptor instead.
-func (*VehicleTaxonomyAirRotary) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{19}
+// Deprecated: Use VehicleTaxonomyTracked.ProtoReflect.Descriptor instead.
+func (*VehicleTaxonomyTracked) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{16}
 }
 
-type VehicleTaxonomyAirFixedWing struct {
+type VehicleTaxonomyTwoWheeled struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *VehicleTaxonomyAirFixedWing) Reset() {
-	*x = VehicleTaxonomyAirFixedWing{}
-	mi := &file_taxonomy_proto_msgTypes[20]
+func (x *VehicleTaxonomyTwoWheeled) Reset() {
+	*x = VehicleTaxonomyTwoWheeled{}
+	mi := &file_taxonomy_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *VehicleTaxonomyAirFixedWing) String() string {
+func (x *VehicleTaxonomyTwoWheeled) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*VehicleTaxonomyAirFixedWing) ProtoMessage() {}
+func (*VehicleTaxonomyTwoWheeled) ProtoMessage() {}
 
-func (x *VehicleTaxonomyAirFixedWing) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[20]
+func (x *VehicleTaxonomyTwoWheeled) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1148,32 +1040,32 @@ func (x *VehicleTaxonomyAirFixedWing) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use VehicleTaxonomyAirFixedWing.ProtoReflect.Descriptor instead.
-func (*VehicleTaxonomyAirFixedWing) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{20}
+// Deprecated: Use VehicleTaxonomyTwoWheeled.ProtoReflect.Descriptor instead.
+func (*VehicleTaxonomyTwoWheeled) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{17}
 }
 
-type VehicleTaxonomyAirLighterThanAir struct {
+type VehicleTaxonomyMultiWheeled struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *VehicleTaxonomyAirLighterThanAir) Reset() {
-	*x = VehicleTaxonomyAirLighterThanAir{}
-	mi := &file_taxonomy_proto_msgTypes[21]
+func (x *VehicleTaxonomyMultiWheeled) Reset() {
+	*x = VehicleTaxonomyMultiWheeled{}
+	mi := &file_taxonomy_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *VehicleTaxonomyAirLighterThanAir) String() string {
+func (x *VehicleTaxonomyMultiWheeled) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*VehicleTaxonomyAirLighterThanAir) ProtoMessage() {}
+func (*VehicleTaxonomyMultiWheeled) ProtoMessage() {}
 
-func (x *VehicleTaxonomyAirLighterThanAir) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[21]
+func (x *VehicleTaxonomyMultiWheeled) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1184,9 +1076,9 @@ func (x *VehicleTaxonomyAirLighterThanAir) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use VehicleTaxonomyAirLighterThanAir.ProtoReflect.Descriptor instead.
-func (*VehicleTaxonomyAirLighterThanAir) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{21}
+// Deprecated: Use VehicleTaxonomyMultiWheeled.ProtoReflect.Descriptor instead.
+func (*VehicleTaxonomyMultiWheeled) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{18}
 }
 
 type VehicleTaxonomyAir struct {
@@ -1203,7 +1095,7 @@ type VehicleTaxonomyAir struct {
 
 func (x *VehicleTaxonomyAir) Reset() {
 	*x = VehicleTaxonomyAir{}
-	mi := &file_taxonomy_proto_msgTypes[22]
+	mi := &file_taxonomy_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1215,7 +1107,7 @@ func (x *VehicleTaxonomyAir) String() string {
 func (*VehicleTaxonomyAir) ProtoMessage() {}
 
 func (x *VehicleTaxonomyAir) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[22]
+	mi := &file_taxonomy_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1228,7 +1120,7 @@ func (x *VehicleTaxonomyAir) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomyAir.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomyAir) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{22}
+	return file_taxonomy_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *VehicleTaxonomyAir) GetKind() isVehicleTaxonomyAir_Kind {
@@ -1286,6 +1178,114 @@ func (*VehicleTaxonomyAir_FixedWing) isVehicleTaxonomyAir_Kind() {}
 func (*VehicleTaxonomyAir_LighterThanAir) isVehicleTaxonomyAir_Kind() {}
 
 func (*VehicleTaxonomyAir_Rotary) isVehicleTaxonomyAir_Kind() {}
+
+type VehicleTaxonomyAirRotary struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VehicleTaxonomyAirRotary) Reset() {
+	*x = VehicleTaxonomyAirRotary{}
+	mi := &file_taxonomy_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VehicleTaxonomyAirRotary) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VehicleTaxonomyAirRotary) ProtoMessage() {}
+
+func (x *VehicleTaxonomyAirRotary) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VehicleTaxonomyAirRotary.ProtoReflect.Descriptor instead.
+func (*VehicleTaxonomyAirRotary) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{20}
+}
+
+type VehicleTaxonomyAirFixedWing struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VehicleTaxonomyAirFixedWing) Reset() {
+	*x = VehicleTaxonomyAirFixedWing{}
+	mi := &file_taxonomy_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VehicleTaxonomyAirFixedWing) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VehicleTaxonomyAirFixedWing) ProtoMessage() {}
+
+func (x *VehicleTaxonomyAirFixedWing) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VehicleTaxonomyAirFixedWing.ProtoReflect.Descriptor instead.
+func (*VehicleTaxonomyAirFixedWing) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{21}
+}
+
+type VehicleTaxonomyAirLighterThanAir struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VehicleTaxonomyAirLighterThanAir) Reset() {
+	*x = VehicleTaxonomyAirLighterThanAir{}
+	mi := &file_taxonomy_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VehicleTaxonomyAirLighterThanAir) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VehicleTaxonomyAirLighterThanAir) ProtoMessage() {}
+
+func (x *VehicleTaxonomyAirLighterThanAir) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VehicleTaxonomyAirLighterThanAir.ProtoReflect.Descriptor instead.
+func (*VehicleTaxonomyAirLighterThanAir) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{22}
+}
 
 type VehicleTaxonomySea struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1359,26 +1359,27 @@ func (*VehicleTaxonomySubsurface) Descriptor() ([]byte, []int) {
 	return file_taxonomy_proto_rawDescGZIP(), []int{24}
 }
 
-type EquipmentTaxonomySensorRadar struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+type EquipmentTaxonomy struct {
+	state         protoimpl.MessageState   `protogen:"open.v1"`
+	Sensor        *EquipmentTaxonomySensor `protobuf:"bytes,1,opt,name=sensor,proto3,oneof" json:"sensor,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *EquipmentTaxonomySensorRadar) Reset() {
-	*x = EquipmentTaxonomySensorRadar{}
+func (x *EquipmentTaxonomy) Reset() {
+	*x = EquipmentTaxonomy{}
 	mi := &file_taxonomy_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *EquipmentTaxonomySensorRadar) String() string {
+func (x *EquipmentTaxonomy) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EquipmentTaxonomySensorRadar) ProtoMessage() {}
+func (*EquipmentTaxonomy) ProtoMessage() {}
 
-func (x *EquipmentTaxonomySensorRadar) ProtoReflect() protoreflect.Message {
+func (x *EquipmentTaxonomy) ProtoReflect() protoreflect.Message {
 	mi := &file_taxonomy_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1390,189 +1391,16 @@ func (x *EquipmentTaxonomySensorRadar) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use EquipmentTaxonomySensorRadar.ProtoReflect.Descriptor instead.
-func (*EquipmentTaxonomySensorRadar) Descriptor() ([]byte, []int) {
+// Deprecated: Use EquipmentTaxonomy.ProtoReflect.Descriptor instead.
+func (*EquipmentTaxonomy) Descriptor() ([]byte, []int) {
 	return file_taxonomy_proto_rawDescGZIP(), []int{25}
 }
 
-type EquipmentTaxonomySensorEW struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *EquipmentTaxonomySensorEW) Reset() {
-	*x = EquipmentTaxonomySensorEW{}
-	mi := &file_taxonomy_proto_msgTypes[26]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EquipmentTaxonomySensorEW) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EquipmentTaxonomySensorEW) ProtoMessage() {}
-
-func (x *EquipmentTaxonomySensorEW) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[26]
+func (x *EquipmentTaxonomy) GetSensor() *EquipmentTaxonomySensor {
 	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
+		return x.Sensor
 	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EquipmentTaxonomySensorEW.ProtoReflect.Descriptor instead.
-func (*EquipmentTaxonomySensorEW) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{26}
-}
-
-type EquipmentTaxonomySensorCBRN struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *EquipmentTaxonomySensorCBRN) Reset() {
-	*x = EquipmentTaxonomySensorCBRN{}
-	mi := &file_taxonomy_proto_msgTypes[27]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EquipmentTaxonomySensorCBRN) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EquipmentTaxonomySensorCBRN) ProtoMessage() {}
-
-func (x *EquipmentTaxonomySensorCBRN) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[27]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EquipmentTaxonomySensorCBRN.ProtoReflect.Descriptor instead.
-func (*EquipmentTaxonomySensorCBRN) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{27}
-}
-
-type EquipmentTaxonomySensorAcoustic struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *EquipmentTaxonomySensorAcoustic) Reset() {
-	*x = EquipmentTaxonomySensorAcoustic{}
-	mi := &file_taxonomy_proto_msgTypes[28]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EquipmentTaxonomySensorAcoustic) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EquipmentTaxonomySensorAcoustic) ProtoMessage() {}
-
-func (x *EquipmentTaxonomySensorAcoustic) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[28]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EquipmentTaxonomySensorAcoustic.ProtoReflect.Descriptor instead.
-func (*EquipmentTaxonomySensorAcoustic) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{28}
-}
-
-type EquipmentTaxonomySensorElectroOptical struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *EquipmentTaxonomySensorElectroOptical) Reset() {
-	*x = EquipmentTaxonomySensorElectroOptical{}
-	mi := &file_taxonomy_proto_msgTypes[29]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EquipmentTaxonomySensorElectroOptical) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EquipmentTaxonomySensorElectroOptical) ProtoMessage() {}
-
-func (x *EquipmentTaxonomySensorElectroOptical) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[29]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EquipmentTaxonomySensorElectroOptical.ProtoReflect.Descriptor instead.
-func (*EquipmentTaxonomySensorElectroOptical) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{29}
-}
-
-type EquipmentTaxonomySensorEmplaced struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *EquipmentTaxonomySensorEmplaced) Reset() {
-	*x = EquipmentTaxonomySensorEmplaced{}
-	mi := &file_taxonomy_proto_msgTypes[30]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EquipmentTaxonomySensorEmplaced) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EquipmentTaxonomySensorEmplaced) ProtoMessage() {}
-
-func (x *EquipmentTaxonomySensorEmplaced) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[30]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EquipmentTaxonomySensorEmplaced.ProtoReflect.Descriptor instead.
-func (*EquipmentTaxonomySensorEmplaced) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{30}
+	return nil
 }
 
 type EquipmentTaxonomySensor struct {
@@ -1592,7 +1420,7 @@ type EquipmentTaxonomySensor struct {
 
 func (x *EquipmentTaxonomySensor) Reset() {
 	*x = EquipmentTaxonomySensor{}
-	mi := &file_taxonomy_proto_msgTypes[31]
+	mi := &file_taxonomy_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1604,7 +1432,7 @@ func (x *EquipmentTaxonomySensor) String() string {
 func (*EquipmentTaxonomySensor) ProtoMessage() {}
 
 func (x *EquipmentTaxonomySensor) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[31]
+	mi := &file_taxonomy_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1617,7 +1445,7 @@ func (x *EquipmentTaxonomySensor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EquipmentTaxonomySensor.ProtoReflect.Descriptor instead.
 func (*EquipmentTaxonomySensor) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{31}
+	return file_taxonomy_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *EquipmentTaxonomySensor) GetEmplaced() *EquipmentTaxonomySensorEmplaced {
@@ -1713,27 +1541,206 @@ func (*EquipmentTaxonomySensor_Acoustic) isEquipmentTaxonomySensor_Kind() {}
 
 func (*EquipmentTaxonomySensor_ElectroOptical) isEquipmentTaxonomySensor_Kind() {}
 
-type EquipmentTaxonomy struct {
-	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Sensor        *EquipmentTaxonomySensor `protobuf:"bytes,1,opt,name=sensor,proto3,oneof" json:"sensor,omitempty"`
+type EquipmentTaxonomySensorRadar struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *EquipmentTaxonomy) Reset() {
-	*x = EquipmentTaxonomy{}
+func (x *EquipmentTaxonomySensorRadar) Reset() {
+	*x = EquipmentTaxonomySensorRadar{}
+	mi := &file_taxonomy_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EquipmentTaxonomySensorRadar) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EquipmentTaxonomySensorRadar) ProtoMessage() {}
+
+func (x *EquipmentTaxonomySensorRadar) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EquipmentTaxonomySensorRadar.ProtoReflect.Descriptor instead.
+func (*EquipmentTaxonomySensorRadar) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{27}
+}
+
+type EquipmentTaxonomySensorEW struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EquipmentTaxonomySensorEW) Reset() {
+	*x = EquipmentTaxonomySensorEW{}
+	mi := &file_taxonomy_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EquipmentTaxonomySensorEW) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EquipmentTaxonomySensorEW) ProtoMessage() {}
+
+func (x *EquipmentTaxonomySensorEW) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EquipmentTaxonomySensorEW.ProtoReflect.Descriptor instead.
+func (*EquipmentTaxonomySensorEW) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{28}
+}
+
+type EquipmentTaxonomySensorCBRN struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EquipmentTaxonomySensorCBRN) Reset() {
+	*x = EquipmentTaxonomySensorCBRN{}
+	mi := &file_taxonomy_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EquipmentTaxonomySensorCBRN) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EquipmentTaxonomySensorCBRN) ProtoMessage() {}
+
+func (x *EquipmentTaxonomySensorCBRN) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EquipmentTaxonomySensorCBRN.ProtoReflect.Descriptor instead.
+func (*EquipmentTaxonomySensorCBRN) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{29}
+}
+
+type EquipmentTaxonomySensorAcoustic struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EquipmentTaxonomySensorAcoustic) Reset() {
+	*x = EquipmentTaxonomySensorAcoustic{}
+	mi := &file_taxonomy_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EquipmentTaxonomySensorAcoustic) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EquipmentTaxonomySensorAcoustic) ProtoMessage() {}
+
+func (x *EquipmentTaxonomySensorAcoustic) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EquipmentTaxonomySensorAcoustic.ProtoReflect.Descriptor instead.
+func (*EquipmentTaxonomySensorAcoustic) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{30}
+}
+
+type EquipmentTaxonomySensorElectroOptical struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EquipmentTaxonomySensorElectroOptical) Reset() {
+	*x = EquipmentTaxonomySensorElectroOptical{}
+	mi := &file_taxonomy_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EquipmentTaxonomySensorElectroOptical) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EquipmentTaxonomySensorElectroOptical) ProtoMessage() {}
+
+func (x *EquipmentTaxonomySensorElectroOptical) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EquipmentTaxonomySensorElectroOptical.ProtoReflect.Descriptor instead.
+func (*EquipmentTaxonomySensorElectroOptical) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{31}
+}
+
+type EquipmentTaxonomySensorEmplaced struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EquipmentTaxonomySensorEmplaced) Reset() {
+	*x = EquipmentTaxonomySensorEmplaced{}
 	mi := &file_taxonomy_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *EquipmentTaxonomy) String() string {
+func (x *EquipmentTaxonomySensorEmplaced) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*EquipmentTaxonomy) ProtoMessage() {}
+func (*EquipmentTaxonomySensorEmplaced) ProtoMessage() {}
 
-func (x *EquipmentTaxonomy) ProtoReflect() protoreflect.Message {
+func (x *EquipmentTaxonomySensorEmplaced) ProtoReflect() protoreflect.Message {
 	mi := &file_taxonomy_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -1745,16 +1752,9 @@ func (x *EquipmentTaxonomy) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use EquipmentTaxonomy.ProtoReflect.Descriptor instead.
-func (*EquipmentTaxonomy) Descriptor() ([]byte, []int) {
+// Deprecated: Use EquipmentTaxonomySensorEmplaced.ProtoReflect.Descriptor instead.
+func (*EquipmentTaxonomySensorEmplaced) Descriptor() ([]byte, []int) {
 	return file_taxonomy_proto_rawDescGZIP(), []int{32}
-}
-
-func (x *EquipmentTaxonomy) GetSensor() *EquipmentTaxonomySensor {
-	if x != nil {
-		return x.Sensor
-	}
-	return nil
 }
 
 type EmitterTaxonomy struct {
@@ -1840,8 +1840,7 @@ const file_taxonomy_proto_rawDesc = "" +
 	"\x1bInfrastructureTaxonomyTower\"\x1e\n" +
 	"\x1cInfrastructureTaxonomyBridge\"\x1c\n" +
 	"\x1aInfrastructureTaxonomyRoad\"\x1b\n" +
-	"\x19InfrastructureTaxonomyDam\"\x19\n" +
-	"\x17VehicleTaxonomyUnmanned\"\xbd\x02\n" +
+	"\x19InfrastructureTaxonomyDam\"\xbd\x02\n" +
 	"\x0fVehicleTaxonomy\x12?\n" +
 	"\bunmanned\x18\x01 \x01(\v2\x1e.world.VehicleTaxonomyUnmannedH\x01R\bunmanned\x88\x01\x01\x120\n" +
 	"\x04land\x18\n" +
@@ -1852,33 +1851,31 @@ const file_taxonomy_proto_rawDesc = "" +
 	"subsurface\x18\r \x01(\v2 .world.VehicleTaxonomySubsurfaceH\x00R\n" +
 	"subsurfaceB\b\n" +
 	"\x06domainB\v\n" +
-	"\t_unmanned\"\x18\n" +
-	"\x16VehicleTaxonomyTracked\"\x1b\n" +
-	"\x19VehicleTaxonomyTwoWheeled\"\x1d\n" +
-	"\x1bVehicleTaxonomyMultiWheeled\"\xe8\x01\n" +
+	"\t_unmanned\"\x19\n" +
+	"\x17VehicleTaxonomyUnmanned\"\xe8\x01\n" +
 	"\x13VehicleTaxonomyLand\x129\n" +
 	"\atracked\x18\x01 \x01(\v2\x1d.world.VehicleTaxonomyTrackedH\x00R\atracked\x12C\n" +
 	"\vtwo_wheeled\x18\x02 \x01(\v2 .world.VehicleTaxonomyTwoWheeledH\x00R\n" +
 	"twoWheeled\x12I\n" +
 	"\rmulti_wheeled\x18\x03 \x01(\v2\".world.VehicleTaxonomyMultiWheeledH\x00R\fmultiWheeledB\x06\n" +
-	"\x04kind\"\x1a\n" +
-	"\x18VehicleTaxonomyAirRotary\"\x1d\n" +
-	"\x1bVehicleTaxonomyAirFixedWing\"\"\n" +
-	" VehicleTaxonomyAirLighterThanAir\"\xf1\x01\n" +
+	"\x04kind\"\x18\n" +
+	"\x16VehicleTaxonomyTracked\"\x1b\n" +
+	"\x19VehicleTaxonomyTwoWheeled\"\x1d\n" +
+	"\x1bVehicleTaxonomyMultiWheeled\"\xf1\x01\n" +
 	"\x12VehicleTaxonomyAir\x12C\n" +
 	"\n" +
 	"fixed_wing\x18\x01 \x01(\v2\".world.VehicleTaxonomyAirFixedWingH\x00R\tfixedWing\x12S\n" +
 	"\x10lighter_than_air\x18\x02 \x01(\v2'.world.VehicleTaxonomyAirLighterThanAirH\x00R\x0elighterThanAir\x129\n" +
 	"\x06rotary\x18\x03 \x01(\v2\x1f.world.VehicleTaxonomyAirRotaryH\x00R\x06rotaryB\x06\n" +
-	"\x04kind\"\x14\n" +
+	"\x04kind\"\x1a\n" +
+	"\x18VehicleTaxonomyAirRotary\"\x1d\n" +
+	"\x1bVehicleTaxonomyAirFixedWing\"\"\n" +
+	" VehicleTaxonomyAirLighterThanAir\"\x14\n" +
 	"\x12VehicleTaxonomySea\"\x1b\n" +
-	"\x19VehicleTaxonomySubsurface\"\x1e\n" +
-	"\x1cEquipmentTaxonomySensorRadar\"\x1b\n" +
-	"\x19EquipmentTaxonomySensorEW\"\x1d\n" +
-	"\x1bEquipmentTaxonomySensorCBRN\"!\n" +
-	"\x1fEquipmentTaxonomySensorAcoustic\"'\n" +
-	"%EquipmentTaxonomySensorElectroOptical\"!\n" +
-	"\x1fEquipmentTaxonomySensorEmplaced\"\xc1\x03\n" +
+	"\x19VehicleTaxonomySubsurface\"[\n" +
+	"\x11EquipmentTaxonomy\x12;\n" +
+	"\x06sensor\x18\x01 \x01(\v2\x1e.world.EquipmentTaxonomySensorH\x00R\x06sensor\x88\x01\x01B\t\n" +
+	"\a_sensor\"\xc1\x03\n" +
 	"\x17EquipmentTaxonomySensor\x12G\n" +
 	"\bemplaced\x18\x01 \x01(\v2&.world.EquipmentTaxonomySensorEmplacedH\x01R\bemplaced\x88\x01\x01\x12;\n" +
 	"\x05radar\x18\n" +
@@ -1888,10 +1885,13 @@ const file_taxonomy_proto_rawDesc = "" +
 	"\bacoustic\x18\r \x01(\v2&.world.EquipmentTaxonomySensorAcousticH\x00R\bacoustic\x12W\n" +
 	"\x0felectro_optical\x18\x0e \x01(\v2,.world.EquipmentTaxonomySensorElectroOpticalH\x00R\x0eelectroOpticalB\x06\n" +
 	"\x04kindB\v\n" +
-	"\t_emplaced\"[\n" +
-	"\x11EquipmentTaxonomy\x12;\n" +
-	"\x06sensor\x18\x01 \x01(\v2\x1e.world.EquipmentTaxonomySensorH\x00R\x06sensor\x88\x01\x01B\t\n" +
-	"\a_sensor\"\x11\n" +
+	"\t_emplaced\"\x1e\n" +
+	"\x1cEquipmentTaxonomySensorRadar\"\x1b\n" +
+	"\x19EquipmentTaxonomySensorEW\"\x1d\n" +
+	"\x1bEquipmentTaxonomySensorCBRN\"!\n" +
+	"\x1fEquipmentTaxonomySensorAcoustic\"'\n" +
+	"%EquipmentTaxonomySensorElectroOptical\"!\n" +
+	"\x1fEquipmentTaxonomySensorEmplaced\"\x11\n" +
 	"\x0fEmitterTaxonomyB Z\x1egithub.com/projectqai/proto/gob\x06proto3"
 
 var (
@@ -1921,26 +1921,26 @@ var file_taxonomy_proto_goTypes = []any{
 	(*InfrastructureTaxonomyBridge)(nil),          // 10: world.InfrastructureTaxonomyBridge
 	(*InfrastructureTaxonomyRoad)(nil),            // 11: world.InfrastructureTaxonomyRoad
 	(*InfrastructureTaxonomyDam)(nil),             // 12: world.InfrastructureTaxonomyDam
-	(*VehicleTaxonomyUnmanned)(nil),               // 13: world.VehicleTaxonomyUnmanned
-	(*VehicleTaxonomy)(nil),                       // 14: world.VehicleTaxonomy
-	(*VehicleTaxonomyTracked)(nil),                // 15: world.VehicleTaxonomyTracked
-	(*VehicleTaxonomyTwoWheeled)(nil),             // 16: world.VehicleTaxonomyTwoWheeled
-	(*VehicleTaxonomyMultiWheeled)(nil),           // 17: world.VehicleTaxonomyMultiWheeled
-	(*VehicleTaxonomyLand)(nil),                   // 18: world.VehicleTaxonomyLand
-	(*VehicleTaxonomyAirRotary)(nil),              // 19: world.VehicleTaxonomyAirRotary
-	(*VehicleTaxonomyAirFixedWing)(nil),           // 20: world.VehicleTaxonomyAirFixedWing
-	(*VehicleTaxonomyAirLighterThanAir)(nil),      // 21: world.VehicleTaxonomyAirLighterThanAir
-	(*VehicleTaxonomyAir)(nil),                    // 22: world.VehicleTaxonomyAir
+	(*VehicleTaxonomy)(nil),                       // 13: world.VehicleTaxonomy
+	(*VehicleTaxonomyUnmanned)(nil),               // 14: world.VehicleTaxonomyUnmanned
+	(*VehicleTaxonomyLand)(nil),                   // 15: world.VehicleTaxonomyLand
+	(*VehicleTaxonomyTracked)(nil),                // 16: world.VehicleTaxonomyTracked
+	(*VehicleTaxonomyTwoWheeled)(nil),             // 17: world.VehicleTaxonomyTwoWheeled
+	(*VehicleTaxonomyMultiWheeled)(nil),           // 18: world.VehicleTaxonomyMultiWheeled
+	(*VehicleTaxonomyAir)(nil),                    // 19: world.VehicleTaxonomyAir
+	(*VehicleTaxonomyAirRotary)(nil),              // 20: world.VehicleTaxonomyAirRotary
+	(*VehicleTaxonomyAirFixedWing)(nil),           // 21: world.VehicleTaxonomyAirFixedWing
+	(*VehicleTaxonomyAirLighterThanAir)(nil),      // 22: world.VehicleTaxonomyAirLighterThanAir
 	(*VehicleTaxonomySea)(nil),                    // 23: world.VehicleTaxonomySea
 	(*VehicleTaxonomySubsurface)(nil),             // 24: world.VehicleTaxonomySubsurface
-	(*EquipmentTaxonomySensorRadar)(nil),          // 25: world.EquipmentTaxonomySensorRadar
-	(*EquipmentTaxonomySensorEW)(nil),             // 26: world.EquipmentTaxonomySensorEW
-	(*EquipmentTaxonomySensorCBRN)(nil),           // 27: world.EquipmentTaxonomySensorCBRN
-	(*EquipmentTaxonomySensorAcoustic)(nil),       // 28: world.EquipmentTaxonomySensorAcoustic
-	(*EquipmentTaxonomySensorElectroOptical)(nil), // 29: world.EquipmentTaxonomySensorElectroOptical
-	(*EquipmentTaxonomySensorEmplaced)(nil),       // 30: world.EquipmentTaxonomySensorEmplaced
-	(*EquipmentTaxonomySensor)(nil),               // 31: world.EquipmentTaxonomySensor
-	(*EquipmentTaxonomy)(nil),                     // 32: world.EquipmentTaxonomy
+	(*EquipmentTaxonomy)(nil),                     // 25: world.EquipmentTaxonomy
+	(*EquipmentTaxonomySensor)(nil),               // 26: world.EquipmentTaxonomySensor
+	(*EquipmentTaxonomySensorRadar)(nil),          // 27: world.EquipmentTaxonomySensorRadar
+	(*EquipmentTaxonomySensorEW)(nil),             // 28: world.EquipmentTaxonomySensorEW
+	(*EquipmentTaxonomySensorCBRN)(nil),           // 29: world.EquipmentTaxonomySensorCBRN
+	(*EquipmentTaxonomySensorAcoustic)(nil),       // 30: world.EquipmentTaxonomySensorAcoustic
+	(*EquipmentTaxonomySensorElectroOptical)(nil), // 31: world.EquipmentTaxonomySensorElectroOptical
+	(*EquipmentTaxonomySensorEmplaced)(nil),       // 32: world.EquipmentTaxonomySensorEmplaced
 	(*EmitterTaxonomy)(nil),                       // 33: world.EmitterTaxonomy
 }
 var file_taxonomy_proto_depIdxs = []int32{
@@ -1948,8 +1948,8 @@ var file_taxonomy_proto_depIdxs = []int32{
 	2,  // 1: world.ClassificationTaxonomy.person:type_name -> world.PersonTaxonomy
 	3,  // 2: world.ClassificationTaxonomy.animal:type_name -> world.AnimalTaxonomy
 	8,  // 3: world.ClassificationTaxonomy.infrastructure:type_name -> world.InfrastructureTaxonomy
-	14, // 4: world.ClassificationTaxonomy.vehicle:type_name -> world.VehicleTaxonomy
-	32, // 5: world.ClassificationTaxonomy.equipment:type_name -> world.EquipmentTaxonomy
+	13, // 4: world.ClassificationTaxonomy.vehicle:type_name -> world.VehicleTaxonomy
+	25, // 5: world.ClassificationTaxonomy.equipment:type_name -> world.EquipmentTaxonomy
 	33, // 6: world.ClassificationTaxonomy.emitter:type_name -> world.EmitterTaxonomy
 	5,  // 7: world.AnimalTaxonomy.air:type_name -> world.AnimalTaxonomyAir
 	7,  // 8: world.AnimalTaxonomy.land:type_name -> world.AnimalTaxonomyLand
@@ -1959,24 +1959,24 @@ var file_taxonomy_proto_depIdxs = []int32{
 	10, // 12: world.InfrastructureTaxonomy.bridge:type_name -> world.InfrastructureTaxonomyBridge
 	11, // 13: world.InfrastructureTaxonomy.road:type_name -> world.InfrastructureTaxonomyRoad
 	12, // 14: world.InfrastructureTaxonomy.dam:type_name -> world.InfrastructureTaxonomyDam
-	13, // 15: world.VehicleTaxonomy.unmanned:type_name -> world.VehicleTaxonomyUnmanned
-	18, // 16: world.VehicleTaxonomy.land:type_name -> world.VehicleTaxonomyLand
-	22, // 17: world.VehicleTaxonomy.air:type_name -> world.VehicleTaxonomyAir
+	14, // 15: world.VehicleTaxonomy.unmanned:type_name -> world.VehicleTaxonomyUnmanned
+	15, // 16: world.VehicleTaxonomy.land:type_name -> world.VehicleTaxonomyLand
+	19, // 17: world.VehicleTaxonomy.air:type_name -> world.VehicleTaxonomyAir
 	23, // 18: world.VehicleTaxonomy.sea:type_name -> world.VehicleTaxonomySea
 	24, // 19: world.VehicleTaxonomy.subsurface:type_name -> world.VehicleTaxonomySubsurface
-	15, // 20: world.VehicleTaxonomyLand.tracked:type_name -> world.VehicleTaxonomyTracked
-	16, // 21: world.VehicleTaxonomyLand.two_wheeled:type_name -> world.VehicleTaxonomyTwoWheeled
-	17, // 22: world.VehicleTaxonomyLand.multi_wheeled:type_name -> world.VehicleTaxonomyMultiWheeled
-	20, // 23: world.VehicleTaxonomyAir.fixed_wing:type_name -> world.VehicleTaxonomyAirFixedWing
-	21, // 24: world.VehicleTaxonomyAir.lighter_than_air:type_name -> world.VehicleTaxonomyAirLighterThanAir
-	19, // 25: world.VehicleTaxonomyAir.rotary:type_name -> world.VehicleTaxonomyAirRotary
-	30, // 26: world.EquipmentTaxonomySensor.emplaced:type_name -> world.EquipmentTaxonomySensorEmplaced
-	25, // 27: world.EquipmentTaxonomySensor.radar:type_name -> world.EquipmentTaxonomySensorRadar
-	26, // 28: world.EquipmentTaxonomySensor.ew:type_name -> world.EquipmentTaxonomySensorEW
-	27, // 29: world.EquipmentTaxonomySensor.cbrn:type_name -> world.EquipmentTaxonomySensorCBRN
-	28, // 30: world.EquipmentTaxonomySensor.acoustic:type_name -> world.EquipmentTaxonomySensorAcoustic
-	29, // 31: world.EquipmentTaxonomySensor.electro_optical:type_name -> world.EquipmentTaxonomySensorElectroOptical
-	31, // 32: world.EquipmentTaxonomy.sensor:type_name -> world.EquipmentTaxonomySensor
+	16, // 20: world.VehicleTaxonomyLand.tracked:type_name -> world.VehicleTaxonomyTracked
+	17, // 21: world.VehicleTaxonomyLand.two_wheeled:type_name -> world.VehicleTaxonomyTwoWheeled
+	18, // 22: world.VehicleTaxonomyLand.multi_wheeled:type_name -> world.VehicleTaxonomyMultiWheeled
+	21, // 23: world.VehicleTaxonomyAir.fixed_wing:type_name -> world.VehicleTaxonomyAirFixedWing
+	22, // 24: world.VehicleTaxonomyAir.lighter_than_air:type_name -> world.VehicleTaxonomyAirLighterThanAir
+	20, // 25: world.VehicleTaxonomyAir.rotary:type_name -> world.VehicleTaxonomyAirRotary
+	26, // 26: world.EquipmentTaxonomy.sensor:type_name -> world.EquipmentTaxonomySensor
+	32, // 27: world.EquipmentTaxonomySensor.emplaced:type_name -> world.EquipmentTaxonomySensorEmplaced
+	27, // 28: world.EquipmentTaxonomySensor.radar:type_name -> world.EquipmentTaxonomySensorRadar
+	28, // 29: world.EquipmentTaxonomySensor.ew:type_name -> world.EquipmentTaxonomySensorEW
+	29, // 30: world.EquipmentTaxonomySensor.cbrn:type_name -> world.EquipmentTaxonomySensorCBRN
+	30, // 31: world.EquipmentTaxonomySensor.acoustic:type_name -> world.EquipmentTaxonomySensorAcoustic
+	31, // 32: world.EquipmentTaxonomySensor.electro_optical:type_name -> world.EquipmentTaxonomySensorElectroOptical
 	33, // [33:33] is the sub-list for method output_type
 	33, // [33:33] is the sub-list for method input_type
 	33, // [33:33] is the sub-list for extension type_name
@@ -2004,30 +2004,30 @@ func file_taxonomy_proto_init() {
 	file_taxonomy_proto_msgTypes[5].OneofWrappers = []any{}
 	file_taxonomy_proto_msgTypes[7].OneofWrappers = []any{}
 	file_taxonomy_proto_msgTypes[8].OneofWrappers = []any{}
-	file_taxonomy_proto_msgTypes[14].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[13].OneofWrappers = []any{
 		(*VehicleTaxonomy_Land)(nil),
 		(*VehicleTaxonomy_Air)(nil),
 		(*VehicleTaxonomy_Sea)(nil),
 		(*VehicleTaxonomy_Subsurface)(nil),
 	}
-	file_taxonomy_proto_msgTypes[18].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[15].OneofWrappers = []any{
 		(*VehicleTaxonomyLand_Tracked)(nil),
 		(*VehicleTaxonomyLand_TwoWheeled)(nil),
 		(*VehicleTaxonomyLand_MultiWheeled)(nil),
 	}
-	file_taxonomy_proto_msgTypes[22].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[19].OneofWrappers = []any{
 		(*VehicleTaxonomyAir_FixedWing)(nil),
 		(*VehicleTaxonomyAir_LighterThanAir)(nil),
 		(*VehicleTaxonomyAir_Rotary)(nil),
 	}
-	file_taxonomy_proto_msgTypes[31].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[25].OneofWrappers = []any{}
+	file_taxonomy_proto_msgTypes[26].OneofWrappers = []any{
 		(*EquipmentTaxonomySensor_Radar)(nil),
 		(*EquipmentTaxonomySensor_Ew)(nil),
 		(*EquipmentTaxonomySensor_Cbrn)(nil),
 		(*EquipmentTaxonomySensor_Acoustic)(nil),
 		(*EquipmentTaxonomySensor_ElectroOptical)(nil),
 	}
-	file_taxonomy_proto_msgTypes[32].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

@@ -90,10 +90,6 @@ class InfrastructureTaxonomyDam(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
 
-class VehicleTaxonomyUnmanned(_message.Message):
-    __slots__ = ()
-    def __init__(self) -> None: ...
-
 class VehicleTaxonomy(_message.Message):
     __slots__ = ("unmanned", "land", "air", "sea", "subsurface")
     UNMANNED_FIELD_NUMBER: _ClassVar[int]
@@ -108,15 +104,7 @@ class VehicleTaxonomy(_message.Message):
     subsurface: VehicleTaxonomySubsurface
     def __init__(self, unmanned: _Optional[_Union[VehicleTaxonomyUnmanned, _Mapping]] = ..., land: _Optional[_Union[VehicleTaxonomyLand, _Mapping]] = ..., air: _Optional[_Union[VehicleTaxonomyAir, _Mapping]] = ..., sea: _Optional[_Union[VehicleTaxonomySea, _Mapping]] = ..., subsurface: _Optional[_Union[VehicleTaxonomySubsurface, _Mapping]] = ...) -> None: ...
 
-class VehicleTaxonomyTracked(_message.Message):
-    __slots__ = ()
-    def __init__(self) -> None: ...
-
-class VehicleTaxonomyTwoWheeled(_message.Message):
-    __slots__ = ()
-    def __init__(self) -> None: ...
-
-class VehicleTaxonomyMultiWheeled(_message.Message):
+class VehicleTaxonomyUnmanned(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
 
@@ -130,15 +118,15 @@ class VehicleTaxonomyLand(_message.Message):
     multi_wheeled: VehicleTaxonomyMultiWheeled
     def __init__(self, tracked: _Optional[_Union[VehicleTaxonomyTracked, _Mapping]] = ..., two_wheeled: _Optional[_Union[VehicleTaxonomyTwoWheeled, _Mapping]] = ..., multi_wheeled: _Optional[_Union[VehicleTaxonomyMultiWheeled, _Mapping]] = ...) -> None: ...
 
-class VehicleTaxonomyAirRotary(_message.Message):
+class VehicleTaxonomyTracked(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
 
-class VehicleTaxonomyAirFixedWing(_message.Message):
+class VehicleTaxonomyTwoWheeled(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
 
-class VehicleTaxonomyAirLighterThanAir(_message.Message):
+class VehicleTaxonomyMultiWheeled(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
 
@@ -152,6 +140,18 @@ class VehicleTaxonomyAir(_message.Message):
     rotary: VehicleTaxonomyAirRotary
     def __init__(self, fixed_wing: _Optional[_Union[VehicleTaxonomyAirFixedWing, _Mapping]] = ..., lighter_than_air: _Optional[_Union[VehicleTaxonomyAirLighterThanAir, _Mapping]] = ..., rotary: _Optional[_Union[VehicleTaxonomyAirRotary, _Mapping]] = ...) -> None: ...
 
+class VehicleTaxonomyAirRotary(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class VehicleTaxonomyAirFixedWing(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class VehicleTaxonomyAirLighterThanAir(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
 class VehicleTaxonomySea(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
@@ -159,6 +159,28 @@ class VehicleTaxonomySea(_message.Message):
 class VehicleTaxonomySubsurface(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
+
+class EquipmentTaxonomy(_message.Message):
+    __slots__ = ("sensor",)
+    SENSOR_FIELD_NUMBER: _ClassVar[int]
+    sensor: EquipmentTaxonomySensor
+    def __init__(self, sensor: _Optional[_Union[EquipmentTaxonomySensor, _Mapping]] = ...) -> None: ...
+
+class EquipmentTaxonomySensor(_message.Message):
+    __slots__ = ("emplaced", "radar", "ew", "cbrn", "acoustic", "electro_optical")
+    EMPLACED_FIELD_NUMBER: _ClassVar[int]
+    RADAR_FIELD_NUMBER: _ClassVar[int]
+    EW_FIELD_NUMBER: _ClassVar[int]
+    CBRN_FIELD_NUMBER: _ClassVar[int]
+    ACOUSTIC_FIELD_NUMBER: _ClassVar[int]
+    ELECTRO_OPTICAL_FIELD_NUMBER: _ClassVar[int]
+    emplaced: EquipmentTaxonomySensorEmplaced
+    radar: EquipmentTaxonomySensorRadar
+    ew: EquipmentTaxonomySensorEW
+    cbrn: EquipmentTaxonomySensorCBRN
+    acoustic: EquipmentTaxonomySensorAcoustic
+    electro_optical: EquipmentTaxonomySensorElectroOptical
+    def __init__(self, emplaced: _Optional[_Union[EquipmentTaxonomySensorEmplaced, _Mapping]] = ..., radar: _Optional[_Union[EquipmentTaxonomySensorRadar, _Mapping]] = ..., ew: _Optional[_Union[EquipmentTaxonomySensorEW, _Mapping]] = ..., cbrn: _Optional[_Union[EquipmentTaxonomySensorCBRN, _Mapping]] = ..., acoustic: _Optional[_Union[EquipmentTaxonomySensorAcoustic, _Mapping]] = ..., electro_optical: _Optional[_Union[EquipmentTaxonomySensorElectroOptical, _Mapping]] = ...) -> None: ...
 
 class EquipmentTaxonomySensorRadar(_message.Message):
     __slots__ = ()
@@ -183,28 +205,6 @@ class EquipmentTaxonomySensorElectroOptical(_message.Message):
 class EquipmentTaxonomySensorEmplaced(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
-
-class EquipmentTaxonomySensor(_message.Message):
-    __slots__ = ("emplaced", "radar", "ew", "cbrn", "acoustic", "electro_optical")
-    EMPLACED_FIELD_NUMBER: _ClassVar[int]
-    RADAR_FIELD_NUMBER: _ClassVar[int]
-    EW_FIELD_NUMBER: _ClassVar[int]
-    CBRN_FIELD_NUMBER: _ClassVar[int]
-    ACOUSTIC_FIELD_NUMBER: _ClassVar[int]
-    ELECTRO_OPTICAL_FIELD_NUMBER: _ClassVar[int]
-    emplaced: EquipmentTaxonomySensorEmplaced
-    radar: EquipmentTaxonomySensorRadar
-    ew: EquipmentTaxonomySensorEW
-    cbrn: EquipmentTaxonomySensorCBRN
-    acoustic: EquipmentTaxonomySensorAcoustic
-    electro_optical: EquipmentTaxonomySensorElectroOptical
-    def __init__(self, emplaced: _Optional[_Union[EquipmentTaxonomySensorEmplaced, _Mapping]] = ..., radar: _Optional[_Union[EquipmentTaxonomySensorRadar, _Mapping]] = ..., ew: _Optional[_Union[EquipmentTaxonomySensorEW, _Mapping]] = ..., cbrn: _Optional[_Union[EquipmentTaxonomySensorCBRN, _Mapping]] = ..., acoustic: _Optional[_Union[EquipmentTaxonomySensorAcoustic, _Mapping]] = ..., electro_optical: _Optional[_Union[EquipmentTaxonomySensorElectroOptical, _Mapping]] = ...) -> None: ...
-
-class EquipmentTaxonomy(_message.Message):
-    __slots__ = ("sensor",)
-    SENSOR_FIELD_NUMBER: _ClassVar[int]
-    sensor: EquipmentTaxonomySensor
-    def __init__(self, sensor: _Optional[_Union[EquipmentTaxonomySensor, _Mapping]] = ...) -> None: ...
 
 class EmitterTaxonomy(_message.Message):
     __slots__ = ()

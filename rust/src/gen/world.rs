@@ -767,6 +767,58 @@ impl AlertLevel {
     }
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskableTarget {
+    #[prost(message, optional, tag = "1")]
+    pub position: ::core::option::Option<TaskableTargetPosition>,
+    #[prost(message, optional, tag = "2")]
+    pub waypoints: ::core::option::Option<TaskableTargetWaypoints>,
+    #[prost(message, optional, tag = "3")]
+    pub entity: ::core::option::Option<TaskableTargetEntity>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskableTargetPosition {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskableTargetWaypoints {
+    /// maximum number of waypoints. default unbounded.
+    #[prost(uint32, optional, tag = "1")]
+    pub max: ::core::option::Option<u32>,
+    /// the waypoints form a closed loop (last connects back to first), e.g. patrol.
+    #[prost(bool, optional, tag = "2")]
+    pub r#loop: ::core::option::Option<bool>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskableTargetEntity {
+    #[prost(uint32, optional, tag = "2")]
+    pub max: ::core::option::Option<u32>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TaskExecutionTarget {
+    #[prost(oneof = "task_execution_target::Kind", tags = "1, 2, 3")]
+    pub kind: ::core::option::Option<task_execution_target::Kind>,
+}
+/// Nested message and enum types in `TaskExecutionTarget`.
+pub mod task_execution_target {
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Kind {
+        #[prost(message, tag = "1")]
+        Position(super::PlanarPoint),
+        #[prost(message, tag = "2")]
+        Waypoints(super::TaskExecutionTargetWaypoints),
+        #[prost(message, tag = "3")]
+        Entity(super::TaskExecutionTargetEntity),
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TaskExecutionTargetWaypoints {
+    #[prost(message, repeated, tag = "1")]
+    pub waypoint: ::prost::alloc::vec::Vec<PlanarPoint>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TaskExecutionTargetEntity {
+    #[prost(string, repeated, tag = "1")]
+    pub entity: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ClassificationTaxonomy {
     #[prost(message, optional, tag = "1")]
     pub confidence: ::core::option::Option<ClassificationConfidence>,
@@ -849,8 +901,6 @@ pub struct InfrastructureTaxonomyRoad {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct InfrastructureTaxonomyDam {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct VehicleTaxonomyUnmanned {}
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct VehicleTaxonomy {
     #[prost(message, optional, tag = "1")]
     pub unmanned: ::core::option::Option<VehicleTaxonomyUnmanned>,
@@ -872,11 +922,7 @@ pub mod vehicle_taxonomy {
     }
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct VehicleTaxonomyTracked {}
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct VehicleTaxonomyTwoWheeled {}
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct VehicleTaxonomyMultiWheeled {}
+pub struct VehicleTaxonomyUnmanned {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct VehicleTaxonomyLand {
     #[prost(oneof = "vehicle_taxonomy_land::Kind", tags = "1, 2, 3")]
@@ -895,11 +941,11 @@ pub mod vehicle_taxonomy_land {
     }
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct VehicleTaxonomyAirRotary {}
+pub struct VehicleTaxonomyTracked {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct VehicleTaxonomyAirFixedWing {}
+pub struct VehicleTaxonomyTwoWheeled {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct VehicleTaxonomyAirLighterThanAir {}
+pub struct VehicleTaxonomyMultiWheeled {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct VehicleTaxonomyAir {
     #[prost(oneof = "vehicle_taxonomy_air::Kind", tags = "1, 2, 3")]
@@ -918,21 +964,20 @@ pub mod vehicle_taxonomy_air {
     }
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomyAirRotary {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomyAirFixedWing {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct VehicleTaxonomyAirLighterThanAir {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct VehicleTaxonomySea {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct VehicleTaxonomySubsurface {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct EquipmentTaxonomySensorRadar {}
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct EquipmentTaxonomySensorEw {}
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct EquipmentTaxonomySensorCbrn {}
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct EquipmentTaxonomySensorAcoustic {}
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct EquipmentTaxonomySensorElectroOptical {}
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct EquipmentTaxonomySensorEmplaced {}
+pub struct EquipmentTaxonomy {
+    #[prost(message, optional, tag = "1")]
+    pub sensor: ::core::option::Option<EquipmentTaxonomySensor>,
+}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct EquipmentTaxonomySensor {
     #[prost(message, optional, tag = "1")]
@@ -957,10 +1002,17 @@ pub mod equipment_taxonomy_sensor {
     }
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct EquipmentTaxonomy {
-    #[prost(message, optional, tag = "1")]
-    pub sensor: ::core::option::Option<EquipmentTaxonomySensor>,
-}
+pub struct EquipmentTaxonomySensorRadar {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EquipmentTaxonomySensorEw {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EquipmentTaxonomySensorCbrn {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EquipmentTaxonomySensorAcoustic {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EquipmentTaxonomySensorElectroOptical {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EquipmentTaxonomySensorEmplaced {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct EmitterTaxonomy {}
 /// metadata
@@ -1412,21 +1464,6 @@ pub struct TaskableAssignee {
     pub entity_id: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct TaskableTarget {
-    /// if set, the task prefers entities in this list as target.
-    #[prost(message, optional, tag = "1")]
-    pub filter: ::core::option::Option<EntityFilter>,
-    /// if set, the task prefers entities (or positions) that are inside the geo regions defined by these entities
-    #[prost(string, repeated, tag = "2")]
-    pub within: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// maximum number of targets per execution. default = 1
-    #[prost(uint32, optional, tag = "3")]
-    pub max_targets: ::core::option::Option<u32>,
-    /// if set, the task accepts an arbitrary geo position
-    #[prost(bool, optional, tag = "4")]
-    pub position: ::core::option::Option<bool>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskableComponent {
     /// priority for which task should be shown first. higher = more important
     #[prost(uint32, optional, tag = "1")]
@@ -1437,6 +1474,8 @@ pub struct TaskableComponent {
     pub context: ::prost::alloc::vec::Vec<TaskableContext>,
     #[prost(message, repeated, tag = "4")]
     pub assignee: ::prost::alloc::vec::Vec<TaskableAssignee>,
+    /// DEPRECATED: taskables are now strongly typed via `target`.
+    #[deprecated]
     #[prost(message, optional, tag = "5")]
     pub schema: ::core::option::Option<::prost_types::Struct>,
     #[prost(enumeration = "TaskableMode", tag = "6")]
@@ -1459,22 +1498,13 @@ pub struct TaskableComponent {
     #[prost(uint32, optional, tag = "11")]
     pub grouping_priority: ::core::option::Option<u32>,
 }
-/// An instance of a task being executed.
-/// Created by RunTask, referencing a TaskableComponent entity as the definition.
-/// The controller that owns the taskable watches for these and executes them.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct TaskExecutionTarget {
-    #[prost(string, repeated, tag = "1")]
-    pub entity: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(message, optional, tag = "2")]
-    pub position: ::core::option::Option<Geometry>,
-}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskExecutionComponent {
     /// entity ID of the TaskableComponent that defines this task
     #[prost(string, tag = "1")]
     pub task: ::prost::alloc::string::String,
-    /// parameters supplied by the caller, validated against the taskable's schema
+    /// DEPRECATED: executions are now strongly typed via `target`.
+    #[deprecated]
     #[prost(message, optional, tag = "2")]
     pub parameters: ::core::option::Option<::prost_types::Struct>,
     /// current execution state, updated by the controller

@@ -6,6 +6,7 @@ import "geometry.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "metrics.proto";
+import "tasking.proto";
 import "taxonomy.proto";
 
 option go_package = "github.com/projectqai/proto/go";
@@ -399,20 +400,6 @@ enum TaskableMode {
   TaskableModePriorityQueue = 3;
 }
 
-message TaskableTarget {
-  // if set, the task prefers entities in this list as target.
-  optional EntityFilter filter = 1;
-
-  // if set, the task prefers entities (or positions) that are inside the geo regions defined by these entities
-  repeated string within = 2;
-
-  // maximum number of targets per execution. default = 1
-  optional uint32 max_targets = 3;
-
-  // if set, the task accepts an arbitrary geo position
-  optional bool position = 4;
-}
-
 message TaskableComponent {
   // priority for which task should be shown first. higher = more important
   optional uint32 priority = 1;
@@ -420,7 +407,8 @@ message TaskableComponent {
   optional string label = 2;
   repeated TaskableContext context = 3;
   repeated TaskableAssignee assignee = 4;
-  google.protobuf.Struct schema = 5;
+  // DEPRECATED: taskables are now strongly typed via `target`.
+  google.protobuf.Struct schema = 5 [deprecated = true];
   TaskableMode mode = 6;
   optional TaskableTarget target = 7;
 
@@ -437,6 +425,10 @@ message TaskableComponent {
   // a ui might also decide to display all alternatives.
   optional string grouping = 10;
   optional uint32 grouping_priority = 11;
+
+  // semantic meaning of the task (look-at, move-to, patrol, ...).
+  // independent of `target` (shape of input).
+  optional TaskingTaxonomy taxonomy = 12;
 }
 
 enum TaskExecutionState {
@@ -446,20 +438,12 @@ enum TaskExecutionState {
   TaskExecutionStateFailed = 3;
 }
 
-// An instance of a task being executed.
-// Created by RunTask, referencing a TaskableComponent entity as the definition.
-// The controller that owns the taskable watches for these and executes them.
-message TaskExecutionTarget {
-  repeated string entity = 1;
-  optional Geometry position = 2;
-}
-
 message TaskExecutionComponent {
   // entity ID of the TaskableComponent that defines this task
   string task = 1;
 
-  // parameters supplied by the caller, validated against the taskable's schema
-  optional google.protobuf.Struct parameters = 2;
+  // DEPRECATED: executions are now strongly typed via `target`.
+  optional google.protobuf.Struct parameters = 2 [deprecated = true];
 
   // current execution state, updated by the controller
   TaskExecutionState state = 3;

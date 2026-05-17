@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package world;
+
+import "geometry.proto";
+
+option go_package = "github.com/projectqai/proto/go";
+
+/// ------- DEFINITION
+
+message TaskableTarget {
+  optional TaskableTargetPosition position = 1;
+  optional TaskableTargetWaypoints waypoints = 2;
+  optional TaskableTargetEntity entity = 3;
+}
+
+message TaskableTargetPosition {}
+
+message TaskableTargetWaypoints {
+  // maximum number of waypoints. default unbounded.
+  optional uint32 max = 1;
+  // the waypoints form a closed loop (last connects back to first), e.g. patrol.
+  optional bool loop = 2;
+}
+
+message TaskableTargetEntity {
+  // if non-empty, only these entity IDs are accepted as targets.
+  // if empty, any entity is accepted.
+  repeated string entity = 1;
+  // maximum number of entities. default 1.
+  optional uint32 max = 2;
+}
+
+/// ------- INSTANCE
+
+message TaskExecutionTarget {
+  oneof kind {
+    PlanarPoint position = 1;
+    TaskExecutionTargetWaypoints waypoints = 2;
+    TaskExecutionTargetEntity entity = 3;
+  }
+}
+
+message TaskExecutionTargetWaypoints {
+  repeated PlanarPoint waypoint = 1;
+}
+
+message TaskExecutionTargetEntity {
+  repeated string entity = 1;
+}

@@ -2,6 +2,7 @@ import geometry_pb2 as _geometry_pb2
 from google.protobuf import struct_pb2 as _struct_pb2
 from google.protobuf import timestamp_pb2 as _timestamp_pb2
 import metrics_pb2 as _metrics_pb2
+import tasking_pb2 as _tasking_pb2
 import taxonomy_pb2 as _taxonomy_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
@@ -756,18 +757,6 @@ class TaskableAssignee(_message.Message):
     entityId: str
     def __init__(self, entityId: _Optional[str] = ...) -> None: ...
 
-class TaskableTarget(_message.Message):
-    __slots__ = ("filter", "within", "max_targets", "position")
-    FILTER_FIELD_NUMBER: _ClassVar[int]
-    WITHIN_FIELD_NUMBER: _ClassVar[int]
-    MAX_TARGETS_FIELD_NUMBER: _ClassVar[int]
-    POSITION_FIELD_NUMBER: _ClassVar[int]
-    filter: EntityFilter
-    within: _containers.RepeatedScalarFieldContainer[str]
-    max_targets: int
-    position: bool
-    def __init__(self, filter: _Optional[_Union[EntityFilter, _Mapping]] = ..., within: _Optional[_Iterable[str]] = ..., max_targets: _Optional[int] = ..., position: bool = ...) -> None: ...
-
 class TaskableComponent(_message.Message):
     __slots__ = ("priority", "label", "context", "assignee", "schema", "mode", "target", "icon", "effect", "grouping", "grouping_priority")
     PRIORITY_FIELD_NUMBER: _ClassVar[int]
@@ -787,20 +776,12 @@ class TaskableComponent(_message.Message):
     assignee: _containers.RepeatedCompositeFieldContainer[TaskableAssignee]
     schema: _struct_pb2.Struct
     mode: TaskableMode
-    target: TaskableTarget
+    target: _tasking_pb2.TaskableTarget
     icon: str
     effect: str
     grouping: str
     grouping_priority: int
-    def __init__(self, priority: _Optional[int] = ..., label: _Optional[str] = ..., context: _Optional[_Iterable[_Union[TaskableContext, _Mapping]]] = ..., assignee: _Optional[_Iterable[_Union[TaskableAssignee, _Mapping]]] = ..., schema: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., mode: _Optional[_Union[TaskableMode, str]] = ..., target: _Optional[_Union[TaskableTarget, _Mapping]] = ..., icon: _Optional[str] = ..., effect: _Optional[str] = ..., grouping: _Optional[str] = ..., grouping_priority: _Optional[int] = ...) -> None: ...
-
-class TaskExecutionTarget(_message.Message):
-    __slots__ = ("entity", "position")
-    ENTITY_FIELD_NUMBER: _ClassVar[int]
-    POSITION_FIELD_NUMBER: _ClassVar[int]
-    entity: _containers.RepeatedScalarFieldContainer[str]
-    position: Geometry
-    def __init__(self, entity: _Optional[_Iterable[str]] = ..., position: _Optional[_Union[Geometry, _Mapping]] = ...) -> None: ...
+    def __init__(self, priority: _Optional[int] = ..., label: _Optional[str] = ..., context: _Optional[_Iterable[_Union[TaskableContext, _Mapping]]] = ..., assignee: _Optional[_Iterable[_Union[TaskableAssignee, _Mapping]]] = ..., schema: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., mode: _Optional[_Union[TaskableMode, str]] = ..., target: _Optional[_Union[_tasking_pb2.TaskableTarget, _Mapping]] = ..., icon: _Optional[str] = ..., effect: _Optional[str] = ..., grouping: _Optional[str] = ..., grouping_priority: _Optional[int] = ...) -> None: ...
 
 class TaskExecutionComponent(_message.Message):
     __slots__ = ("task", "parameters", "state", "reason", "priority", "target")
@@ -815,8 +796,8 @@ class TaskExecutionComponent(_message.Message):
     state: TaskExecutionState
     reason: str
     priority: int
-    target: TaskExecutionTarget
-    def __init__(self, task: _Optional[str] = ..., parameters: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., state: _Optional[_Union[TaskExecutionState, str]] = ..., reason: _Optional[str] = ..., priority: _Optional[int] = ..., target: _Optional[_Union[TaskExecutionTarget, _Mapping]] = ...) -> None: ...
+    target: _tasking_pb2.TaskExecutionTarget
+    def __init__(self, task: _Optional[str] = ..., parameters: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., state: _Optional[_Union[TaskExecutionState, str]] = ..., reason: _Optional[str] = ..., priority: _Optional[int] = ..., target: _Optional[_Union[_tasking_pb2.TaskExecutionTarget, _Mapping]] = ...) -> None: ...
 
 class KinematicsEnu(_message.Message):
     __slots__ = ("east", "north", "up", "covariance")
@@ -1486,8 +1467,8 @@ class RunTaskRequest(_message.Message):
     TARGET_FIELD_NUMBER: _ClassVar[int]
     entityId: str
     priority: int
-    target: TaskExecutionTarget
-    def __init__(self, entityId: _Optional[str] = ..., priority: _Optional[int] = ..., target: _Optional[_Union[TaskExecutionTarget, _Mapping]] = ...) -> None: ...
+    target: _tasking_pb2.TaskExecutionTarget
+    def __init__(self, entityId: _Optional[str] = ..., priority: _Optional[int] = ..., target: _Optional[_Union[_tasking_pb2.TaskExecutionTarget, _Mapping]] = ...) -> None: ...
 
 class RunTaskResponse(_message.Message):
     __slots__ = ("executionId", "status", "humanReadableReason")

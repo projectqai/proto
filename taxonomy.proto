@@ -61,8 +61,6 @@ message InfrastructureTaxonomyDam {}
 
 /// --------------- VEHICLE
 
-message VehicleTaxonomyUnmanned {}
-
 message VehicleTaxonomy {
   optional VehicleTaxonomyUnmanned unmanned = 1;
   oneof domain {
@@ -73,11 +71,9 @@ message VehicleTaxonomy {
   }
 }
 
-/// --------------- VEHICLE LAND
+message VehicleTaxonomyUnmanned {}
 
-message VehicleTaxonomyTracked {}
-message VehicleTaxonomyTwoWheeled {}
-message VehicleTaxonomyMultiWheeled {}
+/// --------------- VEHICLE LAND
 
 message VehicleTaxonomyLand {
   oneof kind {
@@ -87,11 +83,11 @@ message VehicleTaxonomyLand {
   }
 }
 
-/// --------------- VEHICLE AIR
+message VehicleTaxonomyTracked {}
+message VehicleTaxonomyTwoWheeled {}
+message VehicleTaxonomyMultiWheeled {}
 
-message VehicleTaxonomyAirRotary {}
-message VehicleTaxonomyAirFixedWing {}
-message VehicleTaxonomyAirLighterThanAir {}
+/// --------------- VEHICLE AIR
 
 message VehicleTaxonomyAir {
   oneof kind {
@@ -100,6 +96,10 @@ message VehicleTaxonomyAir {
     VehicleTaxonomyAirRotary rotary = 3;
   }
 }
+
+message VehicleTaxonomyAirRotary {}
+message VehicleTaxonomyAirFixedWing {}
+message VehicleTaxonomyAirLighterThanAir {}
 
 /// --------------- VEHICLE SEA
 
@@ -111,12 +111,9 @@ message VehicleTaxonomySubsurface {}
 
 /// --------------- EQUIPMENT
 
-message EquipmentTaxonomySensorRadar {}
-message EquipmentTaxonomySensorEW {}
-message EquipmentTaxonomySensorCBRN {}
-message EquipmentTaxonomySensorAcoustic {}
-message EquipmentTaxonomySensorElectroOptical {}
-message EquipmentTaxonomySensorEmplaced {}
+message EquipmentTaxonomy {
+  optional EquipmentTaxonomySensor sensor = 1;
+}
 
 message EquipmentTaxonomySensor {
   optional EquipmentTaxonomySensorEmplaced emplaced = 1;
@@ -129,10 +126,46 @@ message EquipmentTaxonomySensor {
   }
 }
 
-message EquipmentTaxonomy {
-  optional EquipmentTaxonomySensor sensor = 1;
-}
+message EquipmentTaxonomySensorRadar {}
+message EquipmentTaxonomySensorEW {}
+message EquipmentTaxonomySensorCBRN {}
+message EquipmentTaxonomySensorAcoustic {}
+message EquipmentTaxonomySensorElectroOptical {}
+message EquipmentTaxonomySensorEmplaced {}
 
 /// --------------- EMITTER
 
 message EmitterTaxonomy {}
+
+/// --------------- TASKING
+
+message TaskingTaxonomy {
+  oneof kind {
+    TaskingTaxonomyObserve observe = 10;
+    TaskingTaxonomyMovement movement = 11;
+    TaskingTaxonomyEffect effect = 12;
+  }
+}
+
+message TaskingTaxonomyObserve {
+  oneof kind {
+    TaskingTaxonomyLookAt look_at = 1;
+    TaskingTaxonomyScan scan = 2;
+  }
+}
+
+message TaskingTaxonomyMovement {
+  oneof kind {
+    TaskingTaxonomyMoveTo move_to = 1;
+    TaskingTaxonomyPatrol patrol = 2;
+    TaskingTaxonomyFollow follow = 3;
+  }
+}
+
+message TaskingTaxonomyEffect {}
+
+message TaskingTaxonomyLookAt {}
+message TaskingTaxonomyScan {}
+message TaskingTaxonomyMoveTo {}
+message TaskingTaxonomyPatrol {}
+message TaskingTaxonomyFollow {}

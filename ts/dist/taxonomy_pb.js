@@ -8,7 +8,7 @@ import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
  * Describes the file taxonomy.proto.
  */
 export const file_taxonomy = /*@__PURE__*/
-  fileDesc("Cg50YXhvbm9teS5wcm90bxIFd29ybGQi5QIKFkNsYXNzaWZpY2F0aW9uVGF4b25vbXkSMwoKY29uZmlkZW5jZRgBIAEoCzIfLndvcmxkLkNsYXNzaWZpY2F0aW9uQ29uZmlkZW5jZRInCgZwZXJzb24YCiABKAsyFS53b3JsZC5QZXJzb25UYXhvbm9teUgAEicKBmFuaW1hbBgLIAEoCzIVLndvcmxkLkFuaW1hbFRheG9ub215SAASNwoOaW5mcmFzdHJ1Y3R1cmUYDCABKAsyHS53b3JsZC5JbmZyYXN0cnVjdHVyZVRheG9ub215SAASKQoHdmVoaWNsZRgNIAEoCzIWLndvcmxkLlZlaGljbGVUYXhvbm9teUgAEi0KCWVxdWlwbWVudBgOIAEoCzIYLndvcmxkLkVxdWlwbWVudFRheG9ub215SAASKQoHZW1pdHRlchgPIAEoCzIWLndvcmxkLkVtaXR0ZXJUYXhvbm9teUgAQgYKBGtpbmQiPwoYQ2xhc3NpZmljYXRpb25Db25maWRlbmNlEhIKCmNvbmZpZGVuY2UYASABKAISDwoHcGVuZGluZxgCIAEoCCIQCg5QZXJzb25UYXhvbm9teSJsCg5BbmltYWxUYXhvbm9teRInCgNhaXIYASABKAsyGC53b3JsZC5BbmltYWxUYXhvbm9teUFpckgAEikKBGxhbmQYAiABKAsyGS53b3JsZC5BbmltYWxUYXhvbm9teUxhbmRIAEIGCgRraW5kIhQKEkFuaW1hbFRheG9ub215QmlyZCJKChFBbmltYWxUYXhvbm9teUFpchIsCgRiaXJkGAEgASgLMhkud29ybGQuQW5pbWFsVGF4b25vbXlCaXJkSACIAQFCBwoFX2JpcmQiFQoTQW5pbWFsVGF4b25vbXlIb3JzZSJOChJBbmltYWxUYXhvbm9teUxhbmQSLgoFaG9yc2UYASABKAsyGi53b3JsZC5BbmltYWxUYXhvbm9teUhvcnNlSACIAQFCCAoGX2hvcnNlIpoCChZJbmZyYXN0cnVjdHVyZVRheG9ub215EjYKBXRvd2VyGAEgASgLMiIud29ybGQuSW5mcmFzdHJ1Y3R1cmVUYXhvbm9teVRvd2VySACIAQESOAoGYnJpZGdlGAIgASgLMiMud29ybGQuSW5mcmFzdHJ1Y3R1cmVUYXhvbm9teUJyaWRnZUgBiAEBEjQKBHJvYWQYAyABKAsyIS53b3JsZC5JbmZyYXN0cnVjdHVyZVRheG9ub215Um9hZEgCiAEBEjIKA2RhbRgEIAEoCzIgLndvcmxkLkluZnJhc3RydWN0dXJlVGF4b25vbXlEYW1IA4gBAUIICgZfdG93ZXJCCQoHX2JyaWRnZUIHCgVfcm9hZEIGCgRfZGFtIh0KG0luZnJhc3RydWN0dXJlVGF4b25vbXlUb3dlciIeChxJbmZyYXN0cnVjdHVyZVRheG9ub215QnJpZGdlIhwKGkluZnJhc3RydWN0dXJlVGF4b25vbXlSb2FkIhsKGUluZnJhc3RydWN0dXJlVGF4b25vbXlEYW0iGQoXVmVoaWNsZVRheG9ub215VW5tYW5uZWQilwIKD1ZlaGljbGVUYXhvbm9teRI1Cgh1bm1hbm5lZBgBIAEoCzIeLndvcmxkLlZlaGljbGVUYXhvbm9teVVubWFubmVkSAGIAQESKgoEbGFuZBgKIAEoCzIaLndvcmxkLlZlaGljbGVUYXhvbm9teUxhbmRIABIoCgNhaXIYCyABKAsyGS53b3JsZC5WZWhpY2xlVGF4b25vbXlBaXJIABIoCgNzZWEYDCABKAsyGS53b3JsZC5WZWhpY2xlVGF4b25vbXlTZWFIABI2CgpzdWJzdXJmYWNlGA0gASgLMiAud29ybGQuVmVoaWNsZVRheG9ub215U3Vic3VyZmFjZUgAQggKBmRvbWFpbkILCglfdW5tYW5uZWQiGAoWVmVoaWNsZVRheG9ub215VHJhY2tlZCIbChlWZWhpY2xlVGF4b25vbXlUd29XaGVlbGVkIh0KG1ZlaGljbGVUYXhvbm9teU11bHRpV2hlZWxlZCLFAQoTVmVoaWNsZVRheG9ub215TGFuZBIwCgd0cmFja2VkGAEgASgLMh0ud29ybGQuVmVoaWNsZVRheG9ub215VHJhY2tlZEgAEjcKC3R3b193aGVlbGVkGAIgASgLMiAud29ybGQuVmVoaWNsZVRheG9ub215VHdvV2hlZWxlZEgAEjsKDW11bHRpX3doZWVsZWQYAyABKAsyIi53b3JsZC5WZWhpY2xlVGF4b25vbXlNdWx0aVdoZWVsZWRIAEIGCgRraW5kIhoKGFZlaGljbGVUYXhvbm9teUFpclJvdGFyeSIdChtWZWhpY2xlVGF4b25vbXlBaXJGaXhlZFdpbmciIgogVmVoaWNsZVRheG9ub215QWlyTGlnaHRlclRoYW5BaXIizgEKElZlaGljbGVUYXhvbm9teUFpchI4CgpmaXhlZF93aW5nGAEgASgLMiIud29ybGQuVmVoaWNsZVRheG9ub215QWlyRml4ZWRXaW5nSAASQwoQbGlnaHRlcl90aGFuX2FpchgCIAEoCzInLndvcmxkLlZlaGljbGVUYXhvbm9teUFpckxpZ2h0ZXJUaGFuQWlySAASMQoGcm90YXJ5GAMgASgLMh8ud29ybGQuVmVoaWNsZVRheG9ub215QWlyUm90YXJ5SABCBgoEa2luZCIUChJWZWhpY2xlVGF4b25vbXlTZWEiGwoZVmVoaWNsZVRheG9ub215U3Vic3VyZmFjZSIeChxFcXVpcG1lbnRUYXhvbm9teVNlbnNvclJhZGFyIhsKGUVxdWlwbWVudFRheG9ub215U2Vuc29yRVciHQobRXF1aXBtZW50VGF4b25vbXlTZW5zb3JDQlJOIiEKH0VxdWlwbWVudFRheG9ub215U2Vuc29yQWNvdXN0aWMiJwolRXF1aXBtZW50VGF4b25vbXlTZW5zb3JFbGVjdHJvT3B0aWNhbCIhCh9FcXVpcG1lbnRUYXhvbm9teVNlbnNvckVtcGxhY2VkIowDChdFcXVpcG1lbnRUYXhvbm9teVNlbnNvchI9CghlbXBsYWNlZBgBIAEoCzImLndvcmxkLkVxdWlwbWVudFRheG9ub215U2Vuc29yRW1wbGFjZWRIAYgBARI0CgVyYWRhchgKIAEoCzIjLndvcmxkLkVxdWlwbWVudFRheG9ub215U2Vuc29yUmFkYXJIABIuCgJldxgLIAEoCzIgLndvcmxkLkVxdWlwbWVudFRheG9ub215U2Vuc29yRVdIABIyCgRjYnJuGAwgASgLMiIud29ybGQuRXF1aXBtZW50VGF4b25vbXlTZW5zb3JDQlJOSAASOgoIYWNvdXN0aWMYDSABKAsyJi53b3JsZC5FcXVpcG1lbnRUYXhvbm9teVNlbnNvckFjb3VzdGljSAASRwoPZWxlY3Ryb19vcHRpY2FsGA4gASgLMiwud29ybGQuRXF1aXBtZW50VGF4b25vbXlTZW5zb3JFbGVjdHJvT3B0aWNhbEgAQgYKBGtpbmRCCwoJX2VtcGxhY2VkIlMKEUVxdWlwbWVudFRheG9ub215EjMKBnNlbnNvchgBIAEoCzIeLndvcmxkLkVxdWlwbWVudFRheG9ub215U2Vuc29ySACIAQFCCQoHX3NlbnNvciIRCg9FbWl0dGVyVGF4b25vbXlCIFoeZ2l0aHViLmNvbS9wcm9qZWN0cWFpL3Byb3RvL2dvYgZwcm90bzM");
+  fileDesc("Cg50YXhvbm9teS5wcm90bxIFd29ybGQi5QIKFkNsYXNzaWZpY2F0aW9uVGF4b25vbXkSMwoKY29uZmlkZW5jZRgBIAEoCzIfLndvcmxkLkNsYXNzaWZpY2F0aW9uQ29uZmlkZW5jZRInCgZwZXJzb24YCiABKAsyFS53b3JsZC5QZXJzb25UYXhvbm9teUgAEicKBmFuaW1hbBgLIAEoCzIVLndvcmxkLkFuaW1hbFRheG9ub215SAASNwoOaW5mcmFzdHJ1Y3R1cmUYDCABKAsyHS53b3JsZC5JbmZyYXN0cnVjdHVyZVRheG9ub215SAASKQoHdmVoaWNsZRgNIAEoCzIWLndvcmxkLlZlaGljbGVUYXhvbm9teUgAEi0KCWVxdWlwbWVudBgOIAEoCzIYLndvcmxkLkVxdWlwbWVudFRheG9ub215SAASKQoHZW1pdHRlchgPIAEoCzIWLndvcmxkLkVtaXR0ZXJUYXhvbm9teUgAQgYKBGtpbmQiPwoYQ2xhc3NpZmljYXRpb25Db25maWRlbmNlEhIKCmNvbmZpZGVuY2UYASABKAISDwoHcGVuZGluZxgCIAEoCCIQCg5QZXJzb25UYXhvbm9teSJsCg5BbmltYWxUYXhvbm9teRInCgNhaXIYASABKAsyGC53b3JsZC5BbmltYWxUYXhvbm9teUFpckgAEikKBGxhbmQYAiABKAsyGS53b3JsZC5BbmltYWxUYXhvbm9teUxhbmRIAEIGCgRraW5kIhQKEkFuaW1hbFRheG9ub215QmlyZCJKChFBbmltYWxUYXhvbm9teUFpchIsCgRiaXJkGAEgASgLMhkud29ybGQuQW5pbWFsVGF4b25vbXlCaXJkSACIAQFCBwoFX2JpcmQiFQoTQW5pbWFsVGF4b25vbXlIb3JzZSJOChJBbmltYWxUYXhvbm9teUxhbmQSLgoFaG9yc2UYASABKAsyGi53b3JsZC5BbmltYWxUYXhvbm9teUhvcnNlSACIAQFCCAoGX2hvcnNlIpoCChZJbmZyYXN0cnVjdHVyZVRheG9ub215EjYKBXRvd2VyGAEgASgLMiIud29ybGQuSW5mcmFzdHJ1Y3R1cmVUYXhvbm9teVRvd2VySACIAQESOAoGYnJpZGdlGAIgASgLMiMud29ybGQuSW5mcmFzdHJ1Y3R1cmVUYXhvbm9teUJyaWRnZUgBiAEBEjQKBHJvYWQYAyABKAsyIS53b3JsZC5JbmZyYXN0cnVjdHVyZVRheG9ub215Um9hZEgCiAEBEjIKA2RhbRgEIAEoCzIgLndvcmxkLkluZnJhc3RydWN0dXJlVGF4b25vbXlEYW1IA4gBAUIICgZfdG93ZXJCCQoHX2JyaWRnZUIHCgVfcm9hZEIGCgRfZGFtIh0KG0luZnJhc3RydWN0dXJlVGF4b25vbXlUb3dlciIeChxJbmZyYXN0cnVjdHVyZVRheG9ub215QnJpZGdlIhwKGkluZnJhc3RydWN0dXJlVGF4b25vbXlSb2FkIhsKGUluZnJhc3RydWN0dXJlVGF4b25vbXlEYW0ilwIKD1ZlaGljbGVUYXhvbm9teRI1Cgh1bm1hbm5lZBgBIAEoCzIeLndvcmxkLlZlaGljbGVUYXhvbm9teVVubWFubmVkSAGIAQESKgoEbGFuZBgKIAEoCzIaLndvcmxkLlZlaGljbGVUYXhvbm9teUxhbmRIABIoCgNhaXIYCyABKAsyGS53b3JsZC5WZWhpY2xlVGF4b25vbXlBaXJIABIoCgNzZWEYDCABKAsyGS53b3JsZC5WZWhpY2xlVGF4b25vbXlTZWFIABI2CgpzdWJzdXJmYWNlGA0gASgLMiAud29ybGQuVmVoaWNsZVRheG9ub215U3Vic3VyZmFjZUgAQggKBmRvbWFpbkILCglfdW5tYW5uZWQiGQoXVmVoaWNsZVRheG9ub215VW5tYW5uZWQixQEKE1ZlaGljbGVUYXhvbm9teUxhbmQSMAoHdHJhY2tlZBgBIAEoCzIdLndvcmxkLlZlaGljbGVUYXhvbm9teVRyYWNrZWRIABI3Cgt0d29fd2hlZWxlZBgCIAEoCzIgLndvcmxkLlZlaGljbGVUYXhvbm9teVR3b1doZWVsZWRIABI7Cg1tdWx0aV93aGVlbGVkGAMgASgLMiIud29ybGQuVmVoaWNsZVRheG9ub215TXVsdGlXaGVlbGVkSABCBgoEa2luZCIYChZWZWhpY2xlVGF4b25vbXlUcmFja2VkIhsKGVZlaGljbGVUYXhvbm9teVR3b1doZWVsZWQiHQobVmVoaWNsZVRheG9ub215TXVsdGlXaGVlbGVkIs4BChJWZWhpY2xlVGF4b25vbXlBaXISOAoKZml4ZWRfd2luZxgBIAEoCzIiLndvcmxkLlZlaGljbGVUYXhvbm9teUFpckZpeGVkV2luZ0gAEkMKEGxpZ2h0ZXJfdGhhbl9haXIYAiABKAsyJy53b3JsZC5WZWhpY2xlVGF4b25vbXlBaXJMaWdodGVyVGhhbkFpckgAEjEKBnJvdGFyeRgDIAEoCzIfLndvcmxkLlZlaGljbGVUYXhvbm9teUFpclJvdGFyeUgAQgYKBGtpbmQiGgoYVmVoaWNsZVRheG9ub215QWlyUm90YXJ5Ih0KG1ZlaGljbGVUYXhvbm9teUFpckZpeGVkV2luZyIiCiBWZWhpY2xlVGF4b25vbXlBaXJMaWdodGVyVGhhbkFpciIUChJWZWhpY2xlVGF4b25vbXlTZWEiGwoZVmVoaWNsZVRheG9ub215U3Vic3VyZmFjZSJTChFFcXVpcG1lbnRUYXhvbm9teRIzCgZzZW5zb3IYASABKAsyHi53b3JsZC5FcXVpcG1lbnRUYXhvbm9teVNlbnNvckgAiAEBQgkKB19zZW5zb3IijAMKF0VxdWlwbWVudFRheG9ub215U2Vuc29yEj0KCGVtcGxhY2VkGAEgASgLMiYud29ybGQuRXF1aXBtZW50VGF4b25vbXlTZW5zb3JFbXBsYWNlZEgBiAEBEjQKBXJhZGFyGAogASgLMiMud29ybGQuRXF1aXBtZW50VGF4b25vbXlTZW5zb3JSYWRhckgAEi4KAmV3GAsgASgLMiAud29ybGQuRXF1aXBtZW50VGF4b25vbXlTZW5zb3JFV0gAEjIKBGNicm4YDCABKAsyIi53b3JsZC5FcXVpcG1lbnRUYXhvbm9teVNlbnNvckNCUk5IABI6CghhY291c3RpYxgNIAEoCzImLndvcmxkLkVxdWlwbWVudFRheG9ub215U2Vuc29yQWNvdXN0aWNIABJHCg9lbGVjdHJvX29wdGljYWwYDiABKAsyLC53b3JsZC5FcXVpcG1lbnRUYXhvbm9teVNlbnNvckVsZWN0cm9PcHRpY2FsSABCBgoEa2luZEILCglfZW1wbGFjZWQiHgocRXF1aXBtZW50VGF4b25vbXlTZW5zb3JSYWRhciIbChlFcXVpcG1lbnRUYXhvbm9teVNlbnNvckVXIh0KG0VxdWlwbWVudFRheG9ub215U2Vuc29yQ0JSTiIhCh9FcXVpcG1lbnRUYXhvbm9teVNlbnNvckFjb3VzdGljIicKJUVxdWlwbWVudFRheG9ub215U2Vuc29yRWxlY3Ryb09wdGljYWwiIQofRXF1aXBtZW50VGF4b25vbXlTZW5zb3JFbXBsYWNlZCIRCg9FbWl0dGVyVGF4b25vbXlCIFoeZ2l0aHViLmNvbS9wcm9qZWN0cWFpL3Byb3RvL2dvYgZwcm90bzM");
 
 /**
  * Describes the message world.ClassificationTaxonomy.
@@ -102,73 +102,73 @@ export const InfrastructureTaxonomyDamSchema = /*@__PURE__*/
   messageDesc(file_taxonomy, 12);
 
 /**
- * Describes the message world.VehicleTaxonomyUnmanned.
- * Use `create(VehicleTaxonomyUnmannedSchema)` to create a new message.
- */
-export const VehicleTaxonomyUnmannedSchema = /*@__PURE__*/
-  messageDesc(file_taxonomy, 13);
-
-/**
  * Describes the message world.VehicleTaxonomy.
  * Use `create(VehicleTaxonomySchema)` to create a new message.
  */
 export const VehicleTaxonomySchema = /*@__PURE__*/
+  messageDesc(file_taxonomy, 13);
+
+/**
+ * Describes the message world.VehicleTaxonomyUnmanned.
+ * Use `create(VehicleTaxonomyUnmannedSchema)` to create a new message.
+ */
+export const VehicleTaxonomyUnmannedSchema = /*@__PURE__*/
   messageDesc(file_taxonomy, 14);
-
-/**
- * Describes the message world.VehicleTaxonomyTracked.
- * Use `create(VehicleTaxonomyTrackedSchema)` to create a new message.
- */
-export const VehicleTaxonomyTrackedSchema = /*@__PURE__*/
-  messageDesc(file_taxonomy, 15);
-
-/**
- * Describes the message world.VehicleTaxonomyTwoWheeled.
- * Use `create(VehicleTaxonomyTwoWheeledSchema)` to create a new message.
- */
-export const VehicleTaxonomyTwoWheeledSchema = /*@__PURE__*/
-  messageDesc(file_taxonomy, 16);
-
-/**
- * Describes the message world.VehicleTaxonomyMultiWheeled.
- * Use `create(VehicleTaxonomyMultiWheeledSchema)` to create a new message.
- */
-export const VehicleTaxonomyMultiWheeledSchema = /*@__PURE__*/
-  messageDesc(file_taxonomy, 17);
 
 /**
  * Describes the message world.VehicleTaxonomyLand.
  * Use `create(VehicleTaxonomyLandSchema)` to create a new message.
  */
 export const VehicleTaxonomyLandSchema = /*@__PURE__*/
+  messageDesc(file_taxonomy, 15);
+
+/**
+ * Describes the message world.VehicleTaxonomyTracked.
+ * Use `create(VehicleTaxonomyTrackedSchema)` to create a new message.
+ */
+export const VehicleTaxonomyTrackedSchema = /*@__PURE__*/
+  messageDesc(file_taxonomy, 16);
+
+/**
+ * Describes the message world.VehicleTaxonomyTwoWheeled.
+ * Use `create(VehicleTaxonomyTwoWheeledSchema)` to create a new message.
+ */
+export const VehicleTaxonomyTwoWheeledSchema = /*@__PURE__*/
+  messageDesc(file_taxonomy, 17);
+
+/**
+ * Describes the message world.VehicleTaxonomyMultiWheeled.
+ * Use `create(VehicleTaxonomyMultiWheeledSchema)` to create a new message.
+ */
+export const VehicleTaxonomyMultiWheeledSchema = /*@__PURE__*/
   messageDesc(file_taxonomy, 18);
-
-/**
- * Describes the message world.VehicleTaxonomyAirRotary.
- * Use `create(VehicleTaxonomyAirRotarySchema)` to create a new message.
- */
-export const VehicleTaxonomyAirRotarySchema = /*@__PURE__*/
-  messageDesc(file_taxonomy, 19);
-
-/**
- * Describes the message world.VehicleTaxonomyAirFixedWing.
- * Use `create(VehicleTaxonomyAirFixedWingSchema)` to create a new message.
- */
-export const VehicleTaxonomyAirFixedWingSchema = /*@__PURE__*/
-  messageDesc(file_taxonomy, 20);
-
-/**
- * Describes the message world.VehicleTaxonomyAirLighterThanAir.
- * Use `create(VehicleTaxonomyAirLighterThanAirSchema)` to create a new message.
- */
-export const VehicleTaxonomyAirLighterThanAirSchema = /*@__PURE__*/
-  messageDesc(file_taxonomy, 21);
 
 /**
  * Describes the message world.VehicleTaxonomyAir.
  * Use `create(VehicleTaxonomyAirSchema)` to create a new message.
  */
 export const VehicleTaxonomyAirSchema = /*@__PURE__*/
+  messageDesc(file_taxonomy, 19);
+
+/**
+ * Describes the message world.VehicleTaxonomyAirRotary.
+ * Use `create(VehicleTaxonomyAirRotarySchema)` to create a new message.
+ */
+export const VehicleTaxonomyAirRotarySchema = /*@__PURE__*/
+  messageDesc(file_taxonomy, 20);
+
+/**
+ * Describes the message world.VehicleTaxonomyAirFixedWing.
+ * Use `create(VehicleTaxonomyAirFixedWingSchema)` to create a new message.
+ */
+export const VehicleTaxonomyAirFixedWingSchema = /*@__PURE__*/
+  messageDesc(file_taxonomy, 21);
+
+/**
+ * Describes the message world.VehicleTaxonomyAirLighterThanAir.
+ * Use `create(VehicleTaxonomyAirLighterThanAirSchema)` to create a new message.
+ */
+export const VehicleTaxonomyAirLighterThanAirSchema = /*@__PURE__*/
   messageDesc(file_taxonomy, 22);
 
 /**
@@ -186,59 +186,59 @@ export const VehicleTaxonomySubsurfaceSchema = /*@__PURE__*/
   messageDesc(file_taxonomy, 24);
 
 /**
- * Describes the message world.EquipmentTaxonomySensorRadar.
- * Use `create(EquipmentTaxonomySensorRadarSchema)` to create a new message.
+ * Describes the message world.EquipmentTaxonomy.
+ * Use `create(EquipmentTaxonomySchema)` to create a new message.
  */
-export const EquipmentTaxonomySensorRadarSchema = /*@__PURE__*/
+export const EquipmentTaxonomySchema = /*@__PURE__*/
   messageDesc(file_taxonomy, 25);
-
-/**
- * Describes the message world.EquipmentTaxonomySensorEW.
- * Use `create(EquipmentTaxonomySensorEWSchema)` to create a new message.
- */
-export const EquipmentTaxonomySensorEWSchema = /*@__PURE__*/
-  messageDesc(file_taxonomy, 26);
-
-/**
- * Describes the message world.EquipmentTaxonomySensorCBRN.
- * Use `create(EquipmentTaxonomySensorCBRNSchema)` to create a new message.
- */
-export const EquipmentTaxonomySensorCBRNSchema = /*@__PURE__*/
-  messageDesc(file_taxonomy, 27);
-
-/**
- * Describes the message world.EquipmentTaxonomySensorAcoustic.
- * Use `create(EquipmentTaxonomySensorAcousticSchema)` to create a new message.
- */
-export const EquipmentTaxonomySensorAcousticSchema = /*@__PURE__*/
-  messageDesc(file_taxonomy, 28);
-
-/**
- * Describes the message world.EquipmentTaxonomySensorElectroOptical.
- * Use `create(EquipmentTaxonomySensorElectroOpticalSchema)` to create a new message.
- */
-export const EquipmentTaxonomySensorElectroOpticalSchema = /*@__PURE__*/
-  messageDesc(file_taxonomy, 29);
-
-/**
- * Describes the message world.EquipmentTaxonomySensorEmplaced.
- * Use `create(EquipmentTaxonomySensorEmplacedSchema)` to create a new message.
- */
-export const EquipmentTaxonomySensorEmplacedSchema = /*@__PURE__*/
-  messageDesc(file_taxonomy, 30);
 
 /**
  * Describes the message world.EquipmentTaxonomySensor.
  * Use `create(EquipmentTaxonomySensorSchema)` to create a new message.
  */
 export const EquipmentTaxonomySensorSchema = /*@__PURE__*/
+  messageDesc(file_taxonomy, 26);
+
+/**
+ * Describes the message world.EquipmentTaxonomySensorRadar.
+ * Use `create(EquipmentTaxonomySensorRadarSchema)` to create a new message.
+ */
+export const EquipmentTaxonomySensorRadarSchema = /*@__PURE__*/
+  messageDesc(file_taxonomy, 27);
+
+/**
+ * Describes the message world.EquipmentTaxonomySensorEW.
+ * Use `create(EquipmentTaxonomySensorEWSchema)` to create a new message.
+ */
+export const EquipmentTaxonomySensorEWSchema = /*@__PURE__*/
+  messageDesc(file_taxonomy, 28);
+
+/**
+ * Describes the message world.EquipmentTaxonomySensorCBRN.
+ * Use `create(EquipmentTaxonomySensorCBRNSchema)` to create a new message.
+ */
+export const EquipmentTaxonomySensorCBRNSchema = /*@__PURE__*/
+  messageDesc(file_taxonomy, 29);
+
+/**
+ * Describes the message world.EquipmentTaxonomySensorAcoustic.
+ * Use `create(EquipmentTaxonomySensorAcousticSchema)` to create a new message.
+ */
+export const EquipmentTaxonomySensorAcousticSchema = /*@__PURE__*/
+  messageDesc(file_taxonomy, 30);
+
+/**
+ * Describes the message world.EquipmentTaxonomySensorElectroOptical.
+ * Use `create(EquipmentTaxonomySensorElectroOpticalSchema)` to create a new message.
+ */
+export const EquipmentTaxonomySensorElectroOpticalSchema = /*@__PURE__*/
   messageDesc(file_taxonomy, 31);
 
 /**
- * Describes the message world.EquipmentTaxonomy.
- * Use `create(EquipmentTaxonomySchema)` to create a new message.
+ * Describes the message world.EquipmentTaxonomySensorEmplaced.
+ * Use `create(EquipmentTaxonomySensorEmplacedSchema)` to create a new message.
  */
-export const EquipmentTaxonomySchema = /*@__PURE__*/
+export const EquipmentTaxonomySensorEmplacedSchema = /*@__PURE__*/
   messageDesc(file_taxonomy, 32);
 
 /**

@@ -264,18 +264,6 @@ export declare type InfrastructureTaxonomyDam = Message<"world.InfrastructureTax
 export declare const InfrastructureTaxonomyDamSchema: GenMessage<InfrastructureTaxonomyDam>;
 
 /**
- * @generated from message world.VehicleTaxonomyUnmanned
- */
-export declare type VehicleTaxonomyUnmanned = Message<"world.VehicleTaxonomyUnmanned"> & {
-};
-
-/**
- * Describes the message world.VehicleTaxonomyUnmanned.
- * Use `create(VehicleTaxonomyUnmannedSchema)` to create a new message.
- */
-export declare const VehicleTaxonomyUnmannedSchema: GenMessage<VehicleTaxonomyUnmanned>;
-
-/**
  * @generated from message world.VehicleTaxonomy
  */
 export declare type VehicleTaxonomy = Message<"world.VehicleTaxonomy"> & {
@@ -321,6 +309,52 @@ export declare type VehicleTaxonomy = Message<"world.VehicleTaxonomy"> & {
 export declare const VehicleTaxonomySchema: GenMessage<VehicleTaxonomy>;
 
 /**
+ * @generated from message world.VehicleTaxonomyUnmanned
+ */
+export declare type VehicleTaxonomyUnmanned = Message<"world.VehicleTaxonomyUnmanned"> & {
+};
+
+/**
+ * Describes the message world.VehicleTaxonomyUnmanned.
+ * Use `create(VehicleTaxonomyUnmannedSchema)` to create a new message.
+ */
+export declare const VehicleTaxonomyUnmannedSchema: GenMessage<VehicleTaxonomyUnmanned>;
+
+/**
+ * @generated from message world.VehicleTaxonomyLand
+ */
+export declare type VehicleTaxonomyLand = Message<"world.VehicleTaxonomyLand"> & {
+  /**
+   * @generated from oneof world.VehicleTaxonomyLand.kind
+   */
+  kind: {
+    /**
+     * @generated from field: world.VehicleTaxonomyTracked tracked = 1;
+     */
+    value: VehicleTaxonomyTracked;
+    case: "tracked";
+  } | {
+    /**
+     * @generated from field: world.VehicleTaxonomyTwoWheeled two_wheeled = 2;
+     */
+    value: VehicleTaxonomyTwoWheeled;
+    case: "twoWheeled";
+  } | {
+    /**
+     * @generated from field: world.VehicleTaxonomyMultiWheeled multi_wheeled = 3;
+     */
+    value: VehicleTaxonomyMultiWheeled;
+    case: "multiWheeled";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message world.VehicleTaxonomyLand.
+ * Use `create(VehicleTaxonomyLandSchema)` to create a new message.
+ */
+export declare const VehicleTaxonomyLandSchema: GenMessage<VehicleTaxonomyLand>;
+
+/**
  * @generated from message world.VehicleTaxonomyTracked
  */
 export declare type VehicleTaxonomyTracked = Message<"world.VehicleTaxonomyTracked"> & {
@@ -357,38 +391,38 @@ export declare type VehicleTaxonomyMultiWheeled = Message<"world.VehicleTaxonomy
 export declare const VehicleTaxonomyMultiWheeledSchema: GenMessage<VehicleTaxonomyMultiWheeled>;
 
 /**
- * @generated from message world.VehicleTaxonomyLand
+ * @generated from message world.VehicleTaxonomyAir
  */
-export declare type VehicleTaxonomyLand = Message<"world.VehicleTaxonomyLand"> & {
+export declare type VehicleTaxonomyAir = Message<"world.VehicleTaxonomyAir"> & {
   /**
-   * @generated from oneof world.VehicleTaxonomyLand.kind
+   * @generated from oneof world.VehicleTaxonomyAir.kind
    */
   kind: {
     /**
-     * @generated from field: world.VehicleTaxonomyTracked tracked = 1;
+     * @generated from field: world.VehicleTaxonomyAirFixedWing fixed_wing = 1;
      */
-    value: VehicleTaxonomyTracked;
-    case: "tracked";
+    value: VehicleTaxonomyAirFixedWing;
+    case: "fixedWing";
   } | {
     /**
-     * @generated from field: world.VehicleTaxonomyTwoWheeled two_wheeled = 2;
+     * @generated from field: world.VehicleTaxonomyAirLighterThanAir lighter_than_air = 2;
      */
-    value: VehicleTaxonomyTwoWheeled;
-    case: "twoWheeled";
+    value: VehicleTaxonomyAirLighterThanAir;
+    case: "lighterThanAir";
   } | {
     /**
-     * @generated from field: world.VehicleTaxonomyMultiWheeled multi_wheeled = 3;
+     * @generated from field: world.VehicleTaxonomyAirRotary rotary = 3;
      */
-    value: VehicleTaxonomyMultiWheeled;
-    case: "multiWheeled";
+    value: VehicleTaxonomyAirRotary;
+    case: "rotary";
   } | { case: undefined; value?: undefined };
 };
 
 /**
- * Describes the message world.VehicleTaxonomyLand.
- * Use `create(VehicleTaxonomyLandSchema)` to create a new message.
+ * Describes the message world.VehicleTaxonomyAir.
+ * Use `create(VehicleTaxonomyAirSchema)` to create a new message.
  */
-export declare const VehicleTaxonomyLandSchema: GenMessage<VehicleTaxonomyLand>;
+export declare const VehicleTaxonomyAirSchema: GenMessage<VehicleTaxonomyAir>;
 
 /**
  * @generated from message world.VehicleTaxonomyAirRotary
@@ -427,40 +461,6 @@ export declare type VehicleTaxonomyAirLighterThanAir = Message<"world.VehicleTax
 export declare const VehicleTaxonomyAirLighterThanAirSchema: GenMessage<VehicleTaxonomyAirLighterThanAir>;
 
 /**
- * @generated from message world.VehicleTaxonomyAir
- */
-export declare type VehicleTaxonomyAir = Message<"world.VehicleTaxonomyAir"> & {
-  /**
-   * @generated from oneof world.VehicleTaxonomyAir.kind
-   */
-  kind: {
-    /**
-     * @generated from field: world.VehicleTaxonomyAirFixedWing fixed_wing = 1;
-     */
-    value: VehicleTaxonomyAirFixedWing;
-    case: "fixedWing";
-  } | {
-    /**
-     * @generated from field: world.VehicleTaxonomyAirLighterThanAir lighter_than_air = 2;
-     */
-    value: VehicleTaxonomyAirLighterThanAir;
-    case: "lighterThanAir";
-  } | {
-    /**
-     * @generated from field: world.VehicleTaxonomyAirRotary rotary = 3;
-     */
-    value: VehicleTaxonomyAirRotary;
-    case: "rotary";
-  } | { case: undefined; value?: undefined };
-};
-
-/**
- * Describes the message world.VehicleTaxonomyAir.
- * Use `create(VehicleTaxonomyAirSchema)` to create a new message.
- */
-export declare const VehicleTaxonomyAirSchema: GenMessage<VehicleTaxonomyAir>;
-
-/**
  * @generated from message world.VehicleTaxonomySea
  */
 export declare type VehicleTaxonomySea = Message<"world.VehicleTaxonomySea"> & {
@@ -483,6 +483,73 @@ export declare type VehicleTaxonomySubsurface = Message<"world.VehicleTaxonomySu
  * Use `create(VehicleTaxonomySubsurfaceSchema)` to create a new message.
  */
 export declare const VehicleTaxonomySubsurfaceSchema: GenMessage<VehicleTaxonomySubsurface>;
+
+/**
+ * @generated from message world.EquipmentTaxonomy
+ */
+export declare type EquipmentTaxonomy = Message<"world.EquipmentTaxonomy"> & {
+  /**
+   * @generated from field: optional world.EquipmentTaxonomySensor sensor = 1;
+   */
+  sensor?: EquipmentTaxonomySensor;
+};
+
+/**
+ * Describes the message world.EquipmentTaxonomy.
+ * Use `create(EquipmentTaxonomySchema)` to create a new message.
+ */
+export declare const EquipmentTaxonomySchema: GenMessage<EquipmentTaxonomy>;
+
+/**
+ * @generated from message world.EquipmentTaxonomySensor
+ */
+export declare type EquipmentTaxonomySensor = Message<"world.EquipmentTaxonomySensor"> & {
+  /**
+   * @generated from field: optional world.EquipmentTaxonomySensorEmplaced emplaced = 1;
+   */
+  emplaced?: EquipmentTaxonomySensorEmplaced;
+
+  /**
+   * @generated from oneof world.EquipmentTaxonomySensor.kind
+   */
+  kind: {
+    /**
+     * @generated from field: world.EquipmentTaxonomySensorRadar radar = 10;
+     */
+    value: EquipmentTaxonomySensorRadar;
+    case: "radar";
+  } | {
+    /**
+     * @generated from field: world.EquipmentTaxonomySensorEW ew = 11;
+     */
+    value: EquipmentTaxonomySensorEW;
+    case: "ew";
+  } | {
+    /**
+     * @generated from field: world.EquipmentTaxonomySensorCBRN cbrn = 12;
+     */
+    value: EquipmentTaxonomySensorCBRN;
+    case: "cbrn";
+  } | {
+    /**
+     * @generated from field: world.EquipmentTaxonomySensorAcoustic acoustic = 13;
+     */
+    value: EquipmentTaxonomySensorAcoustic;
+    case: "acoustic";
+  } | {
+    /**
+     * @generated from field: world.EquipmentTaxonomySensorElectroOptical electro_optical = 14;
+     */
+    value: EquipmentTaxonomySensorElectroOptical;
+    case: "electroOptical";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message world.EquipmentTaxonomySensor.
+ * Use `create(EquipmentTaxonomySensorSchema)` to create a new message.
+ */
+export declare const EquipmentTaxonomySensorSchema: GenMessage<EquipmentTaxonomySensor>;
 
 /**
  * @generated from message world.EquipmentTaxonomySensorRadar
@@ -555,73 +622,6 @@ export declare type EquipmentTaxonomySensorEmplaced = Message<"world.EquipmentTa
  * Use `create(EquipmentTaxonomySensorEmplacedSchema)` to create a new message.
  */
 export declare const EquipmentTaxonomySensorEmplacedSchema: GenMessage<EquipmentTaxonomySensorEmplaced>;
-
-/**
- * @generated from message world.EquipmentTaxonomySensor
- */
-export declare type EquipmentTaxonomySensor = Message<"world.EquipmentTaxonomySensor"> & {
-  /**
-   * @generated from field: optional world.EquipmentTaxonomySensorEmplaced emplaced = 1;
-   */
-  emplaced?: EquipmentTaxonomySensorEmplaced;
-
-  /**
-   * @generated from oneof world.EquipmentTaxonomySensor.kind
-   */
-  kind: {
-    /**
-     * @generated from field: world.EquipmentTaxonomySensorRadar radar = 10;
-     */
-    value: EquipmentTaxonomySensorRadar;
-    case: "radar";
-  } | {
-    /**
-     * @generated from field: world.EquipmentTaxonomySensorEW ew = 11;
-     */
-    value: EquipmentTaxonomySensorEW;
-    case: "ew";
-  } | {
-    /**
-     * @generated from field: world.EquipmentTaxonomySensorCBRN cbrn = 12;
-     */
-    value: EquipmentTaxonomySensorCBRN;
-    case: "cbrn";
-  } | {
-    /**
-     * @generated from field: world.EquipmentTaxonomySensorAcoustic acoustic = 13;
-     */
-    value: EquipmentTaxonomySensorAcoustic;
-    case: "acoustic";
-  } | {
-    /**
-     * @generated from field: world.EquipmentTaxonomySensorElectroOptical electro_optical = 14;
-     */
-    value: EquipmentTaxonomySensorElectroOptical;
-    case: "electroOptical";
-  } | { case: undefined; value?: undefined };
-};
-
-/**
- * Describes the message world.EquipmentTaxonomySensor.
- * Use `create(EquipmentTaxonomySensorSchema)` to create a new message.
- */
-export declare const EquipmentTaxonomySensorSchema: GenMessage<EquipmentTaxonomySensor>;
-
-/**
- * @generated from message world.EquipmentTaxonomy
- */
-export declare type EquipmentTaxonomy = Message<"world.EquipmentTaxonomy"> & {
-  /**
-   * @generated from field: optional world.EquipmentTaxonomySensor sensor = 1;
-   */
-  sensor?: EquipmentTaxonomySensor;
-};
-
-/**
- * Describes the message world.EquipmentTaxonomy.
- * Use `create(EquipmentTaxonomySchema)` to create a new message.
- */
-export declare const EquipmentTaxonomySchema: GenMessage<EquipmentTaxonomy>;
 
 /**
  * @generated from message world.EmitterTaxonomy

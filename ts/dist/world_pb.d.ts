@@ -6,6 +6,7 @@ import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobu
 import type { JsonObject, Message } from "@bufbuild/protobuf";
 import type { MetricComponent, MetricKind } from "./metrics_pb.js";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
+import type { TaskableTarget, TaskExecutionTarget } from "./tasking_pb.js";
 import type { LocalGeometry, PlanarGeometry } from "./geometry_pb.js";
 import type { ClassificationTaxonomy } from "./taxonomy_pb.js";
 
@@ -1137,45 +1138,6 @@ export declare type TaskableAssignee = Message<"world.TaskableAssignee"> & {
 export declare const TaskableAssigneeSchema: GenMessage<TaskableAssignee>;
 
 /**
- * @generated from message world.TaskableTarget
- */
-export declare type TaskableTarget = Message<"world.TaskableTarget"> & {
-  /**
-   * if set, the task prefers entities in this list as target.
-   *
-   * @generated from field: optional world.EntityFilter filter = 1;
-   */
-  filter?: EntityFilter;
-
-  /**
-   * if set, the task prefers entities (or positions) that are inside the geo regions defined by these entities
-   *
-   * @generated from field: repeated string within = 2;
-   */
-  within: string[];
-
-  /**
-   * maximum number of targets per execution. default = 1
-   *
-   * @generated from field: optional uint32 max_targets = 3;
-   */
-  maxTargets?: number;
-
-  /**
-   * if set, the task accepts an arbitrary geo position
-   *
-   * @generated from field: optional bool position = 4;
-   */
-  position?: boolean;
-};
-
-/**
- * Describes the message world.TaskableTarget.
- * Use `create(TaskableTargetSchema)` to create a new message.
- */
-export declare const TaskableTargetSchema: GenMessage<TaskableTarget>;
-
-/**
  * @generated from message world.TaskableComponent
  */
 export declare type TaskableComponent = Message<"world.TaskableComponent"> & {
@@ -1202,7 +1164,10 @@ export declare type TaskableComponent = Message<"world.TaskableComponent"> & {
   assignee: TaskableAssignee[];
 
   /**
-   * @generated from field: google.protobuf.Struct schema = 5;
+   * DEPRECATED: taskables are now strongly typed via `target`.
+   *
+   * @generated from field: google.protobuf.Struct schema = 5 [deprecated = true];
+   * @deprecated
    */
   schema?: JsonObject;
 
@@ -1253,31 +1218,6 @@ export declare type TaskableComponent = Message<"world.TaskableComponent"> & {
 export declare const TaskableComponentSchema: GenMessage<TaskableComponent>;
 
 /**
- * An instance of a task being executed.
- * Created by RunTask, referencing a TaskableComponent entity as the definition.
- * The controller that owns the taskable watches for these and executes them.
- *
- * @generated from message world.TaskExecutionTarget
- */
-export declare type TaskExecutionTarget = Message<"world.TaskExecutionTarget"> & {
-  /**
-   * @generated from field: repeated string entity = 1;
-   */
-  entity: string[];
-
-  /**
-   * @generated from field: optional world.Geometry position = 2;
-   */
-  position?: Geometry;
-};
-
-/**
- * Describes the message world.TaskExecutionTarget.
- * Use `create(TaskExecutionTargetSchema)` to create a new message.
- */
-export declare const TaskExecutionTargetSchema: GenMessage<TaskExecutionTarget>;
-
-/**
  * @generated from message world.TaskExecutionComponent
  */
 export declare type TaskExecutionComponent = Message<"world.TaskExecutionComponent"> & {
@@ -1289,9 +1229,10 @@ export declare type TaskExecutionComponent = Message<"world.TaskExecutionCompone
   task: string;
 
   /**
-   * parameters supplied by the caller, validated against the taskable's schema
+   * DEPRECATED: executions are now strongly typed via `target`.
    *
-   * @generated from field: optional google.protobuf.Struct parameters = 2;
+   * @generated from field: optional google.protobuf.Struct parameters = 2 [deprecated = true];
+   * @deprecated
    */
   parameters?: JsonObject;
 
