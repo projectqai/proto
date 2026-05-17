@@ -79,6 +79,16 @@ export declare const TaskableTargetWaypointsSchema: GenMessage<TaskableTargetWay
  */
 export declare type TaskableTargetEntity = Message<"world.TaskableTargetEntity"> & {
   /**
+   * if non-empty, only these entity IDs are accepted as targets.
+   * if empty, any entity is accepted.
+   *
+   * @generated from field: repeated string entity = 1;
+   */
+  entity: string[];
+
+  /**
+   * maximum number of entities. default 1.
+   *
    * @generated from field: optional uint32 max = 2;
    */
   max?: number;

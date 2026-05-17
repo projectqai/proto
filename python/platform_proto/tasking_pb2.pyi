@@ -29,10 +29,12 @@ class TaskableTargetWaypoints(_message.Message):
     def __init__(self, max: _Optional[int] = ..., loop: bool = ...) -> None: ...
 
 class TaskableTargetEntity(_message.Message):
-    __slots__ = ("max",)
+    __slots__ = ("entity", "max")
+    ENTITY_FIELD_NUMBER: _ClassVar[int]
     MAX_FIELD_NUMBER: _ClassVar[int]
+    entity: _containers.RepeatedScalarFieldContainer[str]
     max: int
-    def __init__(self, max: _Optional[int] = ...) -> None: ...
+    def __init__(self, entity: _Optional[_Iterable[str]] = ..., max: _Optional[int] = ...) -> None: ...
 
 class TaskExecutionTarget(_message.Message):
     __slots__ = ("position", "waypoints", "entity")

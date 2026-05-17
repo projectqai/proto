@@ -635,3 +635,189 @@ export declare type EmitterTaxonomy = Message<"world.EmitterTaxonomy"> & {
  */
 export declare const EmitterTaxonomySchema: GenMessage<EmitterTaxonomy>;
 
+/**
+ * @generated from message world.TaskingTaxonomy
+ */
+export declare type TaskingTaxonomy = Message<"world.TaskingTaxonomy"> & {
+  /**
+   * @generated from oneof world.TaskingTaxonomy.kind
+   */
+  kind: {
+    /**
+     * @generated from field: world.TaskingTaxonomyObserve observe = 10;
+     */
+    value: TaskingTaxonomyObserve;
+    case: "observe";
+  } | {
+    /**
+     * @generated from field: world.TaskingTaxonomyMovement movement = 11;
+     */
+    value: TaskingTaxonomyMovement;
+    case: "movement";
+  } | {
+    /**
+     * @generated from field: world.TaskingTaxonomyEffect effect = 12;
+     */
+    value: TaskingTaxonomyEffect;
+    case: "effect";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message world.TaskingTaxonomy.
+ * Use `create(TaskingTaxonomySchema)` to create a new message.
+ */
+export declare const TaskingTaxonomySchema: GenMessage<TaskingTaxonomy>;
+
+/**
+ * @generated from message world.TaskingTaxonomyObserve
+ */
+export declare type TaskingTaxonomyObserve = Message<"world.TaskingTaxonomyObserve"> & {
+  /**
+   * @generated from oneof world.TaskingTaxonomyObserve.kind
+   */
+  kind: {
+    /**
+     * @generated from field: world.TaskingTaxonomyLookAt look_at = 1;
+     */
+    value: TaskingTaxonomyLookAt;
+    case: "lookAt";
+  } | {
+    /**
+     * @generated from field: world.TaskingTaxonomyScan scan = 2;
+     */
+    value: TaskingTaxonomyScan;
+    case: "scan";
+  } | {
+    /**
+     * @generated from field: world.TaskingTaxonomyTrack track = 3;
+     */
+    value: TaskingTaxonomyTrack;
+    case: "track";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyObserve.
+ * Use `create(TaskingTaxonomyObserveSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyObserveSchema: GenMessage<TaskingTaxonomyObserve>;
+
+/**
+ * @generated from message world.TaskingTaxonomyMovement
+ */
+export declare type TaskingTaxonomyMovement = Message<"world.TaskingTaxonomyMovement"> & {
+  /**
+   * @generated from oneof world.TaskingTaxonomyMovement.kind
+   */
+  kind: {
+    /**
+     * @generated from field: world.TaskingTaxonomyMoveTo move_to = 1;
+     */
+    value: TaskingTaxonomyMoveTo;
+    case: "moveTo";
+  } | {
+    /**
+     * @generated from field: world.TaskingTaxonomyPatrol patrol = 2;
+     */
+    value: TaskingTaxonomyPatrol;
+    case: "patrol";
+  } | {
+    /**
+     * @generated from field: world.TaskingTaxonomyFollow follow = 3;
+     */
+    value: TaskingTaxonomyFollow;
+    case: "follow";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyMovement.
+ * Use `create(TaskingTaxonomyMovementSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyMovementSchema: GenMessage<TaskingTaxonomyMovement>;
+
+/**
+ * @generated from message world.TaskingTaxonomyEffect
+ */
+export declare type TaskingTaxonomyEffect = Message<"world.TaskingTaxonomyEffect"> & {
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyEffect.
+ * Use `create(TaskingTaxonomyEffectSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyEffectSchema: GenMessage<TaskingTaxonomyEffect>;
+
+/**
+ * @generated from message world.TaskingTaxonomyLookAt
+ */
+export declare type TaskingTaxonomyLookAt = Message<"world.TaskingTaxonomyLookAt"> & {
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyLookAt.
+ * Use `create(TaskingTaxonomyLookAtSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyLookAtSchema: GenMessage<TaskingTaxonomyLookAt>;
+
+/**
+ * @generated from message world.TaskingTaxonomyScan
+ */
+export declare type TaskingTaxonomyScan = Message<"world.TaskingTaxonomyScan"> & {
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyScan.
+ * Use `create(TaskingTaxonomyScanSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyScanSchema: GenMessage<TaskingTaxonomyScan>;
+
+/**
+ * @generated from message world.TaskingTaxonomyTrack
+ */
+export declare type TaskingTaxonomyTrack = Message<"world.TaskingTaxonomyTrack"> & {
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyTrack.
+ * Use `create(TaskingTaxonomyTrackSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyTrackSchema: GenMessage<TaskingTaxonomyTrack>;
+
+/**
+ * @generated from message world.TaskingTaxonomyMoveTo
+ */
+export declare type TaskingTaxonomyMoveTo = Message<"world.TaskingTaxonomyMoveTo"> & {
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyMoveTo.
+ * Use `create(TaskingTaxonomyMoveToSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyMoveToSchema: GenMessage<TaskingTaxonomyMoveTo>;
+
+/**
+ * @generated from message world.TaskingTaxonomyPatrol
+ */
+export declare type TaskingTaxonomyPatrol = Message<"world.TaskingTaxonomyPatrol"> & {
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyPatrol.
+ * Use `create(TaskingTaxonomyPatrolSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyPatrolSchema: GenMessage<TaskingTaxonomyPatrol>;
+
+/**
+ * @generated from message world.TaskingTaxonomyFollow
+ */
+export declare type TaskingTaxonomyFollow = Message<"world.TaskingTaxonomyFollow"> & {
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyFollow.
+ * Use `create(TaskingTaxonomyFollowSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyFollowSchema: GenMessage<TaskingTaxonomyFollow>;
+

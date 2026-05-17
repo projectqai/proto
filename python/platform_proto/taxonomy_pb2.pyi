@@ -209,3 +209,61 @@ class EquipmentTaxonomySensorEmplaced(_message.Message):
 class EmitterTaxonomy(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
+
+class TaskingTaxonomy(_message.Message):
+    __slots__ = ("observe", "movement", "effect")
+    OBSERVE_FIELD_NUMBER: _ClassVar[int]
+    MOVEMENT_FIELD_NUMBER: _ClassVar[int]
+    EFFECT_FIELD_NUMBER: _ClassVar[int]
+    observe: TaskingTaxonomyObserve
+    movement: TaskingTaxonomyMovement
+    effect: TaskingTaxonomyEffect
+    def __init__(self, observe: _Optional[_Union[TaskingTaxonomyObserve, _Mapping]] = ..., movement: _Optional[_Union[TaskingTaxonomyMovement, _Mapping]] = ..., effect: _Optional[_Union[TaskingTaxonomyEffect, _Mapping]] = ...) -> None: ...
+
+class TaskingTaxonomyObserve(_message.Message):
+    __slots__ = ("look_at", "scan", "track")
+    LOOK_AT_FIELD_NUMBER: _ClassVar[int]
+    SCAN_FIELD_NUMBER: _ClassVar[int]
+    TRACK_FIELD_NUMBER: _ClassVar[int]
+    look_at: TaskingTaxonomyLookAt
+    scan: TaskingTaxonomyScan
+    track: TaskingTaxonomyTrack
+    def __init__(self, look_at: _Optional[_Union[TaskingTaxonomyLookAt, _Mapping]] = ..., scan: _Optional[_Union[TaskingTaxonomyScan, _Mapping]] = ..., track: _Optional[_Union[TaskingTaxonomyTrack, _Mapping]] = ...) -> None: ...
+
+class TaskingTaxonomyMovement(_message.Message):
+    __slots__ = ("move_to", "patrol", "follow")
+    MOVE_TO_FIELD_NUMBER: _ClassVar[int]
+    PATROL_FIELD_NUMBER: _ClassVar[int]
+    FOLLOW_FIELD_NUMBER: _ClassVar[int]
+    move_to: TaskingTaxonomyMoveTo
+    patrol: TaskingTaxonomyPatrol
+    follow: TaskingTaxonomyFollow
+    def __init__(self, move_to: _Optional[_Union[TaskingTaxonomyMoveTo, _Mapping]] = ..., patrol: _Optional[_Union[TaskingTaxonomyPatrol, _Mapping]] = ..., follow: _Optional[_Union[TaskingTaxonomyFollow, _Mapping]] = ...) -> None: ...
+
+class TaskingTaxonomyEffect(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class TaskingTaxonomyLookAt(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class TaskingTaxonomyScan(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class TaskingTaxonomyTrack(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class TaskingTaxonomyMoveTo(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class TaskingTaxonomyPatrol(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class TaskingTaxonomyFollow(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...

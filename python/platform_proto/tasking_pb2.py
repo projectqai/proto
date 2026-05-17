@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from . import geometry_pb2 as geometry__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rtasking.proto\x12\x05world\x1a\x0egeometry.proto\"\xd6\x01\n\x0eTaskableTarget\x12\x34\n\x08position\x18\x01 \x01(\x0b\x32\x1d.world.TaskableTargetPositionH\x00\x88\x01\x01\x12\x36\n\twaypoints\x18\x02 \x01(\x0b\x32\x1e.world.TaskableTargetWaypointsH\x01\x88\x01\x01\x12\x30\n\x06\x65ntity\x18\x03 \x01(\x0b\x32\x1b.world.TaskableTargetEntityH\x02\x88\x01\x01\x42\x0b\n\t_positionB\x0c\n\n_waypointsB\t\n\x07_entity\"\x18\n\x16TaskableTargetPosition\"O\n\x17TaskableTargetWaypoints\x12\x10\n\x03max\x18\x01 \x01(\rH\x00\x88\x01\x01\x12\x11\n\x04loop\x18\x02 \x01(\x08H\x01\x88\x01\x01\x42\x06\n\x04_maxB\x07\n\x05_loop\"0\n\x14TaskableTargetEntity\x12\x10\n\x03max\x18\x02 \x01(\rH\x00\x88\x01\x01\x42\x06\n\x04_max\"\xb3\x01\n\x13TaskExecutionTarget\x12&\n\x08position\x18\x01 \x01(\x0b\x32\x12.world.PlanarPointH\x00\x12\x38\n\twaypoints\x18\x02 \x01(\x0b\x32#.world.TaskExecutionTargetWaypointsH\x00\x12\x32\n\x06\x65ntity\x18\x03 \x01(\x0b\x32 .world.TaskExecutionTargetEntityH\x00\x42\x06\n\x04kind\"D\n\x1cTaskExecutionTargetWaypoints\x12$\n\x08waypoint\x18\x01 \x03(\x0b\x32\x12.world.PlanarPoint\"+\n\x19TaskExecutionTargetEntity\x12\x0e\n\x06\x65ntity\x18\x01 \x03(\tB Z\x1egithub.com/projectqai/proto/gob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rtasking.proto\x12\x05world\x1a\x0egeometry.proto\"\xd6\x01\n\x0eTaskableTarget\x12\x34\n\x08position\x18\x01 \x01(\x0b\x32\x1d.world.TaskableTargetPositionH\x00\x88\x01\x01\x12\x36\n\twaypoints\x18\x02 \x01(\x0b\x32\x1e.world.TaskableTargetWaypointsH\x01\x88\x01\x01\x12\x30\n\x06\x65ntity\x18\x03 \x01(\x0b\x32\x1b.world.TaskableTargetEntityH\x02\x88\x01\x01\x42\x0b\n\t_positionB\x0c\n\n_waypointsB\t\n\x07_entity\"\x18\n\x16TaskableTargetPosition\"O\n\x17TaskableTargetWaypoints\x12\x10\n\x03max\x18\x01 \x01(\rH\x00\x88\x01\x01\x12\x11\n\x04loop\x18\x02 \x01(\x08H\x01\x88\x01\x01\x42\x06\n\x04_maxB\x07\n\x05_loop\"@\n\x14TaskableTargetEntity\x12\x0e\n\x06\x65ntity\x18\x01 \x03(\t\x12\x10\n\x03max\x18\x02 \x01(\rH\x00\x88\x01\x01\x42\x06\n\x04_max\"\xb3\x01\n\x13TaskExecutionTarget\x12&\n\x08position\x18\x01 \x01(\x0b\x32\x12.world.PlanarPointH\x00\x12\x38\n\twaypoints\x18\x02 \x01(\x0b\x32#.world.TaskExecutionTargetWaypointsH\x00\x12\x32\n\x06\x65ntity\x18\x03 \x01(\x0b\x32 .world.TaskExecutionTargetEntityH\x00\x42\x06\n\x04kind\"D\n\x1cTaskExecutionTargetWaypoints\x12$\n\x08waypoint\x18\x01 \x03(\x0b\x32\x12.world.PlanarPoint\"+\n\x19TaskExecutionTargetEntity\x12\x0e\n\x06\x65ntity\x18\x01 \x03(\tB Z\x1egithub.com/projectqai/proto/gob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -40,11 +40,11 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_TASKABLETARGETWAYPOINTS']._serialized_start=283
   _globals['_TASKABLETARGETWAYPOINTS']._serialized_end=362
   _globals['_TASKABLETARGETENTITY']._serialized_start=364
-  _globals['_TASKABLETARGETENTITY']._serialized_end=412
-  _globals['_TASKEXECUTIONTARGET']._serialized_start=415
-  _globals['_TASKEXECUTIONTARGET']._serialized_end=594
-  _globals['_TASKEXECUTIONTARGETWAYPOINTS']._serialized_start=596
-  _globals['_TASKEXECUTIONTARGETWAYPOINTS']._serialized_end=664
-  _globals['_TASKEXECUTIONTARGETENTITY']._serialized_start=666
-  _globals['_TASKEXECUTIONTARGETENTITY']._serialized_end=709
+  _globals['_TASKABLETARGETENTITY']._serialized_end=428
+  _globals['_TASKEXECUTIONTARGET']._serialized_start=431
+  _globals['_TASKEXECUTIONTARGET']._serialized_end=610
+  _globals['_TASKEXECUTIONTARGETWAYPOINTS']._serialized_start=612
+  _globals['_TASKEXECUTIONTARGETWAYPOINTS']._serialized_end=680
+  _globals['_TASKEXECUTIONTARGETENTITY']._serialized_start=682
+  _globals['_TASKEXECUTIONTARGETENTITY']._serialized_end=725
 # @@protoc_insertion_point(module_scope)

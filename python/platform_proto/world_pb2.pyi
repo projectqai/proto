@@ -758,7 +758,7 @@ class TaskableAssignee(_message.Message):
     def __init__(self, entityId: _Optional[str] = ...) -> None: ...
 
 class TaskableComponent(_message.Message):
-    __slots__ = ("priority", "label", "context", "assignee", "schema", "mode", "target", "icon", "effect", "grouping", "grouping_priority")
+    __slots__ = ("priority", "label", "context", "assignee", "schema", "mode", "target", "icon", "effect", "grouping", "grouping_priority", "taxonomy")
     PRIORITY_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     CONTEXT_FIELD_NUMBER: _ClassVar[int]
@@ -770,6 +770,7 @@ class TaskableComponent(_message.Message):
     EFFECT_FIELD_NUMBER: _ClassVar[int]
     GROUPING_FIELD_NUMBER: _ClassVar[int]
     GROUPING_PRIORITY_FIELD_NUMBER: _ClassVar[int]
+    TAXONOMY_FIELD_NUMBER: _ClassVar[int]
     priority: int
     label: str
     context: _containers.RepeatedCompositeFieldContainer[TaskableContext]
@@ -781,7 +782,8 @@ class TaskableComponent(_message.Message):
     effect: str
     grouping: str
     grouping_priority: int
-    def __init__(self, priority: _Optional[int] = ..., label: _Optional[str] = ..., context: _Optional[_Iterable[_Union[TaskableContext, _Mapping]]] = ..., assignee: _Optional[_Iterable[_Union[TaskableAssignee, _Mapping]]] = ..., schema: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., mode: _Optional[_Union[TaskableMode, str]] = ..., target: _Optional[_Union[_tasking_pb2.TaskableTarget, _Mapping]] = ..., icon: _Optional[str] = ..., effect: _Optional[str] = ..., grouping: _Optional[str] = ..., grouping_priority: _Optional[int] = ...) -> None: ...
+    taxonomy: _taxonomy_pb2.TaskingTaxonomy
+    def __init__(self, priority: _Optional[int] = ..., label: _Optional[str] = ..., context: _Optional[_Iterable[_Union[TaskableContext, _Mapping]]] = ..., assignee: _Optional[_Iterable[_Union[TaskableAssignee, _Mapping]]] = ..., schema: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., mode: _Optional[_Union[TaskableMode, str]] = ..., target: _Optional[_Union[_tasking_pb2.TaskableTarget, _Mapping]] = ..., icon: _Optional[str] = ..., effect: _Optional[str] = ..., grouping: _Optional[str] = ..., grouping_priority: _Optional[int] = ..., taxonomy: _Optional[_Union[_taxonomy_pb2.TaskingTaxonomy, _Mapping]] = ...) -> None: ...
 
 class TaskExecutionComponent(_message.Message):
     __slots__ = ("task", "parameters", "state", "reason", "priority", "target")

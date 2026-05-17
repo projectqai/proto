@@ -7,8 +7,8 @@ import type { JsonObject, Message } from "@bufbuild/protobuf";
 import type { MetricComponent, MetricKind } from "./metrics_pb.js";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { TaskableTarget, TaskExecutionTarget } from "./tasking_pb.js";
+import type { ClassificationTaxonomy, TaskingTaxonomy } from "./taxonomy_pb.js";
 import type { LocalGeometry, PlanarGeometry } from "./geometry_pb.js";
-import type { ClassificationTaxonomy } from "./taxonomy_pb.js";
 
 /**
  * Describes the file world.proto.
@@ -1209,6 +1209,14 @@ export declare type TaskableComponent = Message<"world.TaskableComponent"> & {
    * @generated from field: optional uint32 grouping_priority = 11;
    */
   groupingPriority?: number;
+
+  /**
+   * semantic meaning of the task (look-at, move-to, patrol, ...).
+   * independent of `target` (shape of input).
+   *
+   * @generated from field: optional world.TaskingTaxonomy taxonomy = 12;
+   */
+  taxonomy?: TaskingTaxonomy;
 };
 
 /**

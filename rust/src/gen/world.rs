@@ -766,7 +766,7 @@ impl AlertLevel {
         }
     }
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskableTarget {
     #[prost(message, optional, tag = "1")]
     pub position: ::core::option::Option<TaskableTargetPosition>,
@@ -786,8 +786,13 @@ pub struct TaskableTargetWaypoints {
     #[prost(bool, optional, tag = "2")]
     pub r#loop: ::core::option::Option<bool>,
 }
-#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskableTargetEntity {
+    /// if non-empty, only these entity IDs are accepted as targets.
+    /// if empty, any entity is accepted.
+    #[prost(string, repeated, tag = "1")]
+    pub entity: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// maximum number of entities. default 1.
     #[prost(uint32, optional, tag = "2")]
     pub max: ::core::option::Option<u32>,
 }
@@ -1015,6 +1020,71 @@ pub struct EquipmentTaxonomySensorElectroOptical {}
 pub struct EquipmentTaxonomySensorEmplaced {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct EmitterTaxonomy {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomy {
+    #[prost(oneof = "tasking_taxonomy::Kind", tags = "10, 11, 12")]
+    pub kind: ::core::option::Option<tasking_taxonomy::Kind>,
+}
+/// Nested message and enum types in `TaskingTaxonomy`.
+pub mod tasking_taxonomy {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Kind {
+        #[prost(message, tag = "10")]
+        Observe(super::TaskingTaxonomyObserve),
+        #[prost(message, tag = "11")]
+        Movement(super::TaskingTaxonomyMovement),
+        #[prost(message, tag = "12")]
+        Effect(super::TaskingTaxonomyEffect),
+    }
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyObserve {
+    #[prost(oneof = "tasking_taxonomy_observe::Kind", tags = "1, 2, 3")]
+    pub kind: ::core::option::Option<tasking_taxonomy_observe::Kind>,
+}
+/// Nested message and enum types in `TaskingTaxonomyObserve`.
+pub mod tasking_taxonomy_observe {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Kind {
+        #[prost(message, tag = "1")]
+        LookAt(super::TaskingTaxonomyLookAt),
+        #[prost(message, tag = "2")]
+        Scan(super::TaskingTaxonomyScan),
+        #[prost(message, tag = "3")]
+        Track(super::TaskingTaxonomyTrack),
+    }
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyMovement {
+    #[prost(oneof = "tasking_taxonomy_movement::Kind", tags = "1, 2, 3")]
+    pub kind: ::core::option::Option<tasking_taxonomy_movement::Kind>,
+}
+/// Nested message and enum types in `TaskingTaxonomyMovement`.
+pub mod tasking_taxonomy_movement {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Kind {
+        #[prost(message, tag = "1")]
+        MoveTo(super::TaskingTaxonomyMoveTo),
+        #[prost(message, tag = "2")]
+        Patrol(super::TaskingTaxonomyPatrol),
+        #[prost(message, tag = "3")]
+        Follow(super::TaskingTaxonomyFollow),
+    }
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyEffect {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyLookAt {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyScan {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyTrack {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyMoveTo {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyPatrol {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyFollow {}
 /// metadata
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Entity {
@@ -1497,6 +1567,10 @@ pub struct TaskableComponent {
     pub grouping: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(uint32, optional, tag = "11")]
     pub grouping_priority: ::core::option::Option<u32>,
+    /// semantic meaning of the task (look-at, move-to, patrol, ...).
+    /// independent of `target` (shape of input).
+    #[prost(message, optional, tag = "12")]
+    pub taxonomy: ::core::option::Option<TaskingTaxonomy>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskExecutionComponent {

@@ -172,8 +172,12 @@ func (x *TaskableTargetWaypoints) GetLoop() bool {
 }
 
 type TaskableTargetEntity struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Max           *uint32                `protobuf:"varint,2,opt,name=max,proto3,oneof" json:"max,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// if non-empty, only these entity IDs are accepted as targets.
+	// if empty, any entity is accepted.
+	Entity []string `protobuf:"bytes,1,rep,name=entity,proto3" json:"entity,omitempty"`
+	// maximum number of entities. default 1.
+	Max           *uint32 `protobuf:"varint,2,opt,name=max,proto3,oneof" json:"max,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -206,6 +210,13 @@ func (x *TaskableTargetEntity) ProtoReflect() protoreflect.Message {
 // Deprecated: Use TaskableTargetEntity.ProtoReflect.Descriptor instead.
 func (*TaskableTargetEntity) Descriptor() ([]byte, []int) {
 	return file_tasking_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *TaskableTargetEntity) GetEntity() []string {
+	if x != nil {
+		return x.Entity
+	}
+	return nil
 }
 
 func (x *TaskableTargetEntity) GetMax() uint32 {
@@ -419,8 +430,9 @@ const file_tasking_proto_rawDesc = "" +
 	"\x03max\x18\x01 \x01(\rH\x00R\x03max\x88\x01\x01\x12\x17\n" +
 	"\x04loop\x18\x02 \x01(\bH\x01R\x04loop\x88\x01\x01B\x06\n" +
 	"\x04_maxB\a\n" +
-	"\x05_loop\"5\n" +
-	"\x14TaskableTargetEntity\x12\x15\n" +
+	"\x05_loop\"M\n" +
+	"\x14TaskableTargetEntity\x12\x16\n" +
+	"\x06entity\x18\x01 \x03(\tR\x06entity\x12\x15\n" +
 	"\x03max\x18\x02 \x01(\rH\x00R\x03max\x88\x01\x01B\x06\n" +
 	"\x04_max\"\xd0\x01\n" +
 	"\x13TaskExecutionTarget\x120\n" +
