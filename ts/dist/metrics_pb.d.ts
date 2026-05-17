@@ -422,6 +422,23 @@ export enum MetricKind {
   MetricKindBodyTemperature = 142,
 
   /**
+   * Simulation
+   *
+   * @generated from enum value: MetricKindHealth = 160;
+   */
+  MetricKindHealth = 160,
+
+  /**
+   * @generated from enum value: MetricKindAmmo = 161;
+   */
+  MetricKindAmmo = 161,
+
+  /**
+   * @generated from enum value: MetricKindFuel = 162;
+   */
+  MetricKindFuel = 162,
+
+  /**
    * Misc
    *
    * @generated from enum value: MetricKindDuration = 118;

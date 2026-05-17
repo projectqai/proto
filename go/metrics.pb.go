@@ -79,6 +79,10 @@ const (
 	MetricKind_MetricKindHeartRate        MetricKind = 140
 	MetricKind_MetricKindOxygenSaturation MetricKind = 141
 	MetricKind_MetricKindBodyTemperature  MetricKind = 142
+	// Simulation
+	MetricKind_MetricKindHealth MetricKind = 160
+	MetricKind_MetricKindAmmo   MetricKind = 161
+	MetricKind_MetricKindFuel   MetricKind = 162
 	// Misc
 	MetricKind_MetricKindDuration MetricKind = 118
 	MetricKind_MetricKindCount    MetricKind = 120
@@ -130,6 +134,9 @@ var (
 		140: "MetricKindHeartRate",
 		141: "MetricKindOxygenSaturation",
 		142: "MetricKindBodyTemperature",
+		160: "MetricKindHealth",
+		161: "MetricKindAmmo",
+		162: "MetricKindFuel",
 		118: "MetricKindDuration",
 		120: "MetricKindCount",
 	}
@@ -177,6 +184,9 @@ var (
 		"MetricKindHeartRate":        140,
 		"MetricKindOxygenSaturation": 141,
 		"MetricKindBodyTemperature":  142,
+		"MetricKindHealth":           160,
+		"MetricKindAmmo":             161,
+		"MetricKindFuel":             162,
 		"MetricKindDuration":         118,
 		"MetricKindCount":            120,
 	}
@@ -1099,7 +1109,7 @@ const file_metrics_proto_rawDesc = "" +
 	"\t_clippingB\v\n" +
 	"\t_alerting\":\n" +
 	"\x0fMetricComponent\x12'\n" +
-	"\ametrics\x18\x01 \x03(\v2\r.world.MetricR\ametrics*\xf0\b\n" +
+	"\ametrics\x18\x01 \x03(\v2\r.world.MetricR\ametrics*\xb1\t\n" +
 	"\n" +
 	"MetricKind\x12\x19\n" +
 	"\x15MetricKindUnspecified\x10\x00\x12\x19\n" +
@@ -1144,7 +1154,10 @@ const file_metrics_proto_rawDesc = "" +
 	"\x18MetricKindSignalStrength\x10s\x12\x18\n" +
 	"\x13MetricKindHeartRate\x10\x8c\x01\x12\x1f\n" +
 	"\x1aMetricKindOxygenSaturation\x10\x8d\x01\x12\x1e\n" +
-	"\x19MetricKindBodyTemperature\x10\x8e\x01\x12\x16\n" +
+	"\x19MetricKindBodyTemperature\x10\x8e\x01\x12\x15\n" +
+	"\x10MetricKindHealth\x10\xa0\x01\x12\x13\n" +
+	"\x0eMetricKindAmmo\x10\xa1\x01\x12\x13\n" +
+	"\x0eMetricKindFuel\x10\xa2\x01\x12\x16\n" +
 	"\x12MetricKindDuration\x10v\x12\x13\n" +
 	"\x0fMetricKindCount\x10x*\x85\x12\n" +
 	"\n" +

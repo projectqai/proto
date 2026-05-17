@@ -283,6 +283,10 @@ pub enum MetricKind {
     HeartRate = 140,
     OxygenSaturation = 141,
     BodyTemperature = 142,
+    /// Simulation
+    Health = 160,
+    Ammo = 161,
+    Fuel = 162,
     /// Misc
     Duration = 118,
     Count = 120,
@@ -337,6 +341,9 @@ impl MetricKind {
             Self::HeartRate => "MetricKindHeartRate",
             Self::OxygenSaturation => "MetricKindOxygenSaturation",
             Self::BodyTemperature => "MetricKindBodyTemperature",
+            Self::Health => "MetricKindHealth",
+            Self::Ammo => "MetricKindAmmo",
+            Self::Fuel => "MetricKindFuel",
             Self::Duration => "MetricKindDuration",
             Self::Count => "MetricKindCount",
         }
@@ -387,6 +394,9 @@ impl MetricKind {
             "MetricKindHeartRate" => Some(Self::HeartRate),
             "MetricKindOxygenSaturation" => Some(Self::OxygenSaturation),
             "MetricKindBodyTemperature" => Some(Self::BodyTemperature),
+            "MetricKindHealth" => Some(Self::Health),
+            "MetricKindAmmo" => Some(Self::Ammo),
+            "MetricKindFuel" => Some(Self::Fuel),
             "MetricKindDuration" => Some(Self::Duration),
             "MetricKindCount" => Some(Self::Count),
             _ => None,
@@ -765,6 +775,32 @@ impl AlertLevel {
             _ => None,
         }
     }
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ManualControlInput {
+    #[prost(message, optional, tag = "1")]
+    pub axes: ::core::option::Option<ManualControlAxes>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ManualControlAxes {
+    #[prost(float, optional, tag = "1")]
+    pub forward: ::core::option::Option<f32>,
+    #[prost(float, optional, tag = "2")]
+    pub right: ::core::option::Option<f32>,
+    #[prost(float, optional, tag = "3")]
+    pub up: ::core::option::Option<f32>,
+    #[prost(float, optional, tag = "4")]
+    pub yaw: ::core::option::Option<f32>,
+    #[prost(float, optional, tag = "5")]
+    pub pitch: ::core::option::Option<f32>,
+    #[prost(float, optional, tag = "6")]
+    pub roll: ::core::option::Option<f32>,
+    #[prost(float, optional, tag = "7")]
+    pub pan: ::core::option::Option<f32>,
+    #[prost(float, optional, tag = "8")]
+    pub tilt: ::core::option::Option<f32>,
+    #[prost(float, optional, tag = "9")]
+    pub zoom: ::core::option::Option<f32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskableTarget {
@@ -1171,6 +1207,10 @@ pub struct Entity {
     pub assembly: ::core::option::Option<AssemblyComponent>,
     #[prost(message, optional, tag = "63")]
     pub map_layer: ::core::option::Option<MapLayerComponent>,
+    #[prost(message, optional, tag = "64")]
+    pub manual_control: ::core::option::Option<ManualControlComponent>,
+    #[prost(message, optional, tag = "65")]
+    pub target_manual_control: ::core::option::Option<TargetManualControlComponent>,
 }
 /// A controller owns an entity.
 /// The engine normally rejects changes to the entity from non owners,
@@ -2092,6 +2132,16 @@ pub mod map_layer_component {
         #[prost(message, tag = "11")]
         Image(Image),
     }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ManualControlComponent {
+    #[prost(message, repeated, tag = "1")]
+    pub input: ::prost::alloc::vec::Vec<ManualControlInput>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TargetManualControlComponent {
+    #[prost(message, repeated, tag = "1")]
+    pub input: ::prost::alloc::vec::Vec<ManualControlInput>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EntityFilter {
@@ -3112,7 +3162,10 @@ pub enum EntityComponent {
     Interactivity = 60,
     Artifact = 61,
     TargetPose = 62,
+    Assembly = 40,
     MapLayer = 63,
+    ManualControl = 64,
+    TargetManualControl = 65,
 }
 impl EntityComponent {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -3160,7 +3213,10 @@ impl EntityComponent {
             Self::Interactivity => "EntityComponentInteractivity",
             Self::Artifact => "EntityComponentArtifact",
             Self::TargetPose => "EntityComponentTargetPose",
+            Self::Assembly => "EntityComponentAssembly",
             Self::MapLayer => "EntityComponentMapLayer",
+            Self::ManualControl => "EntityComponentManualControl",
+            Self::TargetManualControl => "EntityComponentTargetManualControl",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -3205,7 +3261,10 @@ impl EntityComponent {
             "EntityComponentInteractivity" => Some(Self::Interactivity),
             "EntityComponentArtifact" => Some(Self::Artifact),
             "EntityComponentTargetPose" => Some(Self::TargetPose),
+            "EntityComponentAssembly" => Some(Self::Assembly),
             "EntityComponentMapLayer" => Some(Self::MapLayer),
+            "EntityComponentManualControl" => Some(Self::ManualControl),
+            "EntityComponentTargetManualControl" => Some(Self::TargetManualControl),
             _ => None,
         }
     }

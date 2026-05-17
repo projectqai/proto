@@ -9,6 +9,7 @@ import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { TaskableTarget, TaskExecutionTarget } from "./tasking_pb.js";
 import type { ClassificationTaxonomy, TaskingTaxonomy } from "./taxonomy_pb.js";
 import type { LocalGeometry, PlanarGeometry } from "./geometry_pb.js";
+import type { ManualControlInput } from "./manualcontrol_pb.js";
 
 /**
  * Describes the file world.proto.
@@ -227,6 +228,16 @@ export declare type Entity = Message<"world.Entity"> & {
    * @generated from field: optional world.MapLayerComponent map_layer = 63;
    */
   mapLayer?: MapLayerComponent;
+
+  /**
+   * @generated from field: optional world.ManualControlComponent manual_control = 64;
+   */
+  manualControl?: ManualControlComponent;
+
+  /**
+   * @generated from field: optional world.TargetManualControlComponent target_manual_control = 65;
+   */
+  targetManualControl?: TargetManualControlComponent;
 };
 
 /**
@@ -2553,6 +2564,38 @@ export declare type MapLayerComponent_Image = Message<"world.MapLayerComponent.I
 export declare const MapLayerComponent_ImageSchema: GenMessage<MapLayerComponent_Image>;
 
 /**
+ * @generated from message world.ManualControlComponent
+ */
+export declare type ManualControlComponent = Message<"world.ManualControlComponent"> & {
+  /**
+   * @generated from field: repeated world.ManualControlInput input = 1;
+   */
+  input: ManualControlInput[];
+};
+
+/**
+ * Describes the message world.ManualControlComponent.
+ * Use `create(ManualControlComponentSchema)` to create a new message.
+ */
+export declare const ManualControlComponentSchema: GenMessage<ManualControlComponent>;
+
+/**
+ * @generated from message world.TargetManualControlComponent
+ */
+export declare type TargetManualControlComponent = Message<"world.TargetManualControlComponent"> & {
+  /**
+   * @generated from field: repeated world.ManualControlInput input = 1;
+   */
+  input: ManualControlInput[];
+};
+
+/**
+ * Describes the message world.TargetManualControlComponent.
+ * Use `create(TargetManualControlComponentSchema)` to create a new message.
+ */
+export declare const TargetManualControlComponentSchema: GenMessage<TargetManualControlComponent>;
+
+/**
  * @generated from message world.EntityFilter
  */
 export declare type EntityFilter = Message<"world.EntityFilter"> & {
@@ -4363,9 +4406,24 @@ export enum EntityComponent {
   EntityComponentTargetPose = 62,
 
   /**
+   * @generated from enum value: EntityComponentAssembly = 40;
+   */
+  EntityComponentAssembly = 40,
+
+  /**
    * @generated from enum value: EntityComponentMapLayer = 63;
    */
   EntityComponentMapLayer = 63,
+
+  /**
+   * @generated from enum value: EntityComponentManualControl = 64;
+   */
+  EntityComponentManualControl = 64,
+
+  /**
+   * @generated from enum value: EntityComponentTargetManualControl = 65;
+   */
+  EntityComponentTargetManualControl = 65,
 }
 
 /**

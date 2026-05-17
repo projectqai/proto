@@ -5,6 +5,7 @@ package world;
 import "geometry.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
+import "manualcontrol.proto";
 import "metrics.proto";
 import "tasking.proto";
 import "taxonomy.proto";
@@ -66,6 +67,8 @@ message Entity {
   optional ChatComponent chat = 39;
   optional AssemblyComponent assembly = 40;
   optional MapLayerComponent map_layer = 63;
+  optional ManualControlComponent manual_control = 64;
+  optional TargetManualControlComponent target_manual_control = 65;
 }
 
 // A controller owns an entity.
@@ -900,6 +903,13 @@ message MapLayerComponent {
   }
 }
 
+message ManualControlComponent {
+  repeated ManualControlInput input = 1;
+}
+message TargetManualControlComponent {
+  repeated ManualControlInput input = 1;
+}
+
 // ---------------------------------------------
 
 message EntityFilter {
@@ -1158,7 +1168,10 @@ enum EntityComponent {
   EntityComponentInteractivity = 60;
   EntityComponentArtifact = 61;
   EntityComponentTargetPose = 62;
+  EntityComponentAssembly = 40;
   EntityComponentMapLayer = 63;
+  EntityComponentManualControl = 64;
+  EntityComponentTargetManualControl = 65;
 }
 
 message EntityChangeEvent {

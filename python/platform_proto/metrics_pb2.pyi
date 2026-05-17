@@ -52,6 +52,9 @@ class MetricKind(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     MetricKindHeartRate: _ClassVar[MetricKind]
     MetricKindOxygenSaturation: _ClassVar[MetricKind]
     MetricKindBodyTemperature: _ClassVar[MetricKind]
+    MetricKindHealth: _ClassVar[MetricKind]
+    MetricKindAmmo: _ClassVar[MetricKind]
+    MetricKindFuel: _ClassVar[MetricKind]
     MetricKindDuration: _ClassVar[MetricKind]
     MetricKindCount: _ClassVar[MetricKind]
 
@@ -200,6 +203,9 @@ MetricKindSignalStrength: MetricKind
 MetricKindHeartRate: MetricKind
 MetricKindOxygenSaturation: MetricKind
 MetricKindBodyTemperature: MetricKind
+MetricKindHealth: MetricKind
+MetricKindAmmo: MetricKind
+MetricKindFuel: MetricKind
 MetricKindDuration: MetricKind
 MetricKindCount: MetricKind
 MetricUnitUnspecified: MetricUnit

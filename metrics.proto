@@ -76,6 +76,11 @@ enum MetricKind {
   MetricKindOxygenSaturation = 141;
   MetricKindBodyTemperature = 142;
 
+  // Simulation
+  MetricKindHealth = 160;
+  MetricKindAmmo = 161;
+  MetricKindFuel = 162;
+
   // Misc
   MetricKindDuration = 118;
   MetricKindCount = 120;
