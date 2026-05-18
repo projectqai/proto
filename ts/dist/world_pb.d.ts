@@ -238,6 +238,11 @@ export declare type Entity = Message<"world.Entity"> & {
    * @generated from field: optional world.TargetManualControlComponent target_manual_control = 65;
    */
   targetManualControl?: TargetManualControlComponent;
+
+  /**
+   * @generated from field: optional world.BoundsComponent bounds = 66;
+   */
+  bounds?: BoundsComponent;
 };
 
 /**
@@ -673,6 +678,47 @@ export declare type ArtifactComponent = Message<"world.ArtifactComponent"> & {
 export declare const ArtifactComponentSchema: GenMessage<ArtifactComponent>;
 
 /**
+ * @generated from message world.ImageBoundingBox
+ */
+export declare type ImageBoundingBox = Message<"world.ImageBoundingBox"> & {
+  /**
+   * @generated from field: uint32 x = 1;
+   */
+  x: number;
+
+  /**
+   * @generated from field: uint32 y = 2;
+   */
+  y: number;
+
+  /**
+   * @generated from field: uint32 width = 3;
+   */
+  width: number;
+
+  /**
+   * @generated from field: uint32 height = 4;
+   */
+  height: number;
+
+  /**
+   * @generated from field: uint32 frame_width = 5;
+   */
+  frameWidth: number;
+
+  /**
+   * @generated from field: uint32 frame_height = 6;
+   */
+  frameHeight: number;
+};
+
+/**
+ * Describes the message world.ImageBoundingBox.
+ * Use `create(ImageBoundingBoxSchema)` to create a new message.
+ */
+export declare const ImageBoundingBoxSchema: GenMessage<ImageBoundingBox>;
+
+/**
  * @generated from message world.DetectionComponent
  */
 export declare type DetectionComponent = Message<"world.DetectionComponent"> & {
@@ -682,12 +728,18 @@ export declare type DetectionComponent = Message<"world.DetectionComponent"> & {
   detectorEntityId?: string;
 
   /**
-   * @generated from field: optional string classification = 2;
+   * deprecated, use ClassificationTaxonomy
+   *
+   * @generated from field: optional string classification = 2 [deprecated = true];
+   * @deprecated
    */
   classification?: string;
 
   /**
-   * @generated from field: optional google.protobuf.Timestamp lastMeasured = 3;
+   * deprecated, use lifetime.fresh
+   *
+   * @generated from field: optional google.protobuf.Timestamp lastMeasured = 3 [deprecated = true];
+   * @deprecated
    */
   lastMeasured?: Timestamp;
 
@@ -697,6 +749,16 @@ export declare type DetectionComponent = Message<"world.DetectionComponent"> & {
    * @generated from field: repeated string evidence = 4;
    */
   evidence: string[];
+
+  /**
+   * @generated from field: optional world.ImageBoundingBox image_bbox = 5;
+   */
+  imageBbox?: ImageBoundingBox;
+
+  /**
+   * @generated from field: optional float confidence = 6;
+   */
+  confidence?: number;
 };
 
 /**
@@ -704,6 +766,39 @@ export declare type DetectionComponent = Message<"world.DetectionComponent"> & {
  * Use `create(DetectionComponentSchema)` to create a new message.
  */
 export declare const DetectionComponentSchema: GenMessage<DetectionComponent>;
+
+/**
+ * @generated from message world.BoundsComponent
+ */
+export declare type BoundsComponent = Message<"world.BoundsComponent"> & {
+  /**
+   * @generated from field: float width_m = 1;
+   */
+  widthM: number;
+
+  /**
+   * @generated from field: float height_m = 2;
+   */
+  heightM: number;
+
+  /**
+   * @generated from field: float depth_m = 3;
+   */
+  depthM: number;
+
+  /**
+   * covariance: xx=width², yy=height², zz=depth²
+   *
+   * @generated from field: optional world.CovarianceMatrix covariance = 4;
+   */
+  covariance?: CovarianceMatrix;
+};
+
+/**
+ * Describes the message world.BoundsComponent.
+ * Use `create(BoundsComponentSchema)` to create a new message.
+ */
+export declare const BoundsComponentSchema: GenMessage<BoundsComponent>;
 
 /**
  * Absolute bearing in the world, relative to the local ENU frame.
@@ -727,6 +822,19 @@ export declare type BearingComponent = Message<"world.BearingComponent"> & {
    * @generated from field: optional double elevation = 2;
    */
   elevation?: number;
+
+  /**
+   * angular extent of the observed object around the center bearing.
+   * for camera evidence, engine computes from ImageBoundingBox + CameraComponent.fov.
+   *
+   * @generated from field: optional double azimuth_extent_deg = 3;
+   */
+  azimuthExtentDeg?: number;
+
+  /**
+   * @generated from field: optional double elevation_extent_deg = 4;
+   */
+  elevationExtentDeg?: number;
 };
 
 /**
@@ -4424,6 +4532,11 @@ export enum EntityComponent {
    * @generated from enum value: EntityComponentTargetManualControl = 65;
    */
   EntityComponentTargetManualControl = 65,
+
+  /**
+   * @generated from enum value: EntityComponentBounds = 66;
+   */
+  EntityComponentBounds = 66,
 }
 
 /**

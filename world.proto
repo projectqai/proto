@@ -69,6 +69,7 @@ message Entity {
   optional MapLayerComponent map_layer = 63;
   optional ManualControlComponent manual_control = 64;
   optional TargetManualControlComponent target_manual_control = 65;
+  optional BoundsComponent bounds = 66;
 }
 
 // A controller owns an entity.
@@ -243,13 +244,37 @@ message ArtifactComponent {
   optional string sha256 = 5;
 }
 
+message ImageBoundingBox {
+  uint32 x = 1;
+  uint32 y = 2;
+  uint32 width = 3;
+  uint32 height = 4;
+  uint32 frame_width = 5;
+  uint32 frame_height = 6;
+}
+
 message DetectionComponent {
   optional string detectorEntityId = 1;
-  optional string classification = 2;
-  optional google.protobuf.Timestamp lastMeasured = 3;
+
+  // deprecated, use ClassificationTaxonomy
+  optional string classification = 2 [deprecated = true];
+
+  // deprecated, use lifetime.fresh
+  optional google.protobuf.Timestamp lastMeasured = 3 [deprecated = true];
 
   // entity ids of evidence that triggered or supports this detection
   repeated string evidence = 4;
+
+  optional ImageBoundingBox image_bbox = 5;
+  optional float confidence = 6;
+}
+
+message BoundsComponent {
+  float width_m = 1;
+  float height_m = 2;
+  float depth_m = 3;
+  // covariance: xx=width², yy=height², zz=depth²
+  optional CovarianceMatrix covariance = 4;
 }
 
 // Absolute bearing in the world, relative to the local ENU frame.
@@ -262,6 +287,11 @@ message BearingComponent {
   // angle above the local horizontal plane in degrees [-90, 90]
   // positive = above horizon, negative = below
   optional double elevation = 2;
+
+  // angular extent of the observed object around the center bearing.
+  // for camera evidence, engine computes from ImageBoundingBox + CameraComponent.fov.
+  optional double azimuth_extent_deg = 3;
+  optional double elevation_extent_deg = 4;
 }
 
 message SensorComponent {
@@ -1172,6 +1202,7 @@ enum EntityComponent {
   EntityComponentMapLayer = 63;
   EntityComponentManualControl = 64;
   EntityComponentTargetManualControl = 65;
+  EntityComponentBounds = 66;
 }
 
 message EntityChangeEvent {

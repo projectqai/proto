@@ -1211,6 +1211,8 @@ pub struct Entity {
     pub manual_control: ::core::option::Option<ManualControlComponent>,
     #[prost(message, optional, tag = "65")]
     pub target_manual_control: ::core::option::Option<TargetManualControlComponent>,
+    #[prost(message, optional, tag = "66")]
+    pub bounds: ::core::option::Option<BoundsComponent>,
 }
 /// A controller owns an entity.
 /// The engine normally rejects changes to the entity from non owners,
@@ -1379,17 +1381,52 @@ pub struct ArtifactComponent {
     #[prost(string, optional, tag = "5")]
     pub sha256: ::core::option::Option<::prost::alloc::string::String>,
 }
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ImageBoundingBox {
+    #[prost(uint32, tag = "1")]
+    pub x: u32,
+    #[prost(uint32, tag = "2")]
+    pub y: u32,
+    #[prost(uint32, tag = "3")]
+    pub width: u32,
+    #[prost(uint32, tag = "4")]
+    pub height: u32,
+    #[prost(uint32, tag = "5")]
+    pub frame_width: u32,
+    #[prost(uint32, tag = "6")]
+    pub frame_height: u32,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DetectionComponent {
     #[prost(string, optional, tag = "1")]
     pub detector_entity_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// deprecated, use ClassificationTaxonomy
+    #[deprecated]
     #[prost(string, optional, tag = "2")]
     pub classification: ::core::option::Option<::prost::alloc::string::String>,
+    /// deprecated, use lifetime.fresh
+    #[deprecated]
     #[prost(message, optional, tag = "3")]
     pub last_measured: ::core::option::Option<::prost_types::Timestamp>,
     /// entity ids of evidence that triggered or supports this detection
     #[prost(string, repeated, tag = "4")]
     pub evidence: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "5")]
+    pub image_bbox: ::core::option::Option<ImageBoundingBox>,
+    #[prost(float, optional, tag = "6")]
+    pub confidence: ::core::option::Option<f32>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct BoundsComponent {
+    #[prost(float, tag = "1")]
+    pub width_m: f32,
+    #[prost(float, tag = "2")]
+    pub height_m: f32,
+    #[prost(float, tag = "3")]
+    pub depth_m: f32,
+    /// covariance: xx=width², yy=height², zz=depth²
+    #[prost(message, optional, tag = "4")]
+    pub covariance: ::core::option::Option<CovarianceMatrix>,
 }
 /// Absolute bearing in the world, relative to the local ENU frame.
 /// For root entities this is set directly; for child entities with a
@@ -1403,6 +1440,12 @@ pub struct BearingComponent {
     /// positive = above horizon, negative = below
     #[prost(double, optional, tag = "2")]
     pub elevation: ::core::option::Option<f64>,
+    /// angular extent of the observed object around the center bearing.
+    /// for camera evidence, engine computes from ImageBoundingBox + CameraComponent.fov.
+    #[prost(double, optional, tag = "3")]
+    pub azimuth_extent_deg: ::core::option::Option<f64>,
+    #[prost(double, optional, tag = "4")]
+    pub elevation_extent_deg: ::core::option::Option<f64>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SensorComponent {
@@ -3166,6 +3209,7 @@ pub enum EntityComponent {
     MapLayer = 63,
     ManualControl = 64,
     TargetManualControl = 65,
+    Bounds = 66,
 }
 impl EntityComponent {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -3217,6 +3261,7 @@ impl EntityComponent {
             Self::MapLayer => "EntityComponentMapLayer",
             Self::ManualControl => "EntityComponentManualControl",
             Self::TargetManualControl => "EntityComponentTargetManualControl",
+            Self::Bounds => "EntityComponentBounds",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -3265,6 +3310,7 @@ impl EntityComponent {
             "EntityComponentMapLayer" => Some(Self::MapLayer),
             "EntityComponentManualControl" => Some(Self::ManualControl),
             "EntityComponentTargetManualControl" => Some(Self::TargetManualControl),
+            "EntityComponentBounds" => Some(Self::Bounds),
             _ => None,
         }
     }
