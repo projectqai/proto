@@ -337,6 +337,58 @@ export declare type LocalGeometry = Message<"world.LocalGeometry"> & {
 export declare const LocalGeometrySchema: GenMessage<LocalGeometry>;
 
 /**
+ * @generated from message world.FillStyle
+ */
+export declare type FillStyle = Message<"world.FillStyle"> & {
+  /**
+   * @generated from field: optional string color = 1;
+   */
+  color?: string;
+
+  /**
+   * @generated from field: optional float opacity = 2;
+   */
+  opacity?: number;
+
+  /**
+   * @generated from field: optional string texture = 3;
+   */
+  texture?: string;
+
+  /**
+   * @generated from field: optional double texture_scale_m = 4;
+   */
+  textureScaleM?: number;
+};
+
+/**
+ * Describes the message world.FillStyle.
+ * Use `create(FillStyleSchema)` to create a new message.
+ */
+export declare const FillStyleSchema: GenMessage<FillStyle>;
+
+/**
+ * @generated from message world.GeometryExtrusion
+ */
+export declare type GeometryExtrusion = Message<"world.GeometryExtrusion"> & {
+  /**
+   * @generated from field: optional world.FillStyle fill = 11;
+   */
+  fill?: FillStyle;
+
+  /**
+   * @generated from field: optional double height_m = 12;
+   */
+  heightM?: number;
+};
+
+/**
+ * Describes the message world.GeometryExtrusion.
+ * Use `create(GeometryExtrusionSchema)` to create a new message.
+ */
+export declare const GeometryExtrusionSchema: GenMessage<GeometryExtrusion>;
+
+/**
  * @generated from enum world.LineStyle
  */
 export enum LineStyle {

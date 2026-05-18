@@ -123,6 +123,24 @@ pub mod local_geometry {
         Collection(super::LocalGeometryCollection),
     }
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct FillStyle {
+    #[prost(string, optional, tag = "1")]
+    pub color: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(float, optional, tag = "2")]
+    pub opacity: ::core::option::Option<f32>,
+    #[prost(string, optional, tag = "3")]
+    pub texture: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(double, optional, tag = "4")]
+    pub texture_scale_m: ::core::option::Option<f64>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GeometryExtrusion {
+    #[prost(message, optional, tag = "11")]
+    pub fill: ::core::option::Option<FillStyle>,
+    #[prost(double, optional, tag = "12")]
+    pub height_m: ::core::option::Option<f64>,
+}
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum LineStyle {
@@ -1730,6 +1748,8 @@ pub struct Geometry {
 pub struct GeoShapeComponent {
     #[prost(message, optional, tag = "1")]
     pub geometry: ::core::option::Option<Geometry>,
+    #[prost(message, optional, tag = "2")]
+    pub extrusion: ::core::option::Option<GeometryExtrusion>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LocalShapeComponent {
@@ -1738,6 +1758,8 @@ pub struct LocalShapeComponent {
     pub relative_to: ::prost::alloc::string::String,
     #[prost(message, optional, tag = "1")]
     pub geometry: ::core::option::Option<LocalGeometry>,
+    #[prost(message, optional, tag = "3")]
+    pub extrusion: ::core::option::Option<GeometryExtrusion>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ClassificationComponent {

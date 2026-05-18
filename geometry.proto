@@ -98,3 +98,15 @@ message LocalGeometry {
 }
 
 // ---------------------------------------------
+
+message FillStyle {
+  optional string color = 1;
+  optional float opacity = 2;
+  optional string texture = 3;
+  optional double texture_scale_m = 4;
+}
+
+message GeometryExtrusion {
+  optional FillStyle fill = 11;
+  optional double height_m = 12;
+}

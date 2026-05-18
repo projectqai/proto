@@ -527,6 +527,7 @@ message Geometry {
 
 message GeoShapeComponent {
   optional Geometry geometry = 1;
+  optional GeometryExtrusion extrusion = 2;
 }
 
 message LocalShapeComponent {
@@ -534,6 +535,7 @@ message LocalShapeComponent {
   string relative_to = 2;
 
   optional LocalGeometry geometry = 1;
+  optional GeometryExtrusion extrusion = 3;
 }
 
 enum ClassificationIdentity {

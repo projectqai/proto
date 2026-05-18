@@ -873,6 +873,126 @@ func (*LocalGeometry_Circle) isLocalGeometry_Shape() {}
 
 func (*LocalGeometry_Collection) isLocalGeometry_Shape() {}
 
+type FillStyle struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Color         *string                `protobuf:"bytes,1,opt,name=color,proto3,oneof" json:"color,omitempty"`
+	Opacity       *float32               `protobuf:"fixed32,2,opt,name=opacity,proto3,oneof" json:"opacity,omitempty"`
+	Texture       *string                `protobuf:"bytes,3,opt,name=texture,proto3,oneof" json:"texture,omitempty"`
+	TextureScaleM *float64               `protobuf:"fixed64,4,opt,name=texture_scale_m,json=textureScaleM,proto3,oneof" json:"texture_scale_m,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FillStyle) Reset() {
+	*x = FillStyle{}
+	mi := &file_geometry_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FillStyle) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FillStyle) ProtoMessage() {}
+
+func (x *FillStyle) ProtoReflect() protoreflect.Message {
+	mi := &file_geometry_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FillStyle.ProtoReflect.Descriptor instead.
+func (*FillStyle) Descriptor() ([]byte, []int) {
+	return file_geometry_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *FillStyle) GetColor() string {
+	if x != nil && x.Color != nil {
+		return *x.Color
+	}
+	return ""
+}
+
+func (x *FillStyle) GetOpacity() float32 {
+	if x != nil && x.Opacity != nil {
+		return *x.Opacity
+	}
+	return 0
+}
+
+func (x *FillStyle) GetTexture() string {
+	if x != nil && x.Texture != nil {
+		return *x.Texture
+	}
+	return ""
+}
+
+func (x *FillStyle) GetTextureScaleM() float64 {
+	if x != nil && x.TextureScaleM != nil {
+		return *x.TextureScaleM
+	}
+	return 0
+}
+
+type GeometryExtrusion struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Fill          *FillStyle             `protobuf:"bytes,11,opt,name=fill,proto3,oneof" json:"fill,omitempty"`
+	HeightM       *float64               `protobuf:"fixed64,12,opt,name=height_m,json=heightM,proto3,oneof" json:"height_m,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GeometryExtrusion) Reset() {
+	*x = GeometryExtrusion{}
+	mi := &file_geometry_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GeometryExtrusion) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GeometryExtrusion) ProtoMessage() {}
+
+func (x *GeometryExtrusion) ProtoReflect() protoreflect.Message {
+	mi := &file_geometry_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GeometryExtrusion.ProtoReflect.Descriptor instead.
+func (*GeometryExtrusion) Descriptor() ([]byte, []int) {
+	return file_geometry_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *GeometryExtrusion) GetFill() *FillStyle {
+	if x != nil {
+		return x.Fill
+	}
+	return nil
+}
+
+func (x *GeometryExtrusion) GetHeightM() float64 {
+	if x != nil && x.HeightM != nil {
+		return *x.HeightM
+	}
+	return 0
+}
+
 var File_geometry_proto protoreflect.FileDescriptor
 
 const file_geometry_proto_rawDesc = "" +
@@ -943,7 +1063,23 @@ const file_geometry_proto_rawDesc = "" +
 	"line_style\x18\n" +
 	" \x01(\x0e2\x10.world.LineStyleH\x01R\tlineStyle\x88\x01\x01B\a\n" +
 	"\x05shapeB\r\n" +
-	"\v_line_style*I\n" +
+	"\v_line_style\"\xc7\x01\n" +
+	"\tFillStyle\x12\x19\n" +
+	"\x05color\x18\x01 \x01(\tH\x00R\x05color\x88\x01\x01\x12\x1d\n" +
+	"\aopacity\x18\x02 \x01(\x02H\x01R\aopacity\x88\x01\x01\x12\x1d\n" +
+	"\atexture\x18\x03 \x01(\tH\x02R\atexture\x88\x01\x01\x12+\n" +
+	"\x0ftexture_scale_m\x18\x04 \x01(\x01H\x03R\rtextureScaleM\x88\x01\x01B\b\n" +
+	"\x06_colorB\n" +
+	"\n" +
+	"\b_opacityB\n" +
+	"\n" +
+	"\b_textureB\x12\n" +
+	"\x10_texture_scale_m\"t\n" +
+	"\x11GeometryExtrusion\x12)\n" +
+	"\x04fill\x18\v \x01(\v2\x10.world.FillStyleH\x00R\x04fill\x88\x01\x01\x12\x1e\n" +
+	"\bheight_m\x18\f \x01(\x01H\x01R\aheightM\x88\x01\x01B\a\n" +
+	"\x05_fillB\v\n" +
+	"\t_height_m*I\n" +
 	"\tLineStyle\x12\x12\n" +
 	"\x0eLineStyleSolid\x10\x00\x12\x13\n" +
 	"\x0fLineStyleDashed\x10\x01\x12\x13\n" +
@@ -962,7 +1098,7 @@ func file_geometry_proto_rawDescGZIP() []byte {
 }
 
 var file_geometry_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_geometry_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_geometry_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_geometry_proto_goTypes = []any{
 	(LineStyle)(0),                   // 0: world.LineStyle
 	(*PlanarPoint)(nil),              // 1: world.PlanarPoint
@@ -977,6 +1113,8 @@ var file_geometry_proto_goTypes = []any{
 	(*LocalCircle)(nil),              // 10: world.LocalCircle
 	(*LocalGeometryCollection)(nil),  // 11: world.LocalGeometryCollection
 	(*LocalGeometry)(nil),            // 12: world.LocalGeometry
+	(*FillStyle)(nil),                // 13: world.FillStyle
+	(*GeometryExtrusion)(nil),        // 14: world.GeometryExtrusion
 }
 var file_geometry_proto_depIdxs = []int32{
 	1,  // 0: world.PlanarRing.points:type_name -> world.PlanarPoint
@@ -1001,11 +1139,12 @@ var file_geometry_proto_depIdxs = []int32{
 	10, // 19: world.LocalGeometry.circle:type_name -> world.LocalCircle
 	11, // 20: world.LocalGeometry.collection:type_name -> world.LocalGeometryCollection
 	0,  // 21: world.LocalGeometry.line_style:type_name -> world.LineStyle
-	22, // [22:22] is the sub-list for method output_type
-	22, // [22:22] is the sub-list for method input_type
-	22, // [22:22] is the sub-list for extension type_name
-	22, // [22:22] is the sub-list for extension extendee
-	0,  // [0:22] is the sub-list for field type_name
+	13, // 22: world.GeometryExtrusion.fill:type_name -> world.FillStyle
+	23, // [23:23] is the sub-list for method output_type
+	23, // [23:23] is the sub-list for method input_type
+	23, // [23:23] is the sub-list for extension type_name
+	23, // [23:23] is the sub-list for extension extendee
+	0,  // [0:23] is the sub-list for field type_name
 }
 
 func init() { file_geometry_proto_init() }
@@ -1031,13 +1170,15 @@ func file_geometry_proto_init() {
 		(*LocalGeometry_Circle)(nil),
 		(*LocalGeometry_Collection)(nil),
 	}
+	file_geometry_proto_msgTypes[12].OneofWrappers = []any{}
+	file_geometry_proto_msgTypes[13].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_geometry_proto_rawDesc), len(file_geometry_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

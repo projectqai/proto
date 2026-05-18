@@ -887,18 +887,22 @@ class Geometry(_message.Message):
     def __init__(self, wkb: _Optional[bytes] = ..., planar: _Optional[_Union[_geometry_pb2.PlanarGeometry, _Mapping]] = ...) -> None: ...
 
 class GeoShapeComponent(_message.Message):
-    __slots__ = ("geometry",)
+    __slots__ = ("geometry", "extrusion")
     GEOMETRY_FIELD_NUMBER: _ClassVar[int]
+    EXTRUSION_FIELD_NUMBER: _ClassVar[int]
     geometry: Geometry
-    def __init__(self, geometry: _Optional[_Union[Geometry, _Mapping]] = ...) -> None: ...
+    extrusion: _geometry_pb2.GeometryExtrusion
+    def __init__(self, geometry: _Optional[_Union[Geometry, _Mapping]] = ..., extrusion: _Optional[_Union[_geometry_pb2.GeometryExtrusion, _Mapping]] = ...) -> None: ...
 
 class LocalShapeComponent(_message.Message):
-    __slots__ = ("relative_to", "geometry")
+    __slots__ = ("relative_to", "geometry", "extrusion")
     RELATIVE_TO_FIELD_NUMBER: _ClassVar[int]
     GEOMETRY_FIELD_NUMBER: _ClassVar[int]
+    EXTRUSION_FIELD_NUMBER: _ClassVar[int]
     relative_to: str
     geometry: _geometry_pb2.LocalGeometry
-    def __init__(self, relative_to: _Optional[str] = ..., geometry: _Optional[_Union[_geometry_pb2.LocalGeometry, _Mapping]] = ...) -> None: ...
+    extrusion: _geometry_pb2.GeometryExtrusion
+    def __init__(self, relative_to: _Optional[str] = ..., geometry: _Optional[_Union[_geometry_pb2.LocalGeometry, _Mapping]] = ..., extrusion: _Optional[_Union[_geometry_pb2.GeometryExtrusion, _Mapping]] = ...) -> None: ...
 
 class ClassificationComponent(_message.Message):
     __slots__ = ("dimension", "identity", "taxonomy")

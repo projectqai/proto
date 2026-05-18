@@ -8,7 +8,7 @@ import type { MetricComponent, MetricKind } from "./metrics_pb.js";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { TaskableTarget, TaskExecutionTarget } from "./tasking_pb.js";
 import type { ClassificationTaxonomy, TaskingTaxonomy } from "./taxonomy_pb.js";
-import type { LocalGeometry, PlanarGeometry } from "./geometry_pb.js";
+import type { GeometryExtrusion, LocalGeometry, PlanarGeometry } from "./geometry_pb.js";
 import type { ManualControlInput } from "./manualcontrol_pb.js";
 
 /**
@@ -1518,6 +1518,11 @@ export declare type GeoShapeComponent = Message<"world.GeoShapeComponent"> & {
    * @generated from field: optional world.Geometry geometry = 1;
    */
   geometry?: Geometry;
+
+  /**
+   * @generated from field: optional world.GeometryExtrusion extrusion = 2;
+   */
+  extrusion?: GeometryExtrusion;
 };
 
 /**
@@ -1541,6 +1546,11 @@ export declare type LocalShapeComponent = Message<"world.LocalShapeComponent"> &
    * @generated from field: optional world.LocalGeometry geometry = 1;
    */
   geometry?: LocalGeometry;
+
+  /**
+   * @generated from field: optional world.GeometryExtrusion extrusion = 3;
+   */
+  extrusion?: GeometryExtrusion;
 };
 
 /**

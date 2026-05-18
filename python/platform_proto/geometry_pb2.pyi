@@ -126,3 +126,23 @@ class LocalGeometry(_message.Message):
     collection: LocalGeometryCollection
     line_style: LineStyle
     def __init__(self, point: _Optional[_Union[LocalPoint, _Mapping]] = ..., line: _Optional[_Union[LocalRing, _Mapping]] = ..., polygon: _Optional[_Union[LocalPolygon, _Mapping]] = ..., circle: _Optional[_Union[LocalCircle, _Mapping]] = ..., collection: _Optional[_Union[LocalGeometryCollection, _Mapping]] = ..., line_style: _Optional[_Union[LineStyle, str]] = ...) -> None: ...
+
+class FillStyle(_message.Message):
+    __slots__ = ("color", "opacity", "texture", "texture_scale_m")
+    COLOR_FIELD_NUMBER: _ClassVar[int]
+    OPACITY_FIELD_NUMBER: _ClassVar[int]
+    TEXTURE_FIELD_NUMBER: _ClassVar[int]
+    TEXTURE_SCALE_M_FIELD_NUMBER: _ClassVar[int]
+    color: str
+    opacity: float
+    texture: str
+    texture_scale_m: float
+    def __init__(self, color: _Optional[str] = ..., opacity: _Optional[float] = ..., texture: _Optional[str] = ..., texture_scale_m: _Optional[float] = ...) -> None: ...
+
+class GeometryExtrusion(_message.Message):
+    __slots__ = ("fill", "height_m")
+    FILL_FIELD_NUMBER: _ClassVar[int]
+    HEIGHT_M_FIELD_NUMBER: _ClassVar[int]
+    fill: FillStyle
+    height_m: float
+    def __init__(self, fill: _Optional[_Union[FillStyle, _Mapping]] = ..., height_m: _Optional[float] = ...) -> None: ...
