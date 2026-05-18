@@ -80,6 +80,7 @@ message Controller {
   optional string id = 1;
   optional string node = 2;
   optional string origin = 3;
+  optional string address = 4;
 }
 
 // Leases are used by controllers to negotiate exclusivity on an entity
@@ -398,8 +399,11 @@ message TrackComponent {
   // entity ID of a GeoShapeComponent containing the predicted forward track
   optional string prediction = 3;
 
-  // detection entity IDs that contribute to this track
-  repeated string detections = 4;
+  // typically detection entity IDs that contribute to this track
+  repeated string evidence = 4;
+
+  // confidence that this is a valid track
+  optional float confidence = 5;
 }
 
 message LocatorComponent {
@@ -601,6 +605,7 @@ message AdministrativeComponent {
   optional float height_m = 11; // vertical extent (e.g. air draft)
   optional float tonnage_gt = 8;
   optional float engine_power_kw = 9;
+  repeated string images = 12;
 }
 
 enum NavigationMode {

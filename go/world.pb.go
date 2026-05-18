@@ -1602,6 +1602,7 @@ type Controller struct {
 	Id            *string                `protobuf:"bytes,1,opt,name=id,proto3,oneof" json:"id,omitempty"`
 	Node          *string                `protobuf:"bytes,2,opt,name=node,proto3,oneof" json:"node,omitempty"`
 	Origin        *string                `protobuf:"bytes,3,opt,name=origin,proto3,oneof" json:"origin,omitempty"`
+	Address       *string                `protobuf:"bytes,4,opt,name=address,proto3,oneof" json:"address,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1653,6 +1654,13 @@ func (x *Controller) GetNode() string {
 func (x *Controller) GetOrigin() string {
 	if x != nil && x.Origin != nil {
 		return *x.Origin
+	}
+	return ""
+}
+
+func (x *Controller) GetAddress() string {
+	if x != nil && x.Address != nil {
+		return *x.Address
 	}
 	return ""
 }
@@ -3460,8 +3468,10 @@ type TrackComponent struct {
 	History *string `protobuf:"bytes,2,opt,name=history,proto3,oneof" json:"history,omitempty"`
 	// entity ID of a GeoShapeComponent containing the predicted forward track
 	Prediction *string `protobuf:"bytes,3,opt,name=prediction,proto3,oneof" json:"prediction,omitempty"`
-	// detection entity IDs that contribute to this track
-	Detections    []string `protobuf:"bytes,4,rep,name=detections,proto3" json:"detections,omitempty"`
+	// typically detection entity IDs that contribute to this track
+	Evidence []string `protobuf:"bytes,4,rep,name=evidence,proto3" json:"evidence,omitempty"`
+	// confidence that this is a valid track
+	Confidence    *float32 `protobuf:"fixed32,5,opt,name=confidence,proto3,oneof" json:"confidence,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3517,11 +3527,18 @@ func (x *TrackComponent) GetPrediction() string {
 	return ""
 }
 
-func (x *TrackComponent) GetDetections() []string {
+func (x *TrackComponent) GetEvidence() []string {
 	if x != nil {
-		return x.Detections
+		return x.Evidence
 	}
 	return nil
+}
+
+func (x *TrackComponent) GetConfidence() float32 {
+	if x != nil && x.Confidence != nil {
+		return *x.Confidence
+	}
+	return 0
 }
 
 type LocatorComponent struct {
@@ -4481,6 +4498,7 @@ type AdministrativeComponent struct {
 	HeightM       *float32               `protobuf:"fixed32,11,opt,name=height_m,json=heightM,proto3,oneof" json:"height_m,omitempty"` // vertical extent (e.g. air draft)
 	TonnageGt     *float32               `protobuf:"fixed32,8,opt,name=tonnage_gt,json=tonnageGt,proto3,oneof" json:"tonnage_gt,omitempty"`
 	EnginePowerKw *float32               `protobuf:"fixed32,9,opt,name=engine_power_kw,json=enginePowerKw,proto3,oneof" json:"engine_power_kw,omitempty"`
+	Images        []string               `protobuf:"bytes,12,rep,name=images,proto3" json:"images,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4590,6 +4608,13 @@ func (x *AdministrativeComponent) GetEnginePowerKw() float32 {
 		return *x.EnginePowerKw
 	}
 	return 0
+}
+
+func (x *AdministrativeComponent) GetImages() []string {
+	if x != nil {
+		return x.Images
+	}
+	return nil
 }
 
 // Live navigation telemetry of an asset
@@ -8462,15 +8487,18 @@ const file_world_proto_rawDesc = "" +
 	"\x16_target_manual_controlB\t\n" +
 	"\a_boundsJ\x04\b\b\x10\tJ\x04\b\t\x10\n" +
 	"J\x04\b\n" +
-	"\x10\v\"r\n" +
+	"\x10\v\"\x9d\x01\n" +
 	"\n" +
 	"Controller\x12\x13\n" +
 	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12\x17\n" +
 	"\x04node\x18\x02 \x01(\tH\x01R\x04node\x88\x01\x01\x12\x1b\n" +
-	"\x06origin\x18\x03 \x01(\tH\x02R\x06origin\x88\x01\x01B\x05\n" +
+	"\x06origin\x18\x03 \x01(\tH\x02R\x06origin\x88\x01\x01\x12\x1d\n" +
+	"\aaddress\x18\x04 \x01(\tH\x03R\aaddress\x88\x01\x01B\x05\n" +
 	"\x03_idB\a\n" +
 	"\x05_nodeB\t\n" +
-	"\a_origin\"n\n" +
+	"\a_originB\n" +
+	"\n" +
+	"\b_address\"n\n" +
 	"\x05Lease\x12\x1e\n" +
 	"\n" +
 	"controller\x18\x01 \x01(\tR\n" +
@@ -8676,21 +8704,23 @@ const file_world_proto_rawDesc = "" +
 	"\n" +
 	"covariance\x18\x02 \x01(\v2\x17.world.CovarianceMatrixH\x00R\n" +
 	"covariance\x88\x01\x01B\r\n" +
-	"\v_covariance\"\xba\x01\n" +
+	"\v_covariance\"\xea\x01\n" +
 	"\x0eTrackComponent\x12\x1d\n" +
 	"\atracker\x18\x01 \x01(\tH\x00R\atracker\x88\x01\x01\x12\x1d\n" +
 	"\ahistory\x18\x02 \x01(\tH\x01R\ahistory\x88\x01\x01\x12#\n" +
 	"\n" +
 	"prediction\x18\x03 \x01(\tH\x02R\n" +
-	"prediction\x88\x01\x01\x12\x1e\n" +
+	"prediction\x88\x01\x01\x12\x1a\n" +
+	"\bevidence\x18\x04 \x03(\tR\bevidence\x12#\n" +
 	"\n" +
-	"detections\x18\x04 \x03(\tR\n" +
-	"detectionsB\n" +
+	"confidence\x18\x05 \x01(\x02H\x03R\n" +
+	"confidence\x88\x01\x01B\n" +
 	"\n" +
 	"\b_trackerB\n" +
 	"\n" +
 	"\b_historyB\r\n" +
-	"\v_prediction\"<\n" +
+	"\v_predictionB\r\n" +
+	"\v_confidence\"<\n" +
 	"\x10LocatorComponent\x12(\n" +
 	"\x0flocatedEntityId\x18\x01 \x01(\tR\x0flocatedEntityId\"?\n" +
 	"\x0fTaskableContext\x12\x1f\n" +
@@ -8793,7 +8823,7 @@ const file_world_proto_rawDesc = "" +
 	"\x03ais\x18\x01 \x01(\v2\x15.world.TransponderAISH\x00R\x03ais\x88\x01\x01\x12/\n" +
 	"\x04adsb\x18\x02 \x01(\v2\x16.world.TransponderADSBH\x01R\x04adsb\x88\x01\x01B\x06\n" +
 	"\x04_aisB\a\n" +
-	"\x05_adsb\"\x86\x04\n" +
+	"\x05_adsb\"\x9e\x04\n" +
 	"\x17AdministrativeComponent\x12\x13\n" +
 	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12\x17\n" +
 	"\x04flag\x18\x02 \x01(\tH\x01R\x04flag\x88\x01\x01\x12\x19\n" +
@@ -8809,7 +8839,8 @@ const file_world_proto_rawDesc = "" +
 	"\n" +
 	"tonnage_gt\x18\b \x01(\x02H\tR\ttonnageGt\x88\x01\x01\x12+\n" +
 	"\x0fengine_power_kw\x18\t \x01(\x02H\n" +
-	"R\renginePowerKw\x88\x01\x01B\x05\n" +
+	"R\renginePowerKw\x88\x01\x01\x12\x16\n" +
+	"\x06images\x18\f \x03(\tR\x06imagesB\x05\n" +
 	"\x03_idB\a\n" +
 	"\x05_flagB\b\n" +
 	"\x06_ownerB\x0f\n" +

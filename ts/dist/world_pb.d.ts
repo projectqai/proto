@@ -274,6 +274,11 @@ export declare type Controller = Message<"world.Controller"> & {
    * @generated from field: optional string origin = 3;
    */
   origin?: string;
+
+  /**
+   * @generated from field: optional string address = 4;
+   */
+  address?: string;
 };
 
 /**
@@ -1195,11 +1200,18 @@ export declare type TrackComponent = Message<"world.TrackComponent"> & {
   prediction?: string;
 
   /**
-   * detection entity IDs that contribute to this track
+   * typically detection entity IDs that contribute to this track
    *
-   * @generated from field: repeated string detections = 4;
+   * @generated from field: repeated string evidence = 4;
    */
-  detections: string[];
+  evidence: string[];
+
+  /**
+   * confidence that this is a valid track
+   *
+   * @generated from field: optional float confidence = 5;
+   */
+  confidence?: number;
 };
 
 /**
@@ -1716,6 +1728,11 @@ export declare type AdministrativeComponent = Message<"world.AdministrativeCompo
    * @generated from field: optional float engine_power_kw = 9;
    */
   enginePowerKw?: number;
+
+  /**
+   * @generated from field: repeated string images = 12;
+   */
+  images: string[];
 };
 
 /**

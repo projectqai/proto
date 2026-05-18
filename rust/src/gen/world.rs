@@ -1226,6 +1226,8 @@ pub struct Controller {
     pub node: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, optional, tag = "3")]
     pub origin: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "4")]
+    pub address: ::core::option::Option<::prost::alloc::string::String>,
 }
 /// Leases are used by controllers to negotiate exclusivity on an entity
 /// The engine rejects pushes that attempt to change the holder of an active lease,
@@ -1597,9 +1599,12 @@ pub struct TrackComponent {
     /// entity ID of a GeoShapeComponent containing the predicted forward track
     #[prost(string, optional, tag = "3")]
     pub prediction: ::core::option::Option<::prost::alloc::string::String>,
-    /// detection entity IDs that contribute to this track
+    /// typically detection entity IDs that contribute to this track
     #[prost(string, repeated, tag = "4")]
-    pub detections: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    pub evidence: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// confidence that this is a valid track
+    #[prost(float, optional, tag = "5")]
+    pub confidence: ::core::option::Option<f32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LocatorComponent {
@@ -1801,6 +1806,8 @@ pub struct AdministrativeComponent {
     pub tonnage_gt: ::core::option::Option<f32>,
     #[prost(float, optional, tag = "9")]
     pub engine_power_kw: ::core::option::Option<f32>,
+    #[prost(string, repeated, tag = "12")]
+    pub images: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
 /// Live navigation telemetry of an asset
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
