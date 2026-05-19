@@ -821,6 +821,79 @@ pub struct ManualControlAxes {
     pub zoom: ::core::option::Option<f32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PolicyRule {
+    #[prost(enumeration = "PolicyAction", tag = "1")]
+    pub action: i32,
+    /// CEL expression evaluated against the request context.
+    /// Available variables depend on the engine (e.g. peer.address, rpc.method,
+    /// rpc.write, request.entity_id, request.components).
+    /// If omitted, the rule matches unconditionally.
+    #[prost(string, optional, tag = "2")]
+    pub cel: ::core::option::Option<::prost::alloc::string::String>,
+}
+/// Access policy evaluated on incoming RPCs.
+///
+/// The node entity carries the global policy. Rules are evaluated top to bottom;
+/// the first rule whose CEL returns true produces the verdict (Allow or Deny).
+/// Log does not verdict and continues to the next rule.
+/// Defer jumps to the target entity's chain and returns if no verdict.
+///
+/// If no rule produces a verdict, no verdict is returned.
+/// Use an unconditional rule at the end to set a catch-all:
+///    { action: Deny }
+///
+/// If no PolicyComponent exists on the node, all requests are allowed.
+/// Entity-level policies are never evaluated unless the global chain
+/// reaches a Defer rule.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct PolicyComponent {
+    #[prost(message, repeated, tag = "1")]
+    pub rules: ::prost::alloc::vec::Vec<PolicyRule>,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum PolicyAction {
+    Invalid = 0,
+    /// Reject the request.
+    Deny = 1,
+    /// Accept the request. Evaluation stops.
+    Allow = 2,
+    /// Record the match for auditing, then continue to the next rule.
+    /// Does not produce a verdict on its own.
+    Log = 3,
+    /// Evaluate the target entity's PolicyComponent (like nftables jump).
+    /// If the entity's chain produces a verdict, use it.
+    /// If the entity has no PolicyComponent or its chain produces no verdict,
+    /// return to this chain and continue with the next rule.
+    Defer = 4,
+}
+impl PolicyAction {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Invalid => "PolicyActionInvalid",
+            Self::Deny => "PolicyActionDeny",
+            Self::Allow => "PolicyActionAllow",
+            Self::Log => "PolicyActionLog",
+            Self::Defer => "PolicyActionDefer",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "PolicyActionInvalid" => Some(Self::Invalid),
+            "PolicyActionDeny" => Some(Self::Deny),
+            "PolicyActionAllow" => Some(Self::Allow),
+            "PolicyActionLog" => Some(Self::Log),
+            "PolicyActionDefer" => Some(Self::Defer),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskableTarget {
     #[prost(message, optional, tag = "1")]
     pub position: ::core::option::Option<TaskableTargetPosition>,
@@ -1231,21 +1304,20 @@ pub struct Entity {
     pub target_manual_control: ::core::option::Option<TargetManualControlComponent>,
     #[prost(message, optional, tag = "66")]
     pub bounds: ::core::option::Option<BoundsComponent>,
+    #[prost(message, optional, tag = "67")]
+    pub policy: ::core::option::Option<PolicyComponent>,
 }
-/// A controller owns an entity.
-/// The engine normally rejects changes to the entity from non owners,
-/// but some future work might ask the controller to merge the change.
-/// in that case it MUST NOT be sent via push since push is eventually consistent
+/// A controller owns an entity or change
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Controller {
+    /// if of the controller service
     #[prost(string, optional, tag = "1")]
     pub id: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, optional, tag = "2")]
     pub node: ::core::option::Option<::prost::alloc::string::String>,
+    /// id of another entity from which the controller this has received from (for example a radio)
     #[prost(string, optional, tag = "3")]
     pub origin: ::core::option::Option<::prost::alloc::string::String>,
-    #[prost(string, optional, tag = "4")]
-    pub address: ::core::option::Option<::prost::alloc::string::String>,
 }
 /// Leases are used by controllers to negotiate exclusivity on an entity
 /// The engine rejects pushes that attempt to change the holder of an active lease,
@@ -1258,7 +1330,7 @@ pub struct Lease {
     #[prost(message, optional, tag = "2")]
     pub expires: ::core::option::Option<::prost_types::Timestamp>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct Lifetime {
     /// time this entity should become valid.
     /// will be set to now automatically if omited
@@ -1271,10 +1343,6 @@ pub struct Lifetime {
     /// if set, updates to an entity with older fresh value are ignored by default
     #[prost(message, optional, tag = "3")]
     pub fresh: ::core::option::Option<::prost_types::Timestamp>,
-    /// per-component lifetime metadata
-    /// key is the proto field number of the component in Entity (e.g. 11 for geo)
-    #[prost(map = "int32, message", tag = "4")]
-    pub components: ::std::collections::HashMap<i32, Lifetime>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Channel {
@@ -2395,11 +2463,16 @@ pub struct ListEntitiesRequest {
     pub sort: ::prost::alloc::vec::Vec<SortOption>,
     #[prost(message, optional, tag = "4")]
     pub behaviour: ::core::option::Option<WatchBehavior>,
+    /// request dump of internal state. might be ignored
+    #[prost(bool, tag = "10")]
+    pub dump_internal: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListEntitiesResponse {
     #[prost(message, repeated, tag = "1")]
     pub entities: ::prost::alloc::vec::Vec<Entity>,
+    #[prost(message, repeated, tag = "2")]
+    pub internal: ::prost::alloc::vec::Vec<::prost_types::Struct>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EntityChangeRequest {
@@ -2443,11 +2516,16 @@ pub struct EntityChangeBatch {
 pub struct GetEntityRequest {
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
+    /// request dump of internal state. might be ignored
+    #[prost(bool, tag = "10")]
+    pub dump_internal: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEntityResponse {
     #[prost(message, optional, tag = "1")]
     pub entity: ::core::option::Option<Entity>,
+    #[prost(message, optional, tag = "2")]
+    pub internal: ::core::option::Option<::prost_types::Struct>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GetLocalNodeRequest {}
@@ -2497,6 +2575,11 @@ pub struct HardResetResponse {}
 pub struct TimeSyncRequest {
     #[prost(message, optional, tag = "1")]
     pub t1: ::core::option::Option<::prost_types::Timestamp>,
+    /// Client's receive timestamp of the previous exchange. When set, the server
+    /// can pair it with the stored T1/T2/T3 of that exchange to compute proper
+    /// NTP-style offset and RTT. Omitted on the first probe.
+    #[prost(message, optional, tag = "4")]
+    pub t4: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TimeSyncResponse {
@@ -3239,6 +3322,7 @@ pub enum EntityComponent {
     ManualControl = 64,
     TargetManualControl = 65,
     Bounds = 66,
+    Policy = 67,
 }
 impl EntityComponent {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -3291,6 +3375,7 @@ impl EntityComponent {
             Self::ManualControl => "EntityComponentManualControl",
             Self::TargetManualControl => "EntityComponentTargetManualControl",
             Self::Bounds => "EntityComponentBounds",
+            Self::Policy => "EntityComponentPolicy",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -3340,6 +3425,7 @@ impl EntityComponent {
             "EntityComponentManualControl" => Some(Self::ManualControl),
             "EntityComponentTargetManualControl" => Some(Self::TargetManualControl),
             "EntityComponentBounds" => Some(Self::Bounds),
+            "EntityComponentPolicy" => Some(Self::Policy),
             _ => None,
         }
     }

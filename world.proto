@@ -7,6 +7,7 @@ import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "manualcontrol.proto";
 import "metrics.proto";
+import "policy.proto";
 import "tasking.proto";
 import "taxonomy.proto";
 
@@ -70,17 +71,16 @@ message Entity {
   optional ManualControlComponent manual_control = 64;
   optional TargetManualControlComponent target_manual_control = 65;
   optional BoundsComponent bounds = 66;
+  optional PolicyComponent policy = 67;
 }
 
-// A controller owns an entity.
-// The engine normally rejects changes to the entity from non owners,
-// but some future work might ask the controller to merge the change.
-// in that case it MUST NOT be sent via push since push is eventually consistent
+// A controller owns an entity or change
 message Controller {
+  // if of the controller service
   optional string id = 1;
   optional string node = 2;
+  // id of another entity from which the controller this has received from (for example a radio)
   optional string origin = 3;
-  optional string address = 4;
 }
 
 // Leases are used by controllers to negotiate exclusivity on an entity
@@ -103,10 +103,6 @@ message Lifetime {
   // last time we have seen this entity, normally between from and until
   // if set, updates to an entity with older fresh value are ignored by default
   optional google.protobuf.Timestamp fresh = 3;
-
-  // per-component lifetime metadata
-  // key is the proto field number of the component in Entity (e.g. 11 for geo)
-  map<int32, Lifetime> components = 4;
 }
 
 enum Priority {
@@ -1128,10 +1124,14 @@ message ListEntitiesRequest {
   repeated SortOption sort = 3;
 
   optional WatchBehavior behaviour = 4;
+
+  // request dump of internal state. might be ignored
+  bool dump_internal = 10;
 }
 
 message ListEntitiesResponse {
   repeated Entity entities = 1;
+  repeated google.protobuf.Struct internal = 2;
 }
 
 message EntityChangeRequest {
@@ -1210,6 +1210,7 @@ enum EntityComponent {
   EntityComponentManualControl = 64;
   EntityComponentTargetManualControl = 65;
   EntityComponentBounds = 66;
+  EntityComponentPolicy = 67;
 }
 
 message EntityChangeEvent {
@@ -1223,10 +1224,14 @@ message EntityChangeBatch {
 
 message GetEntityRequest {
   string id = 1;
+
+  // request dump of internal state. might be ignored
+  bool dump_internal = 10;
 }
 
 message GetEntityResponse {
   Entity entity = 1;
+  google.protobuf.Struct internal = 2;
 }
 
 message GetLocalNodeRequest {}
@@ -1273,6 +1278,10 @@ message HardResetResponse {}
 
 message TimeSyncRequest {
   google.protobuf.Timestamp t1 = 1;
+  // Client's receive timestamp of the previous exchange. When set, the server
+  // can pair it with the stored T1/T2/T3 of that exchange to compute proper
+  // NTP-style offset and RTT. Omitted on the first probe.
+  google.protobuf.Timestamp t4 = 4;
 }
 
 message TimeSyncResponse {

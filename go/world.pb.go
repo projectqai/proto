@@ -1027,6 +1027,7 @@ const (
 	EntityComponent_EntityComponentManualControl       EntityComponent = 64
 	EntityComponent_EntityComponentTargetManualControl EntityComponent = 65
 	EntityComponent_EntityComponentBounds              EntityComponent = 66
+	EntityComponent_EntityComponentPolicy              EntityComponent = 67
 )
 
 // Enum value maps for EntityComponent.
@@ -1076,6 +1077,7 @@ var (
 		64: "EntityComponentManualControl",
 		65: "EntityComponentTargetManualControl",
 		66: "EntityComponentBounds",
+		67: "EntityComponentPolicy",
 	}
 	EntityComponent_value = map[string]int32{
 		"EntityComponentUnspecified":         0,
@@ -1122,6 +1124,7 @@ var (
 		"EntityComponentManualControl":       64,
 		"EntityComponentTargetManualControl": 65,
 		"EntityComponentBounds":              66,
+		"EntityComponentPolicy":              67,
 	}
 )
 
@@ -1251,6 +1254,7 @@ type Entity struct {
 	ManualControl       *ManualControlComponent       `protobuf:"bytes,64,opt,name=manual_control,json=manualControl,proto3,oneof" json:"manual_control,omitempty"`
 	TargetManualControl *TargetManualControlComponent `protobuf:"bytes,65,opt,name=target_manual_control,json=targetManualControl,proto3,oneof" json:"target_manual_control,omitempty"`
 	Bounds              *BoundsComponent              `protobuf:"bytes,66,opt,name=bounds,proto3,oneof" json:"bounds,omitempty"`
+	Policy              *PolicyComponent              `protobuf:"bytes,67,opt,name=policy,proto3,oneof" json:"policy,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -1593,16 +1597,21 @@ func (x *Entity) GetBounds() *BoundsComponent {
 	return nil
 }
 
-// A controller owns an entity.
-// The engine normally rejects changes to the entity from non owners,
-// but some future work might ask the controller to merge the change.
-// in that case it MUST NOT be sent via push since push is eventually consistent
+func (x *Entity) GetPolicy() *PolicyComponent {
+	if x != nil {
+		return x.Policy
+	}
+	return nil
+}
+
+// A controller owns an entity or change
 type Controller struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            *string                `protobuf:"bytes,1,opt,name=id,proto3,oneof" json:"id,omitempty"`
-	Node          *string                `protobuf:"bytes,2,opt,name=node,proto3,oneof" json:"node,omitempty"`
-	Origin        *string                `protobuf:"bytes,3,opt,name=origin,proto3,oneof" json:"origin,omitempty"`
-	Address       *string                `protobuf:"bytes,4,opt,name=address,proto3,oneof" json:"address,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// if of the controller service
+	Id   *string `protobuf:"bytes,1,opt,name=id,proto3,oneof" json:"id,omitempty"`
+	Node *string `protobuf:"bytes,2,opt,name=node,proto3,oneof" json:"node,omitempty"`
+	// id of another entity from which the controller this has received from (for example a radio)
+	Origin        *string `protobuf:"bytes,3,opt,name=origin,proto3,oneof" json:"origin,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1654,13 +1663,6 @@ func (x *Controller) GetNode() string {
 func (x *Controller) GetOrigin() string {
 	if x != nil && x.Origin != nil {
 		return *x.Origin
-	}
-	return ""
-}
-
-func (x *Controller) GetAddress() string {
-	if x != nil && x.Address != nil {
-		return *x.Address
 	}
 	return ""
 }
@@ -1730,10 +1732,7 @@ type Lifetime struct {
 	Until *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=until,proto3,oneof" json:"until,omitempty"`
 	// last time we have seen this entity, normally between from and until
 	// if set, updates to an entity with older fresh value are ignored by default
-	Fresh *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=fresh,proto3,oneof" json:"fresh,omitempty"`
-	// per-component lifetime metadata
-	// key is the proto field number of the component in Entity (e.g. 11 for geo)
-	Components    map[int32]*Lifetime `protobuf:"bytes,4,rep,name=components,proto3" json:"components,omitempty" protobuf_key:"varint,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Fresh         *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=fresh,proto3,oneof" json:"fresh,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1785,13 +1784,6 @@ func (x *Lifetime) GetUntil() *timestamppb.Timestamp {
 func (x *Lifetime) GetFresh() *timestamppb.Timestamp {
 	if x != nil {
 		return x.Fresh
-	}
-	return nil
-}
-
-func (x *Lifetime) GetComponents() map[int32]*Lifetime {
-	if x != nil {
-		return x.Components
 	}
 	return nil
 }
@@ -7316,8 +7308,10 @@ type ListEntitiesRequest struct {
 	state  protoimpl.MessageState `protogen:"open.v1"`
 	Filter *EntityFilter          `protobuf:"bytes,2,opt,name=filter,proto3" json:"filter,omitempty"`
 	// sort by. more than 2 are actually ignored
-	Sort          []*SortOption  `protobuf:"bytes,3,rep,name=sort,proto3" json:"sort,omitempty"`
-	Behaviour     *WatchBehavior `protobuf:"bytes,4,opt,name=behaviour,proto3,oneof" json:"behaviour,omitempty"`
+	Sort      []*SortOption  `protobuf:"bytes,3,rep,name=sort,proto3" json:"sort,omitempty"`
+	Behaviour *WatchBehavior `protobuf:"bytes,4,opt,name=behaviour,proto3,oneof" json:"behaviour,omitempty"`
+	// request dump of internal state. might be ignored
+	DumpInternal  bool `protobuf:"varint,10,opt,name=dump_internal,json=dumpInternal,proto3" json:"dump_internal,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -7373,9 +7367,17 @@ func (x *ListEntitiesRequest) GetBehaviour() *WatchBehavior {
 	return nil
 }
 
+func (x *ListEntitiesRequest) GetDumpInternal() bool {
+	if x != nil {
+		return x.DumpInternal
+	}
+	return false
+}
+
 type ListEntitiesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Entities      []*Entity              `protobuf:"bytes,1,rep,name=entities,proto3" json:"entities,omitempty"`
+	Internal      []*structpb.Struct     `protobuf:"bytes,2,rep,name=internal,proto3" json:"internal,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -7413,6 +7415,13 @@ func (*ListEntitiesResponse) Descriptor() ([]byte, []int) {
 func (x *ListEntitiesResponse) GetEntities() []*Entity {
 	if x != nil {
 		return x.Entities
+	}
+	return nil
+}
+
+func (x *ListEntitiesResponse) GetInternal() []*structpb.Struct {
+	if x != nil {
+		return x.Internal
 	}
 	return nil
 }
@@ -7703,8 +7712,10 @@ func (x *EntityChangeBatch) GetEvents() []*EntityChangeEvent {
 }
 
 type GetEntityRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Id    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// request dump of internal state. might be ignored
+	DumpInternal  bool `protobuf:"varint,10,opt,name=dump_internal,json=dumpInternal,proto3" json:"dump_internal,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -7746,9 +7757,17 @@ func (x *GetEntityRequest) GetId() string {
 	return ""
 }
 
+func (x *GetEntityRequest) GetDumpInternal() bool {
+	if x != nil {
+		return x.DumpInternal
+	}
+	return false
+}
+
 type GetEntityResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Entity        *Entity                `protobuf:"bytes,1,opt,name=entity,proto3" json:"entity,omitempty"`
+	Internal      *structpb.Struct       `protobuf:"bytes,2,opt,name=internal,proto3" json:"internal,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -7786,6 +7805,13 @@ func (*GetEntityResponse) Descriptor() ([]byte, []int) {
 func (x *GetEntityResponse) GetEntity() *Entity {
 	if x != nil {
 		return x.Entity
+	}
+	return nil
+}
+
+func (x *GetEntityResponse) GetInternal() *structpb.Struct {
+	if x != nil {
+		return x.Internal
 	}
 	return nil
 }
@@ -8168,8 +8194,12 @@ func (*HardResetResponse) Descriptor() ([]byte, []int) {
 }
 
 type TimeSyncRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	T1            *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=t1,proto3" json:"t1,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	T1    *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=t1,proto3" json:"t1,omitempty"`
+	// Client's receive timestamp of the previous exchange. When set, the server
+	// can pair it with the stored T1/T2/T3 of that exchange to compute proper
+	// NTP-style offset and RTT. Omitted on the first probe.
+	T4            *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=t4,proto3" json:"t4,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -8207,6 +8237,13 @@ func (*TimeSyncRequest) Descriptor() ([]byte, []int) {
 func (x *TimeSyncRequest) GetT1() *timestamppb.Timestamp {
 	if x != nil {
 		return x.T1
+	}
+	return nil
+}
+
+func (x *TimeSyncRequest) GetT4() *timestamppb.Timestamp {
+	if x != nil {
+		return x.T4
 	}
 	return nil
 }
@@ -8281,7 +8318,7 @@ type MapLayerComponent_Tile struct {
 
 func (x *MapLayerComponent_Tile) Reset() {
 	*x = MapLayerComponent_Tile{}
-	mi := &file_world_proto_msgTypes[102]
+	mi := &file_world_proto_msgTypes[101]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8293,7 +8330,7 @@ func (x *MapLayerComponent_Tile) String() string {
 func (*MapLayerComponent_Tile) ProtoMessage() {}
 
 func (x *MapLayerComponent_Tile) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[102]
+	mi := &file_world_proto_msgTypes[101]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8330,7 +8367,7 @@ type MapLayerComponent_Image struct {
 
 func (x *MapLayerComponent_Image) Reset() {
 	*x = MapLayerComponent_Image{}
-	mi := &file_world_proto_msgTypes[103]
+	mi := &file_world_proto_msgTypes[102]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8342,7 +8379,7 @@ func (x *MapLayerComponent_Image) String() string {
 func (*MapLayerComponent_Image) ProtoMessage() {}
 
 func (x *MapLayerComponent_Image) ProtoReflect() protoreflect.Message {
-	mi := &file_world_proto_msgTypes[103]
+	mi := &file_world_proto_msgTypes[102]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8397,7 +8434,7 @@ var File_world_proto protoreflect.FileDescriptor
 
 const file_world_proto_rawDesc = "" +
 	"\n" +
-	"\vworld.proto\x12\x05world\x1a\x0egeometry.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x13manualcontrol.proto\x1a\rmetrics.proto\x1a\rtasking.proto\x1a\x0etaxonomy.proto\"\xad\x18\n" +
+	"\vworld.proto\x12\x05world\x1a\x0egeometry.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x13manualcontrol.proto\x1a\rmetrics.proto\x1a\fpolicy.proto\x1a\rtasking.proto\x1a\x0etaxonomy.proto\"\xed\x18\n" +
 	"\x06Entity\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x19\n" +
 	"\x05label\x18\x02 \x01(\tH\x00R\x05label\x88\x01\x01\x126\n" +
@@ -8451,7 +8488,8 @@ const file_world_proto_rawDesc = "" +
 	"\tmap_layer\x18? \x01(\v2\x18.world.MapLayerComponentH'R\bmapLayer\x88\x01\x01\x12I\n" +
 	"\x0emanual_control\x18@ \x01(\v2\x1d.world.ManualControlComponentH(R\rmanualControl\x88\x01\x01\x12\\\n" +
 	"\x15target_manual_control\x18A \x01(\v2#.world.TargetManualControlComponentH)R\x13targetManualControl\x88\x01\x01\x123\n" +
-	"\x06bounds\x18B \x01(\v2\x16.world.BoundsComponentH*R\x06bounds\x88\x01\x01B\b\n" +
+	"\x06bounds\x18B \x01(\v2\x16.world.BoundsComponentH*R\x06bounds\x88\x01\x01\x123\n" +
+	"\x06policy\x18C \x01(\v2\x16.world.PolicyComponentH+R\x06policy\x88\x01\x01B\b\n" +
 	"\x06_labelB\r\n" +
 	"\v_controllerB\v\n" +
 	"\t_lifetimeB\v\n" +
@@ -8501,37 +8539,29 @@ const file_world_proto_rawDesc = "" +
 	"_map_layerB\x11\n" +
 	"\x0f_manual_controlB\x18\n" +
 	"\x16_target_manual_controlB\t\n" +
-	"\a_boundsJ\x04\b\b\x10\tJ\x04\b\t\x10\n" +
+	"\a_boundsB\t\n" +
+	"\a_policyJ\x04\b\b\x10\tJ\x04\b\t\x10\n" +
 	"J\x04\b\n" +
-	"\x10\v\"\x9d\x01\n" +
+	"\x10\v\"r\n" +
 	"\n" +
 	"Controller\x12\x13\n" +
 	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12\x17\n" +
 	"\x04node\x18\x02 \x01(\tH\x01R\x04node\x88\x01\x01\x12\x1b\n" +
-	"\x06origin\x18\x03 \x01(\tH\x02R\x06origin\x88\x01\x01\x12\x1d\n" +
-	"\aaddress\x18\x04 \x01(\tH\x03R\aaddress\x88\x01\x01B\x05\n" +
+	"\x06origin\x18\x03 \x01(\tH\x02R\x06origin\x88\x01\x01B\x05\n" +
 	"\x03_idB\a\n" +
 	"\x05_nodeB\t\n" +
-	"\a_originB\n" +
-	"\n" +
-	"\b_address\"n\n" +
+	"\a_origin\"n\n" +
 	"\x05Lease\x12\x1e\n" +
 	"\n" +
 	"controller\x18\x01 \x01(\tR\n" +
 	"controller\x129\n" +
 	"\aexpires\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x00R\aexpires\x88\x01\x01B\n" +
 	"\n" +
-	"\b_expires\"\xdb\x02\n" +
+	"\b_expires\"\xca\x01\n" +
 	"\bLifetime\x123\n" +
 	"\x04from\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampH\x00R\x04from\x88\x01\x01\x125\n" +
 	"\x05until\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\x05until\x88\x01\x01\x125\n" +
-	"\x05fresh\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\x05fresh\x88\x01\x01\x12?\n" +
-	"\n" +
-	"components\x18\x04 \x03(\v2\x1f.world.Lifetime.ComponentsEntryR\n" +
-	"components\x1aN\n" +
-	"\x0fComponentsEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\x05R\x03key\x12%\n" +
-	"\x05value\x18\x02 \x01(\v2\x0f.world.LifetimeR\x05value:\x028\x01B\a\n" +
+	"\x05fresh\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\x05fresh\x88\x01\x01B\a\n" +
 	"\x05_fromB\b\n" +
 	"\x06_untilB\b\n" +
 	"\x06_fresh\"\x1d\n" +
@@ -9236,15 +9266,18 @@ const file_world_proto_rawDesc = "" +
 	"\x15keepalive_interval_ms\x18\x04 \x01(\rH\x02R\x13keepaliveIntervalMs\x88\x01\x01B\x0e\n" +
 	"\f_max_rate_hzB\x0f\n" +
 	"\r_min_priorityB\x18\n" +
-	"\x16_keepalive_interval_ms\"\xb6\x01\n" +
+	"\x16_keepalive_interval_ms\"\xdb\x01\n" +
 	"\x13ListEntitiesRequest\x12+\n" +
 	"\x06filter\x18\x02 \x01(\v2\x13.world.EntityFilterR\x06filter\x12%\n" +
 	"\x04sort\x18\x03 \x03(\v2\x11.world.SortOptionR\x04sort\x127\n" +
-	"\tbehaviour\x18\x04 \x01(\v2\x14.world.WatchBehaviorH\x00R\tbehaviour\x88\x01\x01B\f\n" +
+	"\tbehaviour\x18\x04 \x01(\v2\x14.world.WatchBehaviorH\x00R\tbehaviour\x88\x01\x01\x12#\n" +
+	"\rdump_internal\x18\n" +
+	" \x01(\bR\fdumpInternalB\f\n" +
 	"\n" +
-	"_behaviourJ\x04\b\x01\x10\x02\"A\n" +
+	"_behaviourJ\x04\b\x01\x10\x02\"v\n" +
 	"\x14ListEntitiesResponse\x12)\n" +
-	"\bentities\x18\x01 \x03(\v2\r.world.EntityR\bentities\"q\n" +
+	"\bentities\x18\x01 \x03(\v2\r.world.EntityR\bentities\x123\n" +
+	"\binternal\x18\x02 \x03(\v2\x17.google.protobuf.StructR\binternal\"q\n" +
 	"\x13EntityChangeRequest\x12'\n" +
 	"\achanges\x18\x01 \x03(\v2\r.world.EntityR\achanges\x121\n" +
 	"\freplacements\x18\x02 \x03(\v2\r.world.EntityR\freplacements\"%\n" +
@@ -9258,11 +9291,14 @@ const file_world_proto_rawDesc = "" +
 	"\x06entity\x18\x01 \x01(\v2\r.world.EntityR\x06entity\x12!\n" +
 	"\x01t\x18\x02 \x01(\x0e2\x13.world.EntityChangeR\x01t\"E\n" +
 	"\x11EntityChangeBatch\x120\n" +
-	"\x06events\x18\x01 \x03(\v2\x18.world.EntityChangeEventR\x06events\"\"\n" +
+	"\x06events\x18\x01 \x03(\v2\x18.world.EntityChangeEventR\x06events\"G\n" +
 	"\x10GetEntityRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\":\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
+	"\rdump_internal\x18\n" +
+	" \x01(\bR\fdumpInternal\"o\n" +
 	"\x11GetEntityResponse\x12%\n" +
-	"\x06entity\x18\x01 \x01(\v2\r.world.EntityR\x06entity\"\x15\n" +
+	"\x06entity\x18\x01 \x01(\v2\r.world.EntityR\x06entity\x123\n" +
+	"\binternal\x18\x02 \x01(\v2\x17.google.protobuf.StructR\binternal\"\x15\n" +
 	"\x13GetLocalNodeRequest\"V\n" +
 	"\x14GetLocalNodeResponse\x12%\n" +
 	"\x06entity\x18\x01 \x01(\v2\r.world.EntityR\x06entity\x12\x17\n" +
@@ -9287,9 +9323,10 @@ const file_world_proto_rawDesc = "" +
 	"\n" +
 	"mission_id\x18\x01 \x01(\tH\x00R\tmissionId\x88\x01\x01B\r\n" +
 	"\v_mission_id\"\x13\n" +
-	"\x11HardResetResponse\"=\n" +
+	"\x11HardResetResponse\"i\n" +
 	"\x0fTimeSyncRequest\x12*\n" +
-	"\x02t1\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x02t1\"\x96\x01\n" +
+	"\x02t1\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x02t1\x12*\n" +
+	"\x02t4\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\x02t4\"\x96\x01\n" +
 	"\x10TimeSyncResponse\x12*\n" +
 	"\x02t1\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x02t1\x12*\n" +
 	"\x02t2\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x02t2\x12*\n" +
@@ -9420,7 +9457,7 @@ const file_world_proto_rawDesc = "" +
 	"\x13EntityChangeInvalid\x10\x00\x12\x17\n" +
 	"\x13EntityChangeUpdated\x10\x01\x12\x17\n" +
 	"\x13EntityChangeExpired\x10\x02\x12\x1a\n" +
-	"\x16EntityChangeUnobserved\x10\x03*\x94\n" +
+	"\x16EntityChangeUnobserved\x10\x03*\xaf\n" +
 	"\n" +
 	"\x0fEntityComponent\x12\x1e\n" +
 	"\x1aEntityComponentUnspecified\x10\x00\x12\x18\n" +
@@ -9466,7 +9503,8 @@ const file_world_proto_rawDesc = "" +
 	"\x17EntityComponentMapLayer\x10?\x12 \n" +
 	"\x1cEntityComponentManualControl\x10@\x12&\n" +
 	"\"EntityComponentTargetManualControl\x10A\x12\x19\n" +
-	"\x15EntityComponentBounds\x10B*i\n" +
+	"\x15EntityComponentBounds\x10B\x12\x19\n" +
+	"\x15EntityComponentPolicy\x10C*i\n" +
 	"\n" +
 	"TaskStatus\x12\x15\n" +
 	"\x11TaskStatusInvalid\x10\x00\x12\x15\n" +
@@ -9497,7 +9535,7 @@ func file_world_proto_rawDescGZIP() []byte {
 }
 
 var file_world_proto_enumTypes = make([]protoimpl.EnumInfo, 17)
-var file_world_proto_msgTypes = make([]protoimpl.MessageInfo, 104)
+var file_world_proto_msgTypes = make([]protoimpl.MessageInfo, 103)
 var file_world_proto_goTypes = []any{
 	(Priority)(0),                        // 0: world.Priority
 	(GnssFixType)(0),                     // 1: world.GnssFixType
@@ -9616,11 +9654,11 @@ var file_world_proto_goTypes = []any{
 	(*HardResetResponse)(nil),            // 114: world.HardResetResponse
 	(*TimeSyncRequest)(nil),              // 115: world.TimeSyncRequest
 	(*TimeSyncResponse)(nil),             // 116: world.TimeSyncResponse
-	nil,                                  // 117: world.Lifetime.ComponentsEntry
-	nil,                                  // 118: world.MissionKit.LayoutsEntry
-	(*MapLayerComponent_Tile)(nil),       // 119: world.MapLayerComponent.Tile
-	(*MapLayerComponent_Image)(nil),      // 120: world.MapLayerComponent.Image
-	(*MetricComponent)(nil),              // 121: world.MetricComponent
+	nil,                                  // 117: world.MissionKit.LayoutsEntry
+	(*MapLayerComponent_Tile)(nil),       // 118: world.MapLayerComponent.Tile
+	(*MapLayerComponent_Image)(nil),      // 119: world.MapLayerComponent.Image
+	(*MetricComponent)(nil),              // 120: world.MetricComponent
+	(*PolicyComponent)(nil),              // 121: world.PolicyComponent
 	(*timestamppb.Timestamp)(nil),        // 122: google.protobuf.Timestamp
 	(*structpb.Struct)(nil),              // 123: google.protobuf.Struct
 	(*TaskableTarget)(nil),               // 124: world.TaskableTarget
@@ -9661,7 +9699,7 @@ var file_world_proto_depIdxs = []int32{
 	40,  // 24: world.Entity.pose:type_name -> world.PoseComponent
 	41,  // 25: world.Entity.target_pose:type_name -> world.TargetPoseComponent
 	54,  // 26: world.Entity.local_shape:type_name -> world.LocalShapeComponent
-	121, // 27: world.Entity.metric:type_name -> world.MetricComponent
+	120, // 27: world.Entity.metric:type_name -> world.MetricComponent
 	78,  // 28: world.Entity.config:type_name -> world.ConfigurationComponent
 	67,  // 29: world.Entity.configurable:type_name -> world.ConfigurableComponent
 	48,  // 30: world.Entity.taskable:type_name -> world.TaskableComponent
@@ -9676,11 +9714,11 @@ var file_world_proto_depIdxs = []int32{
 	82,  // 39: world.Entity.manual_control:type_name -> world.ManualControlComponent
 	83,  // 40: world.Entity.target_manual_control:type_name -> world.TargetManualControlComponent
 	33,  // 41: world.Entity.bounds:type_name -> world.BoundsComponent
-	122, // 42: world.Lease.expires:type_name -> google.protobuf.Timestamp
-	122, // 43: world.Lifetime.from:type_name -> google.protobuf.Timestamp
-	122, // 44: world.Lifetime.until:type_name -> google.protobuf.Timestamp
-	122, // 45: world.Lifetime.fresh:type_name -> google.protobuf.Timestamp
-	117, // 46: world.Lifetime.components:type_name -> world.Lifetime.ComponentsEntry
+	121, // 42: world.Entity.policy:type_name -> world.PolicyComponent
+	122, // 43: world.Lease.expires:type_name -> google.protobuf.Timestamp
+	122, // 44: world.Lifetime.from:type_name -> google.protobuf.Timestamp
+	122, // 45: world.Lifetime.until:type_name -> google.protobuf.Timestamp
+	122, // 46: world.Lifetime.fresh:type_name -> google.protobuf.Timestamp
 	21,  // 47: world.Routing.channels:type_name -> world.Channel
 	37,  // 48: world.GeoSpatialComponent.covariance:type_name -> world.CovarianceMatrix
 	1,   // 49: world.GnssComponent.fix_type:type_name -> world.GnssFixType
@@ -9744,11 +9782,11 @@ var file_world_proto_depIdxs = []int32{
 	76,  // 107: world.DeviceComponent.lpwan:type_name -> world.LPWANDevice
 	75,  // 108: world.DeviceComponent.meshtastic:type_name -> world.MeshtasticDevice
 	77,  // 109: world.DeviceComponent.ble:type_name -> world.BleDevice
-	118, // 110: world.MissionKit.layouts:type_name -> world.MissionKit.LayoutsEntry
+	117, // 110: world.MissionKit.layouts:type_name -> world.MissionKit.LayoutsEntry
 	69,  // 111: world.NodeDevice.mission_kit:type_name -> world.MissionKit
 	123, // 112: world.ConfigurationComponent.value:type_name -> google.protobuf.Struct
-	119, // 113: world.MapLayerComponent.tiles:type_name -> world.MapLayerComponent.Tile
-	120, // 114: world.MapLayerComponent.image:type_name -> world.MapLayerComponent.Image
+	118, // 113: world.MapLayerComponent.tiles:type_name -> world.MapLayerComponent.Tile
+	119, // 114: world.MapLayerComponent.image:type_name -> world.MapLayerComponent.Image
 	131, // 115: world.ManualControlComponent.input:type_name -> world.ManualControlInput
 	131, // 116: world.TargetManualControlComponent.input:type_name -> world.ManualControlInput
 	89,  // 117: world.EntityFilter.geo:type_name -> world.GeoFilter
@@ -9773,45 +9811,47 @@ var file_world_proto_depIdxs = []int32{
 	95,  // 136: world.ListEntitiesRequest.sort:type_name -> world.SortOption
 	96,  // 137: world.ListEntitiesRequest.behaviour:type_name -> world.WatchBehavior
 	17,  // 138: world.ListEntitiesResponse.entities:type_name -> world.Entity
-	17,  // 139: world.EntityChangeRequest.changes:type_name -> world.Entity
-	17,  // 140: world.EntityChangeRequest.replacements:type_name -> world.Entity
-	17,  // 141: world.EntityChangeEvent.entity:type_name -> world.Entity
-	14,  // 142: world.EntityChangeEvent.t:type_name -> world.EntityChange
-	103, // 143: world.EntityChangeBatch.events:type_name -> world.EntityChangeEvent
-	17,  // 144: world.GetEntityResponse.entity:type_name -> world.Entity
-	17,  // 145: world.GetLocalNodeResponse.entity:type_name -> world.Entity
-	52,  // 146: world.ObserverState.geo:type_name -> world.Geometry
-	122, // 147: world.ObserverState.viewHistory:type_name -> google.protobuf.Timestamp
-	126, // 148: world.RunTaskRequest.target:type_name -> world.TaskExecutionTarget
-	16,  // 149: world.RunTaskResponse.status:type_name -> world.TaskStatus
-	122, // 150: world.TimeSyncRequest.t1:type_name -> google.protobuf.Timestamp
-	122, // 151: world.TimeSyncResponse.t1:type_name -> google.protobuf.Timestamp
-	122, // 152: world.TimeSyncResponse.t2:type_name -> google.protobuf.Timestamp
-	122, // 153: world.TimeSyncResponse.t3:type_name -> google.protobuf.Timestamp
-	20,  // 154: world.Lifetime.ComponentsEntry.value:type_name -> world.Lifetime
-	97,  // 155: world.WorldService.ListEntities:input_type -> world.ListEntitiesRequest
-	105, // 156: world.WorldService.GetEntity:input_type -> world.GetEntityRequest
-	97,  // 157: world.WorldService.WatchEntities:input_type -> world.ListEntitiesRequest
-	99,  // 158: world.WorldService.Push:input_type -> world.EntityChangeRequest
-	100, // 159: world.WorldService.ExpireEntity:input_type -> world.ExpireEntityRequest
-	107, // 160: world.WorldService.GetLocalNode:input_type -> world.GetLocalNodeRequest
-	111, // 161: world.WorldService.RunTask:input_type -> world.RunTaskRequest
-	113, // 162: world.WorldService.HardReset:input_type -> world.HardResetRequest
-	115, // 163: world.WorldService.TimeSync:input_type -> world.TimeSyncRequest
-	98,  // 164: world.WorldService.ListEntities:output_type -> world.ListEntitiesResponse
-	106, // 165: world.WorldService.GetEntity:output_type -> world.GetEntityResponse
-	103, // 166: world.WorldService.WatchEntities:output_type -> world.EntityChangeEvent
-	102, // 167: world.WorldService.Push:output_type -> world.EntityChangeResponse
-	101, // 168: world.WorldService.ExpireEntity:output_type -> world.ExpireEntityResponse
-	108, // 169: world.WorldService.GetLocalNode:output_type -> world.GetLocalNodeResponse
-	112, // 170: world.WorldService.RunTask:output_type -> world.RunTaskResponse
-	114, // 171: world.WorldService.HardReset:output_type -> world.HardResetResponse
-	116, // 172: world.WorldService.TimeSync:output_type -> world.TimeSyncResponse
-	164, // [164:173] is the sub-list for method output_type
-	155, // [155:164] is the sub-list for method input_type
-	155, // [155:155] is the sub-list for extension type_name
-	155, // [155:155] is the sub-list for extension extendee
-	0,   // [0:155] is the sub-list for field type_name
+	123, // 139: world.ListEntitiesResponse.internal:type_name -> google.protobuf.Struct
+	17,  // 140: world.EntityChangeRequest.changes:type_name -> world.Entity
+	17,  // 141: world.EntityChangeRequest.replacements:type_name -> world.Entity
+	17,  // 142: world.EntityChangeEvent.entity:type_name -> world.Entity
+	14,  // 143: world.EntityChangeEvent.t:type_name -> world.EntityChange
+	103, // 144: world.EntityChangeBatch.events:type_name -> world.EntityChangeEvent
+	17,  // 145: world.GetEntityResponse.entity:type_name -> world.Entity
+	123, // 146: world.GetEntityResponse.internal:type_name -> google.protobuf.Struct
+	17,  // 147: world.GetLocalNodeResponse.entity:type_name -> world.Entity
+	52,  // 148: world.ObserverState.geo:type_name -> world.Geometry
+	122, // 149: world.ObserverState.viewHistory:type_name -> google.protobuf.Timestamp
+	126, // 150: world.RunTaskRequest.target:type_name -> world.TaskExecutionTarget
+	16,  // 151: world.RunTaskResponse.status:type_name -> world.TaskStatus
+	122, // 152: world.TimeSyncRequest.t1:type_name -> google.protobuf.Timestamp
+	122, // 153: world.TimeSyncRequest.t4:type_name -> google.protobuf.Timestamp
+	122, // 154: world.TimeSyncResponse.t1:type_name -> google.protobuf.Timestamp
+	122, // 155: world.TimeSyncResponse.t2:type_name -> google.protobuf.Timestamp
+	122, // 156: world.TimeSyncResponse.t3:type_name -> google.protobuf.Timestamp
+	97,  // 157: world.WorldService.ListEntities:input_type -> world.ListEntitiesRequest
+	105, // 158: world.WorldService.GetEntity:input_type -> world.GetEntityRequest
+	97,  // 159: world.WorldService.WatchEntities:input_type -> world.ListEntitiesRequest
+	99,  // 160: world.WorldService.Push:input_type -> world.EntityChangeRequest
+	100, // 161: world.WorldService.ExpireEntity:input_type -> world.ExpireEntityRequest
+	107, // 162: world.WorldService.GetLocalNode:input_type -> world.GetLocalNodeRequest
+	111, // 163: world.WorldService.RunTask:input_type -> world.RunTaskRequest
+	113, // 164: world.WorldService.HardReset:input_type -> world.HardResetRequest
+	115, // 165: world.WorldService.TimeSync:input_type -> world.TimeSyncRequest
+	98,  // 166: world.WorldService.ListEntities:output_type -> world.ListEntitiesResponse
+	106, // 167: world.WorldService.GetEntity:output_type -> world.GetEntityResponse
+	103, // 168: world.WorldService.WatchEntities:output_type -> world.EntityChangeEvent
+	102, // 169: world.WorldService.Push:output_type -> world.EntityChangeResponse
+	101, // 170: world.WorldService.ExpireEntity:output_type -> world.ExpireEntityResponse
+	108, // 171: world.WorldService.GetLocalNode:output_type -> world.GetLocalNodeResponse
+	112, // 172: world.WorldService.RunTask:output_type -> world.RunTaskResponse
+	114, // 173: world.WorldService.HardReset:output_type -> world.HardResetResponse
+	116, // 174: world.WorldService.TimeSync:output_type -> world.TimeSyncResponse
+	166, // [166:175] is the sub-list for method output_type
+	157, // [157:166] is the sub-list for method input_type
+	157, // [157:157] is the sub-list for extension type_name
+	157, // [157:157] is the sub-list for extension extendee
+	0,   // [0:157] is the sub-list for field type_name
 }
 
 func init() { file_world_proto_init() }
@@ -9822,6 +9862,7 @@ func file_world_proto_init() {
 	file_geometry_proto_init()
 	file_manualcontrol_proto_init()
 	file_metrics_proto_init()
+	file_policy_proto_init()
 	file_tasking_proto_init()
 	file_taxonomy_proto_init()
 	file_world_proto_msgTypes[0].OneofWrappers = []any{}
@@ -9913,7 +9954,7 @@ func file_world_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_world_proto_rawDesc), len(file_world_proto_rawDesc)),
 			NumEnums:      17,
-			NumMessages:   104,
+			NumMessages:   103,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

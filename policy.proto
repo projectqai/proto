@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package world;
+
+option go_package = "github.com/projectqai/proto/go";
+
+enum PolicyAction {
+  PolicyActionInvalid = 0;
+
+  // Reject the request.
+  PolicyActionDeny = 1;
+
+  // Accept the request. Evaluation stops.
+  PolicyActionAllow = 2;
+
+  // Record the match for auditing, then continue to the next rule.
+  // Does not produce a verdict on its own.
+  PolicyActionLog = 3;
+
+  // Evaluate the target entity's PolicyComponent (like nftables jump).
+  // If the entity's chain produces a verdict, use it.
+  // If the entity has no PolicyComponent or its chain produces no verdict,
+  // return to this chain and continue with the next rule.
+  PolicyActionDefer = 4;
+}
+
+message PolicyRule {
+  PolicyAction action = 1;
+
+  // CEL expression evaluated against the request context.
+  // Available variables depend on the engine (e.g. peer.address, rpc.method,
+  // rpc.write, request.entity_id, request.components).
+  // If omitted, the rule matches unconditionally.
+  optional string cel = 2;
+}
+
+// Access policy evaluated on incoming RPCs.
+//
+// The node entity carries the global policy. Rules are evaluated top to bottom;
+// the first rule whose CEL returns true produces the verdict (Allow or Deny).
+// Log does not verdict and continues to the next rule.
+// Defer jumps to the target entity's chain and returns if no verdict.
+//
+// If no rule produces a verdict, no verdict is returned.
+// Use an unconditional rule at the end to set a catch-all:
+//   { action: Deny }
+//
+// If no PolicyComponent exists on the node, all requests are allowed.
+// Entity-level policies are never evaluated unless the global chain
+// reaches a Defer rule.
+message PolicyComponent {
+  repeated PolicyRule rules = 1;
+}

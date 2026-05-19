@@ -3,6 +3,7 @@ from google.protobuf import struct_pb2 as _struct_pb2
 from google.protobuf import timestamp_pb2 as _timestamp_pb2
 import manualcontrol_pb2 as _manualcontrol_pb2
 import metrics_pb2 as _metrics_pb2
+import policy_pb2 as _policy_pb2
 import tasking_pb2 as _tasking_pb2
 import taxonomy_pb2 as _taxonomy_pb2
 from google.protobuf.internal import containers as _containers
@@ -214,6 +215,7 @@ class EntityComponent(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     EntityComponentManualControl: _ClassVar[EntityComponent]
     EntityComponentTargetManualControl: _ClassVar[EntityComponent]
     EntityComponentBounds: _ClassVar[EntityComponent]
+    EntityComponentPolicy: _ClassVar[EntityComponent]
 
 class TaskStatus(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -375,13 +377,14 @@ EntityComponentMapLayer: EntityComponent
 EntityComponentManualControl: EntityComponent
 EntityComponentTargetManualControl: EntityComponent
 EntityComponentBounds: EntityComponent
+EntityComponentPolicy: EntityComponent
 TaskStatusInvalid: TaskStatus
 TaskStatusRunning: TaskStatus
 TaskStatusCompleted: TaskStatus
 TaskStatusFailed: TaskStatus
 
 class Entity(_message.Message):
-    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "gnss", "device", "link", "pose", "target_pose", "local_shape", "metric", "config", "configurable", "taskable", "task_execution", "mission", "sensor", "interactivity", "artifact", "chat", "assembly", "map_layer", "manual_control", "target_manual_control", "bounds")
+    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "gnss", "device", "link", "pose", "target_pose", "local_shape", "metric", "config", "configurable", "taskable", "task_execution", "mission", "sensor", "interactivity", "artifact", "chat", "assembly", "map_layer", "manual_control", "target_manual_control", "bounds", "policy")
     ID_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     CONTROLLER_FIELD_NUMBER: _ClassVar[int]
@@ -426,6 +429,7 @@ class Entity(_message.Message):
     MANUAL_CONTROL_FIELD_NUMBER: _ClassVar[int]
     TARGET_MANUAL_CONTROL_FIELD_NUMBER: _ClassVar[int]
     BOUNDS_FIELD_NUMBER: _ClassVar[int]
+    POLICY_FIELD_NUMBER: _ClassVar[int]
     id: str
     label: str
     controller: Controller
@@ -470,19 +474,18 @@ class Entity(_message.Message):
     manual_control: ManualControlComponent
     target_manual_control: TargetManualControlComponent
     bounds: BoundsComponent
-    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., gnss: _Optional[_Union[GnssComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ..., map_layer: _Optional[_Union[MapLayerComponent, _Mapping]] = ..., manual_control: _Optional[_Union[ManualControlComponent, _Mapping]] = ..., target_manual_control: _Optional[_Union[TargetManualControlComponent, _Mapping]] = ..., bounds: _Optional[_Union[BoundsComponent, _Mapping]] = ...) -> None: ...
+    policy: _policy_pb2.PolicyComponent
+    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., gnss: _Optional[_Union[GnssComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ..., map_layer: _Optional[_Union[MapLayerComponent, _Mapping]] = ..., manual_control: _Optional[_Union[ManualControlComponent, _Mapping]] = ..., target_manual_control: _Optional[_Union[TargetManualControlComponent, _Mapping]] = ..., bounds: _Optional[_Union[BoundsComponent, _Mapping]] = ..., policy: _Optional[_Union[_policy_pb2.PolicyComponent, _Mapping]] = ...) -> None: ...
 
 class Controller(_message.Message):
-    __slots__ = ("id", "node", "origin", "address")
+    __slots__ = ("id", "node", "origin")
     ID_FIELD_NUMBER: _ClassVar[int]
     NODE_FIELD_NUMBER: _ClassVar[int]
     ORIGIN_FIELD_NUMBER: _ClassVar[int]
-    ADDRESS_FIELD_NUMBER: _ClassVar[int]
     id: str
     node: str
     origin: str
-    address: str
-    def __init__(self, id: _Optional[str] = ..., node: _Optional[str] = ..., origin: _Optional[str] = ..., address: _Optional[str] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., node: _Optional[str] = ..., origin: _Optional[str] = ...) -> None: ...
 
 class Lease(_message.Message):
     __slots__ = ("controller", "expires")
@@ -493,22 +496,13 @@ class Lease(_message.Message):
     def __init__(self, controller: _Optional[str] = ..., expires: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class Lifetime(_message.Message):
-    __slots__ = ("until", "fresh", "components")
-    class ComponentsEntry(_message.Message):
-        __slots__ = ("key", "value")
-        KEY_FIELD_NUMBER: _ClassVar[int]
-        VALUE_FIELD_NUMBER: _ClassVar[int]
-        key: int
-        value: Lifetime
-        def __init__(self, key: _Optional[int] = ..., value: _Optional[_Union[Lifetime, _Mapping]] = ...) -> None: ...
+    __slots__ = ("until", "fresh")
     FROM_FIELD_NUMBER: _ClassVar[int]
     UNTIL_FIELD_NUMBER: _ClassVar[int]
     FRESH_FIELD_NUMBER: _ClassVar[int]
-    COMPONENTS_FIELD_NUMBER: _ClassVar[int]
     until: _timestamp_pb2.Timestamp
     fresh: _timestamp_pb2.Timestamp
-    components: _containers.MessageMap[int, Lifetime]
-    def __init__(self, until: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., fresh: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., components: _Optional[_Mapping[int, Lifetime]] = ..., **kwargs) -> None: ...
+    def __init__(self, until: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., fresh: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., **kwargs) -> None: ...
 
 class Channel(_message.Message):
     __slots__ = ("name",)
@@ -1444,20 +1438,24 @@ class WatchBehavior(_message.Message):
     def __init__(self, max_rate_hz: _Optional[float] = ..., min_priority: _Optional[_Union[Priority, str]] = ..., keepalive_interval_ms: _Optional[int] = ...) -> None: ...
 
 class ListEntitiesRequest(_message.Message):
-    __slots__ = ("filter", "sort", "behaviour")
+    __slots__ = ("filter", "sort", "behaviour", "dump_internal")
     FILTER_FIELD_NUMBER: _ClassVar[int]
     SORT_FIELD_NUMBER: _ClassVar[int]
     BEHAVIOUR_FIELD_NUMBER: _ClassVar[int]
+    DUMP_INTERNAL_FIELD_NUMBER: _ClassVar[int]
     filter: EntityFilter
     sort: _containers.RepeatedCompositeFieldContainer[SortOption]
     behaviour: WatchBehavior
-    def __init__(self, filter: _Optional[_Union[EntityFilter, _Mapping]] = ..., sort: _Optional[_Iterable[_Union[SortOption, _Mapping]]] = ..., behaviour: _Optional[_Union[WatchBehavior, _Mapping]] = ...) -> None: ...
+    dump_internal: bool
+    def __init__(self, filter: _Optional[_Union[EntityFilter, _Mapping]] = ..., sort: _Optional[_Iterable[_Union[SortOption, _Mapping]]] = ..., behaviour: _Optional[_Union[WatchBehavior, _Mapping]] = ..., dump_internal: bool = ...) -> None: ...
 
 class ListEntitiesResponse(_message.Message):
-    __slots__ = ("entities",)
+    __slots__ = ("entities", "internal")
     ENTITIES_FIELD_NUMBER: _ClassVar[int]
+    INTERNAL_FIELD_NUMBER: _ClassVar[int]
     entities: _containers.RepeatedCompositeFieldContainer[Entity]
-    def __init__(self, entities: _Optional[_Iterable[_Union[Entity, _Mapping]]] = ...) -> None: ...
+    internal: _containers.RepeatedCompositeFieldContainer[_struct_pb2.Struct]
+    def __init__(self, entities: _Optional[_Iterable[_Union[Entity, _Mapping]]] = ..., internal: _Optional[_Iterable[_Union[_struct_pb2.Struct, _Mapping]]] = ...) -> None: ...
 
 class EntityChangeRequest(_message.Message):
     __slots__ = ("changes", "replacements")
@@ -1500,16 +1498,20 @@ class EntityChangeBatch(_message.Message):
     def __init__(self, events: _Optional[_Iterable[_Union[EntityChangeEvent, _Mapping]]] = ...) -> None: ...
 
 class GetEntityRequest(_message.Message):
-    __slots__ = ("id",)
+    __slots__ = ("id", "dump_internal")
     ID_FIELD_NUMBER: _ClassVar[int]
+    DUMP_INTERNAL_FIELD_NUMBER: _ClassVar[int]
     id: str
-    def __init__(self, id: _Optional[str] = ...) -> None: ...
+    dump_internal: bool
+    def __init__(self, id: _Optional[str] = ..., dump_internal: bool = ...) -> None: ...
 
 class GetEntityResponse(_message.Message):
-    __slots__ = ("entity",)
+    __slots__ = ("entity", "internal")
     ENTITY_FIELD_NUMBER: _ClassVar[int]
+    INTERNAL_FIELD_NUMBER: _ClassVar[int]
     entity: Entity
-    def __init__(self, entity: _Optional[_Union[Entity, _Mapping]] = ...) -> None: ...
+    internal: _struct_pb2.Struct
+    def __init__(self, entity: _Optional[_Union[Entity, _Mapping]] = ..., internal: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ...) -> None: ...
 
 class GetLocalNodeRequest(_message.Message):
     __slots__ = ()
@@ -1566,10 +1568,12 @@ class HardResetResponse(_message.Message):
     def __init__(self) -> None: ...
 
 class TimeSyncRequest(_message.Message):
-    __slots__ = ("t1",)
+    __slots__ = ("t1", "t4")
     T1_FIELD_NUMBER: _ClassVar[int]
+    T4_FIELD_NUMBER: _ClassVar[int]
     t1: _timestamp_pb2.Timestamp
-    def __init__(self, t1: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    t4: _timestamp_pb2.Timestamp
+    def __init__(self, t1: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., t4: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class TimeSyncResponse(_message.Message):
     __slots__ = ("t1", "t2", "t3")

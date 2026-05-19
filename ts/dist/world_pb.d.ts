@@ -5,6 +5,7 @@
 import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { JsonObject, Message } from "@bufbuild/protobuf";
 import type { MetricComponent, MetricKind } from "./metrics_pb.js";
+import type { PolicyComponent } from "./policy_pb.js";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { TaskableTarget, TaskExecutionTarget } from "./tasking_pb.js";
 import type { ClassificationTaxonomy, TaskingTaxonomy } from "./taxonomy_pb.js";
@@ -243,6 +244,11 @@ export declare type Entity = Message<"world.Entity"> & {
    * @generated from field: optional world.BoundsComponent bounds = 66;
    */
   bounds?: BoundsComponent;
+
+  /**
+   * @generated from field: optional world.PolicyComponent policy = 67;
+   */
+  policy?: PolicyComponent;
 };
 
 /**
@@ -252,15 +258,14 @@ export declare type Entity = Message<"world.Entity"> & {
 export declare const EntitySchema: GenMessage<Entity>;
 
 /**
- * A controller owns an entity.
- * The engine normally rejects changes to the entity from non owners,
- * but some future work might ask the controller to merge the change.
- * in that case it MUST NOT be sent via push since push is eventually consistent
+ * A controller owns an entity or change
  *
  * @generated from message world.Controller
  */
 export declare type Controller = Message<"world.Controller"> & {
   /**
+   * if of the controller service
+   *
    * @generated from field: optional string id = 1;
    */
   id?: string;
@@ -271,14 +276,11 @@ export declare type Controller = Message<"world.Controller"> & {
   node?: string;
 
   /**
+   * id of another entity from which the controller this has received from (for example a radio)
+   *
    * @generated from field: optional string origin = 3;
    */
   origin?: string;
-
-  /**
-   * @generated from field: optional string address = 4;
-   */
-  address?: string;
 };
 
 /**
@@ -339,14 +341,6 @@ export declare type Lifetime = Message<"world.Lifetime"> & {
    * @generated from field: optional google.protobuf.Timestamp fresh = 3;
    */
   fresh?: Timestamp;
-
-  /**
-   * per-component lifetime metadata
-   * key is the proto field number of the component in Entity (e.g. 11 for geo)
-   *
-   * @generated from field: map<int32, world.Lifetime> components = 4;
-   */
-  components: { [key: number]: Lifetime };
 };
 
 /**
@@ -3181,6 +3175,13 @@ export declare type ListEntitiesRequest = Message<"world.ListEntitiesRequest"> &
    * @generated from field: optional world.WatchBehavior behaviour = 4;
    */
   behaviour?: WatchBehavior;
+
+  /**
+   * request dump of internal state. might be ignored
+   *
+   * @generated from field: bool dump_internal = 10;
+   */
+  dumpInternal: boolean;
 };
 
 /**
@@ -3197,6 +3198,11 @@ export declare type ListEntitiesResponse = Message<"world.ListEntitiesResponse">
    * @generated from field: repeated world.Entity entities = 1;
    */
   entities: Entity[];
+
+  /**
+   * @generated from field: repeated google.protobuf.Struct internal = 2;
+   */
+  internal: JsonObject[];
 };
 
 /**
@@ -3327,6 +3333,13 @@ export declare type GetEntityRequest = Message<"world.GetEntityRequest"> & {
    * @generated from field: string id = 1;
    */
   id: string;
+
+  /**
+   * request dump of internal state. might be ignored
+   *
+   * @generated from field: bool dump_internal = 10;
+   */
+  dumpInternal: boolean;
 };
 
 /**
@@ -3343,6 +3356,11 @@ export declare type GetEntityResponse = Message<"world.GetEntityResponse"> & {
    * @generated from field: world.Entity entity = 1;
    */
   entity?: Entity;
+
+  /**
+   * @generated from field: google.protobuf.Struct internal = 2;
+   */
+  internal?: JsonObject;
 };
 
 /**
@@ -3507,6 +3525,15 @@ export declare type TimeSyncRequest = Message<"world.TimeSyncRequest"> & {
    * @generated from field: google.protobuf.Timestamp t1 = 1;
    */
   t1?: Timestamp;
+
+  /**
+   * Client's receive timestamp of the previous exchange. When set, the server
+   * can pair it with the stored T1/T2/T3 of that exchange to compute proper
+   * NTP-style offset and RTT. Omitted on the first probe.
+   *
+   * @generated from field: google.protobuf.Timestamp t4 = 4;
+   */
+  t4?: Timestamp;
 };
 
 /**
@@ -4564,6 +4591,11 @@ export enum EntityComponent {
    * @generated from enum value: EntityComponentBounds = 66;
    */
   EntityComponentBounds = 66,
+
+  /**
+   * @generated from enum value: EntityComponentPolicy = 67;
+   */
+  EntityComponentPolicy = 67,
 }
 
 /**
