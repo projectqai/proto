@@ -1114,6 +1114,10 @@ message WatchBehavior {
   // 0 or unset = only stream actual changes
   // values lower than 1000 might be capped to 1s
   optional uint32 keepalive_interval_ms = 4;
+
+  // When true, update events only contain the components that actually changed
+  // rather than the full entity. The initial snapshot always sends full entities.
+  optional bool diff = 5;
 }
 
 message ListEntitiesRequest {

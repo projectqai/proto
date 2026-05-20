@@ -1428,14 +1428,16 @@ class SortOption(_message.Message):
     def __init__(self, field: _Optional[_Union[SortField, str]] = ..., descending: bool = ..., metric_id: _Optional[int] = ..., metric_kind: _Optional[_Union[_metrics_pb2.MetricKind, str]] = ...) -> None: ...
 
 class WatchBehavior(_message.Message):
-    __slots__ = ("max_rate_hz", "min_priority", "keepalive_interval_ms")
+    __slots__ = ("max_rate_hz", "min_priority", "keepalive_interval_ms", "diff")
     MAX_RATE_HZ_FIELD_NUMBER: _ClassVar[int]
     MIN_PRIORITY_FIELD_NUMBER: _ClassVar[int]
     KEEPALIVE_INTERVAL_MS_FIELD_NUMBER: _ClassVar[int]
+    DIFF_FIELD_NUMBER: _ClassVar[int]
     max_rate_hz: float
     min_priority: Priority
     keepalive_interval_ms: int
-    def __init__(self, max_rate_hz: _Optional[float] = ..., min_priority: _Optional[_Union[Priority, str]] = ..., keepalive_interval_ms: _Optional[int] = ...) -> None: ...
+    diff: bool
+    def __init__(self, max_rate_hz: _Optional[float] = ..., min_priority: _Optional[_Union[Priority, str]] = ..., keepalive_interval_ms: _Optional[int] = ..., diff: bool = ...) -> None: ...
 
 class ListEntitiesRequest(_message.Message):
     __slots__ = ("filter", "sort", "behaviour", "dump_internal")

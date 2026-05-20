@@ -2453,6 +2453,10 @@ pub struct WatchBehavior {
     /// values lower than 1000 might be capped to 1s
     #[prost(uint32, optional, tag = "4")]
     pub keepalive_interval_ms: ::core::option::Option<u32>,
+    /// When true, update events only contain the components that actually changed
+    /// rather than the full entity. The initial snapshot always sends full entities.
+    #[prost(bool, optional, tag = "5")]
+    pub diff: ::core::option::Option<bool>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListEntitiesRequest {

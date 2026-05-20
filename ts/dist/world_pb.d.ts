@@ -3147,6 +3147,14 @@ export declare type WatchBehavior = Message<"world.WatchBehavior"> & {
    * @generated from field: optional uint32 keepalive_interval_ms = 4;
    */
   keepaliveIntervalMs?: number;
+
+  /**
+   * When true, update events only contain the components that actually changed
+   * rather than the full entity. The initial snapshot always sends full entities.
+   *
+   * @generated from field: optional bool diff = 5;
+   */
+  diff?: boolean;
 };
 
 /**

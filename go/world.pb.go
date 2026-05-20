@@ -7249,8 +7249,11 @@ type WatchBehavior struct {
 	// 0 or unset = only stream actual changes
 	// values lower than 1000 might be capped to 1s
 	KeepaliveIntervalMs *uint32 `protobuf:"varint,4,opt,name=keepalive_interval_ms,json=keepaliveIntervalMs,proto3,oneof" json:"keepalive_interval_ms,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// When true, update events only contain the components that actually changed
+	// rather than the full entity. The initial snapshot always sends full entities.
+	Diff          *bool `protobuf:"varint,5,opt,name=diff,proto3,oneof" json:"diff,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *WatchBehavior) Reset() {
@@ -7302,6 +7305,13 @@ func (x *WatchBehavior) GetKeepaliveIntervalMs() uint32 {
 		return *x.KeepaliveIntervalMs
 	}
 	return 0
+}
+
+func (x *WatchBehavior) GetDiff() bool {
+	if x != nil && x.Diff != nil {
+		return *x.Diff
+	}
+	return false
 }
 
 type ListEntitiesRequest struct {
@@ -9259,14 +9269,16 @@ const file_world_proto_rawDesc = "" +
 	"\tmetric_id\x18\x14 \x01(\rH\x00R\bmetricId\x124\n" +
 	"\vmetric_kind\x18\x15 \x01(\x0e2\x11.world.MetricKindH\x00R\n" +
 	"metricKindB\x11\n" +
-	"\x0fmetric_selector\"\xe1\x01\n" +
+	"\x0fmetric_selector\"\x83\x02\n" +
 	"\rWatchBehavior\x12#\n" +
 	"\vmax_rate_hz\x18\x01 \x01(\x02H\x00R\tmaxRateHz\x88\x01\x01\x127\n" +
 	"\fmin_priority\x18\x03 \x01(\x0e2\x0f.world.PriorityH\x01R\vminPriority\x88\x01\x01\x127\n" +
-	"\x15keepalive_interval_ms\x18\x04 \x01(\rH\x02R\x13keepaliveIntervalMs\x88\x01\x01B\x0e\n" +
+	"\x15keepalive_interval_ms\x18\x04 \x01(\rH\x02R\x13keepaliveIntervalMs\x88\x01\x01\x12\x17\n" +
+	"\x04diff\x18\x05 \x01(\bH\x03R\x04diff\x88\x01\x01B\x0e\n" +
 	"\f_max_rate_hzB\x0f\n" +
 	"\r_min_priorityB\x18\n" +
-	"\x16_keepalive_interval_ms\"\xdb\x01\n" +
+	"\x16_keepalive_interval_msB\a\n" +
+	"\x05_diff\"\xdb\x01\n" +
 	"\x13ListEntitiesRequest\x12+\n" +
 	"\x06filter\x18\x02 \x01(\v2\x13.world.EntityFilterR\x06filter\x12%\n" +
 	"\x04sort\x18\x03 \x03(\v2\x11.world.SortOptionR\x04sort\x127\n" +
