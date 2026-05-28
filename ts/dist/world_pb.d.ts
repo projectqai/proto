@@ -2229,7 +2229,7 @@ export declare type MissionPack = Message<"world.MissionPack"> & {
   layouts: { [key: string]: string };
 
   /**
-   * @generated from field: optional int32 entity_count = 2;
+   * @generated from field: optional uint32 entity_count = 2;
    */
   entityCount?: number;
 
@@ -2242,6 +2242,16 @@ export declare type MissionPack = Message<"world.MissionPack"> & {
    * @generated from field: optional google.protobuf.Timestamp imported_at = 4;
    */
   importedAt?: Timestamp;
+
+  /**
+   * @generated from field: optional uint32 artifact_count = 5;
+   */
+  artifactCount?: number;
+
+  /**
+   * @generated from field: optional uint64 artifact_total_size = 6;
+   */
+  artifactTotalSize?: bigint;
 };
 
 /**

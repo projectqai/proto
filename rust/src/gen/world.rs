@@ -2098,12 +2098,16 @@ pub struct MissionPack {
         ::prost::alloc::string::String,
         ::prost::alloc::string::String,
     >,
-    #[prost(int32, optional, tag = "2")]
-    pub entity_count: ::core::option::Option<i32>,
+    #[prost(uint32, optional, tag = "2")]
+    pub entity_count: ::core::option::Option<u32>,
     #[prost(string, optional, tag = "3")]
     pub pack_version: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(message, optional, tag = "4")]
     pub imported_at: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(uint32, optional, tag = "5")]
+    pub artifact_count: ::core::option::Option<u32>,
+    #[prost(uint64, optional, tag = "6")]
+    pub artifact_total_size: ::core::option::Option<u64>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NodeDevice {

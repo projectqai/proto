@@ -5430,13 +5430,15 @@ func (x *DeviceComponent) GetBle() *BleDevice {
 }
 
 type MissionPack struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Layouts       map[string]string      `protobuf:"bytes,1,rep,name=layouts,proto3" json:"layouts,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	EntityCount   *int32                 `protobuf:"varint,2,opt,name=entity_count,json=entityCount,proto3,oneof" json:"entity_count,omitempty"`
-	PackVersion   *string                `protobuf:"bytes,3,opt,name=pack_version,json=packVersion,proto3,oneof" json:"pack_version,omitempty"`
-	ImportedAt    *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=imported_at,json=importedAt,proto3,oneof" json:"imported_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Layouts           map[string]string      `protobuf:"bytes,1,rep,name=layouts,proto3" json:"layouts,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	EntityCount       *uint32                `protobuf:"varint,2,opt,name=entity_count,json=entityCount,proto3,oneof" json:"entity_count,omitempty"`
+	PackVersion       *string                `protobuf:"bytes,3,opt,name=pack_version,json=packVersion,proto3,oneof" json:"pack_version,omitempty"`
+	ImportedAt        *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=imported_at,json=importedAt,proto3,oneof" json:"imported_at,omitempty"`
+	ArtifactCount     *uint32                `protobuf:"varint,5,opt,name=artifact_count,json=artifactCount,proto3,oneof" json:"artifact_count,omitempty"`
+	ArtifactTotalSize *uint64                `protobuf:"varint,6,opt,name=artifact_total_size,json=artifactTotalSize,proto3,oneof" json:"artifact_total_size,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *MissionPack) Reset() {
@@ -5476,7 +5478,7 @@ func (x *MissionPack) GetLayouts() map[string]string {
 	return nil
 }
 
-func (x *MissionPack) GetEntityCount() int32 {
+func (x *MissionPack) GetEntityCount() uint32 {
 	if x != nil && x.EntityCount != nil {
 		return *x.EntityCount
 	}
@@ -5495,6 +5497,20 @@ func (x *MissionPack) GetImportedAt() *timestamppb.Timestamp {
 		return x.ImportedAt
 	}
 	return nil
+}
+
+func (x *MissionPack) GetArtifactCount() uint32 {
+	if x != nil && x.ArtifactCount != nil {
+		return *x.ArtifactCount
+	}
+	return 0
+}
+
+func (x *MissionPack) GetArtifactTotalSize() uint64 {
+	if x != nil && x.ArtifactTotalSize != nil {
+		return *x.ArtifactTotalSize
+	}
+	return 0
 }
 
 type NodeDevice struct {
@@ -9152,19 +9168,23 @@ const file_world_proto_rawDesc = "" +
 	"\t_ethernetB\b\n" +
 	"\x06_lpwanB\r\n" +
 	"\v_meshtasticB\x06\n" +
-	"\x04_ble\"\xc8\x02\n" +
+	"\x04_ble\"\xd4\x03\n" +
 	"\vMissionPack\x129\n" +
 	"\alayouts\x18\x01 \x03(\v2\x1f.world.MissionPack.LayoutsEntryR\alayouts\x12&\n" +
-	"\fentity_count\x18\x02 \x01(\x05H\x00R\ventityCount\x88\x01\x01\x12&\n" +
+	"\fentity_count\x18\x02 \x01(\rH\x00R\ventityCount\x88\x01\x01\x12&\n" +
 	"\fpack_version\x18\x03 \x01(\tH\x01R\vpackVersion\x88\x01\x01\x12@\n" +
 	"\vimported_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\n" +
-	"importedAt\x88\x01\x01\x1a:\n" +
+	"importedAt\x88\x01\x01\x12*\n" +
+	"\x0eartifact_count\x18\x05 \x01(\rH\x03R\rartifactCount\x88\x01\x01\x123\n" +
+	"\x13artifact_total_size\x18\x06 \x01(\x04H\x04R\x11artifactTotalSize\x88\x01\x01\x1a:\n" +
 	"\fLayoutsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01B\x0f\n" +
 	"\r_entity_countB\x0f\n" +
 	"\r_pack_versionB\x0e\n" +
-	"\f_imported_at\"\xac\x03\n" +
+	"\f_imported_atB\x11\n" +
+	"\x0f_artifact_countB\x16\n" +
+	"\x14_artifact_total_size\"\xac\x03\n" +
 	"\n" +
 	"NodeDevice\x12\x1f\n" +
 	"\bhostname\x18\x01 \x01(\tH\x00R\bhostname\x88\x01\x01\x12\x13\n" +

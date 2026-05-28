@@ -815,9 +815,11 @@ message DeviceComponent {
 
 message MissionPack {
   map<string, string> layouts = 1;
-  optional int32 entity_count = 2;
+  optional uint32 entity_count = 2;
   optional string pack_version = 3;
   optional google.protobuf.Timestamp imported_at = 4;
+  optional uint32 artifact_count = 5;
+  optional uint64 artifact_total_size = 6;
 }
 
 message NodeDevice {

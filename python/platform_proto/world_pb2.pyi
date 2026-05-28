@@ -1117,7 +1117,7 @@ class DeviceComponent(_message.Message):
     def __init__(self, parent: _Optional[str] = ..., composition: _Optional[_Iterable[str]] = ..., unique_hardware_id: _Optional[str] = ..., state: _Optional[_Union[DeviceState, str]] = ..., error: _Optional[str] = ..., category: _Optional[str] = ..., node: _Optional[_Union[NodeDevice, _Mapping]] = ..., usb: _Optional[_Union[UsbDevice, _Mapping]] = ..., ip: _Optional[_Union[IpDevice, _Mapping]] = ..., serial: _Optional[_Union[SerialDevice, _Mapping]] = ..., ethernet: _Optional[_Union[EthernetDevice, _Mapping]] = ..., lpwan: _Optional[_Union[LPWANDevice, _Mapping]] = ..., meshtastic: _Optional[_Union[MeshtasticDevice, _Mapping]] = ..., ble: _Optional[_Union[BleDevice, _Mapping]] = ..., **kwargs) -> None: ...
 
 class MissionPack(_message.Message):
-    __slots__ = ("layouts", "entity_count", "pack_version", "imported_at")
+    __slots__ = ("layouts", "entity_count", "pack_version", "imported_at", "artifact_count", "artifact_total_size")
     class LayoutsEntry(_message.Message):
         __slots__ = ("key", "value")
         KEY_FIELD_NUMBER: _ClassVar[int]
@@ -1129,11 +1129,15 @@ class MissionPack(_message.Message):
     ENTITY_COUNT_FIELD_NUMBER: _ClassVar[int]
     PACK_VERSION_FIELD_NUMBER: _ClassVar[int]
     IMPORTED_AT_FIELD_NUMBER: _ClassVar[int]
+    ARTIFACT_COUNT_FIELD_NUMBER: _ClassVar[int]
+    ARTIFACT_TOTAL_SIZE_FIELD_NUMBER: _ClassVar[int]
     layouts: _containers.ScalarMap[str, str]
     entity_count: int
     pack_version: str
     imported_at: _timestamp_pb2.Timestamp
-    def __init__(self, layouts: _Optional[_Mapping[str, str]] = ..., entity_count: _Optional[int] = ..., pack_version: _Optional[str] = ..., imported_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    artifact_count: int
+    artifact_total_size: int
+    def __init__(self, layouts: _Optional[_Mapping[str, str]] = ..., entity_count: _Optional[int] = ..., pack_version: _Optional[str] = ..., imported_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., artifact_count: _Optional[int] = ..., artifact_total_size: _Optional[int] = ...) -> None: ...
 
 class NodeDevice(_message.Message):
     __slots__ = ("hostname", "os", "arch", "num_cpu", "os_version", "hydris_version", "hydris_update_available", "mission")
