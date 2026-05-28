@@ -53,6 +53,9 @@ const (
 	WorldServiceRunTaskProcedure = "/world.WorldService/RunTask"
 	// WorldServiceHardResetProcedure is the fully-qualified name of the WorldService's HardReset RPC.
 	WorldServiceHardResetProcedure = "/world.WorldService/HardReset"
+	// WorldServiceLoadMissionProcedure is the fully-qualified name of the WorldService's LoadMission
+	// RPC.
+	WorldServiceLoadMissionProcedure = "/world.WorldService/LoadMission"
 	// WorldServiceTimeSyncProcedure is the fully-qualified name of the WorldService's TimeSync RPC.
 	WorldServiceTimeSyncProcedure = "/world.WorldService/TimeSync"
 )
@@ -75,6 +78,8 @@ type WorldServiceClient interface {
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
 	// clear all engine state including persistence
 	HardReset(context.Context, *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error)
+	// replace the world with a stored mission pack artifact
+	LoadMission(context.Context, *connect.Request[_go.LoadMissionRequest]) (*connect.Response[_go.LoadMissionResponse], error)
 	// NTP-style time synchronization for federation clock offset estimation
 	TimeSync(context.Context, *connect.Request[_go.TimeSyncRequest]) (*connect.Response[_go.TimeSyncResponse], error)
 }
@@ -138,6 +143,12 @@ func NewWorldServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(worldServiceMethods.ByName("HardReset")),
 			connect.WithClientOptions(opts...),
 		),
+		loadMission: connect.NewClient[_go.LoadMissionRequest, _go.LoadMissionResponse](
+			httpClient,
+			baseURL+WorldServiceLoadMissionProcedure,
+			connect.WithSchema(worldServiceMethods.ByName("LoadMission")),
+			connect.WithClientOptions(opts...),
+		),
 		timeSync: connect.NewClient[_go.TimeSyncRequest, _go.TimeSyncResponse](
 			httpClient,
 			baseURL+WorldServiceTimeSyncProcedure,
@@ -157,6 +168,7 @@ type worldServiceClient struct {
 	getLocalNode  *connect.Client[_go.GetLocalNodeRequest, _go.GetLocalNodeResponse]
 	runTask       *connect.Client[_go.RunTaskRequest, _go.RunTaskResponse]
 	hardReset     *connect.Client[_go.HardResetRequest, _go.HardResetResponse]
+	loadMission   *connect.Client[_go.LoadMissionRequest, _go.LoadMissionResponse]
 	timeSync      *connect.Client[_go.TimeSyncRequest, _go.TimeSyncResponse]
 }
 
@@ -200,6 +212,11 @@ func (c *worldServiceClient) HardReset(ctx context.Context, req *connect.Request
 	return c.hardReset.CallUnary(ctx, req)
 }
 
+// LoadMission calls world.WorldService.LoadMission.
+func (c *worldServiceClient) LoadMission(ctx context.Context, req *connect.Request[_go.LoadMissionRequest]) (*connect.Response[_go.LoadMissionResponse], error) {
+	return c.loadMission.CallUnary(ctx, req)
+}
+
 // TimeSync calls world.WorldService.TimeSync.
 func (c *worldServiceClient) TimeSync(ctx context.Context, req *connect.Request[_go.TimeSyncRequest]) (*connect.Response[_go.TimeSyncResponse], error) {
 	return c.timeSync.CallUnary(ctx, req)
@@ -223,6 +240,8 @@ type WorldServiceHandler interface {
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
 	// clear all engine state including persistence
 	HardReset(context.Context, *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error)
+	// replace the world with a stored mission pack artifact
+	LoadMission(context.Context, *connect.Request[_go.LoadMissionRequest]) (*connect.Response[_go.LoadMissionResponse], error)
 	// NTP-style time synchronization for federation clock offset estimation
 	TimeSync(context.Context, *connect.Request[_go.TimeSyncRequest]) (*connect.Response[_go.TimeSyncResponse], error)
 }
@@ -282,6 +301,12 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(worldServiceMethods.ByName("HardReset")),
 		connect.WithHandlerOptions(opts...),
 	)
+	worldServiceLoadMissionHandler := connect.NewUnaryHandler(
+		WorldServiceLoadMissionProcedure,
+		svc.LoadMission,
+		connect.WithSchema(worldServiceMethods.ByName("LoadMission")),
+		connect.WithHandlerOptions(opts...),
+	)
 	worldServiceTimeSyncHandler := connect.NewUnaryHandler(
 		WorldServiceTimeSyncProcedure,
 		svc.TimeSync,
@@ -306,6 +331,8 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 			worldServiceRunTaskHandler.ServeHTTP(w, r)
 		case WorldServiceHardResetProcedure:
 			worldServiceHardResetHandler.ServeHTTP(w, r)
+		case WorldServiceLoadMissionProcedure:
+			worldServiceLoadMissionHandler.ServeHTTP(w, r)
 		case WorldServiceTimeSyncProcedure:
 			worldServiceTimeSyncHandler.ServeHTTP(w, r)
 		default:
@@ -347,6 +374,10 @@ func (UnimplementedWorldServiceHandler) RunTask(context.Context, *connect.Reques
 
 func (UnimplementedWorldServiceHandler) HardReset(context.Context, *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.HardReset is not implemented"))
+}
+
+func (UnimplementedWorldServiceHandler) LoadMission(context.Context, *connect.Request[_go.LoadMissionRequest]) (*connect.Response[_go.LoadMissionResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.LoadMission is not implemented"))
 }
 
 func (UnimplementedWorldServiceHandler) TimeSync(context.Context, *connect.Request[_go.TimeSyncRequest]) (*connect.Response[_go.TimeSyncResponse], error) {

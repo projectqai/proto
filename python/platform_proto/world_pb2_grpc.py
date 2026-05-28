@@ -75,6 +75,11 @@ class WorldServiceStub(object):
                 request_serializer=world__pb2.HardResetRequest.SerializeToString,
                 response_deserializer=world__pb2.HardResetResponse.FromString,
                 _registered_method=True)
+        self.LoadMission = channel.unary_unary(
+                '/world.WorldService/LoadMission',
+                request_serializer=world__pb2.LoadMissionRequest.SerializeToString,
+                response_deserializer=world__pb2.LoadMissionResponse.FromString,
+                _registered_method=True)
         self.TimeSync = channel.unary_unary(
                 '/world.WorldService/TimeSync',
                 request_serializer=world__pb2.TimeSyncRequest.SerializeToString,
@@ -142,6 +147,13 @@ class WorldServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def LoadMission(self, request, context):
+        """replace the world with a stored mission pack artifact
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def TimeSync(self, request, context):
         """NTP-style time synchronization for federation clock offset estimation
         """
@@ -191,6 +203,11 @@ def add_WorldServiceServicer_to_server(servicer, server):
                     servicer.HardReset,
                     request_deserializer=world__pb2.HardResetRequest.FromString,
                     response_serializer=world__pb2.HardResetResponse.SerializeToString,
+            ),
+            'LoadMission': grpc.unary_unary_rpc_method_handler(
+                    servicer.LoadMission,
+                    request_deserializer=world__pb2.LoadMissionRequest.FromString,
+                    response_serializer=world__pb2.LoadMissionResponse.SerializeToString,
             ),
             'TimeSync': grpc.unary_unary_rpc_method_handler(
                     servicer.TimeSync,
@@ -415,6 +432,33 @@ class WorldService(object):
             '/world.WorldService/HardReset',
             world__pb2.HardResetRequest.SerializeToString,
             world__pb2.HardResetResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def LoadMission(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/world.WorldService/LoadMission',
+            world__pb2.LoadMissionRequest.SerializeToString,
+            world__pb2.LoadMissionResponse.FromString,
             options,
             channel_credentials,
             insecure,

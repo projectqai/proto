@@ -1116,8 +1116,8 @@ class DeviceComponent(_message.Message):
     ble: BleDevice
     def __init__(self, parent: _Optional[str] = ..., composition: _Optional[_Iterable[str]] = ..., unique_hardware_id: _Optional[str] = ..., state: _Optional[_Union[DeviceState, str]] = ..., error: _Optional[str] = ..., category: _Optional[str] = ..., node: _Optional[_Union[NodeDevice, _Mapping]] = ..., usb: _Optional[_Union[UsbDevice, _Mapping]] = ..., ip: _Optional[_Union[IpDevice, _Mapping]] = ..., serial: _Optional[_Union[SerialDevice, _Mapping]] = ..., ethernet: _Optional[_Union[EthernetDevice, _Mapping]] = ..., lpwan: _Optional[_Union[LPWANDevice, _Mapping]] = ..., meshtastic: _Optional[_Union[MeshtasticDevice, _Mapping]] = ..., ble: _Optional[_Union[BleDevice, _Mapping]] = ..., **kwargs) -> None: ...
 
-class MissionKit(_message.Message):
-    __slots__ = ("layouts",)
+class MissionPack(_message.Message):
+    __slots__ = ("layouts", "entity_count", "pack_version", "imported_at")
     class LayoutsEntry(_message.Message):
         __slots__ = ("key", "value")
         KEY_FIELD_NUMBER: _ClassVar[int]
@@ -1126,11 +1126,17 @@ class MissionKit(_message.Message):
         value: str
         def __init__(self, key: _Optional[str] = ..., value: _Optional[str] = ...) -> None: ...
     LAYOUTS_FIELD_NUMBER: _ClassVar[int]
+    ENTITY_COUNT_FIELD_NUMBER: _ClassVar[int]
+    PACK_VERSION_FIELD_NUMBER: _ClassVar[int]
+    IMPORTED_AT_FIELD_NUMBER: _ClassVar[int]
     layouts: _containers.ScalarMap[str, str]
-    def __init__(self, layouts: _Optional[_Mapping[str, str]] = ...) -> None: ...
+    entity_count: int
+    pack_version: str
+    imported_at: _timestamp_pb2.Timestamp
+    def __init__(self, layouts: _Optional[_Mapping[str, str]] = ..., entity_count: _Optional[int] = ..., pack_version: _Optional[str] = ..., imported_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class NodeDevice(_message.Message):
-    __slots__ = ("hostname", "os", "arch", "num_cpu", "os_version", "hydris_version", "hydris_update_available", "mission_kit")
+    __slots__ = ("hostname", "os", "arch", "num_cpu", "os_version", "hydris_version", "hydris_update_available", "mission")
     HOSTNAME_FIELD_NUMBER: _ClassVar[int]
     OS_FIELD_NUMBER: _ClassVar[int]
     ARCH_FIELD_NUMBER: _ClassVar[int]
@@ -1138,7 +1144,7 @@ class NodeDevice(_message.Message):
     OS_VERSION_FIELD_NUMBER: _ClassVar[int]
     HYDRIS_VERSION_FIELD_NUMBER: _ClassVar[int]
     HYDRIS_UPDATE_AVAILABLE_FIELD_NUMBER: _ClassVar[int]
-    MISSION_KIT_FIELD_NUMBER: _ClassVar[int]
+    MISSION_FIELD_NUMBER: _ClassVar[int]
     hostname: str
     os: str
     arch: str
@@ -1146,8 +1152,8 @@ class NodeDevice(_message.Message):
     os_version: str
     hydris_version: str
     hydris_update_available: str
-    mission_kit: MissionKit
-    def __init__(self, hostname: _Optional[str] = ..., os: _Optional[str] = ..., arch: _Optional[str] = ..., num_cpu: _Optional[int] = ..., os_version: _Optional[str] = ..., hydris_version: _Optional[str] = ..., hydris_update_available: _Optional[str] = ..., mission_kit: _Optional[_Union[MissionKit, _Mapping]] = ...) -> None: ...
+    mission: MissionPack
+    def __init__(self, hostname: _Optional[str] = ..., os: _Optional[str] = ..., arch: _Optional[str] = ..., num_cpu: _Optional[int] = ..., os_version: _Optional[str] = ..., hydris_version: _Optional[str] = ..., hydris_update_available: _Optional[str] = ..., mission: _Optional[_Union[MissionPack, _Mapping]] = ...) -> None: ...
 
 class UsbDevice(_message.Message):
     __slots__ = ("vendor_id", "product_id", "device_class", "device_subclass", "device_protocol", "manufacturer_name", "product_name", "serial_number")
@@ -1560,14 +1566,26 @@ class RunTaskResponse(_message.Message):
     def __init__(self, executionId: _Optional[str] = ..., status: _Optional[_Union[TaskStatus, str]] = ..., humanReadableReason: _Optional[str] = ...) -> None: ...
 
 class HardResetRequest(_message.Message):
-    __slots__ = ("mission_id",)
-    MISSION_ID_FIELD_NUMBER: _ClassVar[int]
-    mission_id: str
-    def __init__(self, mission_id: _Optional[str] = ...) -> None: ...
+    __slots__ = ()
+    def __init__(self) -> None: ...
 
 class HardResetResponse(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
+
+class LoadMissionRequest(_message.Message):
+    __slots__ = ("artifact_id",)
+    ARTIFACT_ID_FIELD_NUMBER: _ClassVar[int]
+    artifact_id: str
+    def __init__(self, artifact_id: _Optional[str] = ...) -> None: ...
+
+class LoadMissionResponse(_message.Message):
+    __slots__ = ("mission", "error")
+    MISSION_FIELD_NUMBER: _ClassVar[int]
+    ERROR_FIELD_NUMBER: _ClassVar[int]
+    mission: MissionPack
+    error: str
+    def __init__(self, mission: _Optional[_Union[MissionPack, _Mapping]] = ..., error: _Optional[str] = ...) -> None: ...
 
 class TimeSyncRequest(_message.Message):
     __slots__ = ("t1", "t4")

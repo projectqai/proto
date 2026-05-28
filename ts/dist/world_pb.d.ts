@@ -2220,20 +2220,35 @@ export declare type DeviceComponent = Message<"world.DeviceComponent"> & {
 export declare const DeviceComponentSchema: GenMessage<DeviceComponent>;
 
 /**
- * @generated from message world.MissionKit
+ * @generated from message world.MissionPack
  */
-export declare type MissionKit = Message<"world.MissionKit"> & {
+export declare type MissionPack = Message<"world.MissionPack"> & {
   /**
    * @generated from field: map<string, string> layouts = 1;
    */
   layouts: { [key: string]: string };
+
+  /**
+   * @generated from field: optional int32 entity_count = 2;
+   */
+  entityCount?: number;
+
+  /**
+   * @generated from field: optional string pack_version = 3;
+   */
+  packVersion?: string;
+
+  /**
+   * @generated from field: optional google.protobuf.Timestamp imported_at = 4;
+   */
+  importedAt?: Timestamp;
 };
 
 /**
- * Describes the message world.MissionKit.
- * Use `create(MissionKitSchema)` to create a new message.
+ * Describes the message world.MissionPack.
+ * Use `create(MissionPackSchema)` to create a new message.
  */
-export declare const MissionKitSchema: GenMessage<MissionKit>;
+export declare const MissionPackSchema: GenMessage<MissionPack>;
 
 /**
  * @generated from message world.NodeDevice
@@ -2275,9 +2290,9 @@ export declare type NodeDevice = Message<"world.NodeDevice"> & {
   hydrisUpdateAvailable?: string;
 
   /**
-   * @generated from field: optional world.MissionKit mission_kit = 8;
+   * @generated from field: optional world.MissionPack mission = 8;
    */
-  missionKit?: MissionKit;
+  mission?: MissionPack;
 };
 
 /**
@@ -3501,10 +3516,6 @@ export declare const RunTaskResponseSchema: GenMessage<RunTaskResponse>;
  * @generated from message world.HardResetRequest
  */
 export declare type HardResetRequest = Message<"world.HardResetRequest"> & {
-  /**
-   * @generated from field: optional string mission_id = 1;
-   */
-  missionId?: string;
 };
 
 /**
@@ -3524,6 +3535,43 @@ export declare type HardResetResponse = Message<"world.HardResetResponse"> & {
  * Use `create(HardResetResponseSchema)` to create a new message.
  */
 export declare const HardResetResponseSchema: GenMessage<HardResetResponse>;
+
+/**
+ * @generated from message world.LoadMissionRequest
+ */
+export declare type LoadMissionRequest = Message<"world.LoadMissionRequest"> & {
+  /**
+   * @generated from field: string artifact_id = 1;
+   */
+  artifactId: string;
+};
+
+/**
+ * Describes the message world.LoadMissionRequest.
+ * Use `create(LoadMissionRequestSchema)` to create a new message.
+ */
+export declare const LoadMissionRequestSchema: GenMessage<LoadMissionRequest>;
+
+/**
+ * @generated from message world.LoadMissionResponse
+ */
+export declare type LoadMissionResponse = Message<"world.LoadMissionResponse"> & {
+  /**
+   * @generated from field: world.MissionPack mission = 1;
+   */
+  mission?: MissionPack;
+
+  /**
+   * @generated from field: optional string error = 2;
+   */
+  error?: string;
+};
+
+/**
+ * Describes the message world.LoadMissionResponse.
+ * Use `create(LoadMissionResponseSchema)` to create a new message.
+ */
+export declare const LoadMissionResponseSchema: GenMessage<LoadMissionResponse>;
 
 /**
  * @generated from message world.TimeSyncRequest
@@ -4726,6 +4774,16 @@ export declare const WorldService: GenService<{
     methodKind: "unary";
     input: typeof HardResetRequestSchema;
     output: typeof HardResetResponseSchema;
+  },
+  /**
+   * replace the world with a stored mission pack artifact
+   *
+   * @generated from rpc world.WorldService.LoadMission
+   */
+  loadMission: {
+    methodKind: "unary";
+    input: typeof LoadMissionRequestSchema;
+    output: typeof LoadMissionResponseSchema;
   },
   /**
    * NTP-style time synchronization for federation clock offset estimation

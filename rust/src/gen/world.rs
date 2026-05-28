@@ -2092,12 +2092,18 @@ pub struct DeviceComponent {
     pub ble: ::core::option::Option<BleDevice>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct MissionKit {
+pub struct MissionPack {
     #[prost(map = "string, string", tag = "1")]
     pub layouts: ::std::collections::HashMap<
         ::prost::alloc::string::String,
         ::prost::alloc::string::String,
     >,
+    #[prost(int32, optional, tag = "2")]
+    pub entity_count: ::core::option::Option<i32>,
+    #[prost(string, optional, tag = "3")]
+    pub pack_version: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "4")]
+    pub imported_at: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct NodeDevice {
@@ -2116,7 +2122,7 @@ pub struct NodeDevice {
     #[prost(string, optional, tag = "7")]
     pub hydris_update_available: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(message, optional, tag = "8")]
-    pub mission_kit: ::core::option::Option<MissionKit>,
+    pub mission: ::core::option::Option<MissionPack>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UsbDevice {
@@ -2568,13 +2574,22 @@ pub struct RunTaskResponse {
     #[prost(string, optional, tag = "3")]
     pub human_readable_reason: ::core::option::Option<::prost::alloc::string::String>,
 }
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct HardResetRequest {
-    #[prost(string, optional, tag = "1")]
-    pub mission_id: ::core::option::Option<::prost::alloc::string::String>,
-}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct HardResetRequest {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct HardResetResponse {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct LoadMissionRequest {
+    #[prost(string, tag = "1")]
+    pub artifact_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct LoadMissionResponse {
+    #[prost(message, optional, tag = "1")]
+    pub mission: ::core::option::Option<MissionPack>,
+    #[prost(string, optional, tag = "2")]
+    pub error: ::core::option::Option<::prost::alloc::string::String>,
+}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TimeSyncRequest {
     #[prost(message, optional, tag = "1")]
@@ -3755,6 +3770,31 @@ pub mod world_service_client {
                 .insert(GrpcMethod::new("world.WorldService", "HardReset"));
             self.inner.unary(req, path, codec).await
         }
+        /// replace the world with a stored mission pack artifact
+        pub async fn load_mission(
+            &mut self,
+            request: impl tonic::IntoRequest<super::LoadMissionRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::LoadMissionResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/world.WorldService/LoadMission",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("world.WorldService", "LoadMission"));
+            self.inner.unary(req, path, codec).await
+        }
         /// NTP-style time synchronization for federation clock offset estimation
         pub async fn time_sync(
             &mut self,
@@ -3860,6 +3900,14 @@ pub mod world_service_server {
             request: tonic::Request<super::HardResetRequest>,
         ) -> std::result::Result<
             tonic::Response<super::HardResetResponse>,
+            tonic::Status,
+        >;
+        /// replace the world with a stored mission pack artifact
+        async fn load_mission(
+            &self,
+            request: tonic::Request<super::LoadMissionRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::LoadMissionResponse>,
             tonic::Status,
         >;
         /// NTP-style time synchronization for federation clock offset estimation
@@ -4294,6 +4342,51 @@ pub mod world_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = HardResetSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/world.WorldService/LoadMission" => {
+                    #[allow(non_camel_case_types)]
+                    struct LoadMissionSvc<T: WorldService>(pub Arc<T>);
+                    impl<
+                        T: WorldService,
+                    > tonic::server::UnaryService<super::LoadMissionRequest>
+                    for LoadMissionSvc<T> {
+                        type Response = super::LoadMissionResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::LoadMissionRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as WorldService>::load_mission(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = LoadMissionSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

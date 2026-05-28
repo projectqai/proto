@@ -813,8 +813,11 @@ message DeviceComponent {
   optional BleDevice ble = 27;
 }
 
-message MissionKit {
+message MissionPack {
   map<string, string> layouts = 1;
+  optional int32 entity_count = 2;
+  optional string pack_version = 3;
+  optional google.protobuf.Timestamp imported_at = 4;
 }
 
 message NodeDevice {
@@ -825,7 +828,7 @@ message NodeDevice {
   optional string os_version = 5;
   optional string hydris_version = 6;
   optional string hydris_update_available = 7;
-  optional MissionKit mission_kit = 8;
+  optional MissionPack mission = 8;
 }
 
 message UsbDevice {
@@ -1274,11 +1277,17 @@ message RunTaskResponse {
   optional string humanReadableReason = 3;
 }
 
-message HardResetRequest {
-  optional string mission_id = 1;
+message HardResetRequest {}
+message HardResetResponse {}
+
+message LoadMissionRequest {
+  string artifact_id = 1;
 }
 
-message HardResetResponse {}
+message LoadMissionResponse {
+  MissionPack mission = 1;
+  optional string error = 2;
+}
 
 message TimeSyncRequest {
   google.protobuf.Timestamp t1 = 1;
@@ -1319,6 +1328,9 @@ service WorldService {
 
   // clear all engine state including persistence
   rpc HardReset(HardResetRequest) returns (HardResetResponse);
+
+  // replace the world with a stored mission pack artifact
+  rpc LoadMission(LoadMissionRequest) returns (LoadMissionResponse);
 
   // NTP-style time synchronization for federation clock offset estimation
   rpc TimeSync(TimeSyncRequest) returns (TimeSyncResponse);
