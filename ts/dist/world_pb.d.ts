@@ -549,6 +549,13 @@ export declare type MediaStream = Message<"world.MediaStream"> & {
    * @generated from field: optional int32 height = 12;
    */
   height?: number;
+
+  /**
+   * wall-clock time of the first frame (mediaTime=0)
+   *
+   * @generated from field: optional google.protobuf.Timestamp epoch = 13;
+   */
+  epoch?: Timestamp;
 };
 
 /**

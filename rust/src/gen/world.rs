@@ -1419,6 +1419,9 @@ pub struct MediaStream {
     /// resolution height in pixels
     #[prost(int32, optional, tag = "12")]
     pub height: ::core::option::Option<i32>,
+    /// wall-clock time of the first frame (mediaTime=0)
+    #[prost(message, optional, tag = "13")]
+    pub epoch: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CameraComponent {

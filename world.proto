@@ -199,6 +199,7 @@ message MediaStream {
   string codec = 10; // video codec, e.g. "H264", "H265"
   optional int32 width = 11; // resolution width in pixels
   optional int32 height = 12; // resolution height in pixels
+  optional google.protobuf.Timestamp epoch = 13; // wall-clock time of the first frame (mediaTime=0)
 }
 
 message CameraComponent {

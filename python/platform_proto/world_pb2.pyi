@@ -559,7 +559,7 @@ class InteractivityComponent(_message.Message):
     def __init__(self, icon: _Optional[str] = ..., reference_url: _Optional[str] = ...) -> None: ...
 
 class MediaStream(_message.Message):
-    __slots__ = ("label", "url", "protocol", "role", "codec", "width", "height")
+    __slots__ = ("label", "url", "protocol", "role", "codec", "width", "height", "epoch")
     LABEL_FIELD_NUMBER: _ClassVar[int]
     URL_FIELD_NUMBER: _ClassVar[int]
     PROTOCOL_FIELD_NUMBER: _ClassVar[int]
@@ -567,6 +567,7 @@ class MediaStream(_message.Message):
     CODEC_FIELD_NUMBER: _ClassVar[int]
     WIDTH_FIELD_NUMBER: _ClassVar[int]
     HEIGHT_FIELD_NUMBER: _ClassVar[int]
+    EPOCH_FIELD_NUMBER: _ClassVar[int]
     label: str
     url: str
     protocol: MediaStreamProtocol
@@ -574,7 +575,8 @@ class MediaStream(_message.Message):
     codec: str
     width: int
     height: int
-    def __init__(self, label: _Optional[str] = ..., url: _Optional[str] = ..., protocol: _Optional[_Union[MediaStreamProtocol, str]] = ..., role: _Optional[_Union[MediaStreamRole, str]] = ..., codec: _Optional[str] = ..., width: _Optional[int] = ..., height: _Optional[int] = ...) -> None: ...
+    epoch: _timestamp_pb2.Timestamp
+    def __init__(self, label: _Optional[str] = ..., url: _Optional[str] = ..., protocol: _Optional[_Union[MediaStreamProtocol, str]] = ..., role: _Optional[_Union[MediaStreamRole, str]] = ..., codec: _Optional[str] = ..., width: _Optional[int] = ..., height: _Optional[int] = ..., epoch: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class CameraComponent(_message.Message):
     __slots__ = ("streams", "focal_point", "fov", "range_min", "range_max", "fov_wide", "fov_tele")

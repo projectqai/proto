@@ -2140,6 +2140,7 @@ type MediaStream struct {
 	Codec         string                 `protobuf:"bytes,10,opt,name=codec,proto3" json:"codec,omitempty"`                          // video codec, e.g. "H264", "H265"
 	Width         *int32                 `protobuf:"varint,11,opt,name=width,proto3,oneof" json:"width,omitempty"`                   // resolution width in pixels
 	Height        *int32                 `protobuf:"varint,12,opt,name=height,proto3,oneof" json:"height,omitempty"`                 // resolution height in pixels
+	Epoch         *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=epoch,proto3,oneof" json:"epoch,omitempty"`                    // wall-clock time of the first frame (mediaTime=0)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2221,6 +2222,13 @@ func (x *MediaStream) GetHeight() int32 {
 		return *x.Height
 	}
 	return 0
+}
+
+func (x *MediaStream) GetEpoch() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Epoch
+	}
+	return nil
 }
 
 type CameraComponent struct {
@@ -8735,7 +8743,7 @@ const file_world_proto_rawDesc = "" +
 	"\x04icon\x18\x01 \x01(\tH\x00R\x04icon\x88\x01\x01\x12(\n" +
 	"\rreference_url\x18\x03 \x01(\tH\x01R\freferenceUrl\x88\x01\x01B\a\n" +
 	"\x05_iconB\x10\n" +
-	"\x0e_reference_url\"\xfc\x01\n" +
+	"\x0e_reference_url\"\xbd\x02\n" +
 	"\vMediaStream\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12\x10\n" +
 	"\x03url\x18\x02 \x01(\tR\x03url\x126\n" +
@@ -8744,9 +8752,11 @@ const file_world_proto_rawDesc = "" +
 	"\x05codec\x18\n" +
 	" \x01(\tR\x05codec\x12\x19\n" +
 	"\x05width\x18\v \x01(\x05H\x00R\x05width\x88\x01\x01\x12\x1b\n" +
-	"\x06height\x18\f \x01(\x05H\x01R\x06height\x88\x01\x01B\b\n" +
+	"\x06height\x18\f \x01(\x05H\x01R\x06height\x88\x01\x01\x125\n" +
+	"\x05epoch\x18\r \x01(\v2\x1a.google.protobuf.TimestampH\x02R\x05epoch\x88\x01\x01B\b\n" +
 	"\x06_widthB\t\n" +
-	"\a_height\"\xce\x02\n" +
+	"\a_heightB\b\n" +
+	"\x06_epoch\"\xce\x02\n" +
 	"\x0fCameraComponent\x12,\n" +
 	"\astreams\x18\x01 \x03(\v2\x12.world.MediaStreamR\astreams\x12$\n" +
 	"\vfocal_point\x18\x02 \x01(\tH\x00R\n" +
@@ -9881,138 +9891,139 @@ var file_world_proto_depIdxs = []int32{
 	1,   // 49: world.GnssComponent.fix_type:type_name -> world.GnssFixType
 	2,   // 50: world.MediaStream.protocol:type_name -> world.MediaStreamProtocol
 	3,   // 51: world.MediaStream.role:type_name -> world.MediaStreamRole
-	27,  // 52: world.CameraComponent.streams:type_name -> world.MediaStream
-	29,  // 53: world.ArtifactComponent.location:type_name -> world.ArtifactLocation
-	124, // 54: world.DetectionComponent.lastMeasured:type_name -> google.protobuf.Timestamp
-	31,  // 55: world.DetectionComponent.image_bbox:type_name -> world.ImageBoundingBox
-	37,  // 56: world.BoundsComponent.covariance:type_name -> world.CovarianceMatrix
-	37,  // 57: world.CartesianOffset.covariance:type_name -> world.CovarianceMatrix
-	36,  // 58: world.CartesianOffset.orientation:type_name -> world.Quaternion
-	37,  // 59: world.PolarOffset.covariance:type_name -> world.CovarianceMatrix
-	36,  // 60: world.PolarOffset.orientation:type_name -> world.Quaternion
-	38,  // 61: world.PoseComponent.cartesian:type_name -> world.CartesianOffset
-	39,  // 62: world.PoseComponent.polar:type_name -> world.PolarOffset
-	38,  // 63: world.TargetPoseComponent.cartesian:type_name -> world.CartesianOffset
-	39,  // 64: world.TargetPoseComponent.polar:type_name -> world.PolarOffset
-	36,  // 65: world.OrientationComponent.orientation:type_name -> world.Quaternion
-	37,  // 66: world.OrientationComponent.covariance:type_name -> world.CovarianceMatrix
-	46,  // 67: world.TaskableComponent.context:type_name -> world.TaskableContext
-	47,  // 68: world.TaskableComponent.assignee:type_name -> world.TaskableAssignee
-	125, // 69: world.TaskableComponent.schema:type_name -> google.protobuf.Struct
-	4,   // 70: world.TaskableComponent.mode:type_name -> world.TaskableMode
-	126, // 71: world.TaskableComponent.target:type_name -> world.TaskableTarget
-	127, // 72: world.TaskableComponent.taxonomy:type_name -> world.TaskingTaxonomy
-	125, // 73: world.TaskExecutionComponent.parameters:type_name -> google.protobuf.Struct
-	5,   // 74: world.TaskExecutionComponent.state:type_name -> world.TaskExecutionState
-	128, // 75: world.TaskExecutionComponent.target:type_name -> world.TaskExecutionTarget
-	37,  // 76: world.KinematicsEnu.covariance:type_name -> world.CovarianceMatrix
-	50,  // 77: world.KinematicsComponent.velocityEnu:type_name -> world.KinematicsEnu
-	50,  // 78: world.KinematicsComponent.accelerationEnu:type_name -> world.KinematicsEnu
-	42,  // 79: world.KinematicsComponent.angularVelocityBody:type_name -> world.AngularVelocity
-	129, // 80: world.Geometry.planar:type_name -> world.PlanarGeometry
-	52,  // 81: world.GeoShapeComponent.geometry:type_name -> world.Geometry
-	130, // 82: world.GeoShapeComponent.extrusion:type_name -> world.GeometryExtrusion
-	131, // 83: world.LocalShapeComponent.geometry:type_name -> world.LocalGeometry
-	130, // 84: world.LocalShapeComponent.extrusion:type_name -> world.GeometryExtrusion
-	7,   // 85: world.ClassificationComponent.dimension:type_name -> world.ClassificationBattleDimension
-	6,   // 86: world.ClassificationComponent.identity:type_name -> world.ClassificationIdentity
-	132, // 87: world.ClassificationComponent.taxonomy:type_name -> world.ClassificationTaxonomy
-	8,   // 88: world.IdentityComponent.affiliation:type_name -> world.Affiliation
-	57,  // 89: world.TransponderComponent.ais:type_name -> world.TransponderAIS
-	58,  // 90: world.TransponderComponent.adsb:type_name -> world.TransponderADSB
-	9,   // 91: world.NavigationComponent.mode:type_name -> world.NavigationMode
-	124, // 92: world.MissionComponent.eta:type_name -> google.protobuf.Timestamp
-	10,  // 93: world.LinkComponent.status:type_name -> world.LinkStatus
-	124, // 94: world.LinkComponent.last_seen:type_name -> google.protobuf.Timestamp
-	124, // 95: world.CaptureComponent.captured_at:type_name -> google.protobuf.Timestamp
-	125, // 96: world.ConfigurableComponent.schema:type_name -> google.protobuf.Struct
-	125, // 97: world.ConfigurableComponent.value:type_name -> google.protobuf.Struct
-	12,  // 98: world.ConfigurableComponent.state:type_name -> world.ConfigurableState
-	66,  // 99: world.ConfigurableComponent.supported_device_classes:type_name -> world.DeviceClassOption
-	124, // 100: world.ConfigurableComponent.scheduled_at:type_name -> google.protobuf.Timestamp
-	11,  // 101: world.DeviceComponent.state:type_name -> world.DeviceState
-	70,  // 102: world.DeviceComponent.node:type_name -> world.NodeDevice
-	71,  // 103: world.DeviceComponent.usb:type_name -> world.UsbDevice
-	72,  // 104: world.DeviceComponent.ip:type_name -> world.IpDevice
-	74,  // 105: world.DeviceComponent.serial:type_name -> world.SerialDevice
-	73,  // 106: world.DeviceComponent.ethernet:type_name -> world.EthernetDevice
-	76,  // 107: world.DeviceComponent.lpwan:type_name -> world.LPWANDevice
-	75,  // 108: world.DeviceComponent.meshtastic:type_name -> world.MeshtasticDevice
-	77,  // 109: world.DeviceComponent.ble:type_name -> world.BleDevice
-	119, // 110: world.MissionPack.layouts:type_name -> world.MissionPack.LayoutsEntry
-	124, // 111: world.MissionPack.imported_at:type_name -> google.protobuf.Timestamp
-	69,  // 112: world.NodeDevice.mission:type_name -> world.MissionPack
-	125, // 113: world.ConfigurationComponent.value:type_name -> google.protobuf.Struct
-	120, // 114: world.MapLayerComponent.tiles:type_name -> world.MapLayerComponent.Tile
-	121, // 115: world.MapLayerComponent.image:type_name -> world.MapLayerComponent.Image
-	133, // 116: world.ManualControlComponent.input:type_name -> world.ManualControlInput
-	133, // 117: world.TargetManualControlComponent.input:type_name -> world.ManualControlInput
-	89,  // 118: world.EntityFilter.geo:type_name -> world.GeoFilter
-	88,  // 119: world.EntityFilter.taskable:type_name -> world.TaskableFilter
-	85,  // 120: world.EntityFilter.controller:type_name -> world.ControllerFilter
-	86,  // 121: world.EntityFilter.track:type_name -> world.TrackFilter
-	87,  // 122: world.EntityFilter.mission:type_name -> world.MissionFilter
-	94,  // 123: world.EntityFilter.channel:type_name -> world.ChannelFilter
-	90,  // 124: world.EntityFilter.device:type_name -> world.DeviceFilter
-	93,  // 125: world.EntityFilter.config:type_name -> world.ConfigurationFilter
-	84,  // 126: world.EntityFilter.or:type_name -> world.EntityFilter
-	84,  // 127: world.EntityFilter.not:type_name -> world.EntityFilter
-	46,  // 128: world.TaskableFilter.context:type_name -> world.TaskableContext
-	47,  // 129: world.TaskableFilter.assignee:type_name -> world.TaskableAssignee
-	52,  // 130: world.GeoFilter.geometry:type_name -> world.Geometry
-	91,  // 131: world.DeviceFilter.ble:type_name -> world.BleDeviceFilter
-	92,  // 132: world.DeviceFilter.usb:type_name -> world.UsbDeviceFilter
-	13,  // 133: world.SortOption.field:type_name -> world.SortField
-	134, // 134: world.SortOption.metric_kind:type_name -> world.MetricKind
-	0,   // 135: world.WatchBehavior.min_priority:type_name -> world.Priority
-	84,  // 136: world.ListEntitiesRequest.filter:type_name -> world.EntityFilter
-	95,  // 137: world.ListEntitiesRequest.sort:type_name -> world.SortOption
-	96,  // 138: world.ListEntitiesRequest.behaviour:type_name -> world.WatchBehavior
-	17,  // 139: world.ListEntitiesResponse.entities:type_name -> world.Entity
-	125, // 140: world.ListEntitiesResponse.internal:type_name -> google.protobuf.Struct
-	17,  // 141: world.EntityChangeRequest.changes:type_name -> world.Entity
-	17,  // 142: world.EntityChangeRequest.replacements:type_name -> world.Entity
-	17,  // 143: world.EntityChangeEvent.entity:type_name -> world.Entity
-	14,  // 144: world.EntityChangeEvent.t:type_name -> world.EntityChange
-	103, // 145: world.EntityChangeBatch.events:type_name -> world.EntityChangeEvent
-	17,  // 146: world.GetEntityResponse.entity:type_name -> world.Entity
-	125, // 147: world.GetEntityResponse.internal:type_name -> google.protobuf.Struct
-	17,  // 148: world.GetLocalNodeResponse.entity:type_name -> world.Entity
-	52,  // 149: world.ObserverState.geo:type_name -> world.Geometry
-	124, // 150: world.ObserverState.viewHistory:type_name -> google.protobuf.Timestamp
-	128, // 151: world.RunTaskRequest.target:type_name -> world.TaskExecutionTarget
-	16,  // 152: world.RunTaskResponse.status:type_name -> world.TaskStatus
-	69,  // 153: world.LoadMissionResponse.mission:type_name -> world.MissionPack
-	124, // 154: world.TimeSyncRequest.t1:type_name -> google.protobuf.Timestamp
-	124, // 155: world.TimeSyncRequest.t4:type_name -> google.protobuf.Timestamp
-	124, // 156: world.TimeSyncResponse.t1:type_name -> google.protobuf.Timestamp
-	124, // 157: world.TimeSyncResponse.t2:type_name -> google.protobuf.Timestamp
-	124, // 158: world.TimeSyncResponse.t3:type_name -> google.protobuf.Timestamp
-	97,  // 159: world.WorldService.ListEntities:input_type -> world.ListEntitiesRequest
-	105, // 160: world.WorldService.GetEntity:input_type -> world.GetEntityRequest
-	97,  // 161: world.WorldService.WatchEntities:input_type -> world.ListEntitiesRequest
-	99,  // 162: world.WorldService.Push:input_type -> world.EntityChangeRequest
-	100, // 163: world.WorldService.ExpireEntity:input_type -> world.ExpireEntityRequest
-	107, // 164: world.WorldService.GetLocalNode:input_type -> world.GetLocalNodeRequest
-	111, // 165: world.WorldService.RunTask:input_type -> world.RunTaskRequest
-	113, // 166: world.WorldService.HardReset:input_type -> world.HardResetRequest
-	115, // 167: world.WorldService.LoadMission:input_type -> world.LoadMissionRequest
-	117, // 168: world.WorldService.TimeSync:input_type -> world.TimeSyncRequest
-	98,  // 169: world.WorldService.ListEntities:output_type -> world.ListEntitiesResponse
-	106, // 170: world.WorldService.GetEntity:output_type -> world.GetEntityResponse
-	103, // 171: world.WorldService.WatchEntities:output_type -> world.EntityChangeEvent
-	102, // 172: world.WorldService.Push:output_type -> world.EntityChangeResponse
-	101, // 173: world.WorldService.ExpireEntity:output_type -> world.ExpireEntityResponse
-	108, // 174: world.WorldService.GetLocalNode:output_type -> world.GetLocalNodeResponse
-	112, // 175: world.WorldService.RunTask:output_type -> world.RunTaskResponse
-	114, // 176: world.WorldService.HardReset:output_type -> world.HardResetResponse
-	116, // 177: world.WorldService.LoadMission:output_type -> world.LoadMissionResponse
-	118, // 178: world.WorldService.TimeSync:output_type -> world.TimeSyncResponse
-	169, // [169:179] is the sub-list for method output_type
-	159, // [159:169] is the sub-list for method input_type
-	159, // [159:159] is the sub-list for extension type_name
-	159, // [159:159] is the sub-list for extension extendee
-	0,   // [0:159] is the sub-list for field type_name
+	124, // 52: world.MediaStream.epoch:type_name -> google.protobuf.Timestamp
+	27,  // 53: world.CameraComponent.streams:type_name -> world.MediaStream
+	29,  // 54: world.ArtifactComponent.location:type_name -> world.ArtifactLocation
+	124, // 55: world.DetectionComponent.lastMeasured:type_name -> google.protobuf.Timestamp
+	31,  // 56: world.DetectionComponent.image_bbox:type_name -> world.ImageBoundingBox
+	37,  // 57: world.BoundsComponent.covariance:type_name -> world.CovarianceMatrix
+	37,  // 58: world.CartesianOffset.covariance:type_name -> world.CovarianceMatrix
+	36,  // 59: world.CartesianOffset.orientation:type_name -> world.Quaternion
+	37,  // 60: world.PolarOffset.covariance:type_name -> world.CovarianceMatrix
+	36,  // 61: world.PolarOffset.orientation:type_name -> world.Quaternion
+	38,  // 62: world.PoseComponent.cartesian:type_name -> world.CartesianOffset
+	39,  // 63: world.PoseComponent.polar:type_name -> world.PolarOffset
+	38,  // 64: world.TargetPoseComponent.cartesian:type_name -> world.CartesianOffset
+	39,  // 65: world.TargetPoseComponent.polar:type_name -> world.PolarOffset
+	36,  // 66: world.OrientationComponent.orientation:type_name -> world.Quaternion
+	37,  // 67: world.OrientationComponent.covariance:type_name -> world.CovarianceMatrix
+	46,  // 68: world.TaskableComponent.context:type_name -> world.TaskableContext
+	47,  // 69: world.TaskableComponent.assignee:type_name -> world.TaskableAssignee
+	125, // 70: world.TaskableComponent.schema:type_name -> google.protobuf.Struct
+	4,   // 71: world.TaskableComponent.mode:type_name -> world.TaskableMode
+	126, // 72: world.TaskableComponent.target:type_name -> world.TaskableTarget
+	127, // 73: world.TaskableComponent.taxonomy:type_name -> world.TaskingTaxonomy
+	125, // 74: world.TaskExecutionComponent.parameters:type_name -> google.protobuf.Struct
+	5,   // 75: world.TaskExecutionComponent.state:type_name -> world.TaskExecutionState
+	128, // 76: world.TaskExecutionComponent.target:type_name -> world.TaskExecutionTarget
+	37,  // 77: world.KinematicsEnu.covariance:type_name -> world.CovarianceMatrix
+	50,  // 78: world.KinematicsComponent.velocityEnu:type_name -> world.KinematicsEnu
+	50,  // 79: world.KinematicsComponent.accelerationEnu:type_name -> world.KinematicsEnu
+	42,  // 80: world.KinematicsComponent.angularVelocityBody:type_name -> world.AngularVelocity
+	129, // 81: world.Geometry.planar:type_name -> world.PlanarGeometry
+	52,  // 82: world.GeoShapeComponent.geometry:type_name -> world.Geometry
+	130, // 83: world.GeoShapeComponent.extrusion:type_name -> world.GeometryExtrusion
+	131, // 84: world.LocalShapeComponent.geometry:type_name -> world.LocalGeometry
+	130, // 85: world.LocalShapeComponent.extrusion:type_name -> world.GeometryExtrusion
+	7,   // 86: world.ClassificationComponent.dimension:type_name -> world.ClassificationBattleDimension
+	6,   // 87: world.ClassificationComponent.identity:type_name -> world.ClassificationIdentity
+	132, // 88: world.ClassificationComponent.taxonomy:type_name -> world.ClassificationTaxonomy
+	8,   // 89: world.IdentityComponent.affiliation:type_name -> world.Affiliation
+	57,  // 90: world.TransponderComponent.ais:type_name -> world.TransponderAIS
+	58,  // 91: world.TransponderComponent.adsb:type_name -> world.TransponderADSB
+	9,   // 92: world.NavigationComponent.mode:type_name -> world.NavigationMode
+	124, // 93: world.MissionComponent.eta:type_name -> google.protobuf.Timestamp
+	10,  // 94: world.LinkComponent.status:type_name -> world.LinkStatus
+	124, // 95: world.LinkComponent.last_seen:type_name -> google.protobuf.Timestamp
+	124, // 96: world.CaptureComponent.captured_at:type_name -> google.protobuf.Timestamp
+	125, // 97: world.ConfigurableComponent.schema:type_name -> google.protobuf.Struct
+	125, // 98: world.ConfigurableComponent.value:type_name -> google.protobuf.Struct
+	12,  // 99: world.ConfigurableComponent.state:type_name -> world.ConfigurableState
+	66,  // 100: world.ConfigurableComponent.supported_device_classes:type_name -> world.DeviceClassOption
+	124, // 101: world.ConfigurableComponent.scheduled_at:type_name -> google.protobuf.Timestamp
+	11,  // 102: world.DeviceComponent.state:type_name -> world.DeviceState
+	70,  // 103: world.DeviceComponent.node:type_name -> world.NodeDevice
+	71,  // 104: world.DeviceComponent.usb:type_name -> world.UsbDevice
+	72,  // 105: world.DeviceComponent.ip:type_name -> world.IpDevice
+	74,  // 106: world.DeviceComponent.serial:type_name -> world.SerialDevice
+	73,  // 107: world.DeviceComponent.ethernet:type_name -> world.EthernetDevice
+	76,  // 108: world.DeviceComponent.lpwan:type_name -> world.LPWANDevice
+	75,  // 109: world.DeviceComponent.meshtastic:type_name -> world.MeshtasticDevice
+	77,  // 110: world.DeviceComponent.ble:type_name -> world.BleDevice
+	119, // 111: world.MissionPack.layouts:type_name -> world.MissionPack.LayoutsEntry
+	124, // 112: world.MissionPack.imported_at:type_name -> google.protobuf.Timestamp
+	69,  // 113: world.NodeDevice.mission:type_name -> world.MissionPack
+	125, // 114: world.ConfigurationComponent.value:type_name -> google.protobuf.Struct
+	120, // 115: world.MapLayerComponent.tiles:type_name -> world.MapLayerComponent.Tile
+	121, // 116: world.MapLayerComponent.image:type_name -> world.MapLayerComponent.Image
+	133, // 117: world.ManualControlComponent.input:type_name -> world.ManualControlInput
+	133, // 118: world.TargetManualControlComponent.input:type_name -> world.ManualControlInput
+	89,  // 119: world.EntityFilter.geo:type_name -> world.GeoFilter
+	88,  // 120: world.EntityFilter.taskable:type_name -> world.TaskableFilter
+	85,  // 121: world.EntityFilter.controller:type_name -> world.ControllerFilter
+	86,  // 122: world.EntityFilter.track:type_name -> world.TrackFilter
+	87,  // 123: world.EntityFilter.mission:type_name -> world.MissionFilter
+	94,  // 124: world.EntityFilter.channel:type_name -> world.ChannelFilter
+	90,  // 125: world.EntityFilter.device:type_name -> world.DeviceFilter
+	93,  // 126: world.EntityFilter.config:type_name -> world.ConfigurationFilter
+	84,  // 127: world.EntityFilter.or:type_name -> world.EntityFilter
+	84,  // 128: world.EntityFilter.not:type_name -> world.EntityFilter
+	46,  // 129: world.TaskableFilter.context:type_name -> world.TaskableContext
+	47,  // 130: world.TaskableFilter.assignee:type_name -> world.TaskableAssignee
+	52,  // 131: world.GeoFilter.geometry:type_name -> world.Geometry
+	91,  // 132: world.DeviceFilter.ble:type_name -> world.BleDeviceFilter
+	92,  // 133: world.DeviceFilter.usb:type_name -> world.UsbDeviceFilter
+	13,  // 134: world.SortOption.field:type_name -> world.SortField
+	134, // 135: world.SortOption.metric_kind:type_name -> world.MetricKind
+	0,   // 136: world.WatchBehavior.min_priority:type_name -> world.Priority
+	84,  // 137: world.ListEntitiesRequest.filter:type_name -> world.EntityFilter
+	95,  // 138: world.ListEntitiesRequest.sort:type_name -> world.SortOption
+	96,  // 139: world.ListEntitiesRequest.behaviour:type_name -> world.WatchBehavior
+	17,  // 140: world.ListEntitiesResponse.entities:type_name -> world.Entity
+	125, // 141: world.ListEntitiesResponse.internal:type_name -> google.protobuf.Struct
+	17,  // 142: world.EntityChangeRequest.changes:type_name -> world.Entity
+	17,  // 143: world.EntityChangeRequest.replacements:type_name -> world.Entity
+	17,  // 144: world.EntityChangeEvent.entity:type_name -> world.Entity
+	14,  // 145: world.EntityChangeEvent.t:type_name -> world.EntityChange
+	103, // 146: world.EntityChangeBatch.events:type_name -> world.EntityChangeEvent
+	17,  // 147: world.GetEntityResponse.entity:type_name -> world.Entity
+	125, // 148: world.GetEntityResponse.internal:type_name -> google.protobuf.Struct
+	17,  // 149: world.GetLocalNodeResponse.entity:type_name -> world.Entity
+	52,  // 150: world.ObserverState.geo:type_name -> world.Geometry
+	124, // 151: world.ObserverState.viewHistory:type_name -> google.protobuf.Timestamp
+	128, // 152: world.RunTaskRequest.target:type_name -> world.TaskExecutionTarget
+	16,  // 153: world.RunTaskResponse.status:type_name -> world.TaskStatus
+	69,  // 154: world.LoadMissionResponse.mission:type_name -> world.MissionPack
+	124, // 155: world.TimeSyncRequest.t1:type_name -> google.protobuf.Timestamp
+	124, // 156: world.TimeSyncRequest.t4:type_name -> google.protobuf.Timestamp
+	124, // 157: world.TimeSyncResponse.t1:type_name -> google.protobuf.Timestamp
+	124, // 158: world.TimeSyncResponse.t2:type_name -> google.protobuf.Timestamp
+	124, // 159: world.TimeSyncResponse.t3:type_name -> google.protobuf.Timestamp
+	97,  // 160: world.WorldService.ListEntities:input_type -> world.ListEntitiesRequest
+	105, // 161: world.WorldService.GetEntity:input_type -> world.GetEntityRequest
+	97,  // 162: world.WorldService.WatchEntities:input_type -> world.ListEntitiesRequest
+	99,  // 163: world.WorldService.Push:input_type -> world.EntityChangeRequest
+	100, // 164: world.WorldService.ExpireEntity:input_type -> world.ExpireEntityRequest
+	107, // 165: world.WorldService.GetLocalNode:input_type -> world.GetLocalNodeRequest
+	111, // 166: world.WorldService.RunTask:input_type -> world.RunTaskRequest
+	113, // 167: world.WorldService.HardReset:input_type -> world.HardResetRequest
+	115, // 168: world.WorldService.LoadMission:input_type -> world.LoadMissionRequest
+	117, // 169: world.WorldService.TimeSync:input_type -> world.TimeSyncRequest
+	98,  // 170: world.WorldService.ListEntities:output_type -> world.ListEntitiesResponse
+	106, // 171: world.WorldService.GetEntity:output_type -> world.GetEntityResponse
+	103, // 172: world.WorldService.WatchEntities:output_type -> world.EntityChangeEvent
+	102, // 173: world.WorldService.Push:output_type -> world.EntityChangeResponse
+	101, // 174: world.WorldService.ExpireEntity:output_type -> world.ExpireEntityResponse
+	108, // 175: world.WorldService.GetLocalNode:output_type -> world.GetLocalNodeResponse
+	112, // 176: world.WorldService.RunTask:output_type -> world.RunTaskResponse
+	114, // 177: world.WorldService.HardReset:output_type -> world.HardResetResponse
+	116, // 178: world.WorldService.LoadMission:output_type -> world.LoadMissionResponse
+	118, // 179: world.WorldService.TimeSync:output_type -> world.TimeSyncResponse
+	170, // [170:180] is the sub-list for method output_type
+	160, // [160:170] is the sub-list for method input_type
+	160, // [160:160] is the sub-list for extension type_name
+	160, // [160:160] is the sub-list for extension extendee
+	0,   // [0:160] is the sub-list for field type_name
 }
 
 func init() { file_world_proto_init() }
