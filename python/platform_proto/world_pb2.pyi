@@ -216,6 +216,7 @@ class EntityComponent(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     EntityComponentTargetManualControl: _ClassVar[EntityComponent]
     EntityComponentBounds: _ClassVar[EntityComponent]
     EntityComponentPolicy: _ClassVar[EntityComponent]
+    EntityComponentAuthorization: _ClassVar[EntityComponent]
 
 class TaskStatus(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -378,13 +379,14 @@ EntityComponentManualControl: EntityComponent
 EntityComponentTargetManualControl: EntityComponent
 EntityComponentBounds: EntityComponent
 EntityComponentPolicy: EntityComponent
+EntityComponentAuthorization: EntityComponent
 TaskStatusInvalid: TaskStatus
 TaskStatusRunning: TaskStatus
 TaskStatusCompleted: TaskStatus
 TaskStatusFailed: TaskStatus
 
 class Entity(_message.Message):
-    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "gnss", "device", "link", "pose", "target_pose", "local_shape", "metric", "config", "configurable", "taskable", "task_execution", "mission", "sensor", "interactivity", "artifact", "chat", "assembly", "map_layer", "manual_control", "target_manual_control", "bounds", "policy")
+    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "gnss", "device", "link", "pose", "target_pose", "local_shape", "metric", "config", "configurable", "taskable", "task_execution", "mission", "sensor", "interactivity", "artifact", "chat", "assembly", "map_layer", "manual_control", "target_manual_control", "bounds", "policy", "authorization")
     ID_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     CONTROLLER_FIELD_NUMBER: _ClassVar[int]
@@ -430,6 +432,7 @@ class Entity(_message.Message):
     TARGET_MANUAL_CONTROL_FIELD_NUMBER: _ClassVar[int]
     BOUNDS_FIELD_NUMBER: _ClassVar[int]
     POLICY_FIELD_NUMBER: _ClassVar[int]
+    AUTHORIZATION_FIELD_NUMBER: _ClassVar[int]
     id: str
     label: str
     controller: Controller
@@ -475,7 +478,8 @@ class Entity(_message.Message):
     target_manual_control: TargetManualControlComponent
     bounds: BoundsComponent
     policy: _policy_pb2.PolicyComponent
-    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., gnss: _Optional[_Union[GnssComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ..., map_layer: _Optional[_Union[MapLayerComponent, _Mapping]] = ..., manual_control: _Optional[_Union[ManualControlComponent, _Mapping]] = ..., target_manual_control: _Optional[_Union[TargetManualControlComponent, _Mapping]] = ..., bounds: _Optional[_Union[BoundsComponent, _Mapping]] = ..., policy: _Optional[_Union[_policy_pb2.PolicyComponent, _Mapping]] = ...) -> None: ...
+    authorization: _policy_pb2.AuthorizationComponent
+    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., gnss: _Optional[_Union[GnssComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ..., map_layer: _Optional[_Union[MapLayerComponent, _Mapping]] = ..., manual_control: _Optional[_Union[ManualControlComponent, _Mapping]] = ..., target_manual_control: _Optional[_Union[TargetManualControlComponent, _Mapping]] = ..., bounds: _Optional[_Union[BoundsComponent, _Mapping]] = ..., policy: _Optional[_Union[_policy_pb2.PolicyComponent, _Mapping]] = ..., authorization: _Optional[_Union[_policy_pb2.AuthorizationComponent, _Mapping]] = ...) -> None: ...
 
 class Controller(_message.Message):
     __slots__ = ("id", "node", "origin")
@@ -602,19 +606,46 @@ class ArtifactLocation(_message.Message):
     url: str
     def __init__(self, url: _Optional[str] = ...) -> None: ...
 
+class ArtifactEncryption(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
 class ArtifactComponent(_message.Message):
-    __slots__ = ("id", "content_type", "location", "size_bytes", "sha256")
+    __slots__ = ("id", "content_type", "location", "size_bytes", "sha256", "encryption", "parts")
+    class PartsEntry(_message.Message):
+        __slots__ = ("key", "value")
+        KEY_FIELD_NUMBER: _ClassVar[int]
+        VALUE_FIELD_NUMBER: _ClassVar[int]
+        key: str
+        value: Artifact
+        def __init__(self, key: _Optional[str] = ..., value: _Optional[_Union[Artifact, _Mapping]] = ...) -> None: ...
     ID_FIELD_NUMBER: _ClassVar[int]
     CONTENT_TYPE_FIELD_NUMBER: _ClassVar[int]
     LOCATION_FIELD_NUMBER: _ClassVar[int]
     SIZE_BYTES_FIELD_NUMBER: _ClassVar[int]
     SHA256_FIELD_NUMBER: _ClassVar[int]
+    ENCRYPTION_FIELD_NUMBER: _ClassVar[int]
+    PARTS_FIELD_NUMBER: _ClassVar[int]
     id: str
     content_type: str
     location: _containers.RepeatedCompositeFieldContainer[ArtifactLocation]
     size_bytes: int
     sha256: str
-    def __init__(self, id: _Optional[str] = ..., content_type: _Optional[str] = ..., location: _Optional[_Iterable[_Union[ArtifactLocation, _Mapping]]] = ..., size_bytes: _Optional[int] = ..., sha256: _Optional[str] = ...) -> None: ...
+    encryption: ArtifactEncryption
+    parts: _containers.MessageMap[str, Artifact]
+    def __init__(self, id: _Optional[str] = ..., content_type: _Optional[str] = ..., location: _Optional[_Iterable[_Union[ArtifactLocation, _Mapping]]] = ..., size_bytes: _Optional[int] = ..., sha256: _Optional[str] = ..., encryption: _Optional[_Union[ArtifactEncryption, _Mapping]] = ..., parts: _Optional[_Mapping[str, Artifact]] = ...) -> None: ...
+
+class Artifact(_message.Message):
+    __slots__ = ("content_type", "location", "size_bytes", "sha256")
+    CONTENT_TYPE_FIELD_NUMBER: _ClassVar[int]
+    LOCATION_FIELD_NUMBER: _ClassVar[int]
+    SIZE_BYTES_FIELD_NUMBER: _ClassVar[int]
+    SHA256_FIELD_NUMBER: _ClassVar[int]
+    content_type: str
+    location: _containers.RepeatedCompositeFieldContainer[ArtifactLocation]
+    size_bytes: int
+    sha256: str
+    def __init__(self, content_type: _Optional[str] = ..., location: _Optional[_Iterable[_Union[ArtifactLocation, _Mapping]]] = ..., size_bytes: _Optional[int] = ..., sha256: _Optional[str] = ...) -> None: ...
 
 class ImageBoundingBox(_message.Message):
     __slots__ = ("x", "y", "width", "height", "frame_width", "frame_height")
@@ -1526,6 +1557,18 @@ class GetEntityResponse(_message.Message):
     entity: Entity
     internal: _struct_pb2.Struct
     def __init__(self, entity: _Optional[_Union[Entity, _Mapping]] = ..., internal: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ...) -> None: ...
+
+class GetSelfRequest(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class GetSelfResponse(_message.Message):
+    __slots__ = ("entity_id", "entity")
+    ENTITY_ID_FIELD_NUMBER: _ClassVar[int]
+    ENTITY_FIELD_NUMBER: _ClassVar[int]
+    entity_id: str
+    entity: Entity
+    def __init__(self, entity_id: _Optional[str] = ..., entity: _Optional[_Union[Entity, _Mapping]] = ...) -> None: ...
 
 class GetLocalNodeRequest(_message.Message):
     __slots__ = ()

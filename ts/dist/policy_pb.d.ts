@@ -28,6 +28,13 @@ export declare type PolicyRule = Message<"world.PolicyRule"> & {
    * @generated from field: optional string cel = 2;
    */
   cel?: string;
+
+  /**
+   * Human-readable label for this rule, shown in logs and UI.
+   *
+   * @generated from field: optional string label = 3;
+   */
+  label?: string;
 };
 
 /**
@@ -66,6 +73,222 @@ export declare type PolicyComponent = Message<"world.PolicyComponent"> & {
  * Use `create(PolicyComponentSchema)` to create a new message.
  */
 export declare const PolicyComponentSchema: GenMessage<PolicyComponent>;
+
+/**
+ * @generated from message world.EntitlementCop
+ */
+export declare type EntitlementCop = Message<"world.EntitlementCop"> & {
+};
+
+/**
+ * Describes the message world.EntitlementCop.
+ * Use `create(EntitlementCopSchema)` to create a new message.
+ */
+export declare const EntitlementCopSchema: GenMessage<EntitlementCop>;
+
+/**
+ * @generated from message world.EntitlementCopWrite
+ */
+export declare type EntitlementCopWrite = Message<"world.EntitlementCopWrite"> & {
+};
+
+/**
+ * Describes the message world.EntitlementCopWrite.
+ * Use `create(EntitlementCopWriteSchema)` to create a new message.
+ */
+export declare const EntitlementCopWriteSchema: GenMessage<EntitlementCopWrite>;
+
+/**
+ * @generated from message world.EntitlementIam
+ */
+export declare type EntitlementIam = Message<"world.EntitlementIam"> & {
+};
+
+/**
+ * Describes the message world.EntitlementIam.
+ * Use `create(EntitlementIamSchema)` to create a new message.
+ */
+export declare const EntitlementIamSchema: GenMessage<EntitlementIam>;
+
+/**
+ * @generated from message world.EntitlementPolicy
+ */
+export declare type EntitlementPolicy = Message<"world.EntitlementPolicy"> & {
+};
+
+/**
+ * Describes the message world.EntitlementPolicy.
+ * Use `create(EntitlementPolicySchema)` to create a new message.
+ */
+export declare const EntitlementPolicySchema: GenMessage<EntitlementPolicy>;
+
+/**
+ * @generated from message world.EntitlementTasking
+ */
+export declare type EntitlementTasking = Message<"world.EntitlementTasking"> & {
+};
+
+/**
+ * Describes the message world.EntitlementTasking.
+ * Use `create(EntitlementTaskingSchema)` to create a new message.
+ */
+export declare const EntitlementTaskingSchema: GenMessage<EntitlementTasking>;
+
+/**
+ * @generated from message world.EntitlementConsequential
+ */
+export declare type EntitlementConsequential = Message<"world.EntitlementConsequential"> & {
+};
+
+/**
+ * Describes the message world.EntitlementConsequential.
+ * Use `create(EntitlementConsequentialSchema)` to create a new message.
+ */
+export declare const EntitlementConsequentialSchema: GenMessage<EntitlementConsequential>;
+
+/**
+ * @generated from message world.EntitlementReset
+ */
+export declare type EntitlementReset = Message<"world.EntitlementReset"> & {
+};
+
+/**
+ * Describes the message world.EntitlementReset.
+ * Use `create(EntitlementResetSchema)` to create a new message.
+ */
+export declare const EntitlementResetSchema: GenMessage<EntitlementReset>;
+
+/**
+ * @generated from message world.EntitlementArtifactsRead
+ */
+export declare type EntitlementArtifactsRead = Message<"world.EntitlementArtifactsRead"> & {
+};
+
+/**
+ * Describes the message world.EntitlementArtifactsRead.
+ * Use `create(EntitlementArtifactsReadSchema)` to create a new message.
+ */
+export declare const EntitlementArtifactsReadSchema: GenMessage<EntitlementArtifactsRead>;
+
+/**
+ * @generated from message world.EntitlementSecrets
+ */
+export declare type EntitlementSecrets = Message<"world.EntitlementSecrets"> & {
+};
+
+/**
+ * Describes the message world.EntitlementSecrets.
+ * Use `create(EntitlementSecretsSchema)` to create a new message.
+ */
+export declare const EntitlementSecretsSchema: GenMessage<EntitlementSecrets>;
+
+/**
+ * @generated from message world.EntitlementSecretsRead
+ */
+export declare type EntitlementSecretsRead = Message<"world.EntitlementSecretsRead"> & {
+};
+
+/**
+ * Describes the message world.EntitlementSecretsRead.
+ * Use `create(EntitlementSecretsReadSchema)` to create a new message.
+ */
+export declare const EntitlementSecretsReadSchema: GenMessage<EntitlementSecretsRead>;
+
+/**
+ * @generated from message world.Entitlement
+ */
+export declare type Entitlement = Message<"world.Entitlement"> & {
+  /**
+   * @generated from oneof world.Entitlement.kind
+   */
+  kind: {
+    /**
+     * @generated from field: world.EntitlementCop cop = 1;
+     */
+    value: EntitlementCop;
+    case: "cop";
+  } | {
+    /**
+     * @generated from field: world.EntitlementCopWrite cop_write = 2;
+     */
+    value: EntitlementCopWrite;
+    case: "copWrite";
+  } | {
+    /**
+     * @generated from field: world.EntitlementIam iam = 3;
+     */
+    value: EntitlementIam;
+    case: "iam";
+  } | {
+    /**
+     * @generated from field: world.EntitlementPolicy policy = 4;
+     */
+    value: EntitlementPolicy;
+    case: "policy";
+  } | {
+    /**
+     * @generated from field: world.EntitlementTasking tasking = 5;
+     */
+    value: EntitlementTasking;
+    case: "tasking";
+  } | {
+    /**
+     * @generated from field: world.EntitlementConsequential consequential = 6;
+     */
+    value: EntitlementConsequential;
+    case: "consequential";
+  } | {
+    /**
+     * @generated from field: world.EntitlementReset reset = 7;
+     */
+    value: EntitlementReset;
+    case: "reset";
+  } | {
+    /**
+     * @generated from field: world.EntitlementArtifactsRead artifacts_read = 8;
+     */
+    value: EntitlementArtifactsRead;
+    case: "artifactsRead";
+  } | {
+    /**
+     * @generated from field: world.EntitlementSecrets secrets = 9;
+     */
+    value: EntitlementSecrets;
+    case: "secrets";
+  } | {
+    /**
+     * @generated from field: world.EntitlementSecretsRead secrets_read = 10;
+     */
+    value: EntitlementSecretsRead;
+    case: "secretsRead";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message world.Entitlement.
+ * Use `create(EntitlementSchema)` to create a new message.
+ */
+export declare const EntitlementSchema: GenMessage<Entitlement>;
+
+/**
+ * Entitlements attached to an auth identity entity (auth:user:*,
+ * auth:token:*, auth:cert:*).
+ * Referenced in the policy chain via "name" in actor.entitlements.
+ *
+ * @generated from message world.AuthorizationComponent
+ */
+export declare type AuthorizationComponent = Message<"world.AuthorizationComponent"> & {
+  /**
+   * @generated from field: repeated world.Entitlement entitlements = 2;
+   */
+  entitlements: Entitlement[];
+};
+
+/**
+ * Describes the message world.AuthorizationComponent.
+ * Use `create(AuthorizationComponentSchema)` to create a new message.
+ */
+export declare const AuthorizationComponentSchema: GenMessage<AuthorizationComponent>;
 
 /**
  * @generated from enum world.PolicyAction

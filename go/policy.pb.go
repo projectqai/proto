@@ -91,7 +91,9 @@ type PolicyRule struct {
 	// Available variables depend on the engine (e.g. peer.address, rpc.method,
 	// rpc.write, request.entity_id, request.components).
 	// If omitted, the rule matches unconditionally.
-	Cel           *string `protobuf:"bytes,2,opt,name=cel,proto3,oneof" json:"cel,omitempty"`
+	Cel *string `protobuf:"bytes,2,opt,name=cel,proto3,oneof" json:"cel,omitempty"`
+	// Human-readable label for this rule, shown in logs and UI.
+	Label         *string `protobuf:"bytes,3,opt,name=label,proto3,oneof" json:"label,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -136,6 +138,13 @@ func (x *PolicyRule) GetAction() PolicyAction {
 func (x *PolicyRule) GetCel() string {
 	if x != nil && x.Cel != nil {
 		return *x.Cel
+	}
+	return ""
+}
+
+func (x *PolicyRule) GetLabel() string {
+	if x != nil && x.Label != nil {
+		return *x.Label
 	}
 	return ""
 }
@@ -199,18 +208,662 @@ func (x *PolicyComponent) GetRules() []*PolicyRule {
 	return nil
 }
 
+type EntitlementCop struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EntitlementCop) Reset() {
+	*x = EntitlementCop{}
+	mi := &file_policy_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EntitlementCop) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EntitlementCop) ProtoMessage() {}
+
+func (x *EntitlementCop) ProtoReflect() protoreflect.Message {
+	mi := &file_policy_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EntitlementCop.ProtoReflect.Descriptor instead.
+func (*EntitlementCop) Descriptor() ([]byte, []int) {
+	return file_policy_proto_rawDescGZIP(), []int{2}
+}
+
+type EntitlementCopWrite struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EntitlementCopWrite) Reset() {
+	*x = EntitlementCopWrite{}
+	mi := &file_policy_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EntitlementCopWrite) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EntitlementCopWrite) ProtoMessage() {}
+
+func (x *EntitlementCopWrite) ProtoReflect() protoreflect.Message {
+	mi := &file_policy_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EntitlementCopWrite.ProtoReflect.Descriptor instead.
+func (*EntitlementCopWrite) Descriptor() ([]byte, []int) {
+	return file_policy_proto_rawDescGZIP(), []int{3}
+}
+
+type EntitlementIam struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EntitlementIam) Reset() {
+	*x = EntitlementIam{}
+	mi := &file_policy_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EntitlementIam) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EntitlementIam) ProtoMessage() {}
+
+func (x *EntitlementIam) ProtoReflect() protoreflect.Message {
+	mi := &file_policy_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EntitlementIam.ProtoReflect.Descriptor instead.
+func (*EntitlementIam) Descriptor() ([]byte, []int) {
+	return file_policy_proto_rawDescGZIP(), []int{4}
+}
+
+type EntitlementPolicy struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EntitlementPolicy) Reset() {
+	*x = EntitlementPolicy{}
+	mi := &file_policy_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EntitlementPolicy) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EntitlementPolicy) ProtoMessage() {}
+
+func (x *EntitlementPolicy) ProtoReflect() protoreflect.Message {
+	mi := &file_policy_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EntitlementPolicy.ProtoReflect.Descriptor instead.
+func (*EntitlementPolicy) Descriptor() ([]byte, []int) {
+	return file_policy_proto_rawDescGZIP(), []int{5}
+}
+
+type EntitlementTasking struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EntitlementTasking) Reset() {
+	*x = EntitlementTasking{}
+	mi := &file_policy_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EntitlementTasking) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EntitlementTasking) ProtoMessage() {}
+
+func (x *EntitlementTasking) ProtoReflect() protoreflect.Message {
+	mi := &file_policy_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EntitlementTasking.ProtoReflect.Descriptor instead.
+func (*EntitlementTasking) Descriptor() ([]byte, []int) {
+	return file_policy_proto_rawDescGZIP(), []int{6}
+}
+
+type EntitlementConsequential struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EntitlementConsequential) Reset() {
+	*x = EntitlementConsequential{}
+	mi := &file_policy_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EntitlementConsequential) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EntitlementConsequential) ProtoMessage() {}
+
+func (x *EntitlementConsequential) ProtoReflect() protoreflect.Message {
+	mi := &file_policy_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EntitlementConsequential.ProtoReflect.Descriptor instead.
+func (*EntitlementConsequential) Descriptor() ([]byte, []int) {
+	return file_policy_proto_rawDescGZIP(), []int{7}
+}
+
+type EntitlementReset struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EntitlementReset) Reset() {
+	*x = EntitlementReset{}
+	mi := &file_policy_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EntitlementReset) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EntitlementReset) ProtoMessage() {}
+
+func (x *EntitlementReset) ProtoReflect() protoreflect.Message {
+	mi := &file_policy_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EntitlementReset.ProtoReflect.Descriptor instead.
+func (*EntitlementReset) Descriptor() ([]byte, []int) {
+	return file_policy_proto_rawDescGZIP(), []int{8}
+}
+
+type EntitlementArtifactsRead struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EntitlementArtifactsRead) Reset() {
+	*x = EntitlementArtifactsRead{}
+	mi := &file_policy_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EntitlementArtifactsRead) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EntitlementArtifactsRead) ProtoMessage() {}
+
+func (x *EntitlementArtifactsRead) ProtoReflect() protoreflect.Message {
+	mi := &file_policy_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EntitlementArtifactsRead.ProtoReflect.Descriptor instead.
+func (*EntitlementArtifactsRead) Descriptor() ([]byte, []int) {
+	return file_policy_proto_rawDescGZIP(), []int{9}
+}
+
+type EntitlementSecrets struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EntitlementSecrets) Reset() {
+	*x = EntitlementSecrets{}
+	mi := &file_policy_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EntitlementSecrets) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EntitlementSecrets) ProtoMessage() {}
+
+func (x *EntitlementSecrets) ProtoReflect() protoreflect.Message {
+	mi := &file_policy_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EntitlementSecrets.ProtoReflect.Descriptor instead.
+func (*EntitlementSecrets) Descriptor() ([]byte, []int) {
+	return file_policy_proto_rawDescGZIP(), []int{10}
+}
+
+type EntitlementSecretsRead struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EntitlementSecretsRead) Reset() {
+	*x = EntitlementSecretsRead{}
+	mi := &file_policy_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EntitlementSecretsRead) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EntitlementSecretsRead) ProtoMessage() {}
+
+func (x *EntitlementSecretsRead) ProtoReflect() protoreflect.Message {
+	mi := &file_policy_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EntitlementSecretsRead.ProtoReflect.Descriptor instead.
+func (*EntitlementSecretsRead) Descriptor() ([]byte, []int) {
+	return file_policy_proto_rawDescGZIP(), []int{11}
+}
+
+type Entitlement struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Kind:
+	//
+	//	*Entitlement_Cop
+	//	*Entitlement_CopWrite
+	//	*Entitlement_Iam
+	//	*Entitlement_Policy
+	//	*Entitlement_Tasking
+	//	*Entitlement_Consequential
+	//	*Entitlement_Reset_
+	//	*Entitlement_ArtifactsRead
+	//	*Entitlement_Secrets
+	//	*Entitlement_SecretsRead
+	Kind          isEntitlement_Kind `protobuf_oneof:"kind"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Entitlement) Reset() {
+	*x = Entitlement{}
+	mi := &file_policy_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Entitlement) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Entitlement) ProtoMessage() {}
+
+func (x *Entitlement) ProtoReflect() protoreflect.Message {
+	mi := &file_policy_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Entitlement.ProtoReflect.Descriptor instead.
+func (*Entitlement) Descriptor() ([]byte, []int) {
+	return file_policy_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *Entitlement) GetKind() isEntitlement_Kind {
+	if x != nil {
+		return x.Kind
+	}
+	return nil
+}
+
+func (x *Entitlement) GetCop() *EntitlementCop {
+	if x != nil {
+		if x, ok := x.Kind.(*Entitlement_Cop); ok {
+			return x.Cop
+		}
+	}
+	return nil
+}
+
+func (x *Entitlement) GetCopWrite() *EntitlementCopWrite {
+	if x != nil {
+		if x, ok := x.Kind.(*Entitlement_CopWrite); ok {
+			return x.CopWrite
+		}
+	}
+	return nil
+}
+
+func (x *Entitlement) GetIam() *EntitlementIam {
+	if x != nil {
+		if x, ok := x.Kind.(*Entitlement_Iam); ok {
+			return x.Iam
+		}
+	}
+	return nil
+}
+
+func (x *Entitlement) GetPolicy() *EntitlementPolicy {
+	if x != nil {
+		if x, ok := x.Kind.(*Entitlement_Policy); ok {
+			return x.Policy
+		}
+	}
+	return nil
+}
+
+func (x *Entitlement) GetTasking() *EntitlementTasking {
+	if x != nil {
+		if x, ok := x.Kind.(*Entitlement_Tasking); ok {
+			return x.Tasking
+		}
+	}
+	return nil
+}
+
+func (x *Entitlement) GetConsequential() *EntitlementConsequential {
+	if x != nil {
+		if x, ok := x.Kind.(*Entitlement_Consequential); ok {
+			return x.Consequential
+		}
+	}
+	return nil
+}
+
+func (x *Entitlement) GetReset_() *EntitlementReset {
+	if x != nil {
+		if x, ok := x.Kind.(*Entitlement_Reset_); ok {
+			return x.Reset_
+		}
+	}
+	return nil
+}
+
+func (x *Entitlement) GetArtifactsRead() *EntitlementArtifactsRead {
+	if x != nil {
+		if x, ok := x.Kind.(*Entitlement_ArtifactsRead); ok {
+			return x.ArtifactsRead
+		}
+	}
+	return nil
+}
+
+func (x *Entitlement) GetSecrets() *EntitlementSecrets {
+	if x != nil {
+		if x, ok := x.Kind.(*Entitlement_Secrets); ok {
+			return x.Secrets
+		}
+	}
+	return nil
+}
+
+func (x *Entitlement) GetSecretsRead() *EntitlementSecretsRead {
+	if x != nil {
+		if x, ok := x.Kind.(*Entitlement_SecretsRead); ok {
+			return x.SecretsRead
+		}
+	}
+	return nil
+}
+
+type isEntitlement_Kind interface {
+	isEntitlement_Kind()
+}
+
+type Entitlement_Cop struct {
+	Cop *EntitlementCop `protobuf:"bytes,1,opt,name=cop,proto3,oneof"`
+}
+
+type Entitlement_CopWrite struct {
+	CopWrite *EntitlementCopWrite `protobuf:"bytes,2,opt,name=cop_write,json=copWrite,proto3,oneof"`
+}
+
+type Entitlement_Iam struct {
+	Iam *EntitlementIam `protobuf:"bytes,3,opt,name=iam,proto3,oneof"`
+}
+
+type Entitlement_Policy struct {
+	Policy *EntitlementPolicy `protobuf:"bytes,4,opt,name=policy,proto3,oneof"`
+}
+
+type Entitlement_Tasking struct {
+	Tasking *EntitlementTasking `protobuf:"bytes,5,opt,name=tasking,proto3,oneof"`
+}
+
+type Entitlement_Consequential struct {
+	Consequential *EntitlementConsequential `protobuf:"bytes,6,opt,name=consequential,proto3,oneof"`
+}
+
+type Entitlement_Reset_ struct {
+	Reset_ *EntitlementReset `protobuf:"bytes,7,opt,name=reset,proto3,oneof"`
+}
+
+type Entitlement_ArtifactsRead struct {
+	ArtifactsRead *EntitlementArtifactsRead `protobuf:"bytes,8,opt,name=artifacts_read,json=artifactsRead,proto3,oneof"`
+}
+
+type Entitlement_Secrets struct {
+	Secrets *EntitlementSecrets `protobuf:"bytes,9,opt,name=secrets,proto3,oneof"`
+}
+
+type Entitlement_SecretsRead struct {
+	SecretsRead *EntitlementSecretsRead `protobuf:"bytes,10,opt,name=secrets_read,json=secretsRead,proto3,oneof"`
+}
+
+func (*Entitlement_Cop) isEntitlement_Kind() {}
+
+func (*Entitlement_CopWrite) isEntitlement_Kind() {}
+
+func (*Entitlement_Iam) isEntitlement_Kind() {}
+
+func (*Entitlement_Policy) isEntitlement_Kind() {}
+
+func (*Entitlement_Tasking) isEntitlement_Kind() {}
+
+func (*Entitlement_Consequential) isEntitlement_Kind() {}
+
+func (*Entitlement_Reset_) isEntitlement_Kind() {}
+
+func (*Entitlement_ArtifactsRead) isEntitlement_Kind() {}
+
+func (*Entitlement_Secrets) isEntitlement_Kind() {}
+
+func (*Entitlement_SecretsRead) isEntitlement_Kind() {}
+
+// Entitlements attached to an auth identity entity (auth:user:*,
+// auth:token:*, auth:cert:*).
+// Referenced in the policy chain via "name" in actor.entitlements.
+type AuthorizationComponent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Entitlements  []*Entitlement         `protobuf:"bytes,2,rep,name=entitlements,proto3" json:"entitlements,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AuthorizationComponent) Reset() {
+	*x = AuthorizationComponent{}
+	mi := &file_policy_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AuthorizationComponent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AuthorizationComponent) ProtoMessage() {}
+
+func (x *AuthorizationComponent) ProtoReflect() protoreflect.Message {
+	mi := &file_policy_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AuthorizationComponent.ProtoReflect.Descriptor instead.
+func (*AuthorizationComponent) Descriptor() ([]byte, []int) {
+	return file_policy_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *AuthorizationComponent) GetEntitlements() []*Entitlement {
+	if x != nil {
+		return x.Entitlements
+	}
+	return nil
+}
+
 var File_policy_proto protoreflect.FileDescriptor
 
 const file_policy_proto_rawDesc = "" +
 	"\n" +
-	"\fpolicy.proto\x12\x05world\"X\n" +
+	"\fpolicy.proto\x12\x05world\"}\n" +
 	"\n" +
 	"PolicyRule\x12+\n" +
 	"\x06action\x18\x01 \x01(\x0e2\x13.world.PolicyActionR\x06action\x12\x15\n" +
-	"\x03cel\x18\x02 \x01(\tH\x00R\x03cel\x88\x01\x01B\x06\n" +
-	"\x04_cel\":\n" +
+	"\x03cel\x18\x02 \x01(\tH\x00R\x03cel\x88\x01\x01\x12\x19\n" +
+	"\x05label\x18\x03 \x01(\tH\x01R\x05label\x88\x01\x01B\x06\n" +
+	"\x04_celB\b\n" +
+	"\x06_label\":\n" +
 	"\x0fPolicyComponent\x12'\n" +
-	"\x05rules\x18\x01 \x03(\v2\x11.world.PolicyRuleR\x05rules*\x80\x01\n" +
+	"\x05rules\x18\x01 \x03(\v2\x11.world.PolicyRuleR\x05rules\"\x10\n" +
+	"\x0eEntitlementCop\"\x15\n" +
+	"\x13EntitlementCopWrite\"\x10\n" +
+	"\x0eEntitlementIam\"\x13\n" +
+	"\x11EntitlementPolicy\"\x14\n" +
+	"\x12EntitlementTasking\"\x1a\n" +
+	"\x18EntitlementConsequential\"\x12\n" +
+	"\x10EntitlementReset\"\x1a\n" +
+	"\x18EntitlementArtifactsRead\"\x14\n" +
+	"\x12EntitlementSecrets\"\x18\n" +
+	"\x16EntitlementSecretsRead\"\xd0\x04\n" +
+	"\vEntitlement\x12)\n" +
+	"\x03cop\x18\x01 \x01(\v2\x15.world.EntitlementCopH\x00R\x03cop\x129\n" +
+	"\tcop_write\x18\x02 \x01(\v2\x1a.world.EntitlementCopWriteH\x00R\bcopWrite\x12)\n" +
+	"\x03iam\x18\x03 \x01(\v2\x15.world.EntitlementIamH\x00R\x03iam\x122\n" +
+	"\x06policy\x18\x04 \x01(\v2\x18.world.EntitlementPolicyH\x00R\x06policy\x125\n" +
+	"\atasking\x18\x05 \x01(\v2\x19.world.EntitlementTaskingH\x00R\atasking\x12G\n" +
+	"\rconsequential\x18\x06 \x01(\v2\x1f.world.EntitlementConsequentialH\x00R\rconsequential\x12/\n" +
+	"\x05reset\x18\a \x01(\v2\x17.world.EntitlementResetH\x00R\x05reset\x12H\n" +
+	"\x0eartifacts_read\x18\b \x01(\v2\x1f.world.EntitlementArtifactsReadH\x00R\rartifactsRead\x125\n" +
+	"\asecrets\x18\t \x01(\v2\x19.world.EntitlementSecretsH\x00R\asecrets\x12B\n" +
+	"\fsecrets_read\x18\n" +
+	" \x01(\v2\x1d.world.EntitlementSecretsReadH\x00R\vsecretsReadB\x06\n" +
+	"\x04kind\"P\n" +
+	"\x16AuthorizationComponent\x126\n" +
+	"\fentitlements\x18\x02 \x03(\v2\x12.world.EntitlementR\fentitlements*\x80\x01\n" +
 	"\fPolicyAction\x12\x17\n" +
 	"\x13PolicyActionInvalid\x10\x00\x12\x14\n" +
 	"\x10PolicyActionDeny\x10\x01\x12\x15\n" +
@@ -231,20 +884,43 @@ func file_policy_proto_rawDescGZIP() []byte {
 }
 
 var file_policy_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_policy_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_policy_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_policy_proto_goTypes = []any{
-	(PolicyAction)(0),       // 0: world.PolicyAction
-	(*PolicyRule)(nil),      // 1: world.PolicyRule
-	(*PolicyComponent)(nil), // 2: world.PolicyComponent
+	(PolicyAction)(0),                // 0: world.PolicyAction
+	(*PolicyRule)(nil),               // 1: world.PolicyRule
+	(*PolicyComponent)(nil),          // 2: world.PolicyComponent
+	(*EntitlementCop)(nil),           // 3: world.EntitlementCop
+	(*EntitlementCopWrite)(nil),      // 4: world.EntitlementCopWrite
+	(*EntitlementIam)(nil),           // 5: world.EntitlementIam
+	(*EntitlementPolicy)(nil),        // 6: world.EntitlementPolicy
+	(*EntitlementTasking)(nil),       // 7: world.EntitlementTasking
+	(*EntitlementConsequential)(nil), // 8: world.EntitlementConsequential
+	(*EntitlementReset)(nil),         // 9: world.EntitlementReset
+	(*EntitlementArtifactsRead)(nil), // 10: world.EntitlementArtifactsRead
+	(*EntitlementSecrets)(nil),       // 11: world.EntitlementSecrets
+	(*EntitlementSecretsRead)(nil),   // 12: world.EntitlementSecretsRead
+	(*Entitlement)(nil),              // 13: world.Entitlement
+	(*AuthorizationComponent)(nil),   // 14: world.AuthorizationComponent
 }
 var file_policy_proto_depIdxs = []int32{
-	0, // 0: world.PolicyRule.action:type_name -> world.PolicyAction
-	1, // 1: world.PolicyComponent.rules:type_name -> world.PolicyRule
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0,  // 0: world.PolicyRule.action:type_name -> world.PolicyAction
+	1,  // 1: world.PolicyComponent.rules:type_name -> world.PolicyRule
+	3,  // 2: world.Entitlement.cop:type_name -> world.EntitlementCop
+	4,  // 3: world.Entitlement.cop_write:type_name -> world.EntitlementCopWrite
+	5,  // 4: world.Entitlement.iam:type_name -> world.EntitlementIam
+	6,  // 5: world.Entitlement.policy:type_name -> world.EntitlementPolicy
+	7,  // 6: world.Entitlement.tasking:type_name -> world.EntitlementTasking
+	8,  // 7: world.Entitlement.consequential:type_name -> world.EntitlementConsequential
+	9,  // 8: world.Entitlement.reset:type_name -> world.EntitlementReset
+	10, // 9: world.Entitlement.artifacts_read:type_name -> world.EntitlementArtifactsRead
+	11, // 10: world.Entitlement.secrets:type_name -> world.EntitlementSecrets
+	12, // 11: world.Entitlement.secrets_read:type_name -> world.EntitlementSecretsRead
+	13, // 12: world.AuthorizationComponent.entitlements:type_name -> world.Entitlement
+	13, // [13:13] is the sub-list for method output_type
+	13, // [13:13] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_policy_proto_init() }
@@ -253,13 +929,25 @@ func file_policy_proto_init() {
 		return
 	}
 	file_policy_proto_msgTypes[0].OneofWrappers = []any{}
+	file_policy_proto_msgTypes[12].OneofWrappers = []any{
+		(*Entitlement_Cop)(nil),
+		(*Entitlement_CopWrite)(nil),
+		(*Entitlement_Iam)(nil),
+		(*Entitlement_Policy)(nil),
+		(*Entitlement_Tasking)(nil),
+		(*Entitlement_Consequential)(nil),
+		(*Entitlement_Reset_)(nil),
+		(*Entitlement_ArtifactsRead)(nil),
+		(*Entitlement_Secrets)(nil),
+		(*Entitlement_SecretsRead)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_policy_proto_rawDesc), len(file_policy_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   2,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

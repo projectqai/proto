@@ -49,6 +49,8 @@ const (
 	// WorldServiceGetLocalNodeProcedure is the fully-qualified name of the WorldService's GetLocalNode
 	// RPC.
 	WorldServiceGetLocalNodeProcedure = "/world.WorldService/GetLocalNode"
+	// WorldServiceGetSelfProcedure is the fully-qualified name of the WorldService's GetSelf RPC.
+	WorldServiceGetSelfProcedure = "/world.WorldService/GetSelf"
 	// WorldServiceRunTaskProcedure is the fully-qualified name of the WorldService's RunTask RPC.
 	WorldServiceRunTaskProcedure = "/world.WorldService/RunTask"
 	// WorldServiceHardResetProcedure is the fully-qualified name of the WorldService's HardReset RPC.
@@ -74,6 +76,8 @@ type WorldServiceClient interface {
 	ExpireEntity(context.Context, *connect.Request[_go.ExpireEntityRequest]) (*connect.Response[_go.ExpireEntityResponse], error)
 	// get information about the local node the client is connected to
 	GetLocalNode(context.Context, *connect.Request[_go.GetLocalNodeRequest]) (*connect.Response[_go.GetLocalNodeResponse], error)
+	// return the identity entity for the calling connection
+	GetSelf(context.Context, *connect.Request[_go.GetSelfRequest]) (*connect.Response[_go.GetSelfResponse], error)
 	// create an instance of a specific task entity
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
 	// clear all engine state including persistence
@@ -131,6 +135,12 @@ func NewWorldServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(worldServiceMethods.ByName("GetLocalNode")),
 			connect.WithClientOptions(opts...),
 		),
+		getSelf: connect.NewClient[_go.GetSelfRequest, _go.GetSelfResponse](
+			httpClient,
+			baseURL+WorldServiceGetSelfProcedure,
+			connect.WithSchema(worldServiceMethods.ByName("GetSelf")),
+			connect.WithClientOptions(opts...),
+		),
 		runTask: connect.NewClient[_go.RunTaskRequest, _go.RunTaskResponse](
 			httpClient,
 			baseURL+WorldServiceRunTaskProcedure,
@@ -166,6 +176,7 @@ type worldServiceClient struct {
 	push          *connect.Client[_go.EntityChangeRequest, _go.EntityChangeResponse]
 	expireEntity  *connect.Client[_go.ExpireEntityRequest, _go.ExpireEntityResponse]
 	getLocalNode  *connect.Client[_go.GetLocalNodeRequest, _go.GetLocalNodeResponse]
+	getSelf       *connect.Client[_go.GetSelfRequest, _go.GetSelfResponse]
 	runTask       *connect.Client[_go.RunTaskRequest, _go.RunTaskResponse]
 	hardReset     *connect.Client[_go.HardResetRequest, _go.HardResetResponse]
 	loadMission   *connect.Client[_go.LoadMissionRequest, _go.LoadMissionResponse]
@@ -202,6 +213,11 @@ func (c *worldServiceClient) GetLocalNode(ctx context.Context, req *connect.Requ
 	return c.getLocalNode.CallUnary(ctx, req)
 }
 
+// GetSelf calls world.WorldService.GetSelf.
+func (c *worldServiceClient) GetSelf(ctx context.Context, req *connect.Request[_go.GetSelfRequest]) (*connect.Response[_go.GetSelfResponse], error) {
+	return c.getSelf.CallUnary(ctx, req)
+}
+
 // RunTask calls world.WorldService.RunTask.
 func (c *worldServiceClient) RunTask(ctx context.Context, req *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error) {
 	return c.runTask.CallUnary(ctx, req)
@@ -236,6 +252,8 @@ type WorldServiceHandler interface {
 	ExpireEntity(context.Context, *connect.Request[_go.ExpireEntityRequest]) (*connect.Response[_go.ExpireEntityResponse], error)
 	// get information about the local node the client is connected to
 	GetLocalNode(context.Context, *connect.Request[_go.GetLocalNodeRequest]) (*connect.Response[_go.GetLocalNodeResponse], error)
+	// return the identity entity for the calling connection
+	GetSelf(context.Context, *connect.Request[_go.GetSelfRequest]) (*connect.Response[_go.GetSelfResponse], error)
 	// create an instance of a specific task entity
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
 	// clear all engine state including persistence
@@ -289,6 +307,12 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(worldServiceMethods.ByName("GetLocalNode")),
 		connect.WithHandlerOptions(opts...),
 	)
+	worldServiceGetSelfHandler := connect.NewUnaryHandler(
+		WorldServiceGetSelfProcedure,
+		svc.GetSelf,
+		connect.WithSchema(worldServiceMethods.ByName("GetSelf")),
+		connect.WithHandlerOptions(opts...),
+	)
 	worldServiceRunTaskHandler := connect.NewUnaryHandler(
 		WorldServiceRunTaskProcedure,
 		svc.RunTask,
@@ -327,6 +351,8 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 			worldServiceExpireEntityHandler.ServeHTTP(w, r)
 		case WorldServiceGetLocalNodeProcedure:
 			worldServiceGetLocalNodeHandler.ServeHTTP(w, r)
+		case WorldServiceGetSelfProcedure:
+			worldServiceGetSelfHandler.ServeHTTP(w, r)
 		case WorldServiceRunTaskProcedure:
 			worldServiceRunTaskHandler.ServeHTTP(w, r)
 		case WorldServiceHardResetProcedure:
@@ -366,6 +392,10 @@ func (UnimplementedWorldServiceHandler) ExpireEntity(context.Context, *connect.R
 
 func (UnimplementedWorldServiceHandler) GetLocalNode(context.Context, *connect.Request[_go.GetLocalNodeRequest]) (*connect.Response[_go.GetLocalNodeResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.GetLocalNode is not implemented"))
+}
+
+func (UnimplementedWorldServiceHandler) GetSelf(context.Context, *connect.Request[_go.GetSelfRequest]) (*connect.Response[_go.GetSelfResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.GetSelf is not implemented"))
 }
 
 func (UnimplementedWorldServiceHandler) RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error) {

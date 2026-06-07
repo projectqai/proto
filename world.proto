@@ -72,6 +72,7 @@ message Entity {
   optional TargetManualControlComponent target_manual_control = 65;
   optional BoundsComponent bounds = 66;
   optional PolicyComponent policy = 67;
+  optional AuthorizationComponent authorization = 68;
 }
 
 // A controller owns an entity or change
@@ -232,12 +233,25 @@ message ArtifactLocation {
   string url = 1;
 }
 
+message ArtifactEncryption {}
+
 message ArtifactComponent {
-  string id = 1;
+  string id = 1 [deprecated = true];
   string content_type = 2;
 
   repeated ArtifactLocation location = 3;
 
+  optional int64 size_bytes = 4;
+  optional string sha256 = 5;
+
+  optional ArtifactEncryption encryption = 6;
+
+  map<string, Artifact> parts = 7;
+}
+
+message Artifact {
+  string content_type = 2;
+  repeated ArtifactLocation location = 3;
   optional int64 size_bytes = 4;
   optional string sha256 = 5;
 }
@@ -1221,6 +1235,7 @@ enum EntityComponent {
   EntityComponentTargetManualControl = 65;
   EntityComponentBounds = 66;
   EntityComponentPolicy = 67;
+  EntityComponentAuthorization = 68;
 }
 
 message EntityChangeEvent {
@@ -1242,6 +1257,13 @@ message GetEntityRequest {
 message GetEntityResponse {
   Entity entity = 1;
   google.protobuf.Struct internal = 2;
+}
+
+message GetSelfRequest {}
+
+message GetSelfResponse {
+  string entity_id = 1;
+  Entity entity = 2;
 }
 
 message GetLocalNodeRequest {}
@@ -1325,6 +1347,9 @@ service WorldService {
 
   // get information about the local node the client is connected to
   rpc GetLocalNode(GetLocalNodeRequest) returns (GetLocalNodeResponse);
+
+  // return the identity entity for the calling connection
+  rpc GetSelf(GetSelfRequest) returns (GetSelfResponse);
 
   // create an instance of a specific task entity
   rpc RunTask(RunTaskRequest) returns (RunTaskResponse);

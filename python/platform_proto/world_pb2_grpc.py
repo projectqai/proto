@@ -65,6 +65,11 @@ class WorldServiceStub(object):
                 request_serializer=world__pb2.GetLocalNodeRequest.SerializeToString,
                 response_deserializer=world__pb2.GetLocalNodeResponse.FromString,
                 _registered_method=True)
+        self.GetSelf = channel.unary_unary(
+                '/world.WorldService/GetSelf',
+                request_serializer=world__pb2.GetSelfRequest.SerializeToString,
+                response_deserializer=world__pb2.GetSelfResponse.FromString,
+                _registered_method=True)
         self.RunTask = channel.unary_unary(
                 '/world.WorldService/RunTask',
                 request_serializer=world__pb2.RunTaskRequest.SerializeToString,
@@ -133,6 +138,13 @@ class WorldServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetSelf(self, request, context):
+        """return the identity entity for the calling connection
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def RunTask(self, request, context):
         """create an instance of a specific task entity
         """
@@ -193,6 +205,11 @@ def add_WorldServiceServicer_to_server(servicer, server):
                     servicer.GetLocalNode,
                     request_deserializer=world__pb2.GetLocalNodeRequest.FromString,
                     response_serializer=world__pb2.GetLocalNodeResponse.SerializeToString,
+            ),
+            'GetSelf': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetSelf,
+                    request_deserializer=world__pb2.GetSelfRequest.FromString,
+                    response_serializer=world__pb2.GetSelfResponse.SerializeToString,
             ),
             'RunTask': grpc.unary_unary_rpc_method_handler(
                     servicer.RunTask,
@@ -378,6 +395,33 @@ class WorldService(object):
             '/world.WorldService/GetLocalNode',
             world__pb2.GetLocalNodeRequest.SerializeToString,
             world__pb2.GetLocalNodeResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetSelf(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/world.WorldService/GetSelf',
+            world__pb2.GetSelfRequest.SerializeToString,
+            world__pb2.GetSelfResponse.FromString,
             options,
             channel_credentials,
             insecure,

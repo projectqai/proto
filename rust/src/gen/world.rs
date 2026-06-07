@@ -830,6 +830,9 @@ pub struct PolicyRule {
     /// If omitted, the rule matches unconditionally.
     #[prost(string, optional, tag = "2")]
     pub cel: ::core::option::Option<::prost::alloc::string::String>,
+    /// Human-readable label for this rule, shown in logs and UI.
+    #[prost(string, optional, tag = "3")]
+    pub label: ::core::option::Option<::prost::alloc::string::String>,
 }
 /// Access policy evaluated on incoming RPCs.
 ///
@@ -849,6 +852,65 @@ pub struct PolicyRule {
 pub struct PolicyComponent {
     #[prost(message, repeated, tag = "1")]
     pub rules: ::prost::alloc::vec::Vec<PolicyRule>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EntitlementCop {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EntitlementCopWrite {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EntitlementIam {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EntitlementPolicy {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EntitlementTasking {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EntitlementConsequential {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EntitlementReset {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EntitlementArtifactsRead {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EntitlementSecrets {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct EntitlementSecretsRead {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct Entitlement {
+    #[prost(oneof = "entitlement::Kind", tags = "1, 2, 3, 4, 5, 6, 7, 8, 9, 10")]
+    pub kind: ::core::option::Option<entitlement::Kind>,
+}
+/// Nested message and enum types in `Entitlement`.
+pub mod entitlement {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Kind {
+        #[prost(message, tag = "1")]
+        Cop(super::EntitlementCop),
+        #[prost(message, tag = "2")]
+        CopWrite(super::EntitlementCopWrite),
+        #[prost(message, tag = "3")]
+        Iam(super::EntitlementIam),
+        #[prost(message, tag = "4")]
+        Policy(super::EntitlementPolicy),
+        #[prost(message, tag = "5")]
+        Tasking(super::EntitlementTasking),
+        #[prost(message, tag = "6")]
+        Consequential(super::EntitlementConsequential),
+        #[prost(message, tag = "7")]
+        Reset(super::EntitlementReset),
+        #[prost(message, tag = "8")]
+        ArtifactsRead(super::EntitlementArtifactsRead),
+        #[prost(message, tag = "9")]
+        Secrets(super::EntitlementSecrets),
+        #[prost(message, tag = "10")]
+        SecretsRead(super::EntitlementSecretsRead),
+    }
+}
+/// Entitlements attached to an auth identity entity (auth:user:*,
+/// auth:token:*, auth:cert:*).
+/// Referenced in the policy chain via "name" in actor.entitlements.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct AuthorizationComponent {
+    #[prost(message, repeated, tag = "2")]
+    pub entitlements: ::prost::alloc::vec::Vec<Entitlement>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
@@ -1306,6 +1368,8 @@ pub struct Entity {
     pub bounds: ::core::option::Option<BoundsComponent>,
     #[prost(message, optional, tag = "67")]
     pub policy: ::core::option::Option<PolicyComponent>,
+    #[prost(message, optional, tag = "68")]
+    pub authorization: ::core::option::Option<AuthorizationComponent>,
 }
 /// A controller owns an entity or change
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1459,10 +1523,28 @@ pub struct ArtifactLocation {
     #[prost(string, tag = "1")]
     pub url: ::prost::alloc::string::String,
 }
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ArtifactEncryption {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ArtifactComponent {
+    #[deprecated]
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
+    #[prost(string, tag = "2")]
+    pub content_type: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag = "3")]
+    pub location: ::prost::alloc::vec::Vec<ArtifactLocation>,
+    #[prost(int64, optional, tag = "4")]
+    pub size_bytes: ::core::option::Option<i64>,
+    #[prost(string, optional, tag = "5")]
+    pub sha256: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(message, optional, tag = "6")]
+    pub encryption: ::core::option::Option<ArtifactEncryption>,
+    #[prost(map = "string, message", tag = "7")]
+    pub parts: ::std::collections::HashMap<::prost::alloc::string::String, Artifact>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Artifact {
     #[prost(string, tag = "2")]
     pub content_type: ::prost::alloc::string::String,
     #[prost(message, repeated, tag = "3")]
@@ -2545,6 +2627,15 @@ pub struct GetEntityResponse {
     pub internal: ::core::option::Option<::prost_types::Struct>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct GetSelfRequest {}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct GetSelfResponse {
+    #[prost(string, tag = "1")]
+    pub entity_id: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "2")]
+    pub entity: ::core::option::Option<Entity>,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct GetLocalNodeRequest {}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetLocalNodeResponse {
@@ -3349,6 +3440,7 @@ pub enum EntityComponent {
     TargetManualControl = 65,
     Bounds = 66,
     Policy = 67,
+    Authorization = 68,
 }
 impl EntityComponent {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -3402,6 +3494,7 @@ impl EntityComponent {
             Self::TargetManualControl => "EntityComponentTargetManualControl",
             Self::Bounds => "EntityComponentBounds",
             Self::Policy => "EntityComponentPolicy",
+            Self::Authorization => "EntityComponentAuthorization",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -3452,6 +3545,7 @@ impl EntityComponent {
             "EntityComponentTargetManualControl" => Some(Self::TargetManualControl),
             "EntityComponentBounds" => Some(Self::Bounds),
             "EntityComponentPolicy" => Some(Self::Policy),
+            "EntityComponentAuthorization" => Some(Self::Authorization),
             _ => None,
         }
     }
@@ -3727,6 +3821,31 @@ pub mod world_service_client {
                 .insert(GrpcMethod::new("world.WorldService", "GetLocalNode"));
             self.inner.unary(req, path, codec).await
         }
+        /// return the identity entity for the calling connection
+        pub async fn get_self(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetSelfRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetSelfResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/world.WorldService/GetSelf",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("world.WorldService", "GetSelf"));
+            self.inner.unary(req, path, codec).await
+        }
         /// create an instance of a specific task entity
         pub async fn run_task(
             &mut self,
@@ -3896,6 +4015,11 @@ pub mod world_service_server {
             tonic::Response<super::GetLocalNodeResponse>,
             tonic::Status,
         >;
+        /// return the identity entity for the calling connection
+        async fn get_self(
+            &self,
+            request: tonic::Request<super::GetSelfRequest>,
+        ) -> std::result::Result<tonic::Response<super::GetSelfResponse>, tonic::Status>;
         /// create an instance of a specific task entity
         async fn run_task(
             &self,
@@ -4259,6 +4383,51 @@ pub mod world_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = GetLocalNodeSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/world.WorldService/GetSelf" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetSelfSvc<T: WorldService>(pub Arc<T>);
+                    impl<
+                        T: WorldService,
+                    > tonic::server::UnaryService<super::GetSelfRequest>
+                    for GetSelfSvc<T> {
+                        type Response = super::GetSelfResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetSelfRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as WorldService>::get_self(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = GetSelfSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(

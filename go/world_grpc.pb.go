@@ -25,6 +25,7 @@ const (
 	WorldService_Push_FullMethodName          = "/world.WorldService/Push"
 	WorldService_ExpireEntity_FullMethodName  = "/world.WorldService/ExpireEntity"
 	WorldService_GetLocalNode_FullMethodName  = "/world.WorldService/GetLocalNode"
+	WorldService_GetSelf_FullMethodName       = "/world.WorldService/GetSelf"
 	WorldService_RunTask_FullMethodName       = "/world.WorldService/RunTask"
 	WorldService_HardReset_FullMethodName     = "/world.WorldService/HardReset"
 	WorldService_LoadMission_FullMethodName   = "/world.WorldService/LoadMission"
@@ -49,6 +50,8 @@ type WorldServiceClient interface {
 	ExpireEntity(ctx context.Context, in *ExpireEntityRequest, opts ...grpc.CallOption) (*ExpireEntityResponse, error)
 	// get information about the local node the client is connected to
 	GetLocalNode(ctx context.Context, in *GetLocalNodeRequest, opts ...grpc.CallOption) (*GetLocalNodeResponse, error)
+	// return the identity entity for the calling connection
+	GetSelf(ctx context.Context, in *GetSelfRequest, opts ...grpc.CallOption) (*GetSelfResponse, error)
 	// create an instance of a specific task entity
 	RunTask(ctx context.Context, in *RunTaskRequest, opts ...grpc.CallOption) (*RunTaskResponse, error)
 	// clear all engine state including persistence
@@ -136,6 +139,16 @@ func (c *worldServiceClient) GetLocalNode(ctx context.Context, in *GetLocalNodeR
 	return out, nil
 }
 
+func (c *worldServiceClient) GetSelf(ctx context.Context, in *GetSelfRequest, opts ...grpc.CallOption) (*GetSelfResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSelfResponse)
+	err := c.cc.Invoke(ctx, WorldService_GetSelf_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *worldServiceClient) RunTask(ctx context.Context, in *RunTaskRequest, opts ...grpc.CallOption) (*RunTaskResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RunTaskResponse)
@@ -194,6 +207,8 @@ type WorldServiceServer interface {
 	ExpireEntity(context.Context, *ExpireEntityRequest) (*ExpireEntityResponse, error)
 	// get information about the local node the client is connected to
 	GetLocalNode(context.Context, *GetLocalNodeRequest) (*GetLocalNodeResponse, error)
+	// return the identity entity for the calling connection
+	GetSelf(context.Context, *GetSelfRequest) (*GetSelfResponse, error)
 	// create an instance of a specific task entity
 	RunTask(context.Context, *RunTaskRequest) (*RunTaskResponse, error)
 	// clear all engine state including persistence
@@ -229,6 +244,9 @@ func (UnimplementedWorldServiceServer) ExpireEntity(context.Context, *ExpireEnti
 }
 func (UnimplementedWorldServiceServer) GetLocalNode(context.Context, *GetLocalNodeRequest) (*GetLocalNodeResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetLocalNode not implemented")
+}
+func (UnimplementedWorldServiceServer) GetSelf(context.Context, *GetSelfRequest) (*GetSelfResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetSelf not implemented")
 }
 func (UnimplementedWorldServiceServer) RunTask(context.Context, *RunTaskRequest) (*RunTaskResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RunTask not implemented")
@@ -364,6 +382,24 @@ func _WorldService_GetLocalNode_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorldService_GetSelf_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSelfRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorldServiceServer).GetSelf(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorldService_GetSelf_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorldServiceServer).GetSelf(ctx, req.(*GetSelfRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _WorldService_RunTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RunTaskRequest)
 	if err := dec(in); err != nil {
@@ -462,6 +498,10 @@ var WorldService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetLocalNode",
 			Handler:    _WorldService_GetLocalNode_Handler,
+		},
+		{
+			MethodName: "GetSelf",
+			Handler:    _WorldService_GetSelf_Handler,
 		},
 		{
 			MethodName: "RunTask",

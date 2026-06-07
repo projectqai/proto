@@ -5,7 +5,7 @@
 import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { JsonObject, Message } from "@bufbuild/protobuf";
 import type { MetricComponent, MetricKind } from "./metrics_pb.js";
-import type { PolicyComponent } from "./policy_pb.js";
+import type { AuthorizationComponent, PolicyComponent } from "./policy_pb.js";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { TaskableTarget, TaskExecutionTarget } from "./tasking_pb.js";
 import type { ClassificationTaxonomy, TaskingTaxonomy } from "./taxonomy_pb.js";
@@ -249,6 +249,11 @@ export declare type Entity = Message<"world.Entity"> & {
    * @generated from field: optional world.PolicyComponent policy = 67;
    */
   policy?: PolicyComponent;
+
+  /**
+   * @generated from field: optional world.AuthorizationComponent authorization = 68;
+   */
+  authorization?: AuthorizationComponent;
 };
 
 /**
@@ -648,11 +653,24 @@ export declare type ArtifactLocation = Message<"world.ArtifactLocation"> & {
 export declare const ArtifactLocationSchema: GenMessage<ArtifactLocation>;
 
 /**
+ * @generated from message world.ArtifactEncryption
+ */
+export declare type ArtifactEncryption = Message<"world.ArtifactEncryption"> & {
+};
+
+/**
+ * Describes the message world.ArtifactEncryption.
+ * Use `create(ArtifactEncryptionSchema)` to create a new message.
+ */
+export declare const ArtifactEncryptionSchema: GenMessage<ArtifactEncryption>;
+
+/**
  * @generated from message world.ArtifactComponent
  */
 export declare type ArtifactComponent = Message<"world.ArtifactComponent"> & {
   /**
-   * @generated from field: string id = 1;
+   * @generated from field: string id = 1 [deprecated = true];
+   * @deprecated
    */
   id: string;
 
@@ -675,6 +693,16 @@ export declare type ArtifactComponent = Message<"world.ArtifactComponent"> & {
    * @generated from field: optional string sha256 = 5;
    */
   sha256?: string;
+
+  /**
+   * @generated from field: optional world.ArtifactEncryption encryption = 6;
+   */
+  encryption?: ArtifactEncryption;
+
+  /**
+   * @generated from field: map<string, world.Artifact> parts = 7;
+   */
+  parts: { [key: string]: Artifact };
 };
 
 /**
@@ -682,6 +710,37 @@ export declare type ArtifactComponent = Message<"world.ArtifactComponent"> & {
  * Use `create(ArtifactComponentSchema)` to create a new message.
  */
 export declare const ArtifactComponentSchema: GenMessage<ArtifactComponent>;
+
+/**
+ * @generated from message world.Artifact
+ */
+export declare type Artifact = Message<"world.Artifact"> & {
+  /**
+   * @generated from field: string content_type = 2;
+   */
+  contentType: string;
+
+  /**
+   * @generated from field: repeated world.ArtifactLocation location = 3;
+   */
+  location: ArtifactLocation[];
+
+  /**
+   * @generated from field: optional int64 size_bytes = 4;
+   */
+  sizeBytes?: bigint;
+
+  /**
+   * @generated from field: optional string sha256 = 5;
+   */
+  sha256?: string;
+};
+
+/**
+ * Describes the message world.Artifact.
+ * Use `create(ArtifactSchema)` to create a new message.
+ */
+export declare const ArtifactSchema: GenMessage<Artifact>;
 
 /**
  * @generated from message world.ImageBoundingBox
@@ -3410,6 +3469,39 @@ export declare type GetEntityResponse = Message<"world.GetEntityResponse"> & {
 export declare const GetEntityResponseSchema: GenMessage<GetEntityResponse>;
 
 /**
+ * @generated from message world.GetSelfRequest
+ */
+export declare type GetSelfRequest = Message<"world.GetSelfRequest"> & {
+};
+
+/**
+ * Describes the message world.GetSelfRequest.
+ * Use `create(GetSelfRequestSchema)` to create a new message.
+ */
+export declare const GetSelfRequestSchema: GenMessage<GetSelfRequest>;
+
+/**
+ * @generated from message world.GetSelfResponse
+ */
+export declare type GetSelfResponse = Message<"world.GetSelfResponse"> & {
+  /**
+   * @generated from field: string entity_id = 1;
+   */
+  entityId: string;
+
+  /**
+   * @generated from field: world.Entity entity = 2;
+   */
+  entity?: Entity;
+};
+
+/**
+ * Describes the message world.GetSelfResponse.
+ * Use `create(GetSelfResponseSchema)` to create a new message.
+ */
+export declare const GetSelfResponseSchema: GenMessage<GetSelfResponse>;
+
+/**
  * @generated from message world.GetLocalNodeRequest
  */
 export declare type GetLocalNodeRequest = Message<"world.GetLocalNodeRequest"> & {
@@ -4669,6 +4761,11 @@ export enum EntityComponent {
    * @generated from enum value: EntityComponentPolicy = 67;
    */
   EntityComponentPolicy = 67,
+
+  /**
+   * @generated from enum value: EntityComponentAuthorization = 68;
+   */
+  EntityComponentAuthorization = 68,
 }
 
 /**
@@ -4771,6 +4868,16 @@ export declare const WorldService: GenService<{
     methodKind: "unary";
     input: typeof GetLocalNodeRequestSchema;
     output: typeof GetLocalNodeResponseSchema;
+  },
+  /**
+   * return the identity entity for the calling connection
+   *
+   * @generated from rpc world.WorldService.GetSelf
+   */
+  getSelf: {
+    methodKind: "unary";
+    input: typeof GetSelfRequestSchema;
+    output: typeof GetSelfResponseSchema;
   },
   /**
    * create an instance of a specific task entity
