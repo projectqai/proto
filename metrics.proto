@@ -129,6 +129,10 @@ enum MetricUnit {
   MetricUnitKilometerPerHour = 56;
   MetricUnitMeterPerSecondSquared = 57;
 
+  // Area
+  MetricUnitSquareMeter = 58;
+  MetricUnitSquareKilometer = 59;
+
   // Light
   MetricUnitLux = 60;
 
