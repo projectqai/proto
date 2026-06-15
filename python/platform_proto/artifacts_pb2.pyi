@@ -22,12 +22,14 @@ class DownloadArtifactResponse(_message.Message):
     def __init__(self, meta: _Optional[_Union[_world_pb2.ArtifactComponent, _Mapping]] = ..., chunk: _Optional[bytes] = ...) -> None: ...
 
 class UploadArtifactRequest(_message.Message):
-    __slots__ = ("id", "chunk")
+    __slots__ = ("id", "chunk", "content_type")
     ID_FIELD_NUMBER: _ClassVar[int]
     CHUNK_FIELD_NUMBER: _ClassVar[int]
+    CONTENT_TYPE_FIELD_NUMBER: _ClassVar[int]
     id: str
     chunk: bytes
-    def __init__(self, id: _Optional[str] = ..., chunk: _Optional[bytes] = ...) -> None: ...
+    content_type: str
+    def __init__(self, id: _Optional[str] = ..., chunk: _Optional[bytes] = ..., content_type: _Optional[str] = ...) -> None: ...
 
 class UploadArtifactResponse(_message.Message):
     __slots__ = ()

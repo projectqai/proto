@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from . import world_pb2 as world__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0f\x61rtifacts.proto\x12\x05world\x1a\x0bworld.proto\"@\n\x17\x44ownloadArtifactRequest\x12\x0c\n\x02id\x18\x01 \x01(\tH\x00\x12\x10\n\x06sha256\x18\x02 \x01(\tH\x00\x42\x05\n\x03ref\"n\n\x18\x44ownloadArtifactResponse\x12+\n\x04meta\x18\x01 \x01(\x0b\x32\x18.world.ArtifactComponentH\x00\x88\x01\x01\x12\x12\n\x05\x63hunk\x18\x02 \x01(\x0cH\x01\x88\x01\x01\x42\x07\n\x05_metaB\x08\n\x06_chunk\"M\n\x15UploadArtifactRequest\x12\x0f\n\x02id\x18\x01 \x01(\tH\x00\x88\x01\x01\x12\x12\n\x05\x63hunk\x18\x02 \x01(\x0cH\x01\x88\x01\x01\x42\x05\n\x03_idB\x08\n\x06_chunk\"\x18\n\x16UploadArtifactResponse2\xb9\x01\n\x0f\x41rtifactService\x12U\n\x10\x44ownloadArtifact\x12\x1e.world.DownloadArtifactRequest\x1a\x1f.world.DownloadArtifactResponse0\x01\x12O\n\x0eUploadArtifact\x12\x1c.world.UploadArtifactRequest\x1a\x1d.world.UploadArtifactResponse(\x01\x42 Z\x1egithub.com/projectqai/proto/gob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0f\x61rtifacts.proto\x12\x05world\x1a\x0bworld.proto\"@\n\x17\x44ownloadArtifactRequest\x12\x0c\n\x02id\x18\x01 \x01(\tH\x00\x12\x10\n\x06sha256\x18\x02 \x01(\tH\x00\x42\x05\n\x03ref\"n\n\x18\x44ownloadArtifactResponse\x12+\n\x04meta\x18\x01 \x01(\x0b\x32\x18.world.ArtifactComponentH\x00\x88\x01\x01\x12\x12\n\x05\x63hunk\x18\x02 \x01(\x0cH\x01\x88\x01\x01\x42\x07\n\x05_metaB\x08\n\x06_chunk\"y\n\x15UploadArtifactRequest\x12\x0f\n\x02id\x18\x01 \x01(\tH\x00\x88\x01\x01\x12\x12\n\x05\x63hunk\x18\x02 \x01(\x0cH\x01\x88\x01\x01\x12\x19\n\x0c\x63ontent_type\x18\x03 \x01(\tH\x02\x88\x01\x01\x42\x05\n\x03_idB\x08\n\x06_chunkB\x0f\n\r_content_type\"\x18\n\x16UploadArtifactResponse2\xb9\x01\n\x0f\x41rtifactService\x12U\n\x10\x44ownloadArtifact\x12\x1e.world.DownloadArtifactRequest\x1a\x1f.world.DownloadArtifactResponse0\x01\x12O\n\x0eUploadArtifact\x12\x1c.world.UploadArtifactRequest\x1a\x1d.world.UploadArtifactResponse(\x01\x42 Z\x1egithub.com/projectqai/proto/gob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -38,9 +38,9 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_DOWNLOADARTIFACTRESPONSE']._serialized_start=105
   _globals['_DOWNLOADARTIFACTRESPONSE']._serialized_end=215
   _globals['_UPLOADARTIFACTREQUEST']._serialized_start=217
-  _globals['_UPLOADARTIFACTREQUEST']._serialized_end=294
-  _globals['_UPLOADARTIFACTRESPONSE']._serialized_start=296
-  _globals['_UPLOADARTIFACTRESPONSE']._serialized_end=320
-  _globals['_ARTIFACTSERVICE']._serialized_start=323
-  _globals['_ARTIFACTSERVICE']._serialized_end=508
+  _globals['_UPLOADARTIFACTREQUEST']._serialized_end=338
+  _globals['_UPLOADARTIFACTRESPONSE']._serialized_start=340
+  _globals['_UPLOADARTIFACTRESPONSE']._serialized_end=364
+  _globals['_ARTIFACTSERVICE']._serialized_start=367
+  _globals['_ARTIFACTSERVICE']._serialized_end=552
 # @@protoc_insertion_point(module_scope)

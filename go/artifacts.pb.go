@@ -164,7 +164,10 @@ type UploadArtifactRequest struct {
 	// entity id, set in the first message only
 	Id *string `protobuf:"bytes,1,opt,name=id,proto3,oneof" json:"id,omitempty"`
 	// data chunks
-	Chunk         []byte `protobuf:"bytes,2,opt,name=chunk,proto3,oneof" json:"chunk,omitempty"`
+	Chunk []byte `protobuf:"bytes,2,opt,name=chunk,proto3,oneof" json:"chunk,omitempty"`
+	// content type of the artifact, set in the first message only.
+	// If omitted, an existing part's content type is preserved.
+	ContentType   *string `protobuf:"bytes,3,opt,name=content_type,json=contentType,proto3,oneof" json:"content_type,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -211,6 +214,13 @@ func (x *UploadArtifactRequest) GetChunk() []byte {
 		return x.Chunk
 	}
 	return nil
+}
+
+func (x *UploadArtifactRequest) GetContentType() string {
+	if x != nil && x.ContentType != nil {
+		return *x.ContentType
+	}
+	return ""
 }
 
 type UploadArtifactResponse struct {
@@ -262,12 +272,14 @@ const file_artifacts_proto_rawDesc = "" +
 	"\x04meta\x18\x01 \x01(\v2\x18.world.ArtifactComponentH\x00R\x04meta\x88\x01\x01\x12\x19\n" +
 	"\x05chunk\x18\x02 \x01(\fH\x01R\x05chunk\x88\x01\x01B\a\n" +
 	"\x05_metaB\b\n" +
-	"\x06_chunk\"X\n" +
+	"\x06_chunk\"\x91\x01\n" +
 	"\x15UploadArtifactRequest\x12\x13\n" +
 	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12\x19\n" +
-	"\x05chunk\x18\x02 \x01(\fH\x01R\x05chunk\x88\x01\x01B\x05\n" +
+	"\x05chunk\x18\x02 \x01(\fH\x01R\x05chunk\x88\x01\x01\x12&\n" +
+	"\fcontent_type\x18\x03 \x01(\tH\x02R\vcontentType\x88\x01\x01B\x05\n" +
 	"\x03_idB\b\n" +
-	"\x06_chunk\"\x18\n" +
+	"\x06_chunkB\x0f\n" +
+	"\r_content_type\"\x18\n" +
 	"\x16UploadArtifactResponse2\xb9\x01\n" +
 	"\x0fArtifactService\x12U\n" +
 	"\x10DownloadArtifact\x12\x1e.world.DownloadArtifactRequest\x1a\x1f.world.DownloadArtifactResponse0\x01\x12O\n" +

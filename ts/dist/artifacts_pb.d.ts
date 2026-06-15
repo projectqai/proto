@@ -85,6 +85,14 @@ export declare type UploadArtifactRequest = Message<"world.UploadArtifactRequest
    * @generated from field: optional bytes chunk = 2;
    */
   chunk?: Uint8Array;
+
+  /**
+   * content type of the artifact, set in the first message only.
+   * If omitted, an existing part's content type is preserved.
+   *
+   * @generated from field: optional string content_type = 3;
+   */
+  contentType?: string;
 };
 
 /**

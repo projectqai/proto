@@ -29,6 +29,10 @@ message UploadArtifactRequest {
 
   // data chunks
   optional bytes chunk = 2;
+
+  // content type of the artifact, set in the first message only.
+  // If omitted, an existing part's content type is preserved.
+  optional string content_type = 3;
 }
 
 message UploadArtifactResponse {}
