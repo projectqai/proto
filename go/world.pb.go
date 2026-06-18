@@ -6722,6 +6722,8 @@ func (x *EntityFilter) GetNot() *EntityFilter {
 type ControllerFilter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            *string                `protobuf:"bytes,1,opt,name=id,proto3,oneof" json:"id,omitempty"`
+	Node          *string                `protobuf:"bytes,2,opt,name=node,proto3,oneof" json:"node,omitempty"`
+	Origin        *string                `protobuf:"bytes,3,opt,name=origin,proto3,oneof" json:"origin,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -6759,6 +6761,20 @@ func (*ControllerFilter) Descriptor() ([]byte, []int) {
 func (x *ControllerFilter) GetId() string {
 	if x != nil && x.Id != nil {
 		return *x.Id
+	}
+	return ""
+}
+
+func (x *ControllerFilter) GetNode() string {
+	if x != nil && x.Node != nil {
+		return *x.Node
+	}
+	return ""
+}
+
+func (x *ControllerFilter) GetOrigin() string {
+	if x != nil && x.Origin != nil {
+		return *x.Origin
 	}
 	return ""
 }
@@ -9584,10 +9600,14 @@ const file_world_proto_rawDesc = "" +
 	"\n" +
 	"\b_channelB\t\n" +
 	"\a_deviceB\t\n" +
-	"\a_config\".\n" +
+	"\a_config\"x\n" +
 	"\x10ControllerFilter\x12\x13\n" +
-	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01B\x05\n" +
-	"\x03_id\"8\n" +
+	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12\x17\n" +
+	"\x04node\x18\x02 \x01(\tH\x01R\x04node\x88\x01\x01\x12\x1b\n" +
+	"\x06origin\x18\x03 \x01(\tH\x02R\x06origin\x88\x01\x01B\x05\n" +
+	"\x03_idB\a\n" +
+	"\x05_nodeB\t\n" +
+	"\a_origin\"8\n" +
 	"\vTrackFilter\x12\x1d\n" +
 	"\atracker\x18\x01 \x01(\tH\x00R\atracker\x88\x01\x01B\n" +
 	"\n" +

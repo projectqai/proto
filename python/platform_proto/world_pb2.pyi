@@ -1369,10 +1369,14 @@ class EntityFilter(_message.Message):
     def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., geo: _Optional[_Union[GeoFilter, _Mapping]] = ..., taskable: _Optional[_Union[TaskableFilter, _Mapping]] = ..., component: _Optional[_Iterable[int]] = ..., controller: _Optional[_Union[ControllerFilter, _Mapping]] = ..., track: _Optional[_Union[TrackFilter, _Mapping]] = ..., mission: _Optional[_Union[MissionFilter, _Mapping]] = ..., channel: _Optional[_Union[ChannelFilter, _Mapping]] = ..., device: _Optional[_Union[DeviceFilter, _Mapping]] = ..., config: _Optional[_Union[ConfigurationFilter, _Mapping]] = ..., **kwargs) -> None: ...
 
 class ControllerFilter(_message.Message):
-    __slots__ = ("id",)
+    __slots__ = ("id", "node", "origin")
     ID_FIELD_NUMBER: _ClassVar[int]
+    NODE_FIELD_NUMBER: _ClassVar[int]
+    ORIGIN_FIELD_NUMBER: _ClassVar[int]
     id: str
-    def __init__(self, id: _Optional[str] = ...) -> None: ...
+    node: str
+    origin: str
+    def __init__(self, id: _Optional[str] = ..., node: _Optional[str] = ..., origin: _Optional[str] = ...) -> None: ...
 
 class TrackFilter(_message.Message):
     __slots__ = ("tracker",)

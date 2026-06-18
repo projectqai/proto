@@ -2913,6 +2913,16 @@ export declare type ControllerFilter = Message<"world.ControllerFilter"> & {
    * @generated from field: optional string id = 1;
    */
   id?: string;
+
+  /**
+   * @generated from field: optional string node = 2;
+   */
+  node?: string;
+
+  /**
+   * @generated from field: optional string origin = 3;
+   */
+  origin?: string;
 };
 
 /**

@@ -827,7 +827,7 @@ pub struct PolicyRule {
     /// CEL expression evaluated against the request context.
     /// Available variables depend on the engine (e.g. peer.address, rpc.method,
     /// rpc.write, request.entity_id, request.components).
-    /// If omitted, the rule matches unconditionally.
+    /// an empty rule evaluates to "true"
     #[prost(string, optional, tag = "2")]
     pub cel: ::core::option::Option<::prost::alloc::string::String>,
     /// Human-readable label for this rule, shown in logs and UI.
@@ -923,10 +923,11 @@ pub enum PolicyAction {
     /// Record the match for auditing, then continue to the next rule.
     /// Does not produce a verdict on its own.
     Log = 3,
-    /// Evaluate the target entity's PolicyComponent (like nftables jump).
-    /// If the entity's chain produces a verdict, use it.
-    /// If the entity has no PolicyComponent or its chain produces no verdict,
-    /// return to this chain and continue with the next rule.
+    /// Jump to a target entity's PolicyComponent (like nftables jump).
+    /// The target is named by the rule's CEL expression
+    /// If the target's chain produces a verdict, use it. If the target
+    /// has no PolicyComponent or its chain produces no verdict, return to this
+    /// chain and continue with the next rule.
     Defer = 4,
 }
 impl PolicyAction {
@@ -2418,6 +2419,10 @@ pub struct EntityFilter {
 pub struct ControllerFilter {
     #[prost(string, optional, tag = "1")]
     pub id: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "2")]
+    pub node: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "3")]
+    pub origin: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TrackFilter {

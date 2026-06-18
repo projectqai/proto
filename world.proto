@@ -986,6 +986,8 @@ message EntityFilter {
 
 message ControllerFilter {
   optional string id = 1;
+  optional string node = 2;
+  optional string origin = 3;
 }
 
 message TrackFilter {

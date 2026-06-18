@@ -23,7 +23,7 @@ export declare type PolicyRule = Message<"world.PolicyRule"> & {
    * CEL expression evaluated against the request context.
    * Available variables depend on the engine (e.g. peer.address, rpc.method,
    * rpc.write, request.entity_id, request.components).
-   * If omitted, the rule matches unconditionally.
+   * an empty rule evaluates to "true"
    *
    * @generated from field: optional string cel = 2;
    */
@@ -322,10 +322,11 @@ export enum PolicyAction {
   PolicyActionLog = 3,
 
   /**
-   * Evaluate the target entity's PolicyComponent (like nftables jump).
-   * If the entity's chain produces a verdict, use it.
-   * If the entity has no PolicyComponent or its chain produces no verdict,
-   * return to this chain and continue with the next rule.
+   * Jump to a target entity's PolicyComponent (like nftables jump).
+   * The target is named by the rule's CEL expression
+   * If the target's chain produces a verdict, use it. If the target
+   * has no PolicyComponent or its chain produces no verdict, return to this
+   * chain and continue with the next rule.
    *
    * @generated from enum value: PolicyActionDefer = 4;
    */
