@@ -211,14 +211,24 @@ class EmitterTaxonomy(_message.Message):
     def __init__(self) -> None: ...
 
 class TaskingTaxonomy(_message.Message):
-    __slots__ = ("observe", "movement", "effect")
+    __slots__ = ("observe", "movement", "effect", "commission")
     OBSERVE_FIELD_NUMBER: _ClassVar[int]
     MOVEMENT_FIELD_NUMBER: _ClassVar[int]
     EFFECT_FIELD_NUMBER: _ClassVar[int]
+    COMMISSION_FIELD_NUMBER: _ClassVar[int]
     observe: TaskingTaxonomyObserve
     movement: TaskingTaxonomyMovement
     effect: TaskingTaxonomyEffect
-    def __init__(self, observe: _Optional[_Union[TaskingTaxonomyObserve, _Mapping]] = ..., movement: _Optional[_Union[TaskingTaxonomyMovement, _Mapping]] = ..., effect: _Optional[_Union[TaskingTaxonomyEffect, _Mapping]] = ...) -> None: ...
+    commission: TaskingTaxonomyCommission
+    def __init__(self, observe: _Optional[_Union[TaskingTaxonomyObserve, _Mapping]] = ..., movement: _Optional[_Union[TaskingTaxonomyMovement, _Mapping]] = ..., effect: _Optional[_Union[TaskingTaxonomyEffect, _Mapping]] = ..., commission: _Optional[_Union[TaskingTaxonomyCommission, _Mapping]] = ...) -> None: ...
+
+class TaskingTaxonomyCommission(_message.Message):
+    __slots__ = ("position", "calibrate")
+    POSITION_FIELD_NUMBER: _ClassVar[int]
+    CALIBRATE_FIELD_NUMBER: _ClassVar[int]
+    position: TaskingTaxonomyCommissionPosition
+    calibrate: TaskingTaxonomyCommissionCalibrate
+    def __init__(self, position: _Optional[_Union[TaskingTaxonomyCommissionPosition, _Mapping]] = ..., calibrate: _Optional[_Union[TaskingTaxonomyCommissionCalibrate, _Mapping]] = ...) -> None: ...
 
 class TaskingTaxonomyObserve(_message.Message):
     __slots__ = ("look_at", "scan", "track")
@@ -265,5 +275,13 @@ class TaskingTaxonomyPatrol(_message.Message):
     def __init__(self) -> None: ...
 
 class TaskingTaxonomyFollow(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class TaskingTaxonomyCommissionPosition(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class TaskingTaxonomyCommissionCalibrate(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...

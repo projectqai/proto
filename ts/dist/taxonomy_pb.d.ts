@@ -660,6 +660,12 @@ export declare type TaskingTaxonomy = Message<"world.TaskingTaxonomy"> & {
      */
     value: TaskingTaxonomyEffect;
     case: "effect";
+  } | {
+    /**
+     * @generated from field: world.TaskingTaxonomyCommission commission = 13;
+     */
+    value: TaskingTaxonomyCommission;
+    case: "commission";
   } | { case: undefined; value?: undefined };
 };
 
@@ -668,6 +674,34 @@ export declare type TaskingTaxonomy = Message<"world.TaskingTaxonomy"> & {
  * Use `create(TaskingTaxonomySchema)` to create a new message.
  */
 export declare const TaskingTaxonomySchema: GenMessage<TaskingTaxonomy>;
+
+/**
+ * @generated from message world.TaskingTaxonomyCommission
+ */
+export declare type TaskingTaxonomyCommission = Message<"world.TaskingTaxonomyCommission"> & {
+  /**
+   * @generated from oneof world.TaskingTaxonomyCommission.kind
+   */
+  kind: {
+    /**
+     * @generated from field: world.TaskingTaxonomyCommissionPosition position = 1;
+     */
+    value: TaskingTaxonomyCommissionPosition;
+    case: "position";
+  } | {
+    /**
+     * @generated from field: world.TaskingTaxonomyCommissionCalibrate calibrate = 2;
+     */
+    value: TaskingTaxonomyCommissionCalibrate;
+    case: "calibrate";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyCommission.
+ * Use `create(TaskingTaxonomyCommissionSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyCommissionSchema: GenMessage<TaskingTaxonomyCommission>;
 
 /**
  * @generated from message world.TaskingTaxonomyObserve
@@ -820,4 +854,28 @@ export declare type TaskingTaxonomyFollow = Message<"world.TaskingTaxonomyFollow
  * Use `create(TaskingTaxonomyFollowSchema)` to create a new message.
  */
 export declare const TaskingTaxonomyFollowSchema: GenMessage<TaskingTaxonomyFollow>;
+
+/**
+ * @generated from message world.TaskingTaxonomyCommissionPosition
+ */
+export declare type TaskingTaxonomyCommissionPosition = Message<"world.TaskingTaxonomyCommissionPosition"> & {
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyCommissionPosition.
+ * Use `create(TaskingTaxonomyCommissionPositionSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyCommissionPositionSchema: GenMessage<TaskingTaxonomyCommissionPosition>;
+
+/**
+ * @generated from message world.TaskingTaxonomyCommissionCalibrate
+ */
+export declare type TaskingTaxonomyCommissionCalibrate = Message<"world.TaskingTaxonomyCommissionCalibrate"> & {
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyCommissionCalibrate.
+ * Use `create(TaskingTaxonomyCommissionCalibrateSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyCommissionCalibrateSchema: GenMessage<TaskingTaxonomyCommissionCalibrate>;
 

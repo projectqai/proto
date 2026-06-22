@@ -1212,7 +1212,7 @@ pub struct EquipmentTaxonomySensorEmplaced {}
 pub struct EmitterTaxonomy {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TaskingTaxonomy {
-    #[prost(oneof = "tasking_taxonomy::Kind", tags = "10, 11, 12")]
+    #[prost(oneof = "tasking_taxonomy::Kind", tags = "10, 11, 12, 13")]
     pub kind: ::core::option::Option<tasking_taxonomy::Kind>,
 }
 /// Nested message and enum types in `TaskingTaxonomy`.
@@ -1225,6 +1225,23 @@ pub mod tasking_taxonomy {
         Movement(super::TaskingTaxonomyMovement),
         #[prost(message, tag = "12")]
         Effect(super::TaskingTaxonomyEffect),
+        #[prost(message, tag = "13")]
+        Commission(super::TaskingTaxonomyCommission),
+    }
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyCommission {
+    #[prost(oneof = "tasking_taxonomy_commission::Kind", tags = "1, 2")]
+    pub kind: ::core::option::Option<tasking_taxonomy_commission::Kind>,
+}
+/// Nested message and enum types in `TaskingTaxonomyCommission`.
+pub mod tasking_taxonomy_commission {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Kind {
+        #[prost(message, tag = "1")]
+        Position(super::TaskingTaxonomyCommissionPosition),
+        #[prost(message, tag = "2")]
+        Calibrate(super::TaskingTaxonomyCommissionCalibrate),
     }
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
@@ -1275,6 +1292,10 @@ pub struct TaskingTaxonomyMoveTo {}
 pub struct TaskingTaxonomyPatrol {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TaskingTaxonomyFollow {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyCommissionPosition {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyCommissionCalibrate {}
 /// metadata
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Entity {

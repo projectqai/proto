@@ -144,6 +144,14 @@ message TaskingTaxonomy {
     TaskingTaxonomyObserve observe = 10;
     TaskingTaxonomyMovement movement = 11;
     TaskingTaxonomyEffect effect = 12;
+    TaskingTaxonomyCommission commission = 13;
+  }
+}
+
+message TaskingTaxonomyCommission {
+  oneof kind {
+    TaskingTaxonomyCommissionPosition position = 1;
+    TaskingTaxonomyCommissionCalibrate calibrate = 2;
   }
 }
 
@@ -171,3 +179,6 @@ message TaskingTaxonomyTrack {}
 message TaskingTaxonomyMoveTo {}
 message TaskingTaxonomyPatrol {}
 message TaskingTaxonomyFollow {}
+
+message TaskingTaxonomyCommissionPosition {}
+message TaskingTaxonomyCommissionCalibrate {}
