@@ -4260,6 +4260,11 @@ export enum DeviceState {
    * @generated from enum value: DeviceStateFailed = 2;
    */
   DeviceStateFailed = 2,
+
+  /**
+   * @generated from enum value: DeviceStateDegraded = 3;
+   */
+  DeviceStateDegraded = 3,
 }
 
 /**

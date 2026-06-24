@@ -3189,6 +3189,7 @@ pub enum DeviceState {
     Pending = 0,
     Active = 1,
     Failed = 2,
+    Degraded = 3,
 }
 impl DeviceState {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -3200,6 +3201,7 @@ impl DeviceState {
             Self::Pending => "DeviceStatePending",
             Self::Active => "DeviceStateActive",
             Self::Failed => "DeviceStateFailed",
+            Self::Degraded => "DeviceStateDegraded",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -3208,6 +3210,7 @@ impl DeviceState {
             "DeviceStatePending" => Some(Self::Pending),
             "DeviceStateActive" => Some(Self::Active),
             "DeviceStateFailed" => Some(Self::Failed),
+            "DeviceStateDegraded" => Some(Self::Degraded),
             _ => None,
         }
     }

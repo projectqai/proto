@@ -114,6 +114,7 @@ class DeviceState(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     DeviceStatePending: _ClassVar[DeviceState]
     DeviceStateActive: _ClassVar[DeviceState]
     DeviceStateFailed: _ClassVar[DeviceState]
+    DeviceStateDegraded: _ClassVar[DeviceState]
 
 class ConfigurableState(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -289,6 +290,7 @@ LinkStatusLost: LinkStatus
 DeviceStatePending: DeviceState
 DeviceStateActive: DeviceState
 DeviceStateFailed: DeviceState
+DeviceStateDegraded: DeviceState
 ConfigurableStateInactive: ConfigurableState
 ConfigurableStateStarting: ConfigurableState
 ConfigurableStateActive: ConfigurableState

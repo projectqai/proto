@@ -745,6 +745,7 @@ enum DeviceState {
   DeviceStatePending = 0;
   DeviceStateActive = 1;
   DeviceStateFailed = 2;
+  DeviceStateDegraded = 3;
 }
 
 enum ConfigurableState {

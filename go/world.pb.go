@@ -668,9 +668,10 @@ func (LinkStatus) EnumDescriptor() ([]byte, []int) {
 type DeviceState int32
 
 const (
-	DeviceState_DeviceStatePending DeviceState = 0
-	DeviceState_DeviceStateActive  DeviceState = 1
-	DeviceState_DeviceStateFailed  DeviceState = 2
+	DeviceState_DeviceStatePending  DeviceState = 0
+	DeviceState_DeviceStateActive   DeviceState = 1
+	DeviceState_DeviceStateFailed   DeviceState = 2
+	DeviceState_DeviceStateDegraded DeviceState = 3
 )
 
 // Enum value maps for DeviceState.
@@ -679,11 +680,13 @@ var (
 		0: "DeviceStatePending",
 		1: "DeviceStateActive",
 		2: "DeviceStateFailed",
+		3: "DeviceStateDegraded",
 	}
 	DeviceState_value = map[string]int32{
-		"DeviceStatePending": 0,
-		"DeviceStateActive":  1,
-		"DeviceStateFailed":  2,
+		"DeviceStatePending":  0,
+		"DeviceStateActive":   1,
+		"DeviceStateFailed":   2,
+		"DeviceStateDegraded": 3,
 	}
 )
 
@@ -9833,11 +9836,12 @@ const file_world_proto_rawDesc = "" +
 	"\x15LinkStatusUnspecified\x10\x00\x12\x17\n" +
 	"\x13LinkStatusConnected\x10\x01\x12\x16\n" +
 	"\x12LinkStatusDegraded\x10\x02\x12\x12\n" +
-	"\x0eLinkStatusLost\x10\x03*S\n" +
+	"\x0eLinkStatusLost\x10\x03*l\n" +
 	"\vDeviceState\x12\x16\n" +
 	"\x12DeviceStatePending\x10\x00\x12\x15\n" +
 	"\x11DeviceStateActive\x10\x01\x12\x15\n" +
-	"\x11DeviceStateFailed\x10\x02*\xca\x01\n" +
+	"\x11DeviceStateFailed\x10\x02\x12\x17\n" +
+	"\x13DeviceStateDegraded\x10\x03*\xca\x01\n" +
 	"\x11ConfigurableState\x12\x1d\n" +
 	"\x19ConfigurableStateInactive\x10\x00\x12\x1d\n" +
 	"\x19ConfigurableStateStarting\x10\x01\x12\x1b\n" +
