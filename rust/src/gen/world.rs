@@ -2368,19 +2368,15 @@ pub mod map_layer_component {
         #[prost(string, tag = "1")]
         pub url: ::prost::alloc::string::String,
     }
-    /// single bitmap covering \[west, south, east, north\] in WGS84.
+    /// single bitmap centered on the entity's geo, sized in meters.
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct Image {
         #[prost(string, tag = "1")]
         pub url: ::prost::alloc::string::String,
-        #[prost(double, tag = "2")]
-        pub west: f64,
-        #[prost(double, tag = "3")]
-        pub south: f64,
-        #[prost(double, tag = "4")]
-        pub east: f64,
-        #[prost(double, tag = "5")]
-        pub north: f64,
+        #[prost(double, tag = "6")]
+        pub width_m: f64,
+        #[prost(double, tag = "7")]
+        pub height_m: f64,
     }
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Source {

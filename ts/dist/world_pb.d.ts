@@ -2746,7 +2746,7 @@ export declare type MapLayerComponent_Tile = Message<"world.MapLayerComponent.Ti
 export declare const MapLayerComponent_TileSchema: GenMessage<MapLayerComponent_Tile>;
 
 /**
- * single bitmap covering [west, south, east, north] in WGS84.
+ * single bitmap centered on the entity's geo, sized in meters.
  *
  * @generated from message world.MapLayerComponent.Image
  */
@@ -2757,24 +2757,14 @@ export declare type MapLayerComponent_Image = Message<"world.MapLayerComponent.I
   url: string;
 
   /**
-   * @generated from field: double west = 2;
+   * @generated from field: double width_m = 6;
    */
-  west: number;
+  widthM: number;
 
   /**
-   * @generated from field: double south = 3;
+   * @generated from field: double height_m = 7;
    */
-  south: number;
-
-  /**
-   * @generated from field: double east = 4;
-   */
-  east: number;
-
-  /**
-   * @generated from field: double north = 5;
-   */
-  north: number;
+  heightM: number;
 };
 
 /**

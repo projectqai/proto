@@ -8739,14 +8739,12 @@ func (x *MapLayerComponent_Tile) GetUrl() string {
 	return ""
 }
 
-// single bitmap covering [west, south, east, north] in WGS84.
+// single bitmap centered on the entity's geo, sized in meters.
 type MapLayerComponent_Image struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
-	West          float64                `protobuf:"fixed64,2,opt,name=west,proto3" json:"west,omitempty"`
-	South         float64                `protobuf:"fixed64,3,opt,name=south,proto3" json:"south,omitempty"`
-	East          float64                `protobuf:"fixed64,4,opt,name=east,proto3" json:"east,omitempty"`
-	North         float64                `protobuf:"fixed64,5,opt,name=north,proto3" json:"north,omitempty"`
+	WidthM        float64                `protobuf:"fixed64,6,opt,name=width_m,json=widthM,proto3" json:"width_m,omitempty"`
+	HeightM       float64                `protobuf:"fixed64,7,opt,name=height_m,json=heightM,proto3" json:"height_m,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -8788,30 +8786,16 @@ func (x *MapLayerComponent_Image) GetUrl() string {
 	return ""
 }
 
-func (x *MapLayerComponent_Image) GetWest() float64 {
+func (x *MapLayerComponent_Image) GetWidthM() float64 {
 	if x != nil {
-		return x.West
+		return x.WidthM
 	}
 	return 0
 }
 
-func (x *MapLayerComponent_Image) GetSouth() float64 {
+func (x *MapLayerComponent_Image) GetHeightM() float64 {
 	if x != nil {
-		return x.South
-	}
-	return 0
-}
-
-func (x *MapLayerComponent_Image) GetEast() float64 {
-	if x != nil {
-		return x.East
-	}
-	return 0
-}
-
-func (x *MapLayerComponent_Image) GetNorth() float64 {
-	if x != nil {
-		return x.North
+		return x.HeightM
 	}
 	return 0
 }
@@ -9555,7 +9539,7 @@ const file_world_proto_rawDesc = "" +
 	"\x11AssemblyComponent\x12\x1b\n" +
 	"\x06parent\x18\x01 \x01(\tH\x00R\x06parent\x88\x01\x01\x12\x18\n" +
 	"\aoutline\x18\x02 \x03(\tR\aoutlineB\t\n" +
-	"\a_parent\"\xc8\x02\n" +
+	"\a_parent\"\xda\x02\n" +
 	"\x11MapLayerComponent\x12\x17\n" +
 	"\az_index\x18\x01 \x01(\x05R\x06zIndex\x12\x18\n" +
 	"\aopacity\x18\x02 \x01(\x02R\aopacity\x125\n" +
@@ -9563,13 +9547,11 @@ const file_world_proto_rawDesc = "" +
 	" \x01(\v2\x1d.world.MapLayerComponent.TileH\x00R\x05tiles\x126\n" +
 	"\x05image\x18\v \x01(\v2\x1e.world.MapLayerComponent.ImageH\x00R\x05image\x1a\x18\n" +
 	"\x04Tile\x12\x10\n" +
-	"\x03url\x18\x01 \x01(\tR\x03url\x1am\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\x1a\x7f\n" +
 	"\x05Image\x12\x10\n" +
-	"\x03url\x18\x01 \x01(\tR\x03url\x12\x12\n" +
-	"\x04west\x18\x02 \x01(\x01R\x04west\x12\x14\n" +
-	"\x05south\x18\x03 \x01(\x01R\x05south\x12\x12\n" +
-	"\x04east\x18\x04 \x01(\x01R\x04east\x12\x14\n" +
-	"\x05north\x18\x05 \x01(\x01R\x05northB\b\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\x12\x17\n" +
+	"\awidth_m\x18\x06 \x01(\x01R\x06widthM\x12\x19\n" +
+	"\bheight_m\x18\a \x01(\x01R\aheightMJ\x04\b\x02\x10\x03J\x04\b\x03\x10\x04J\x04\b\x04\x10\x05J\x04\b\x05\x10\x06R\x04westR\x05southR\x04eastR\x05northB\b\n" +
 	"\x06source\"I\n" +
 	"\x16ManualControlComponent\x12/\n" +
 	"\x05input\x18\x01 \x03(\v2\x19.world.ManualControlInputR\x05input\"O\n" +
