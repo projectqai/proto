@@ -1308,18 +1308,14 @@ class MapLayerComponent(_message.Message):
         url: str
         def __init__(self, url: _Optional[str] = ...) -> None: ...
     class Image(_message.Message):
-        __slots__ = ("url", "west", "south", "east", "north")
+        __slots__ = ("url", "width_m", "height_m")
         URL_FIELD_NUMBER: _ClassVar[int]
-        WEST_FIELD_NUMBER: _ClassVar[int]
-        SOUTH_FIELD_NUMBER: _ClassVar[int]
-        EAST_FIELD_NUMBER: _ClassVar[int]
-        NORTH_FIELD_NUMBER: _ClassVar[int]
+        WIDTH_M_FIELD_NUMBER: _ClassVar[int]
+        HEIGHT_M_FIELD_NUMBER: _ClassVar[int]
         url: str
-        west: float
-        south: float
-        east: float
-        north: float
-        def __init__(self, url: _Optional[str] = ..., west: _Optional[float] = ..., south: _Optional[float] = ..., east: _Optional[float] = ..., north: _Optional[float] = ...) -> None: ...
+        width_m: float
+        height_m: float
+        def __init__(self, url: _Optional[str] = ..., width_m: _Optional[float] = ..., height_m: _Optional[float] = ...) -> None: ...
     Z_INDEX_FIELD_NUMBER: _ClassVar[int]
     OPACITY_FIELD_NUMBER: _ClassVar[int]
     TILES_FIELD_NUMBER: _ClassVar[int]

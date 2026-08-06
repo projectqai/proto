@@ -947,13 +947,13 @@ message MapLayerComponent {
     string url = 1;
   }
 
-  // single bitmap covering [west, south, east, north] in WGS84.
+  // single bitmap centered on the entity's geo, sized in meters.
   message Image {
+    reserved 2, 3, 4, 5;
+    reserved "west", "south", "east", "north";
     string url = 1;
-    double west = 2;
-    double south = 3;
-    double east = 4;
-    double north = 5;
+    double width_m = 6;
+    double height_m = 7;
   }
 }
 
