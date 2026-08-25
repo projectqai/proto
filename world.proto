@@ -73,6 +73,7 @@ message Entity {
   optional BoundsComponent bounds = 66;
   optional PolicyComponent policy = 67;
   optional AuthorizationComponent authorization = 68;
+  optional MeasurementComponent measurement = 69;
 }
 
 // A controller owns an entity or change
@@ -547,6 +548,20 @@ message LocalShapeComponent {
 
   optional LocalGeometry geometry = 1;
   optional GeometryExtrusion extrusion = 3;
+}
+
+// repeat the first vertex last to close the path
+message MeasurementComponent {
+  repeated MeasurementVertex vertex = 1;
+}
+
+message MeasurementVertex {
+  oneof at {
+    PlanarPoint point = 1;
+
+    // entity ID whose position this vertex follows
+    string entity = 2;
+  }
 }
 
 enum ClassificationIdentity {
@@ -1239,6 +1254,7 @@ enum EntityComponent {
   EntityComponentBounds = 66;
   EntityComponentPolicy = 67;
   EntityComponentAuthorization = 68;
+  EntityComponentMeasurement = 69;
 }
 
 message EntityChangeEvent {

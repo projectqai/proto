@@ -40,6 +40,7 @@ enum MetricKind {
   MetricKindSpeed = 61;
   MetricKindAcceleration = 62;
   MetricKindDepth = 63;
+  MetricKindArea = 64;
 
   // Data / network
   MetricKindDataRate = 80;

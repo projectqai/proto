@@ -51,6 +51,7 @@ const (
 	MetricKind_MetricKindSpeed        MetricKind = 61
 	MetricKind_MetricKindAcceleration MetricKind = 62
 	MetricKind_MetricKindDepth        MetricKind = 63
+	MetricKind_MetricKindArea         MetricKind = 64
 	// Data / network
 	MetricKind_MetricKindDataRate MetricKind = 80
 	MetricKind_MetricKindLatency  MetricKind = 81
@@ -113,6 +114,7 @@ var (
 		61:  "MetricKindSpeed",
 		62:  "MetricKindAcceleration",
 		63:  "MetricKindDepth",
+		64:  "MetricKindArea",
 		80:  "MetricKindDataRate",
 		81:  "MetricKindLatency",
 		82:  "MetricKindDataSize",
@@ -163,6 +165,7 @@ var (
 		"MetricKindSpeed":            61,
 		"MetricKindAcceleration":     62,
 		"MetricKindDepth":            63,
+		"MetricKindArea":             64,
 		"MetricKindDataRate":         80,
 		"MetricKindLatency":          81,
 		"MetricKindDataSize":         82,
@@ -258,6 +261,9 @@ const (
 	MetricUnit_MetricUnitKnot                  MetricUnit = 55
 	MetricUnit_MetricUnitKilometerPerHour      MetricUnit = 56
 	MetricUnit_MetricUnitMeterPerSecondSquared MetricUnit = 57
+	// Area
+	MetricUnit_MetricUnitSquareMeter     MetricUnit = 58
+	MetricUnit_MetricUnitSquareKilometer MetricUnit = 59
 	// Light
 	MetricUnit_MetricUnitLux MetricUnit = 60
 	// Sound
@@ -370,6 +376,8 @@ var (
 		55:  "MetricUnitKnot",
 		56:  "MetricUnitKilometerPerHour",
 		57:  "MetricUnitMeterPerSecondSquared",
+		58:  "MetricUnitSquareMeter",
+		59:  "MetricUnitSquareKilometer",
 		60:  "MetricUnitLux",
 		70:  "MetricUnitDecibel",
 		71:  "MetricUnitDecibelA",
@@ -459,6 +467,8 @@ var (
 		"MetricUnitKnot":                    55,
 		"MetricUnitKilometerPerHour":        56,
 		"MetricUnitMeterPerSecondSquared":   57,
+		"MetricUnitSquareMeter":             58,
+		"MetricUnitSquareKilometer":         59,
 		"MetricUnitLux":                     60,
 		"MetricUnitDecibel":                 70,
 		"MetricUnitDecibelA":                71,
@@ -1109,7 +1119,7 @@ const file_metrics_proto_rawDesc = "" +
 	"\t_clippingB\v\n" +
 	"\t_alerting\":\n" +
 	"\x0fMetricComponent\x12'\n" +
-	"\ametrics\x18\x01 \x03(\v2\r.world.MetricR\ametrics*\xb1\t\n" +
+	"\ametrics\x18\x01 \x03(\v2\r.world.MetricR\ametrics*\xc5\t\n" +
 	"\n" +
 	"MetricKind\x12\x19\n" +
 	"\x15MetricKindUnspecified\x10\x00\x12\x19\n" +
@@ -1133,7 +1143,8 @@ const file_metrics_proto_rawDesc = "" +
 	"\x12MetricKindDistance\x10<\x12\x13\n" +
 	"\x0fMetricKindSpeed\x10=\x12\x1a\n" +
 	"\x16MetricKindAcceleration\x10>\x12\x13\n" +
-	"\x0fMetricKindDepth\x10?\x12\x16\n" +
+	"\x0fMetricKindDepth\x10?\x12\x12\n" +
+	"\x0eMetricKindArea\x10@\x12\x16\n" +
 	"\x12MetricKindDataRate\x10P\x12\x15\n" +
 	"\x11MetricKindLatency\x10Q\x12\x16\n" +
 	"\x12MetricKindDataSize\x10R\x12\x11\n" +
@@ -1159,7 +1170,7 @@ const file_metrics_proto_rawDesc = "" +
 	"\x0eMetricKindAmmo\x10\xa1\x01\x12\x13\n" +
 	"\x0eMetricKindFuel\x10\xa2\x01\x12\x16\n" +
 	"\x12MetricKindDuration\x10v\x12\x13\n" +
-	"\x0fMetricKindCount\x10x*\x85\x12\n" +
+	"\x0fMetricKindCount\x10x*\xbf\x12\n" +
 	"\n" +
 	"MetricUnit\x12\x19\n" +
 	"\x15MetricUnitUnspecified\x10\x00\x12\x15\n" +
@@ -1193,7 +1204,9 @@ const file_metrics_proto_rawDesc = "" +
 	"\x18MetricUnitMeterPerSecond\x106\x12\x12\n" +
 	"\x0eMetricUnitKnot\x107\x12\x1e\n" +
 	"\x1aMetricUnitKilometerPerHour\x108\x12#\n" +
-	"\x1fMetricUnitMeterPerSecondSquared\x109\x12\x11\n" +
+	"\x1fMetricUnitMeterPerSecondSquared\x109\x12\x19\n" +
+	"\x15MetricUnitSquareMeter\x10:\x12\x1d\n" +
+	"\x19MetricUnitSquareKilometer\x10;\x12\x11\n" +
 	"\rMetricUnitLux\x10<\x12\x15\n" +
 	"\x11MetricUnitDecibel\x10F\x12\x16\n" +
 	"\x12MetricUnitDecibelA\x10G\x12\x1a\n" +
