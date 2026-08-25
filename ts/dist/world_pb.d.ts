@@ -9,7 +9,7 @@ import type { AuthorizationComponent, PolicyComponent } from "./policy_pb.js";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { TaskableTarget, TaskExecutionTarget } from "./tasking_pb.js";
 import type { ClassificationTaxonomy, TaskingTaxonomy } from "./taxonomy_pb.js";
-import type { GeometryExtrusion, LocalGeometry, PlanarGeometry } from "./geometry_pb.js";
+import type { GeometryExtrusion, LocalGeometry, PlanarGeometry, PlanarPoint } from "./geometry_pb.js";
 import type { ManualControlInput } from "./manualcontrol_pb.js";
 
 /**
@@ -254,6 +254,11 @@ export declare type Entity = Message<"world.Entity"> & {
    * @generated from field: optional world.AuthorizationComponent authorization = 68;
    */
   authorization?: AuthorizationComponent;
+
+  /**
+   * @generated from field: optional world.MeasurementComponent measurement = 69;
+   */
+  measurement?: MeasurementComponent;
 };
 
 /**
@@ -1618,6 +1623,54 @@ export declare type LocalShapeComponent = Message<"world.LocalShapeComponent"> &
  * Use `create(LocalShapeComponentSchema)` to create a new message.
  */
 export declare const LocalShapeComponentSchema: GenMessage<LocalShapeComponent>;
+
+/**
+ * repeat the first vertex last to close the path
+ *
+ * @generated from message world.MeasurementComponent
+ */
+export declare type MeasurementComponent = Message<"world.MeasurementComponent"> & {
+  /**
+   * @generated from field: repeated world.MeasurementVertex vertex = 1;
+   */
+  vertex: MeasurementVertex[];
+};
+
+/**
+ * Describes the message world.MeasurementComponent.
+ * Use `create(MeasurementComponentSchema)` to create a new message.
+ */
+export declare const MeasurementComponentSchema: GenMessage<MeasurementComponent>;
+
+/**
+ * @generated from message world.MeasurementVertex
+ */
+export declare type MeasurementVertex = Message<"world.MeasurementVertex"> & {
+  /**
+   * @generated from oneof world.MeasurementVertex.at
+   */
+  at: {
+    /**
+     * @generated from field: world.PlanarPoint point = 1;
+     */
+    value: PlanarPoint;
+    case: "point";
+  } | {
+    /**
+     * entity ID whose position this vertex follows
+     *
+     * @generated from field: string entity = 2;
+     */
+    value: string;
+    case: "entity";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message world.MeasurementVertex.
+ * Use `create(MeasurementVertexSchema)` to create a new message.
+ */
+export declare const MeasurementVertexSchema: GenMessage<MeasurementVertex>;
 
 /**
  * @generated from message world.ClassificationComponent
@@ -4771,6 +4824,11 @@ export enum EntityComponent {
    * @generated from enum value: EntityComponentAuthorization = 68;
    */
   EntityComponentAuthorization = 68,
+
+  /**
+   * @generated from enum value: EntityComponentMeasurement = 69;
+   */
+  EntityComponentMeasurement = 69,
 }
 
 /**

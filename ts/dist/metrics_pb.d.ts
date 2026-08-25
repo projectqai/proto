@@ -303,6 +303,11 @@ export enum MetricKind {
   MetricKindDepth = 63,
 
   /**
+   * @generated from enum value: MetricKindArea = 64;
+   */
+  MetricKindArea = 64,
+
+  /**
    * Data / network
    *
    * @generated from enum value: MetricKindDataRate = 80;
@@ -626,6 +631,18 @@ export enum MetricUnit {
    * @generated from enum value: MetricUnitMeterPerSecondSquared = 57;
    */
   MetricUnitMeterPerSecondSquared = 57,
+
+  /**
+   * Area
+   *
+   * @generated from enum value: MetricUnitSquareMeter = 58;
+   */
+  MetricUnitSquareMeter = 58,
+
+  /**
+   * @generated from enum value: MetricUnitSquareKilometer = 59;
+   */
+  MetricUnitSquareKilometer = 59,
 
   /**
    * Light
