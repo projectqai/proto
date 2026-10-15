@@ -270,9 +270,10 @@ const (
 	MetricUnit_MetricUnitDecibel  MetricUnit = 70
 	MetricUnit_MetricUnitDecibelA MetricUnit = 71 // A-weighted (dBA)
 	// Data rate
-	MetricUnit_MetricUnitBitPerSecond     MetricUnit = 80
-	MetricUnit_MetricUnitKilobitPerSecond MetricUnit = 81
-	MetricUnit_MetricUnitMegabitPerSecond MetricUnit = 82
+	MetricUnit_MetricUnitBitPerSecond      MetricUnit = 80
+	MetricUnit_MetricUnitKilobitPerSecond  MetricUnit = 81
+	MetricUnit_MetricUnitMegabitPerSecond  MetricUnit = 82
+	MetricUnit_MetricUnitKilobytePerSecond MetricUnit = 88
 	// Data size
 	MetricUnit_MetricUnitByte     MetricUnit = 84
 	MetricUnit_MetricUnitKilobyte MetricUnit = 85
@@ -384,6 +385,7 @@ var (
 		80:  "MetricUnitBitPerSecond",
 		81:  "MetricUnitKilobitPerSecond",
 		82:  "MetricUnitMegabitPerSecond",
+		88:  "MetricUnitKilobytePerSecond",
 		84:  "MetricUnitByte",
 		85:  "MetricUnitKilobyte",
 		86:  "MetricUnitMegabyte",
@@ -475,6 +477,7 @@ var (
 		"MetricUnitBitPerSecond":            80,
 		"MetricUnitKilobitPerSecond":        81,
 		"MetricUnitMegabitPerSecond":        82,
+		"MetricUnitKilobytePerSecond":       88,
 		"MetricUnitByte":                    84,
 		"MetricUnitKilobyte":                85,
 		"MetricUnitMegabyte":                86,
@@ -1170,7 +1173,7 @@ const file_metrics_proto_rawDesc = "" +
 	"\x0eMetricKindAmmo\x10\xa1\x01\x12\x13\n" +
 	"\x0eMetricKindFuel\x10\xa2\x01\x12\x16\n" +
 	"\x12MetricKindDuration\x10v\x12\x13\n" +
-	"\x0fMetricKindCount\x10x*\xbf\x12\n" +
+	"\x0fMetricKindCount\x10x*\xe0\x12\n" +
 	"\n" +
 	"MetricUnit\x12\x19\n" +
 	"\x15MetricUnitUnspecified\x10\x00\x12\x15\n" +
@@ -1212,7 +1215,8 @@ const file_metrics_proto_rawDesc = "" +
 	"\x12MetricUnitDecibelA\x10G\x12\x1a\n" +
 	"\x16MetricUnitBitPerSecond\x10P\x12\x1e\n" +
 	"\x1aMetricUnitKilobitPerSecond\x10Q\x12\x1e\n" +
-	"\x1aMetricUnitMegabitPerSecond\x10R\x12\x12\n" +
+	"\x1aMetricUnitMegabitPerSecond\x10R\x12\x1f\n" +
+	"\x1bMetricUnitKilobytePerSecond\x10X\x12\x12\n" +
 	"\x0eMetricUnitByte\x10T\x12\x16\n" +
 	"\x12MetricUnitKilobyte\x10U\x12\x16\n" +
 	"\x12MetricUnitMegabyte\x10V\x12\x16\n" +

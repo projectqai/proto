@@ -76,7 +76,9 @@ type PlanarPoint struct {
 	Longitude float64                `protobuf:"fixed64,1,opt,name=longitude,proto3" json:"longitude,omitempty"`
 	Latitude  float64                `protobuf:"fixed64,2,opt,name=latitude,proto3" json:"latitude,omitempty"`
 	// height above ellipsoid (WGS84) in meters
-	Altitude      *float64 `protobuf:"fixed64,3,opt,name=altitude,proto3,oneof" json:"altitude,omitempty"`
+	Altitude *float64 `protobuf:"fixed64,3,opt,name=altitude,proto3,oneof" json:"altitude,omitempty"`
+	// id of an entity this point tracks
+	Entity        *string `protobuf:"bytes,4,opt,name=entity,proto3,oneof" json:"entity,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -130,6 +132,13 @@ func (x *PlanarPoint) GetAltitude() float64 {
 		return *x.Altitude
 	}
 	return 0
+}
+
+func (x *PlanarPoint) GetEntity() string {
+	if x != nil && x.Entity != nil {
+		return *x.Entity
+	}
+	return ""
 }
 
 // a path with zero area on the projected flat surface
@@ -997,12 +1006,14 @@ var File_geometry_proto protoreflect.FileDescriptor
 
 const file_geometry_proto_rawDesc = "" +
 	"\n" +
-	"\x0egeometry.proto\x12\x05world\"u\n" +
+	"\x0egeometry.proto\x12\x05world\"\x9d\x01\n" +
 	"\vPlanarPoint\x12\x1c\n" +
 	"\tlongitude\x18\x01 \x01(\x01R\tlongitude\x12\x1a\n" +
 	"\blatitude\x18\x02 \x01(\x01R\blatitude\x12\x1f\n" +
-	"\baltitude\x18\x03 \x01(\x01H\x00R\baltitude\x88\x01\x01B\v\n" +
-	"\t_altitude\"8\n" +
+	"\baltitude\x18\x03 \x01(\x01H\x00R\baltitude\x88\x01\x01\x12\x1b\n" +
+	"\x06entity\x18\x04 \x01(\tH\x01R\x06entity\x88\x01\x01B\v\n" +
+	"\t_altitudeB\t\n" +
+	"\a_entity\"8\n" +
 	"\n" +
 	"PlanarRing\x12*\n" +
 	"\x06points\x18\x01 \x03(\v2\x12.world.PlanarPointR\x06points\"a\n" +

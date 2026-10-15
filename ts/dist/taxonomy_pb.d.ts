@@ -58,6 +58,12 @@ export declare type ClassificationTaxonomy = Message<"world.ClassificationTaxono
      */
     value: EmitterTaxonomy;
     case: "emitter";
+  } | {
+    /**
+     * @generated from field: world.OtherTaxonomy other = 16;
+     */
+    value: OtherTaxonomy;
+    case: "other";
   } | { case: undefined; value?: undefined };
 };
 
@@ -66,6 +72,18 @@ export declare type ClassificationTaxonomy = Message<"world.ClassificationTaxono
  * Use `create(ClassificationTaxonomySchema)` to create a new message.
  */
 export declare const ClassificationTaxonomySchema: GenMessage<ClassificationTaxonomy>;
+
+/**
+ * @generated from message world.OtherTaxonomy
+ */
+export declare type OtherTaxonomy = Message<"world.OtherTaxonomy"> & {
+};
+
+/**
+ * Describes the message world.OtherTaxonomy.
+ * Use `create(OtherTaxonomySchema)` to create a new message.
+ */
+export declare const OtherTaxonomySchema: GenMessage<OtherTaxonomy>;
 
 /**
  * @generated from message world.ClassificationConfidence
@@ -80,6 +98,13 @@ export declare type ClassificationConfidence = Message<"world.ClassificationConf
    * @generated from field: bool pending = 2;
    */
   pending: boolean;
+
+  /**
+   * confidence in percent (0 - 100)
+   *
+   * @generated from field: optional uint32 confidence_percent = 3;
+   */
+  confidencePercent?: number;
 };
 
 /**
@@ -382,6 +407,28 @@ export declare const VehicleTaxonomyTwoWheeledSchema: GenMessage<VehicleTaxonomy
  * @generated from message world.VehicleTaxonomyMultiWheeled
  */
 export declare type VehicleTaxonomyMultiWheeled = Message<"world.VehicleTaxonomyMultiWheeled"> & {
+  /**
+   * @generated from oneof world.VehicleTaxonomyMultiWheeled.weight
+   */
+  weight: {
+    /**
+     * @generated from field: world.VehicleTaxonomyMultiWheeledLight light = 1;
+     */
+    value: VehicleTaxonomyMultiWheeledLight;
+    case: "light";
+  } | {
+    /**
+     * @generated from field: world.VehicleTaxonomyMultiWheeledMedium medium = 2;
+     */
+    value: VehicleTaxonomyMultiWheeledMedium;
+    case: "medium";
+  } | {
+    /**
+     * @generated from field: world.VehicleTaxonomyMultiWheeledHeavy heavy = 3;
+     */
+    value: VehicleTaxonomyMultiWheeledHeavy;
+    case: "heavy";
+  } | { case: undefined; value?: undefined };
 };
 
 /**
@@ -389,6 +436,42 @@ export declare type VehicleTaxonomyMultiWheeled = Message<"world.VehicleTaxonomy
  * Use `create(VehicleTaxonomyMultiWheeledSchema)` to create a new message.
  */
 export declare const VehicleTaxonomyMultiWheeledSchema: GenMessage<VehicleTaxonomyMultiWheeled>;
+
+/**
+ * @generated from message world.VehicleTaxonomyMultiWheeledLight
+ */
+export declare type VehicleTaxonomyMultiWheeledLight = Message<"world.VehicleTaxonomyMultiWheeledLight"> & {
+};
+
+/**
+ * Describes the message world.VehicleTaxonomyMultiWheeledLight.
+ * Use `create(VehicleTaxonomyMultiWheeledLightSchema)` to create a new message.
+ */
+export declare const VehicleTaxonomyMultiWheeledLightSchema: GenMessage<VehicleTaxonomyMultiWheeledLight>;
+
+/**
+ * @generated from message world.VehicleTaxonomyMultiWheeledMedium
+ */
+export declare type VehicleTaxonomyMultiWheeledMedium = Message<"world.VehicleTaxonomyMultiWheeledMedium"> & {
+};
+
+/**
+ * Describes the message world.VehicleTaxonomyMultiWheeledMedium.
+ * Use `create(VehicleTaxonomyMultiWheeledMediumSchema)` to create a new message.
+ */
+export declare const VehicleTaxonomyMultiWheeledMediumSchema: GenMessage<VehicleTaxonomyMultiWheeledMedium>;
+
+/**
+ * @generated from message world.VehicleTaxonomyMultiWheeledHeavy
+ */
+export declare type VehicleTaxonomyMultiWheeledHeavy = Message<"world.VehicleTaxonomyMultiWheeledHeavy"> & {
+};
+
+/**
+ * Describes the message world.VehicleTaxonomyMultiWheeledHeavy.
+ * Use `create(VehicleTaxonomyMultiWheeledHeavySchema)` to create a new message.
+ */
+export declare const VehicleTaxonomyMultiWheeledHeavySchema: GenMessage<VehicleTaxonomyMultiWheeledHeavy>;
 
 /**
  * @generated from message world.VehicleTaxonomyAir
@@ -542,6 +625,12 @@ export declare type EquipmentTaxonomySensor = Message<"world.EquipmentTaxonomySe
      */
     value: EquipmentTaxonomySensorElectroOptical;
     case: "electroOptical";
+  } | {
+    /**
+     * @generated from field: world.EquipmentTaxonomySensorSeismic seismic = 15;
+     */
+    value: EquipmentTaxonomySensorSeismic;
+    case: "seismic";
   } | { case: undefined; value?: undefined };
 };
 
@@ -622,6 +711,18 @@ export declare type EquipmentTaxonomySensorEmplaced = Message<"world.EquipmentTa
  * Use `create(EquipmentTaxonomySensorEmplacedSchema)` to create a new message.
  */
 export declare const EquipmentTaxonomySensorEmplacedSchema: GenMessage<EquipmentTaxonomySensorEmplaced>;
+
+/**
+ * @generated from message world.EquipmentTaxonomySensorSeismic
+ */
+export declare type EquipmentTaxonomySensorSeismic = Message<"world.EquipmentTaxonomySensorSeismic"> & {
+};
+
+/**
+ * Describes the message world.EquipmentTaxonomySensorSeismic.
+ * Use `create(EquipmentTaxonomySensorSeismicSchema)` to create a new message.
+ */
+export declare const EquipmentTaxonomySensorSeismicSchema: GenMessage<EquipmentTaxonomySensorSeismic>;
 
 /**
  * @generated from message world.EmitterTaxonomy

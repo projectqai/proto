@@ -169,6 +169,7 @@ class EntityChange(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     EntityChangeUpdated: _ClassVar[EntityChange]
     EntityChangeExpired: _ClassVar[EntityChange]
     EntityChangeUnobserved: _ClassVar[EntityChange]
+    EntityChangeHeartbeat: _ClassVar[EntityChange]
 
 class EntityComponent(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -218,6 +219,7 @@ class EntityComponent(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     EntityComponentBounds: _ClassVar[EntityComponent]
     EntityComponentPolicy: _ClassVar[EntityComponent]
     EntityComponentAuthorization: _ClassVar[EntityComponent]
+    EntityComponentMeasurement: _ClassVar[EntityComponent]
 
 class TaskStatus(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -336,6 +338,7 @@ EntityChangeInvalid: EntityChange
 EntityChangeUpdated: EntityChange
 EntityChangeExpired: EntityChange
 EntityChangeUnobserved: EntityChange
+EntityChangeHeartbeat: EntityChange
 EntityComponentUnspecified: EntityComponent
 EntityComponentLabel: EntityComponent
 EntityComponentController: EntityComponent
@@ -382,13 +385,14 @@ EntityComponentTargetManualControl: EntityComponent
 EntityComponentBounds: EntityComponent
 EntityComponentPolicy: EntityComponent
 EntityComponentAuthorization: EntityComponent
+EntityComponentMeasurement: EntityComponent
 TaskStatusInvalid: TaskStatus
 TaskStatusRunning: TaskStatus
 TaskStatusCompleted: TaskStatus
 TaskStatusFailed: TaskStatus
 
 class Entity(_message.Message):
-    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "gnss", "device", "link", "pose", "target_pose", "local_shape", "metric", "config", "configurable", "taskable", "task_execution", "mission", "sensor", "interactivity", "artifact", "chat", "assembly", "map_layer", "manual_control", "target_manual_control", "bounds", "policy", "authorization")
+    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "gnss", "device", "link", "pose", "target_pose", "local_shape", "metric", "config", "configurable", "taskable", "task_execution", "mission", "sensor", "interactivity", "artifact", "chat", "assembly", "map_layer", "manual_control", "target_manual_control", "bounds", "policy", "authorization", "measurement")
     ID_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     CONTROLLER_FIELD_NUMBER: _ClassVar[int]
@@ -435,6 +439,7 @@ class Entity(_message.Message):
     BOUNDS_FIELD_NUMBER: _ClassVar[int]
     POLICY_FIELD_NUMBER: _ClassVar[int]
     AUTHORIZATION_FIELD_NUMBER: _ClassVar[int]
+    MEASUREMENT_FIELD_NUMBER: _ClassVar[int]
     id: str
     label: str
     controller: Controller
@@ -481,7 +486,8 @@ class Entity(_message.Message):
     bounds: BoundsComponent
     policy: _policy_pb2.PolicyComponent
     authorization: _policy_pb2.AuthorizationComponent
-    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., gnss: _Optional[_Union[GnssComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ..., map_layer: _Optional[_Union[MapLayerComponent, _Mapping]] = ..., manual_control: _Optional[_Union[ManualControlComponent, _Mapping]] = ..., target_manual_control: _Optional[_Union[TargetManualControlComponent, _Mapping]] = ..., bounds: _Optional[_Union[BoundsComponent, _Mapping]] = ..., policy: _Optional[_Union[_policy_pb2.PolicyComponent, _Mapping]] = ..., authorization: _Optional[_Union[_policy_pb2.AuthorizationComponent, _Mapping]] = ...) -> None: ...
+    measurement: MeasurementComponent
+    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., gnss: _Optional[_Union[GnssComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ..., map_layer: _Optional[_Union[MapLayerComponent, _Mapping]] = ..., manual_control: _Optional[_Union[ManualControlComponent, _Mapping]] = ..., target_manual_control: _Optional[_Union[TargetManualControlComponent, _Mapping]] = ..., bounds: _Optional[_Union[BoundsComponent, _Mapping]] = ..., policy: _Optional[_Union[_policy_pb2.PolicyComponent, _Mapping]] = ..., authorization: _Optional[_Union[_policy_pb2.AuthorizationComponent, _Mapping]] = ..., measurement: _Optional[_Union[MeasurementComponent, _Mapping]] = ...) -> None: ...
 
 class Controller(_message.Message):
     __slots__ = ("id", "node", "origin")
@@ -523,16 +529,22 @@ class Routing(_message.Message):
     def __init__(self, channels: _Optional[_Iterable[_Union[Channel, _Mapping]]] = ...) -> None: ...
 
 class GeoSpatialComponent(_message.Message):
-    __slots__ = ("longitude", "latitude", "altitude", "covariance")
+    __slots__ = ("longitude", "latitude", "altitude", "covariance", "latitude_e7", "longitude_e7", "altitude_cm")
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     ALTITUDE_FIELD_NUMBER: _ClassVar[int]
     COVARIANCE_FIELD_NUMBER: _ClassVar[int]
+    LATITUDE_E7_FIELD_NUMBER: _ClassVar[int]
+    LONGITUDE_E7_FIELD_NUMBER: _ClassVar[int]
+    ALTITUDE_CM_FIELD_NUMBER: _ClassVar[int]
     longitude: float
     latitude: float
     altitude: float
     covariance: CovarianceMatrix
-    def __init__(self, longitude: _Optional[float] = ..., latitude: _Optional[float] = ..., altitude: _Optional[float] = ..., covariance: _Optional[_Union[CovarianceMatrix, _Mapping]] = ...) -> None: ...
+    latitude_e7: int
+    longitude_e7: int
+    altitude_cm: int
+    def __init__(self, longitude: _Optional[float] = ..., latitude: _Optional[float] = ..., altitude: _Optional[float] = ..., covariance: _Optional[_Union[CovarianceMatrix, _Mapping]] = ..., latitude_e7: _Optional[int] = ..., longitude_e7: _Optional[int] = ..., altitude_cm: _Optional[int] = ...) -> None: ...
 
 class GnssComponent(_message.Message):
     __slots__ = ("fix_type", "satellites_visible", "satellites_used", "hdop", "vdop", "pdop")
@@ -754,7 +766,7 @@ class CartesianOffset(_message.Message):
     def __init__(self, east_m: _Optional[float] = ..., north_m: _Optional[float] = ..., up_m: _Optional[float] = ..., covariance: _Optional[_Union[CovarianceMatrix, _Mapping]] = ..., orientation: _Optional[_Union[Quaternion, _Mapping]] = ...) -> None: ...
 
 class PolarOffset(_message.Message):
-    __slots__ = ("azimuth", "elevation", "range", "covariance", "azimuth_error_deg", "elevation_error_deg", "range_error_m", "orientation")
+    __slots__ = ("azimuth", "elevation", "range", "covariance", "azimuth_error_deg", "elevation_error_deg", "range_error_m", "orientation", "azimuth_cdeg", "azimuth_error_cdeg")
     AZIMUTH_FIELD_NUMBER: _ClassVar[int]
     ELEVATION_FIELD_NUMBER: _ClassVar[int]
     RANGE_FIELD_NUMBER: _ClassVar[int]
@@ -763,6 +775,8 @@ class PolarOffset(_message.Message):
     ELEVATION_ERROR_DEG_FIELD_NUMBER: _ClassVar[int]
     RANGE_ERROR_M_FIELD_NUMBER: _ClassVar[int]
     ORIENTATION_FIELD_NUMBER: _ClassVar[int]
+    AZIMUTH_CDEG_FIELD_NUMBER: _ClassVar[int]
+    AZIMUTH_ERROR_CDEG_FIELD_NUMBER: _ClassVar[int]
     azimuth: float
     elevation: float
     range: float
@@ -771,7 +785,9 @@ class PolarOffset(_message.Message):
     elevation_error_deg: float
     range_error_m: float
     orientation: Quaternion
-    def __init__(self, azimuth: _Optional[float] = ..., elevation: _Optional[float] = ..., range: _Optional[float] = ..., covariance: _Optional[_Union[CovarianceMatrix, _Mapping]] = ..., azimuth_error_deg: _Optional[float] = ..., elevation_error_deg: _Optional[float] = ..., range_error_m: _Optional[float] = ..., orientation: _Optional[_Union[Quaternion, _Mapping]] = ...) -> None: ...
+    azimuth_cdeg: int
+    azimuth_error_cdeg: int
+    def __init__(self, azimuth: _Optional[float] = ..., elevation: _Optional[float] = ..., range: _Optional[float] = ..., covariance: _Optional[_Union[CovarianceMatrix, _Mapping]] = ..., azimuth_error_deg: _Optional[float] = ..., elevation_error_deg: _Optional[float] = ..., range_error_m: _Optional[float] = ..., orientation: _Optional[_Union[Quaternion, _Mapping]] = ..., azimuth_cdeg: _Optional[int] = ..., azimuth_error_cdeg: _Optional[int] = ...) -> None: ...
 
 class PoseComponent(_message.Message):
     __slots__ = ("parent", "cartesian", "polar")
@@ -933,6 +949,20 @@ class LocalShapeComponent(_message.Message):
     extrusion: _geometry_pb2.GeometryExtrusion
     def __init__(self, relative_to: _Optional[str] = ..., geometry: _Optional[_Union[_geometry_pb2.LocalGeometry, _Mapping]] = ..., extrusion: _Optional[_Union[_geometry_pb2.GeometryExtrusion, _Mapping]] = ...) -> None: ...
 
+class MeasurementComponent(_message.Message):
+    __slots__ = ("vertex",)
+    VERTEX_FIELD_NUMBER: _ClassVar[int]
+    vertex: _containers.RepeatedCompositeFieldContainer[MeasurementVertex]
+    def __init__(self, vertex: _Optional[_Iterable[_Union[MeasurementVertex, _Mapping]]] = ...) -> None: ...
+
+class MeasurementVertex(_message.Message):
+    __slots__ = ("point", "entity")
+    POINT_FIELD_NUMBER: _ClassVar[int]
+    ENTITY_FIELD_NUMBER: _ClassVar[int]
+    point: _geometry_pb2.PlanarPoint
+    entity: str
+    def __init__(self, point: _Optional[_Union[_geometry_pb2.PlanarPoint, _Mapping]] = ..., entity: _Optional[str] = ...) -> None: ...
+
 class ClassificationComponent(_message.Message):
     __slots__ = ("dimension", "identity", "taxonomy")
     DIMENSION_FIELD_NUMBER: _ClassVar[int]
@@ -950,16 +980,24 @@ class IdentityComponent(_message.Message):
     def __init__(self, affiliation: _Optional[_Union[Affiliation, str]] = ...) -> None: ...
 
 class TransponderAIS(_message.Message):
-    __slots__ = ("mmsi", "imo", "callsign", "vessel_name")
+    __slots__ = ("mmsi", "imo", "callsign", "vessel_name", "dimension_to_bow_m", "dimension_to_stern_m", "dimension_to_port_m", "dimension_to_starboard_m")
     MMSI_FIELD_NUMBER: _ClassVar[int]
     IMO_FIELD_NUMBER: _ClassVar[int]
     CALLSIGN_FIELD_NUMBER: _ClassVar[int]
     VESSEL_NAME_FIELD_NUMBER: _ClassVar[int]
+    DIMENSION_TO_BOW_M_FIELD_NUMBER: _ClassVar[int]
+    DIMENSION_TO_STERN_M_FIELD_NUMBER: _ClassVar[int]
+    DIMENSION_TO_PORT_M_FIELD_NUMBER: _ClassVar[int]
+    DIMENSION_TO_STARBOARD_M_FIELD_NUMBER: _ClassVar[int]
     mmsi: int
     imo: int
     callsign: str
     vessel_name: str
-    def __init__(self, mmsi: _Optional[int] = ..., imo: _Optional[int] = ..., callsign: _Optional[str] = ..., vessel_name: _Optional[str] = ...) -> None: ...
+    dimension_to_bow_m: int
+    dimension_to_stern_m: int
+    dimension_to_port_m: int
+    dimension_to_starboard_m: int
+    def __init__(self, mmsi: _Optional[int] = ..., imo: _Optional[int] = ..., callsign: _Optional[str] = ..., vessel_name: _Optional[str] = ..., dimension_to_bow_m: _Optional[int] = ..., dimension_to_stern_m: _Optional[int] = ..., dimension_to_port_m: _Optional[int] = ..., dimension_to_starboard_m: _Optional[int] = ...) -> None: ...
 
 class TransponderADSB(_message.Message):
     __slots__ = ("icao_address", "flight_id")
@@ -978,32 +1016,40 @@ class TransponderComponent(_message.Message):
     def __init__(self, ais: _Optional[_Union[TransponderAIS, _Mapping]] = ..., adsb: _Optional[_Union[TransponderADSB, _Mapping]] = ...) -> None: ...
 
 class AdministrativeComponent(_message.Message):
-    __slots__ = ("id", "flag", "owner", "manufacturer", "model", "year_built", "length_m", "width_m", "height_m", "tonnage_gt", "engine_power_kw", "images")
+    __slots__ = ("id", "flag", "owner", "operator", "manufacturer", "model", "year_built", "length_m", "width_m", "height_m", "draught_m", "tonnage_gt", "deadweight_t", "engine_power_kw", "speed_max_kn", "images")
     ID_FIELD_NUMBER: _ClassVar[int]
     FLAG_FIELD_NUMBER: _ClassVar[int]
     OWNER_FIELD_NUMBER: _ClassVar[int]
+    OPERATOR_FIELD_NUMBER: _ClassVar[int]
     MANUFACTURER_FIELD_NUMBER: _ClassVar[int]
     MODEL_FIELD_NUMBER: _ClassVar[int]
     YEAR_BUILT_FIELD_NUMBER: _ClassVar[int]
     LENGTH_M_FIELD_NUMBER: _ClassVar[int]
     WIDTH_M_FIELD_NUMBER: _ClassVar[int]
     HEIGHT_M_FIELD_NUMBER: _ClassVar[int]
+    DRAUGHT_M_FIELD_NUMBER: _ClassVar[int]
     TONNAGE_GT_FIELD_NUMBER: _ClassVar[int]
+    DEADWEIGHT_T_FIELD_NUMBER: _ClassVar[int]
     ENGINE_POWER_KW_FIELD_NUMBER: _ClassVar[int]
+    SPEED_MAX_KN_FIELD_NUMBER: _ClassVar[int]
     IMAGES_FIELD_NUMBER: _ClassVar[int]
     id: str
     flag: str
     owner: str
+    operator: str
     manufacturer: str
     model: str
     year_built: int
     length_m: float
     width_m: float
     height_m: float
+    draught_m: float
     tonnage_gt: float
+    deadweight_t: float
     engine_power_kw: float
+    speed_max_kn: float
     images: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, id: _Optional[str] = ..., flag: _Optional[str] = ..., owner: _Optional[str] = ..., manufacturer: _Optional[str] = ..., model: _Optional[str] = ..., year_built: _Optional[int] = ..., length_m: _Optional[float] = ..., width_m: _Optional[float] = ..., height_m: _Optional[float] = ..., tonnage_gt: _Optional[float] = ..., engine_power_kw: _Optional[float] = ..., images: _Optional[_Iterable[str]] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., flag: _Optional[str] = ..., owner: _Optional[str] = ..., operator: _Optional[str] = ..., manufacturer: _Optional[str] = ..., model: _Optional[str] = ..., year_built: _Optional[int] = ..., length_m: _Optional[float] = ..., width_m: _Optional[float] = ..., height_m: _Optional[float] = ..., draught_m: _Optional[float] = ..., tonnage_gt: _Optional[float] = ..., deadweight_t: _Optional[float] = ..., engine_power_kw: _Optional[float] = ..., speed_max_kn: _Optional[float] = ..., images: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class NavigationComponent(_message.Message):
     __slots__ = ("mode", "armed", "emergency", "waypoint_current", "waypoint_total")
@@ -1075,19 +1121,31 @@ class CaptureComponent(_message.Message):
     content: _containers.RepeatedScalarFieldContainer[str]
     def __init__(self, payload: _Optional[bytes] = ..., port: _Optional[int] = ..., content_type: _Optional[str] = ..., captured_by: _Optional[str] = ..., captured_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., content: _Optional[_Iterable[str]] = ...) -> None: ...
 
+class CaptureFilter(_message.Message):
+    __slots__ = ("port", "content_type", "captured_by")
+    PORT_FIELD_NUMBER: _ClassVar[int]
+    CONTENT_TYPE_FIELD_NUMBER: _ClassVar[int]
+    CAPTURED_BY_FIELD_NUMBER: _ClassVar[int]
+    port: int
+    content_type: str
+    captured_by: str
+    def __init__(self, port: _Optional[int] = ..., content_type: _Optional[str] = ..., captured_by: _Optional[str] = ...) -> None: ...
+
 class PowerComponent(_message.Message):
-    __slots__ = ("battery_charge_remaining", "voltage", "remaining_seconds", "current_a", "capacity_used_mah")
+    __slots__ = ("battery_charge_remaining", "voltage", "remaining_seconds", "current_a", "capacity_used_mah", "battery_charge_percent")
     BATTERY_CHARGE_REMAINING_FIELD_NUMBER: _ClassVar[int]
     VOLTAGE_FIELD_NUMBER: _ClassVar[int]
     REMAINING_SECONDS_FIELD_NUMBER: _ClassVar[int]
     CURRENT_A_FIELD_NUMBER: _ClassVar[int]
     CAPACITY_USED_MAH_FIELD_NUMBER: _ClassVar[int]
+    BATTERY_CHARGE_PERCENT_FIELD_NUMBER: _ClassVar[int]
     battery_charge_remaining: float
     voltage: float
     remaining_seconds: int
     current_a: float
     capacity_used_mah: float
-    def __init__(self, battery_charge_remaining: _Optional[float] = ..., voltage: _Optional[float] = ..., remaining_seconds: _Optional[int] = ..., current_a: _Optional[float] = ..., capacity_used_mah: _Optional[float] = ...) -> None: ...
+    battery_charge_percent: int
+    def __init__(self, battery_charge_remaining: _Optional[float] = ..., voltage: _Optional[float] = ..., remaining_seconds: _Optional[int] = ..., current_a: _Optional[float] = ..., capacity_used_mah: _Optional[float] = ..., battery_charge_percent: _Optional[int] = ...) -> None: ...
 
 class DeviceClassOption(_message.Message):
     __slots__ = ("label", "description")
@@ -1119,10 +1177,11 @@ class ConfigurableComponent(_message.Message):
     def __init__(self, schema: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., value: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., state: _Optional[_Union[ConfigurableState, str]] = ..., error: _Optional[str] = ..., label: _Optional[str] = ..., applied_version: _Optional[int] = ..., supported_device_classes: _Optional[_Iterable[_Union[DeviceClassOption, _Mapping]]] = ..., scheduled_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class DeviceComponent(_message.Message):
-    __slots__ = ("parent", "composition", "unique_hardware_id", "state", "error", "category", "node", "usb", "ip", "serial", "ethernet", "lpwan", "meshtastic", "ble")
+    __slots__ = ("parent", "composition", "unique_hardware_id", "unique_hardware_index", "state", "error", "category", "node", "usb", "ip", "serial", "ethernet", "lpwan", "meshtastic", "ble")
     PARENT_FIELD_NUMBER: _ClassVar[int]
     COMPOSITION_FIELD_NUMBER: _ClassVar[int]
     UNIQUE_HARDWARE_ID_FIELD_NUMBER: _ClassVar[int]
+    UNIQUE_HARDWARE_INDEX_FIELD_NUMBER: _ClassVar[int]
     STATE_FIELD_NUMBER: _ClassVar[int]
     ERROR_FIELD_NUMBER: _ClassVar[int]
     CLASS_FIELD_NUMBER: _ClassVar[int]
@@ -1138,6 +1197,7 @@ class DeviceComponent(_message.Message):
     parent: str
     composition: _containers.RepeatedScalarFieldContainer[str]
     unique_hardware_id: str
+    unique_hardware_index: int
     state: DeviceState
     error: str
     category: str
@@ -1149,7 +1209,7 @@ class DeviceComponent(_message.Message):
     lpwan: LPWANDevice
     meshtastic: MeshtasticDevice
     ble: BleDevice
-    def __init__(self, parent: _Optional[str] = ..., composition: _Optional[_Iterable[str]] = ..., unique_hardware_id: _Optional[str] = ..., state: _Optional[_Union[DeviceState, str]] = ..., error: _Optional[str] = ..., category: _Optional[str] = ..., node: _Optional[_Union[NodeDevice, _Mapping]] = ..., usb: _Optional[_Union[UsbDevice, _Mapping]] = ..., ip: _Optional[_Union[IpDevice, _Mapping]] = ..., serial: _Optional[_Union[SerialDevice, _Mapping]] = ..., ethernet: _Optional[_Union[EthernetDevice, _Mapping]] = ..., lpwan: _Optional[_Union[LPWANDevice, _Mapping]] = ..., meshtastic: _Optional[_Union[MeshtasticDevice, _Mapping]] = ..., ble: _Optional[_Union[BleDevice, _Mapping]] = ..., **kwargs) -> None: ...
+    def __init__(self, parent: _Optional[str] = ..., composition: _Optional[_Iterable[str]] = ..., unique_hardware_id: _Optional[str] = ..., unique_hardware_index: _Optional[int] = ..., state: _Optional[_Union[DeviceState, str]] = ..., error: _Optional[str] = ..., category: _Optional[str] = ..., node: _Optional[_Union[NodeDevice, _Mapping]] = ..., usb: _Optional[_Union[UsbDevice, _Mapping]] = ..., ip: _Optional[_Union[IpDevice, _Mapping]] = ..., serial: _Optional[_Union[SerialDevice, _Mapping]] = ..., ethernet: _Optional[_Union[EthernetDevice, _Mapping]] = ..., lpwan: _Optional[_Union[LPWANDevice, _Mapping]] = ..., meshtastic: _Optional[_Union[MeshtasticDevice, _Mapping]] = ..., ble: _Optional[_Union[BleDevice, _Mapping]] = ..., **kwargs) -> None: ...
 
 class MissionPack(_message.Message):
     __slots__ = ("layouts", "entity_count", "pack_version", "imported_at", "artifact_count", "artifact_total_size")
@@ -1175,7 +1235,7 @@ class MissionPack(_message.Message):
     def __init__(self, layouts: _Optional[_Mapping[str, str]] = ..., entity_count: _Optional[int] = ..., pack_version: _Optional[str] = ..., imported_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., artifact_count: _Optional[int] = ..., artifact_total_size: _Optional[int] = ...) -> None: ...
 
 class NodeDevice(_message.Message):
-    __slots__ = ("hostname", "os", "arch", "num_cpu", "os_version", "hydris_version", "hydris_update_available", "mission")
+    __slots__ = ("hostname", "os", "arch", "num_cpu", "os_version", "hydris_version", "hydris_update_available", "mission", "mtls_identity")
     HOSTNAME_FIELD_NUMBER: _ClassVar[int]
     OS_FIELD_NUMBER: _ClassVar[int]
     ARCH_FIELD_NUMBER: _ClassVar[int]
@@ -1184,6 +1244,7 @@ class NodeDevice(_message.Message):
     HYDRIS_VERSION_FIELD_NUMBER: _ClassVar[int]
     HYDRIS_UPDATE_AVAILABLE_FIELD_NUMBER: _ClassVar[int]
     MISSION_FIELD_NUMBER: _ClassVar[int]
+    MTLS_IDENTITY_FIELD_NUMBER: _ClassVar[int]
     hostname: str
     os: str
     arch: str
@@ -1192,7 +1253,8 @@ class NodeDevice(_message.Message):
     hydris_version: str
     hydris_update_available: str
     mission: MissionPack
-    def __init__(self, hostname: _Optional[str] = ..., os: _Optional[str] = ..., arch: _Optional[str] = ..., num_cpu: _Optional[int] = ..., os_version: _Optional[str] = ..., hydris_version: _Optional[str] = ..., hydris_update_available: _Optional[str] = ..., mission: _Optional[_Union[MissionPack, _Mapping]] = ...) -> None: ...
+    mtls_identity: str
+    def __init__(self, hostname: _Optional[str] = ..., os: _Optional[str] = ..., arch: _Optional[str] = ..., num_cpu: _Optional[int] = ..., os_version: _Optional[str] = ..., hydris_version: _Optional[str] = ..., hydris_update_available: _Optional[str] = ..., mission: _Optional[_Union[MissionPack, _Mapping]] = ..., mtls_identity: _Optional[str] = ...) -> None: ...
 
 class UsbDevice(_message.Message):
     __slots__ = ("vendor_id", "product_id", "device_class", "device_subclass", "device_protocol", "manufacturer_name", "product_name", "serial_number")
@@ -1339,12 +1401,13 @@ class TargetManualControlComponent(_message.Message):
     def __init__(self, input: _Optional[_Iterable[_Union[_manualcontrol_pb2.ManualControlInput, _Mapping]]] = ...) -> None: ...
 
 class EntityFilter(_message.Message):
-    __slots__ = ("id", "label", "geo", "taskable", "component", "controller", "track", "mission", "channel", "device", "config")
+    __slots__ = ("id", "label", "geo", "taskable", "component", "capture", "controller", "track", "mission", "channel", "device", "config")
     ID_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     GEO_FIELD_NUMBER: _ClassVar[int]
     TASKABLE_FIELD_NUMBER: _ClassVar[int]
     COMPONENT_FIELD_NUMBER: _ClassVar[int]
+    CAPTURE_FIELD_NUMBER: _ClassVar[int]
     CONTROLLER_FIELD_NUMBER: _ClassVar[int]
     TRACK_FIELD_NUMBER: _ClassVar[int]
     MISSION_FIELD_NUMBER: _ClassVar[int]
@@ -1358,13 +1421,14 @@ class EntityFilter(_message.Message):
     geo: GeoFilter
     taskable: TaskableFilter
     component: _containers.RepeatedScalarFieldContainer[int]
+    capture: CaptureFilter
     controller: ControllerFilter
     track: TrackFilter
     mission: MissionFilter
     channel: ChannelFilter
     device: DeviceFilter
     config: ConfigurationFilter
-    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., geo: _Optional[_Union[GeoFilter, _Mapping]] = ..., taskable: _Optional[_Union[TaskableFilter, _Mapping]] = ..., component: _Optional[_Iterable[int]] = ..., controller: _Optional[_Union[ControllerFilter, _Mapping]] = ..., track: _Optional[_Union[TrackFilter, _Mapping]] = ..., mission: _Optional[_Union[MissionFilter, _Mapping]] = ..., channel: _Optional[_Union[ChannelFilter, _Mapping]] = ..., device: _Optional[_Union[DeviceFilter, _Mapping]] = ..., config: _Optional[_Union[ConfigurationFilter, _Mapping]] = ..., **kwargs) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., geo: _Optional[_Union[GeoFilter, _Mapping]] = ..., taskable: _Optional[_Union[TaskableFilter, _Mapping]] = ..., component: _Optional[_Iterable[int]] = ..., capture: _Optional[_Union[CaptureFilter, _Mapping]] = ..., controller: _Optional[_Union[ControllerFilter, _Mapping]] = ..., track: _Optional[_Union[TrackFilter, _Mapping]] = ..., mission: _Optional[_Union[MissionFilter, _Mapping]] = ..., channel: _Optional[_Union[ChannelFilter, _Mapping]] = ..., device: _Optional[_Union[DeviceFilter, _Mapping]] = ..., config: _Optional[_Union[ConfigurationFilter, _Mapping]] = ..., **kwargs) -> None: ...
 
 class ControllerFilter(_message.Message):
     __slots__ = ("id", "node", "origin")
@@ -1473,16 +1537,18 @@ class SortOption(_message.Message):
     def __init__(self, field: _Optional[_Union[SortField, str]] = ..., descending: bool = ..., metric_id: _Optional[int] = ..., metric_kind: _Optional[_Union[_metrics_pb2.MetricKind, str]] = ...) -> None: ...
 
 class WatchBehavior(_message.Message):
-    __slots__ = ("max_rate_hz", "min_priority", "keepalive_interval_ms", "diff")
+    __slots__ = ("max_rate_hz", "min_priority", "keepalive_interval_ms", "diff", "heartbeat_interval_ms")
     MAX_RATE_HZ_FIELD_NUMBER: _ClassVar[int]
     MIN_PRIORITY_FIELD_NUMBER: _ClassVar[int]
     KEEPALIVE_INTERVAL_MS_FIELD_NUMBER: _ClassVar[int]
     DIFF_FIELD_NUMBER: _ClassVar[int]
+    HEARTBEAT_INTERVAL_MS_FIELD_NUMBER: _ClassVar[int]
     max_rate_hz: float
     min_priority: Priority
     keepalive_interval_ms: int
     diff: bool
-    def __init__(self, max_rate_hz: _Optional[float] = ..., min_priority: _Optional[_Union[Priority, str]] = ..., keepalive_interval_ms: _Optional[int] = ..., diff: bool = ...) -> None: ...
+    heartbeat_interval_ms: int
+    def __init__(self, max_rate_hz: _Optional[float] = ..., min_priority: _Optional[_Union[Priority, str]] = ..., keepalive_interval_ms: _Optional[int] = ..., diff: bool = ..., heartbeat_interval_ms: _Optional[int] = ...) -> None: ...
 
 class ListEntitiesRequest(_message.Message):
     __slots__ = ("filter", "sort", "behaviour", "dump_internal")
@@ -1531,12 +1597,14 @@ class EntityChangeResponse(_message.Message):
     def __init__(self, accepted: bool = ..., debug: _Optional[str] = ...) -> None: ...
 
 class EntityChangeEvent(_message.Message):
-    __slots__ = ("entity", "t")
+    __slots__ = ("entity", "t", "now")
     ENTITY_FIELD_NUMBER: _ClassVar[int]
     T_FIELD_NUMBER: _ClassVar[int]
+    NOW_FIELD_NUMBER: _ClassVar[int]
     entity: Entity
     t: EntityChange
-    def __init__(self, entity: _Optional[_Union[Entity, _Mapping]] = ..., t: _Optional[_Union[EntityChange, str]] = ...) -> None: ...
+    now: _timestamp_pb2.Timestamp
+    def __init__(self, entity: _Optional[_Union[Entity, _Mapping]] = ..., t: _Optional[_Union[EntityChange, str]] = ..., now: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class EntityChangeBatch(_message.Message):
     __slots__ = ("events",)

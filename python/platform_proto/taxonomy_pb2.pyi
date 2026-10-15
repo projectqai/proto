@@ -5,7 +5,7 @@ from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Opti
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class ClassificationTaxonomy(_message.Message):
-    __slots__ = ("confidence", "person", "animal", "infrastructure", "vehicle", "equipment", "emitter")
+    __slots__ = ("confidence", "person", "animal", "infrastructure", "vehicle", "equipment", "emitter", "other")
     CONFIDENCE_FIELD_NUMBER: _ClassVar[int]
     PERSON_FIELD_NUMBER: _ClassVar[int]
     ANIMAL_FIELD_NUMBER: _ClassVar[int]
@@ -13,6 +13,7 @@ class ClassificationTaxonomy(_message.Message):
     VEHICLE_FIELD_NUMBER: _ClassVar[int]
     EQUIPMENT_FIELD_NUMBER: _ClassVar[int]
     EMITTER_FIELD_NUMBER: _ClassVar[int]
+    OTHER_FIELD_NUMBER: _ClassVar[int]
     confidence: ClassificationConfidence
     person: PersonTaxonomy
     animal: AnimalTaxonomy
@@ -20,15 +21,22 @@ class ClassificationTaxonomy(_message.Message):
     vehicle: VehicleTaxonomy
     equipment: EquipmentTaxonomy
     emitter: EmitterTaxonomy
-    def __init__(self, confidence: _Optional[_Union[ClassificationConfidence, _Mapping]] = ..., person: _Optional[_Union[PersonTaxonomy, _Mapping]] = ..., animal: _Optional[_Union[AnimalTaxonomy, _Mapping]] = ..., infrastructure: _Optional[_Union[InfrastructureTaxonomy, _Mapping]] = ..., vehicle: _Optional[_Union[VehicleTaxonomy, _Mapping]] = ..., equipment: _Optional[_Union[EquipmentTaxonomy, _Mapping]] = ..., emitter: _Optional[_Union[EmitterTaxonomy, _Mapping]] = ...) -> None: ...
+    other: OtherTaxonomy
+    def __init__(self, confidence: _Optional[_Union[ClassificationConfidence, _Mapping]] = ..., person: _Optional[_Union[PersonTaxonomy, _Mapping]] = ..., animal: _Optional[_Union[AnimalTaxonomy, _Mapping]] = ..., infrastructure: _Optional[_Union[InfrastructureTaxonomy, _Mapping]] = ..., vehicle: _Optional[_Union[VehicleTaxonomy, _Mapping]] = ..., equipment: _Optional[_Union[EquipmentTaxonomy, _Mapping]] = ..., emitter: _Optional[_Union[EmitterTaxonomy, _Mapping]] = ..., other: _Optional[_Union[OtherTaxonomy, _Mapping]] = ...) -> None: ...
+
+class OtherTaxonomy(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
 
 class ClassificationConfidence(_message.Message):
-    __slots__ = ("confidence", "pending")
+    __slots__ = ("confidence", "pending", "confidence_percent")
     CONFIDENCE_FIELD_NUMBER: _ClassVar[int]
     PENDING_FIELD_NUMBER: _ClassVar[int]
+    CONFIDENCE_PERCENT_FIELD_NUMBER: _ClassVar[int]
     confidence: float
     pending: bool
-    def __init__(self, confidence: _Optional[float] = ..., pending: bool = ...) -> None: ...
+    confidence_percent: int
+    def __init__(self, confidence: _Optional[float] = ..., pending: bool = ..., confidence_percent: _Optional[int] = ...) -> None: ...
 
 class PersonTaxonomy(_message.Message):
     __slots__ = ()
@@ -127,6 +135,24 @@ class VehicleTaxonomyTwoWheeled(_message.Message):
     def __init__(self) -> None: ...
 
 class VehicleTaxonomyMultiWheeled(_message.Message):
+    __slots__ = ("light", "medium", "heavy")
+    LIGHT_FIELD_NUMBER: _ClassVar[int]
+    MEDIUM_FIELD_NUMBER: _ClassVar[int]
+    HEAVY_FIELD_NUMBER: _ClassVar[int]
+    light: VehicleTaxonomyMultiWheeledLight
+    medium: VehicleTaxonomyMultiWheeledMedium
+    heavy: VehicleTaxonomyMultiWheeledHeavy
+    def __init__(self, light: _Optional[_Union[VehicleTaxonomyMultiWheeledLight, _Mapping]] = ..., medium: _Optional[_Union[VehicleTaxonomyMultiWheeledMedium, _Mapping]] = ..., heavy: _Optional[_Union[VehicleTaxonomyMultiWheeledHeavy, _Mapping]] = ...) -> None: ...
+
+class VehicleTaxonomyMultiWheeledLight(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class VehicleTaxonomyMultiWheeledMedium(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class VehicleTaxonomyMultiWheeledHeavy(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
 
@@ -167,20 +193,22 @@ class EquipmentTaxonomy(_message.Message):
     def __init__(self, sensor: _Optional[_Union[EquipmentTaxonomySensor, _Mapping]] = ...) -> None: ...
 
 class EquipmentTaxonomySensor(_message.Message):
-    __slots__ = ("emplaced", "radar", "ew", "cbrn", "acoustic", "electro_optical")
+    __slots__ = ("emplaced", "radar", "ew", "cbrn", "acoustic", "electro_optical", "seismic")
     EMPLACED_FIELD_NUMBER: _ClassVar[int]
     RADAR_FIELD_NUMBER: _ClassVar[int]
     EW_FIELD_NUMBER: _ClassVar[int]
     CBRN_FIELD_NUMBER: _ClassVar[int]
     ACOUSTIC_FIELD_NUMBER: _ClassVar[int]
     ELECTRO_OPTICAL_FIELD_NUMBER: _ClassVar[int]
+    SEISMIC_FIELD_NUMBER: _ClassVar[int]
     emplaced: EquipmentTaxonomySensorEmplaced
     radar: EquipmentTaxonomySensorRadar
     ew: EquipmentTaxonomySensorEW
     cbrn: EquipmentTaxonomySensorCBRN
     acoustic: EquipmentTaxonomySensorAcoustic
     electro_optical: EquipmentTaxonomySensorElectroOptical
-    def __init__(self, emplaced: _Optional[_Union[EquipmentTaxonomySensorEmplaced, _Mapping]] = ..., radar: _Optional[_Union[EquipmentTaxonomySensorRadar, _Mapping]] = ..., ew: _Optional[_Union[EquipmentTaxonomySensorEW, _Mapping]] = ..., cbrn: _Optional[_Union[EquipmentTaxonomySensorCBRN, _Mapping]] = ..., acoustic: _Optional[_Union[EquipmentTaxonomySensorAcoustic, _Mapping]] = ..., electro_optical: _Optional[_Union[EquipmentTaxonomySensorElectroOptical, _Mapping]] = ...) -> None: ...
+    seismic: EquipmentTaxonomySensorSeismic
+    def __init__(self, emplaced: _Optional[_Union[EquipmentTaxonomySensorEmplaced, _Mapping]] = ..., radar: _Optional[_Union[EquipmentTaxonomySensorRadar, _Mapping]] = ..., ew: _Optional[_Union[EquipmentTaxonomySensorEW, _Mapping]] = ..., cbrn: _Optional[_Union[EquipmentTaxonomySensorCBRN, _Mapping]] = ..., acoustic: _Optional[_Union[EquipmentTaxonomySensorAcoustic, _Mapping]] = ..., electro_optical: _Optional[_Union[EquipmentTaxonomySensorElectroOptical, _Mapping]] = ..., seismic: _Optional[_Union[EquipmentTaxonomySensorSeismic, _Mapping]] = ...) -> None: ...
 
 class EquipmentTaxonomySensorRadar(_message.Message):
     __slots__ = ()
@@ -203,6 +231,10 @@ class EquipmentTaxonomySensorElectroOptical(_message.Message):
     def __init__(self) -> None: ...
 
 class EquipmentTaxonomySensorEmplaced(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class EquipmentTaxonomySensorSeismic(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...
 

@@ -92,13 +92,18 @@ function responseBodyStream(resp: Response): AsyncIterable<Uint8Array> {
 	};
 }
 
-export function connect(serverURL?: string): WorldClient {
+// connect returns a client for the engine. A plugin may pass one of the extra
+// identities its package.json declares under hydris.actors to push as it; the
+// plugin host refuses anything undeclared. Use it for data the plugin does not
+// trust, so a tighter policy bounds it than the plugin's own code.
+export function connect(serverURL?: string, opts?: { actor?: string }): WorldClient {
 	const base = serverURL ?? process.env.HYDRIS_SERVER ?? "http://localhost:50051";
+	const actor = opts?.actor;
 	const transport = createTransport({
 		baseUrl: base,
 		httpClient: universalFetch,
 		useBinaryFormat: true,
-		interceptors: [],
+		interceptors: actor ? [(next) => (req) => { req.header.set("X-Plugin-Actor", actor); return next(req); }] : [],
 		acceptCompression: [],
 		sendCompression: null,
 		compressMinBytes: Number.MAX_SAFE_INTEGER,
@@ -166,7 +171,7 @@ function isCanceled(err: unknown): boolean {
 	return err instanceof ConnectError && err.code === Code.Canceled;
 }
 
-function sleep(ms: number, signal: AbortSignal): Promise<void> {
+export function sleep(ms: number, signal: AbortSignal): Promise<void> {
 	return new Promise((resolve) => {
 		if (signal.aborted) return resolve();
 		const timer = setTimeout(resolve, ms);

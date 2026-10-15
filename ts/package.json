@@ -1,6 +1,6 @@
 {
   "name": "@projectqai/proto",
-  "version": "0.0.70",
+  "version": "0.0.72",
   "author": "projectq-release-bot",
   "type": "module",
   "exports": {
@@ -29,8 +29,8 @@
     "@bufbuild/protoc-gen-es": "^2.10.1"
   },
   "scripts": {
-    "build": "buf generate",
-    "prepublishOnly": "bun run build",
-    "release": "bun run build && npm version patch && npm publish --access public"
+    "generate": "buf generate",
+    "prepublishOnly": "bun run generate",
+    "release": "bun run generate && npm version patch && npm publish --access public"
   }
 }

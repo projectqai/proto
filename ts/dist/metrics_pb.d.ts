@@ -683,6 +683,11 @@ export enum MetricUnit {
   MetricUnitMegabitPerSecond = 82,
 
   /**
+   * @generated from enum value: MetricUnitKilobytePerSecond = 88;
+   */
+  MetricUnitKilobytePerSecond = 88,
+
+  /**
    * Data size
    *
    * @generated from enum value: MetricUnitByte = 84;

@@ -16,14 +16,16 @@ LineStyleDashed: LineStyle
 LineStyleDotted: LineStyle
 
 class PlanarPoint(_message.Message):
-    __slots__ = ("longitude", "latitude", "altitude")
+    __slots__ = ("longitude", "latitude", "altitude", "entity")
     LONGITUDE_FIELD_NUMBER: _ClassVar[int]
     LATITUDE_FIELD_NUMBER: _ClassVar[int]
     ALTITUDE_FIELD_NUMBER: _ClassVar[int]
+    ENTITY_FIELD_NUMBER: _ClassVar[int]
     longitude: float
     latitude: float
     altitude: float
-    def __init__(self, longitude: _Optional[float] = ..., latitude: _Optional[float] = ..., altitude: _Optional[float] = ...) -> None: ...
+    entity: str
+    def __init__(self, longitude: _Optional[float] = ..., latitude: _Optional[float] = ..., altitude: _Optional[float] = ..., entity: _Optional[str] = ...) -> None: ...
 
 class PlanarRing(_message.Message):
     __slots__ = ("points",)

@@ -14,12 +14,18 @@ message ClassificationTaxonomy {
     VehicleTaxonomy vehicle = 13;
     EquipmentTaxonomy equipment = 14;
     EmitterTaxonomy emitter = 15;
+    OtherTaxonomy other = 16;
   }
 }
+
+message OtherTaxonomy {}
 
 message ClassificationConfidence {
   float confidence = 1;
   bool pending = 2;
+
+  // confidence in percent (0 - 100)
+  optional uint32 confidence_percent = 3;
 }
 
 /// ------------------ PERSON
@@ -85,7 +91,18 @@ message VehicleTaxonomyLand {
 
 message VehicleTaxonomyTracked {}
 message VehicleTaxonomyTwoWheeled {}
-message VehicleTaxonomyMultiWheeled {}
+
+message VehicleTaxonomyMultiWheeled {
+  oneof weight {
+    VehicleTaxonomyMultiWheeledLight light = 1;
+    VehicleTaxonomyMultiWheeledMedium medium = 2;
+    VehicleTaxonomyMultiWheeledHeavy heavy = 3;
+  }
+}
+
+message VehicleTaxonomyMultiWheeledLight {}
+message VehicleTaxonomyMultiWheeledMedium {}
+message VehicleTaxonomyMultiWheeledHeavy {}
 
 /// --------------- VEHICLE AIR
 
@@ -123,6 +140,7 @@ message EquipmentTaxonomySensor {
     EquipmentTaxonomySensorCBRN cbrn = 12;
     EquipmentTaxonomySensorAcoustic acoustic = 13;
     EquipmentTaxonomySensorElectroOptical electro_optical = 14;
+    EquipmentTaxonomySensorSeismic seismic = 15;
   }
 }
 
@@ -132,6 +150,7 @@ message EquipmentTaxonomySensorCBRN {}
 message EquipmentTaxonomySensorAcoustic {}
 message EquipmentTaxonomySensorElectroOptical {}
 message EquipmentTaxonomySensorEmplaced {}
+message EquipmentTaxonomySensorSeismic {}
 
 /// --------------- EMITTER
 

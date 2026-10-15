@@ -94,6 +94,9 @@ message Lease {
   optional google.protobuf.Timestamp expires = 2;
 }
 
+// all times are absolute wall clock. All involved systems must be synchronized to the same clock.
+// federation does this automatically. Consumers that cannot sync (TimeSync or NTP) can estimate
+// the upstream clock offset from EntityChangeEvent.now instead.
 message Lifetime {
   // time this entity should become valid.
   // will be set to now automatically if omited
@@ -103,7 +106,8 @@ message Lifetime {
   optional google.protobuf.Timestamp until = 2;
 
   // last time we have seen this entity, normally between from and until
-  // if set, updates to an entity with older fresh value are ignored by default
+  // if set, updates to an existing entity are ignored if the write isn't newer than existing
+  // Also considered the _version_ of an entity.
   optional google.protobuf.Timestamp fresh = 3;
 }
 
@@ -144,6 +148,12 @@ message GeoSpatialComponent {
 
   // covariance in meters² (local ENU frame): xx=east², yy=north², zz=up²
   optional CovarianceMatrix covariance = 4;
+
+  // fixed-point alternatives to the fields above, for bandwidth-constrained
+  // links: degrees × 1e7, and centimeters above ellipsoid (WGS84)
+  optional sint32 latitude_e7 = 5;
+  optional sint32 longitude_e7 = 6;
+  optional sint32 altitude_cm = 7;
 }
 
 enum GnssFixType {
@@ -363,6 +373,10 @@ message PolarOffset {
   optional double range_error_m = 12;
 
   optional Quaternion orientation = 5;
+
+  // fixed-point alternatives to azimuth and azimuth_error_deg, in centidegrees
+  optional uint32 azimuth_cdeg = 6;
+  optional uint32 azimuth_error_cdeg = 7;
 }
 
 // This entity's pose is defined relative to a parent entity's coordinate frame.
@@ -609,6 +623,14 @@ message TransponderAIS {
   optional uint32 imo = 2;
   optional string callsign = 3;
   optional string vessel_name = 4;
+
+  // Distances in meters from the reported position reference point (the GNSS
+  // antenna) to the hull, per ITU-R M.1371 msg 5 / 24B. Length = bow + stern,
+  // beam = port + starboard. Absent when the transponder reports all zeros.
+  optional uint32 dimension_to_bow_m = 5;
+  optional uint32 dimension_to_stern_m = 6;
+  optional uint32 dimension_to_port_m = 7;
+  optional uint32 dimension_to_starboard_m = 8;
 }
 
 message TransponderADSB {
@@ -625,14 +647,18 @@ message AdministrativeComponent {
   optional string id = 1;
   optional string flag = 2;
   optional string owner = 3;
+  optional string operator = 13;
   optional string manufacturer = 4;
   optional string model = 5;
   optional uint32 year_built = 6;
   optional float length_m = 7;
   optional float width_m = 10; // beam / lateral extent
   optional float height_m = 11; // vertical extent (e.g. air draft)
+  optional float draught_m = 14; // vertical extent below waterline
   optional float tonnage_gt = 8;
+  optional float deadweight_t = 15;
   optional float engine_power_kw = 9;
+  optional float speed_max_kn = 16;
   repeated string images = 12;
 }
 
@@ -739,6 +765,12 @@ message CaptureComponent {
   repeated string content = 6;
 }
 
+message CaptureFilter {
+  optional uint32 port = 1;
+  optional string content_type = 2;
+  optional string captured_by = 3;
+}
+
 message PowerComponent {
   // battery charge remaining (0.0 - 1.0)
   optional float battery_charge_remaining = 1;
@@ -754,6 +786,9 @@ message PowerComponent {
 
   // cumulative battery capacity consumed in milliamp-hours
   optional float capacity_used_mah = 5;
+
+  // battery charge remaining in percent (0 - 100)
+  optional uint32 battery_charge_percent = 6;
 }
 
 enum DeviceState {
@@ -824,6 +859,10 @@ message DeviceComponent {
   // physical hardware even if it moves to a different port or node.
   optional string unique_hardware_id = 4;
 
+  // numeric identity from a known list, for links too narrow for unique_hardware_id.
+  // a catalog maps it to unique_hardware_id.
+  optional uint64 unique_hardware_index = 5;
+
   DeviceState state = 6;
   optional string error = 7;
 
@@ -862,6 +901,9 @@ message NodeDevice {
   optional string hydris_version = 6;
   optional string hydris_update_available = 7;
   optional MissionPack mission = 8;
+
+  // Lowercase hex SHA-256 of the node's TLS leaf certificate
+  optional string mtls_identity = 9;
 }
 
 message UsbDevice {
@@ -987,6 +1029,7 @@ message EntityFilter {
   optional GeoFilter geo = 3; // entity geo intersects with geometry/bounds
   optional TaskableFilter taskable = 4;
   repeated uint32 component = 5; // entity must have ALL these components
+  optional CaptureFilter capture = 6;
   optional ControllerFilter controller = 7;
   optional TrackFilter track = 8;
   optional MissionFilter mission = 9;
@@ -1156,6 +1199,11 @@ message WatchBehavior {
   // When true, update events only contain the components that actually changed
   // rather than the full entity. The initial snapshot always sends full entities.
   optional bool diff = 5;
+
+  // Send an EntityChangeHeartbeat event when the stream has been idle for this
+  // long, so consumers keep receiving EntityChangeEvent.now for clock offset
+  // estimation. unset = 30s, 0 = no heartbeats. values lower than 1000 are capped to 1s
+  optional uint32 heartbeat_interval_ms = 6;
 }
 
 message ListEntitiesRequest {
@@ -1203,6 +1251,7 @@ enum EntityChange {
   EntityChangeUpdated = 1;
   EntityChangeExpired = 2;
   EntityChangeUnobserved = 3;
+  EntityChangeHeartbeat = 4;
 }
 
 // Proto field numbers of Entity component fields.
@@ -1260,6 +1309,10 @@ enum EntityComponent {
 message EntityChangeEvent {
   Entity entity = 1;
   EntityChange t = 2;
+
+  // upstream wall clock at the time this event was sent.
+  // Consumers should use TimeSync() ideally, but this is a good enough fallback when TimeSync isnt possible
+  google.protobuf.Timestamp now = 3;
 }
 
 message EntityChangeBatch {

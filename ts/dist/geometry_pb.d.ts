@@ -32,6 +32,13 @@ export declare type PlanarPoint = Message<"world.PlanarPoint"> & {
    * @generated from field: optional double altitude = 3;
    */
   altitude?: number;
+
+  /**
+   * id of an entity this point tracks
+   *
+   * @generated from field: optional string entity = 4;
+   */
+  entity?: string;
 };
 
 /**

@@ -14,6 +14,9 @@ message PlanarPoint {
 
   // height above ellipsoid (WGS84) in meters
   optional double altitude = 3;
+
+  // id of an entity this point tracks
+  optional string entity = 4;
 }
 
 // a path with zero area on the projected flat surface

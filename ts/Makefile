@@ -1,3 +1,2 @@
 generate:
-	bun install
-	bun run build
+	bun run generate

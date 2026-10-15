@@ -145,6 +145,7 @@ enum MetricUnit {
   MetricUnitBitPerSecond = 80;
   MetricUnitKilobitPerSecond = 81;
   MetricUnitMegabitPerSecond = 82;
+  MetricUnitKilobytePerSecond = 88;
 
   // Data size
   MetricUnitByte = 84;

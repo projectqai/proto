@@ -32,6 +32,7 @@ type ClassificationTaxonomy struct {
 	//	*ClassificationTaxonomy_Vehicle
 	//	*ClassificationTaxonomy_Equipment
 	//	*ClassificationTaxonomy_Emitter
+	//	*ClassificationTaxonomy_Other
 	Kind          isClassificationTaxonomy_Kind `protobuf_oneof:"kind"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -135,6 +136,15 @@ func (x *ClassificationTaxonomy) GetEmitter() *EmitterTaxonomy {
 	return nil
 }
 
+func (x *ClassificationTaxonomy) GetOther() *OtherTaxonomy {
+	if x != nil {
+		if x, ok := x.Kind.(*ClassificationTaxonomy_Other); ok {
+			return x.Other
+		}
+	}
+	return nil
+}
+
 type isClassificationTaxonomy_Kind interface {
 	isClassificationTaxonomy_Kind()
 }
@@ -163,6 +173,10 @@ type ClassificationTaxonomy_Emitter struct {
 	Emitter *EmitterTaxonomy `protobuf:"bytes,15,opt,name=emitter,proto3,oneof"`
 }
 
+type ClassificationTaxonomy_Other struct {
+	Other *OtherTaxonomy `protobuf:"bytes,16,opt,name=other,proto3,oneof"`
+}
+
 func (*ClassificationTaxonomy_Person) isClassificationTaxonomy_Kind() {}
 
 func (*ClassificationTaxonomy_Animal) isClassificationTaxonomy_Kind() {}
@@ -175,17 +189,57 @@ func (*ClassificationTaxonomy_Equipment) isClassificationTaxonomy_Kind() {}
 
 func (*ClassificationTaxonomy_Emitter) isClassificationTaxonomy_Kind() {}
 
-type ClassificationConfidence struct {
+func (*ClassificationTaxonomy_Other) isClassificationTaxonomy_Kind() {}
+
+type OtherTaxonomy struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Confidence    float32                `protobuf:"fixed32,1,opt,name=confidence,proto3" json:"confidence,omitempty"`
-	Pending       bool                   `protobuf:"varint,2,opt,name=pending,proto3" json:"pending,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
+func (x *OtherTaxonomy) Reset() {
+	*x = OtherTaxonomy{}
+	mi := &file_taxonomy_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OtherTaxonomy) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OtherTaxonomy) ProtoMessage() {}
+
+func (x *OtherTaxonomy) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OtherTaxonomy.ProtoReflect.Descriptor instead.
+func (*OtherTaxonomy) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{1}
+}
+
+type ClassificationConfidence struct {
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	Confidence float32                `protobuf:"fixed32,1,opt,name=confidence,proto3" json:"confidence,omitempty"`
+	Pending    bool                   `protobuf:"varint,2,opt,name=pending,proto3" json:"pending,omitempty"`
+	// confidence in percent (0 - 100)
+	ConfidencePercent *uint32 `protobuf:"varint,3,opt,name=confidence_percent,json=confidencePercent,proto3,oneof" json:"confidence_percent,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
 func (x *ClassificationConfidence) Reset() {
 	*x = ClassificationConfidence{}
-	mi := &file_taxonomy_proto_msgTypes[1]
+	mi := &file_taxonomy_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -197,7 +251,7 @@ func (x *ClassificationConfidence) String() string {
 func (*ClassificationConfidence) ProtoMessage() {}
 
 func (x *ClassificationConfidence) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[1]
+	mi := &file_taxonomy_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -210,7 +264,7 @@ func (x *ClassificationConfidence) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClassificationConfidence.ProtoReflect.Descriptor instead.
 func (*ClassificationConfidence) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{1}
+	return file_taxonomy_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ClassificationConfidence) GetConfidence() float32 {
@@ -227,6 +281,13 @@ func (x *ClassificationConfidence) GetPending() bool {
 	return false
 }
 
+func (x *ClassificationConfidence) GetConfidencePercent() uint32 {
+	if x != nil && x.ConfidencePercent != nil {
+		return *x.ConfidencePercent
+	}
+	return 0
+}
+
 type PersonTaxonomy struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -235,7 +296,7 @@ type PersonTaxonomy struct {
 
 func (x *PersonTaxonomy) Reset() {
 	*x = PersonTaxonomy{}
-	mi := &file_taxonomy_proto_msgTypes[2]
+	mi := &file_taxonomy_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -247,7 +308,7 @@ func (x *PersonTaxonomy) String() string {
 func (*PersonTaxonomy) ProtoMessage() {}
 
 func (x *PersonTaxonomy) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[2]
+	mi := &file_taxonomy_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -260,7 +321,7 @@ func (x *PersonTaxonomy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PersonTaxonomy.ProtoReflect.Descriptor instead.
 func (*PersonTaxonomy) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{2}
+	return file_taxonomy_proto_rawDescGZIP(), []int{3}
 }
 
 type AnimalTaxonomy struct {
@@ -276,7 +337,7 @@ type AnimalTaxonomy struct {
 
 func (x *AnimalTaxonomy) Reset() {
 	*x = AnimalTaxonomy{}
-	mi := &file_taxonomy_proto_msgTypes[3]
+	mi := &file_taxonomy_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -288,7 +349,7 @@ func (x *AnimalTaxonomy) String() string {
 func (*AnimalTaxonomy) ProtoMessage() {}
 
 func (x *AnimalTaxonomy) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[3]
+	mi := &file_taxonomy_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -301,7 +362,7 @@ func (x *AnimalTaxonomy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AnimalTaxonomy.ProtoReflect.Descriptor instead.
 func (*AnimalTaxonomy) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{3}
+	return file_taxonomy_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *AnimalTaxonomy) GetKind() isAnimalTaxonomy_Kind {
@@ -353,7 +414,7 @@ type AnimalTaxonomyBird struct {
 
 func (x *AnimalTaxonomyBird) Reset() {
 	*x = AnimalTaxonomyBird{}
-	mi := &file_taxonomy_proto_msgTypes[4]
+	mi := &file_taxonomy_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -365,7 +426,7 @@ func (x *AnimalTaxonomyBird) String() string {
 func (*AnimalTaxonomyBird) ProtoMessage() {}
 
 func (x *AnimalTaxonomyBird) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[4]
+	mi := &file_taxonomy_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -378,7 +439,7 @@ func (x *AnimalTaxonomyBird) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AnimalTaxonomyBird.ProtoReflect.Descriptor instead.
 func (*AnimalTaxonomyBird) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{4}
+	return file_taxonomy_proto_rawDescGZIP(), []int{5}
 }
 
 type AnimalTaxonomyAir struct {
@@ -390,7 +451,7 @@ type AnimalTaxonomyAir struct {
 
 func (x *AnimalTaxonomyAir) Reset() {
 	*x = AnimalTaxonomyAir{}
-	mi := &file_taxonomy_proto_msgTypes[5]
+	mi := &file_taxonomy_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -402,7 +463,7 @@ func (x *AnimalTaxonomyAir) String() string {
 func (*AnimalTaxonomyAir) ProtoMessage() {}
 
 func (x *AnimalTaxonomyAir) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[5]
+	mi := &file_taxonomy_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -415,7 +476,7 @@ func (x *AnimalTaxonomyAir) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AnimalTaxonomyAir.ProtoReflect.Descriptor instead.
 func (*AnimalTaxonomyAir) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{5}
+	return file_taxonomy_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *AnimalTaxonomyAir) GetBird() *AnimalTaxonomyBird {
@@ -433,7 +494,7 @@ type AnimalTaxonomyHorse struct {
 
 func (x *AnimalTaxonomyHorse) Reset() {
 	*x = AnimalTaxonomyHorse{}
-	mi := &file_taxonomy_proto_msgTypes[6]
+	mi := &file_taxonomy_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -445,7 +506,7 @@ func (x *AnimalTaxonomyHorse) String() string {
 func (*AnimalTaxonomyHorse) ProtoMessage() {}
 
 func (x *AnimalTaxonomyHorse) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[6]
+	mi := &file_taxonomy_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -458,7 +519,7 @@ func (x *AnimalTaxonomyHorse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AnimalTaxonomyHorse.ProtoReflect.Descriptor instead.
 func (*AnimalTaxonomyHorse) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{6}
+	return file_taxonomy_proto_rawDescGZIP(), []int{7}
 }
 
 type AnimalTaxonomyLand struct {
@@ -470,7 +531,7 @@ type AnimalTaxonomyLand struct {
 
 func (x *AnimalTaxonomyLand) Reset() {
 	*x = AnimalTaxonomyLand{}
-	mi := &file_taxonomy_proto_msgTypes[7]
+	mi := &file_taxonomy_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -482,7 +543,7 @@ func (x *AnimalTaxonomyLand) String() string {
 func (*AnimalTaxonomyLand) ProtoMessage() {}
 
 func (x *AnimalTaxonomyLand) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[7]
+	mi := &file_taxonomy_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -495,7 +556,7 @@ func (x *AnimalTaxonomyLand) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AnimalTaxonomyLand.ProtoReflect.Descriptor instead.
 func (*AnimalTaxonomyLand) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{7}
+	return file_taxonomy_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *AnimalTaxonomyLand) GetHorse() *AnimalTaxonomyHorse {
@@ -517,7 +578,7 @@ type InfrastructureTaxonomy struct {
 
 func (x *InfrastructureTaxonomy) Reset() {
 	*x = InfrastructureTaxonomy{}
-	mi := &file_taxonomy_proto_msgTypes[8]
+	mi := &file_taxonomy_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -529,7 +590,7 @@ func (x *InfrastructureTaxonomy) String() string {
 func (*InfrastructureTaxonomy) ProtoMessage() {}
 
 func (x *InfrastructureTaxonomy) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[8]
+	mi := &file_taxonomy_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -542,7 +603,7 @@ func (x *InfrastructureTaxonomy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InfrastructureTaxonomy.ProtoReflect.Descriptor instead.
 func (*InfrastructureTaxonomy) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{8}
+	return file_taxonomy_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *InfrastructureTaxonomy) GetTower() *InfrastructureTaxonomyTower {
@@ -581,7 +642,7 @@ type InfrastructureTaxonomyTower struct {
 
 func (x *InfrastructureTaxonomyTower) Reset() {
 	*x = InfrastructureTaxonomyTower{}
-	mi := &file_taxonomy_proto_msgTypes[9]
+	mi := &file_taxonomy_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -593,7 +654,7 @@ func (x *InfrastructureTaxonomyTower) String() string {
 func (*InfrastructureTaxonomyTower) ProtoMessage() {}
 
 func (x *InfrastructureTaxonomyTower) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[9]
+	mi := &file_taxonomy_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -606,7 +667,7 @@ func (x *InfrastructureTaxonomyTower) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InfrastructureTaxonomyTower.ProtoReflect.Descriptor instead.
 func (*InfrastructureTaxonomyTower) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{9}
+	return file_taxonomy_proto_rawDescGZIP(), []int{10}
 }
 
 type InfrastructureTaxonomyBridge struct {
@@ -617,7 +678,7 @@ type InfrastructureTaxonomyBridge struct {
 
 func (x *InfrastructureTaxonomyBridge) Reset() {
 	*x = InfrastructureTaxonomyBridge{}
-	mi := &file_taxonomy_proto_msgTypes[10]
+	mi := &file_taxonomy_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -629,7 +690,7 @@ func (x *InfrastructureTaxonomyBridge) String() string {
 func (*InfrastructureTaxonomyBridge) ProtoMessage() {}
 
 func (x *InfrastructureTaxonomyBridge) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[10]
+	mi := &file_taxonomy_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -642,7 +703,7 @@ func (x *InfrastructureTaxonomyBridge) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InfrastructureTaxonomyBridge.ProtoReflect.Descriptor instead.
 func (*InfrastructureTaxonomyBridge) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{10}
+	return file_taxonomy_proto_rawDescGZIP(), []int{11}
 }
 
 type InfrastructureTaxonomyRoad struct {
@@ -653,7 +714,7 @@ type InfrastructureTaxonomyRoad struct {
 
 func (x *InfrastructureTaxonomyRoad) Reset() {
 	*x = InfrastructureTaxonomyRoad{}
-	mi := &file_taxonomy_proto_msgTypes[11]
+	mi := &file_taxonomy_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -665,7 +726,7 @@ func (x *InfrastructureTaxonomyRoad) String() string {
 func (*InfrastructureTaxonomyRoad) ProtoMessage() {}
 
 func (x *InfrastructureTaxonomyRoad) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[11]
+	mi := &file_taxonomy_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -678,7 +739,7 @@ func (x *InfrastructureTaxonomyRoad) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InfrastructureTaxonomyRoad.ProtoReflect.Descriptor instead.
 func (*InfrastructureTaxonomyRoad) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{11}
+	return file_taxonomy_proto_rawDescGZIP(), []int{12}
 }
 
 type InfrastructureTaxonomyDam struct {
@@ -689,7 +750,7 @@ type InfrastructureTaxonomyDam struct {
 
 func (x *InfrastructureTaxonomyDam) Reset() {
 	*x = InfrastructureTaxonomyDam{}
-	mi := &file_taxonomy_proto_msgTypes[12]
+	mi := &file_taxonomy_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -701,7 +762,7 @@ func (x *InfrastructureTaxonomyDam) String() string {
 func (*InfrastructureTaxonomyDam) ProtoMessage() {}
 
 func (x *InfrastructureTaxonomyDam) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[12]
+	mi := &file_taxonomy_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -714,7 +775,7 @@ func (x *InfrastructureTaxonomyDam) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InfrastructureTaxonomyDam.ProtoReflect.Descriptor instead.
 func (*InfrastructureTaxonomyDam) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{12}
+	return file_taxonomy_proto_rawDescGZIP(), []int{13}
 }
 
 type VehicleTaxonomy struct {
@@ -733,7 +794,7 @@ type VehicleTaxonomy struct {
 
 func (x *VehicleTaxonomy) Reset() {
 	*x = VehicleTaxonomy{}
-	mi := &file_taxonomy_proto_msgTypes[13]
+	mi := &file_taxonomy_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -745,7 +806,7 @@ func (x *VehicleTaxonomy) String() string {
 func (*VehicleTaxonomy) ProtoMessage() {}
 
 func (x *VehicleTaxonomy) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[13]
+	mi := &file_taxonomy_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -758,7 +819,7 @@ func (x *VehicleTaxonomy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomy.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomy) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{13}
+	return file_taxonomy_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *VehicleTaxonomy) GetUnmanned() *VehicleTaxonomyUnmanned {
@@ -847,7 +908,7 @@ type VehicleTaxonomyUnmanned struct {
 
 func (x *VehicleTaxonomyUnmanned) Reset() {
 	*x = VehicleTaxonomyUnmanned{}
-	mi := &file_taxonomy_proto_msgTypes[14]
+	mi := &file_taxonomy_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -859,7 +920,7 @@ func (x *VehicleTaxonomyUnmanned) String() string {
 func (*VehicleTaxonomyUnmanned) ProtoMessage() {}
 
 func (x *VehicleTaxonomyUnmanned) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[14]
+	mi := &file_taxonomy_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -872,7 +933,7 @@ func (x *VehicleTaxonomyUnmanned) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomyUnmanned.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomyUnmanned) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{14}
+	return file_taxonomy_proto_rawDescGZIP(), []int{15}
 }
 
 type VehicleTaxonomyLand struct {
@@ -889,7 +950,7 @@ type VehicleTaxonomyLand struct {
 
 func (x *VehicleTaxonomyLand) Reset() {
 	*x = VehicleTaxonomyLand{}
-	mi := &file_taxonomy_proto_msgTypes[15]
+	mi := &file_taxonomy_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -901,7 +962,7 @@ func (x *VehicleTaxonomyLand) String() string {
 func (*VehicleTaxonomyLand) ProtoMessage() {}
 
 func (x *VehicleTaxonomyLand) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[15]
+	mi := &file_taxonomy_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -914,7 +975,7 @@ func (x *VehicleTaxonomyLand) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomyLand.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomyLand) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{15}
+	return file_taxonomy_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *VehicleTaxonomyLand) GetKind() isVehicleTaxonomyLand_Kind {
@@ -981,7 +1042,7 @@ type VehicleTaxonomyTracked struct {
 
 func (x *VehicleTaxonomyTracked) Reset() {
 	*x = VehicleTaxonomyTracked{}
-	mi := &file_taxonomy_proto_msgTypes[16]
+	mi := &file_taxonomy_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -993,7 +1054,7 @@ func (x *VehicleTaxonomyTracked) String() string {
 func (*VehicleTaxonomyTracked) ProtoMessage() {}
 
 func (x *VehicleTaxonomyTracked) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[16]
+	mi := &file_taxonomy_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1006,7 +1067,7 @@ func (x *VehicleTaxonomyTracked) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomyTracked.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomyTracked) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{16}
+	return file_taxonomy_proto_rawDescGZIP(), []int{17}
 }
 
 type VehicleTaxonomyTwoWheeled struct {
@@ -1017,7 +1078,7 @@ type VehicleTaxonomyTwoWheeled struct {
 
 func (x *VehicleTaxonomyTwoWheeled) Reset() {
 	*x = VehicleTaxonomyTwoWheeled{}
-	mi := &file_taxonomy_proto_msgTypes[17]
+	mi := &file_taxonomy_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1029,7 +1090,7 @@ func (x *VehicleTaxonomyTwoWheeled) String() string {
 func (*VehicleTaxonomyTwoWheeled) ProtoMessage() {}
 
 func (x *VehicleTaxonomyTwoWheeled) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[17]
+	mi := &file_taxonomy_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1042,18 +1103,24 @@ func (x *VehicleTaxonomyTwoWheeled) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomyTwoWheeled.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomyTwoWheeled) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{17}
+	return file_taxonomy_proto_rawDescGZIP(), []int{18}
 }
 
 type VehicleTaxonomyMultiWheeled struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Weight:
+	//
+	//	*VehicleTaxonomyMultiWheeled_Light
+	//	*VehicleTaxonomyMultiWheeled_Medium
+	//	*VehicleTaxonomyMultiWheeled_Heavy
+	Weight        isVehicleTaxonomyMultiWheeled_Weight `protobuf_oneof:"weight"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *VehicleTaxonomyMultiWheeled) Reset() {
 	*x = VehicleTaxonomyMultiWheeled{}
-	mi := &file_taxonomy_proto_msgTypes[18]
+	mi := &file_taxonomy_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1065,7 +1132,7 @@ func (x *VehicleTaxonomyMultiWheeled) String() string {
 func (*VehicleTaxonomyMultiWheeled) ProtoMessage() {}
 
 func (x *VehicleTaxonomyMultiWheeled) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[18]
+	mi := &file_taxonomy_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1078,7 +1145,171 @@ func (x *VehicleTaxonomyMultiWheeled) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomyMultiWheeled.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomyMultiWheeled) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{18}
+	return file_taxonomy_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *VehicleTaxonomyMultiWheeled) GetWeight() isVehicleTaxonomyMultiWheeled_Weight {
+	if x != nil {
+		return x.Weight
+	}
+	return nil
+}
+
+func (x *VehicleTaxonomyMultiWheeled) GetLight() *VehicleTaxonomyMultiWheeledLight {
+	if x != nil {
+		if x, ok := x.Weight.(*VehicleTaxonomyMultiWheeled_Light); ok {
+			return x.Light
+		}
+	}
+	return nil
+}
+
+func (x *VehicleTaxonomyMultiWheeled) GetMedium() *VehicleTaxonomyMultiWheeledMedium {
+	if x != nil {
+		if x, ok := x.Weight.(*VehicleTaxonomyMultiWheeled_Medium); ok {
+			return x.Medium
+		}
+	}
+	return nil
+}
+
+func (x *VehicleTaxonomyMultiWheeled) GetHeavy() *VehicleTaxonomyMultiWheeledHeavy {
+	if x != nil {
+		if x, ok := x.Weight.(*VehicleTaxonomyMultiWheeled_Heavy); ok {
+			return x.Heavy
+		}
+	}
+	return nil
+}
+
+type isVehicleTaxonomyMultiWheeled_Weight interface {
+	isVehicleTaxonomyMultiWheeled_Weight()
+}
+
+type VehicleTaxonomyMultiWheeled_Light struct {
+	Light *VehicleTaxonomyMultiWheeledLight `protobuf:"bytes,1,opt,name=light,proto3,oneof"`
+}
+
+type VehicleTaxonomyMultiWheeled_Medium struct {
+	Medium *VehicleTaxonomyMultiWheeledMedium `protobuf:"bytes,2,opt,name=medium,proto3,oneof"`
+}
+
+type VehicleTaxonomyMultiWheeled_Heavy struct {
+	Heavy *VehicleTaxonomyMultiWheeledHeavy `protobuf:"bytes,3,opt,name=heavy,proto3,oneof"`
+}
+
+func (*VehicleTaxonomyMultiWheeled_Light) isVehicleTaxonomyMultiWheeled_Weight() {}
+
+func (*VehicleTaxonomyMultiWheeled_Medium) isVehicleTaxonomyMultiWheeled_Weight() {}
+
+func (*VehicleTaxonomyMultiWheeled_Heavy) isVehicleTaxonomyMultiWheeled_Weight() {}
+
+type VehicleTaxonomyMultiWheeledLight struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VehicleTaxonomyMultiWheeledLight) Reset() {
+	*x = VehicleTaxonomyMultiWheeledLight{}
+	mi := &file_taxonomy_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VehicleTaxonomyMultiWheeledLight) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VehicleTaxonomyMultiWheeledLight) ProtoMessage() {}
+
+func (x *VehicleTaxonomyMultiWheeledLight) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VehicleTaxonomyMultiWheeledLight.ProtoReflect.Descriptor instead.
+func (*VehicleTaxonomyMultiWheeledLight) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{20}
+}
+
+type VehicleTaxonomyMultiWheeledMedium struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VehicleTaxonomyMultiWheeledMedium) Reset() {
+	*x = VehicleTaxonomyMultiWheeledMedium{}
+	mi := &file_taxonomy_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VehicleTaxonomyMultiWheeledMedium) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VehicleTaxonomyMultiWheeledMedium) ProtoMessage() {}
+
+func (x *VehicleTaxonomyMultiWheeledMedium) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VehicleTaxonomyMultiWheeledMedium.ProtoReflect.Descriptor instead.
+func (*VehicleTaxonomyMultiWheeledMedium) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{21}
+}
+
+type VehicleTaxonomyMultiWheeledHeavy struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VehicleTaxonomyMultiWheeledHeavy) Reset() {
+	*x = VehicleTaxonomyMultiWheeledHeavy{}
+	mi := &file_taxonomy_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VehicleTaxonomyMultiWheeledHeavy) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VehicleTaxonomyMultiWheeledHeavy) ProtoMessage() {}
+
+func (x *VehicleTaxonomyMultiWheeledHeavy) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VehicleTaxonomyMultiWheeledHeavy.ProtoReflect.Descriptor instead.
+func (*VehicleTaxonomyMultiWheeledHeavy) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{22}
 }
 
 type VehicleTaxonomyAir struct {
@@ -1095,7 +1326,7 @@ type VehicleTaxonomyAir struct {
 
 func (x *VehicleTaxonomyAir) Reset() {
 	*x = VehicleTaxonomyAir{}
-	mi := &file_taxonomy_proto_msgTypes[19]
+	mi := &file_taxonomy_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1107,7 +1338,7 @@ func (x *VehicleTaxonomyAir) String() string {
 func (*VehicleTaxonomyAir) ProtoMessage() {}
 
 func (x *VehicleTaxonomyAir) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[19]
+	mi := &file_taxonomy_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1120,7 +1351,7 @@ func (x *VehicleTaxonomyAir) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomyAir.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomyAir) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{19}
+	return file_taxonomy_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *VehicleTaxonomyAir) GetKind() isVehicleTaxonomyAir_Kind {
@@ -1187,7 +1418,7 @@ type VehicleTaxonomyAirRotary struct {
 
 func (x *VehicleTaxonomyAirRotary) Reset() {
 	*x = VehicleTaxonomyAirRotary{}
-	mi := &file_taxonomy_proto_msgTypes[20]
+	mi := &file_taxonomy_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1199,7 +1430,7 @@ func (x *VehicleTaxonomyAirRotary) String() string {
 func (*VehicleTaxonomyAirRotary) ProtoMessage() {}
 
 func (x *VehicleTaxonomyAirRotary) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[20]
+	mi := &file_taxonomy_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1212,7 +1443,7 @@ func (x *VehicleTaxonomyAirRotary) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomyAirRotary.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomyAirRotary) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{20}
+	return file_taxonomy_proto_rawDescGZIP(), []int{24}
 }
 
 type VehicleTaxonomyAirFixedWing struct {
@@ -1223,7 +1454,7 @@ type VehicleTaxonomyAirFixedWing struct {
 
 func (x *VehicleTaxonomyAirFixedWing) Reset() {
 	*x = VehicleTaxonomyAirFixedWing{}
-	mi := &file_taxonomy_proto_msgTypes[21]
+	mi := &file_taxonomy_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1235,7 +1466,7 @@ func (x *VehicleTaxonomyAirFixedWing) String() string {
 func (*VehicleTaxonomyAirFixedWing) ProtoMessage() {}
 
 func (x *VehicleTaxonomyAirFixedWing) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[21]
+	mi := &file_taxonomy_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1248,7 +1479,7 @@ func (x *VehicleTaxonomyAirFixedWing) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomyAirFixedWing.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomyAirFixedWing) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{21}
+	return file_taxonomy_proto_rawDescGZIP(), []int{25}
 }
 
 type VehicleTaxonomyAirLighterThanAir struct {
@@ -1259,7 +1490,7 @@ type VehicleTaxonomyAirLighterThanAir struct {
 
 func (x *VehicleTaxonomyAirLighterThanAir) Reset() {
 	*x = VehicleTaxonomyAirLighterThanAir{}
-	mi := &file_taxonomy_proto_msgTypes[22]
+	mi := &file_taxonomy_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1271,7 +1502,7 @@ func (x *VehicleTaxonomyAirLighterThanAir) String() string {
 func (*VehicleTaxonomyAirLighterThanAir) ProtoMessage() {}
 
 func (x *VehicleTaxonomyAirLighterThanAir) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[22]
+	mi := &file_taxonomy_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1284,7 +1515,7 @@ func (x *VehicleTaxonomyAirLighterThanAir) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomyAirLighterThanAir.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomyAirLighterThanAir) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{22}
+	return file_taxonomy_proto_rawDescGZIP(), []int{26}
 }
 
 type VehicleTaxonomySea struct {
@@ -1295,7 +1526,7 @@ type VehicleTaxonomySea struct {
 
 func (x *VehicleTaxonomySea) Reset() {
 	*x = VehicleTaxonomySea{}
-	mi := &file_taxonomy_proto_msgTypes[23]
+	mi := &file_taxonomy_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1307,7 +1538,7 @@ func (x *VehicleTaxonomySea) String() string {
 func (*VehicleTaxonomySea) ProtoMessage() {}
 
 func (x *VehicleTaxonomySea) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[23]
+	mi := &file_taxonomy_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1320,7 +1551,7 @@ func (x *VehicleTaxonomySea) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomySea.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomySea) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{23}
+	return file_taxonomy_proto_rawDescGZIP(), []int{27}
 }
 
 type VehicleTaxonomySubsurface struct {
@@ -1331,7 +1562,7 @@ type VehicleTaxonomySubsurface struct {
 
 func (x *VehicleTaxonomySubsurface) Reset() {
 	*x = VehicleTaxonomySubsurface{}
-	mi := &file_taxonomy_proto_msgTypes[24]
+	mi := &file_taxonomy_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1343,7 +1574,7 @@ func (x *VehicleTaxonomySubsurface) String() string {
 func (*VehicleTaxonomySubsurface) ProtoMessage() {}
 
 func (x *VehicleTaxonomySubsurface) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[24]
+	mi := &file_taxonomy_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1356,7 +1587,7 @@ func (x *VehicleTaxonomySubsurface) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VehicleTaxonomySubsurface.ProtoReflect.Descriptor instead.
 func (*VehicleTaxonomySubsurface) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{24}
+	return file_taxonomy_proto_rawDescGZIP(), []int{28}
 }
 
 type EquipmentTaxonomy struct {
@@ -1368,7 +1599,7 @@ type EquipmentTaxonomy struct {
 
 func (x *EquipmentTaxonomy) Reset() {
 	*x = EquipmentTaxonomy{}
-	mi := &file_taxonomy_proto_msgTypes[25]
+	mi := &file_taxonomy_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1380,7 +1611,7 @@ func (x *EquipmentTaxonomy) String() string {
 func (*EquipmentTaxonomy) ProtoMessage() {}
 
 func (x *EquipmentTaxonomy) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[25]
+	mi := &file_taxonomy_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1393,7 +1624,7 @@ func (x *EquipmentTaxonomy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EquipmentTaxonomy.ProtoReflect.Descriptor instead.
 func (*EquipmentTaxonomy) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{25}
+	return file_taxonomy_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *EquipmentTaxonomy) GetSensor() *EquipmentTaxonomySensor {
@@ -1413,6 +1644,7 @@ type EquipmentTaxonomySensor struct {
 	//	*EquipmentTaxonomySensor_Cbrn
 	//	*EquipmentTaxonomySensor_Acoustic
 	//	*EquipmentTaxonomySensor_ElectroOptical
+	//	*EquipmentTaxonomySensor_Seismic
 	Kind          isEquipmentTaxonomySensor_Kind `protobuf_oneof:"kind"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1420,7 +1652,7 @@ type EquipmentTaxonomySensor struct {
 
 func (x *EquipmentTaxonomySensor) Reset() {
 	*x = EquipmentTaxonomySensor{}
-	mi := &file_taxonomy_proto_msgTypes[26]
+	mi := &file_taxonomy_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1432,7 +1664,7 @@ func (x *EquipmentTaxonomySensor) String() string {
 func (*EquipmentTaxonomySensor) ProtoMessage() {}
 
 func (x *EquipmentTaxonomySensor) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[26]
+	mi := &file_taxonomy_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1445,7 +1677,7 @@ func (x *EquipmentTaxonomySensor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EquipmentTaxonomySensor.ProtoReflect.Descriptor instead.
 func (*EquipmentTaxonomySensor) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{26}
+	return file_taxonomy_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *EquipmentTaxonomySensor) GetEmplaced() *EquipmentTaxonomySensorEmplaced {
@@ -1507,6 +1739,15 @@ func (x *EquipmentTaxonomySensor) GetElectroOptical() *EquipmentTaxonomySensorEl
 	return nil
 }
 
+func (x *EquipmentTaxonomySensor) GetSeismic() *EquipmentTaxonomySensorSeismic {
+	if x != nil {
+		if x, ok := x.Kind.(*EquipmentTaxonomySensor_Seismic); ok {
+			return x.Seismic
+		}
+	}
+	return nil
+}
+
 type isEquipmentTaxonomySensor_Kind interface {
 	isEquipmentTaxonomySensor_Kind()
 }
@@ -1531,6 +1772,10 @@ type EquipmentTaxonomySensor_ElectroOptical struct {
 	ElectroOptical *EquipmentTaxonomySensorElectroOptical `protobuf:"bytes,14,opt,name=electro_optical,json=electroOptical,proto3,oneof"`
 }
 
+type EquipmentTaxonomySensor_Seismic struct {
+	Seismic *EquipmentTaxonomySensorSeismic `protobuf:"bytes,15,opt,name=seismic,proto3,oneof"`
+}
+
 func (*EquipmentTaxonomySensor_Radar) isEquipmentTaxonomySensor_Kind() {}
 
 func (*EquipmentTaxonomySensor_Ew) isEquipmentTaxonomySensor_Kind() {}
@@ -1541,6 +1786,8 @@ func (*EquipmentTaxonomySensor_Acoustic) isEquipmentTaxonomySensor_Kind() {}
 
 func (*EquipmentTaxonomySensor_ElectroOptical) isEquipmentTaxonomySensor_Kind() {}
 
+func (*EquipmentTaxonomySensor_Seismic) isEquipmentTaxonomySensor_Kind() {}
+
 type EquipmentTaxonomySensorRadar struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1549,7 +1796,7 @@ type EquipmentTaxonomySensorRadar struct {
 
 func (x *EquipmentTaxonomySensorRadar) Reset() {
 	*x = EquipmentTaxonomySensorRadar{}
-	mi := &file_taxonomy_proto_msgTypes[27]
+	mi := &file_taxonomy_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1561,7 +1808,7 @@ func (x *EquipmentTaxonomySensorRadar) String() string {
 func (*EquipmentTaxonomySensorRadar) ProtoMessage() {}
 
 func (x *EquipmentTaxonomySensorRadar) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[27]
+	mi := &file_taxonomy_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1574,7 +1821,7 @@ func (x *EquipmentTaxonomySensorRadar) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EquipmentTaxonomySensorRadar.ProtoReflect.Descriptor instead.
 func (*EquipmentTaxonomySensorRadar) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{27}
+	return file_taxonomy_proto_rawDescGZIP(), []int{31}
 }
 
 type EquipmentTaxonomySensorEW struct {
@@ -1585,7 +1832,7 @@ type EquipmentTaxonomySensorEW struct {
 
 func (x *EquipmentTaxonomySensorEW) Reset() {
 	*x = EquipmentTaxonomySensorEW{}
-	mi := &file_taxonomy_proto_msgTypes[28]
+	mi := &file_taxonomy_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1597,7 +1844,7 @@ func (x *EquipmentTaxonomySensorEW) String() string {
 func (*EquipmentTaxonomySensorEW) ProtoMessage() {}
 
 func (x *EquipmentTaxonomySensorEW) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[28]
+	mi := &file_taxonomy_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1610,7 +1857,7 @@ func (x *EquipmentTaxonomySensorEW) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EquipmentTaxonomySensorEW.ProtoReflect.Descriptor instead.
 func (*EquipmentTaxonomySensorEW) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{28}
+	return file_taxonomy_proto_rawDescGZIP(), []int{32}
 }
 
 type EquipmentTaxonomySensorCBRN struct {
@@ -1621,7 +1868,7 @@ type EquipmentTaxonomySensorCBRN struct {
 
 func (x *EquipmentTaxonomySensorCBRN) Reset() {
 	*x = EquipmentTaxonomySensorCBRN{}
-	mi := &file_taxonomy_proto_msgTypes[29]
+	mi := &file_taxonomy_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1633,7 +1880,7 @@ func (x *EquipmentTaxonomySensorCBRN) String() string {
 func (*EquipmentTaxonomySensorCBRN) ProtoMessage() {}
 
 func (x *EquipmentTaxonomySensorCBRN) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[29]
+	mi := &file_taxonomy_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1646,7 +1893,7 @@ func (x *EquipmentTaxonomySensorCBRN) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EquipmentTaxonomySensorCBRN.ProtoReflect.Descriptor instead.
 func (*EquipmentTaxonomySensorCBRN) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{29}
+	return file_taxonomy_proto_rawDescGZIP(), []int{33}
 }
 
 type EquipmentTaxonomySensorAcoustic struct {
@@ -1657,7 +1904,7 @@ type EquipmentTaxonomySensorAcoustic struct {
 
 func (x *EquipmentTaxonomySensorAcoustic) Reset() {
 	*x = EquipmentTaxonomySensorAcoustic{}
-	mi := &file_taxonomy_proto_msgTypes[30]
+	mi := &file_taxonomy_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1669,7 +1916,7 @@ func (x *EquipmentTaxonomySensorAcoustic) String() string {
 func (*EquipmentTaxonomySensorAcoustic) ProtoMessage() {}
 
 func (x *EquipmentTaxonomySensorAcoustic) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[30]
+	mi := &file_taxonomy_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1682,7 +1929,7 @@ func (x *EquipmentTaxonomySensorAcoustic) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EquipmentTaxonomySensorAcoustic.ProtoReflect.Descriptor instead.
 func (*EquipmentTaxonomySensorAcoustic) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{30}
+	return file_taxonomy_proto_rawDescGZIP(), []int{34}
 }
 
 type EquipmentTaxonomySensorElectroOptical struct {
@@ -1693,7 +1940,7 @@ type EquipmentTaxonomySensorElectroOptical struct {
 
 func (x *EquipmentTaxonomySensorElectroOptical) Reset() {
 	*x = EquipmentTaxonomySensorElectroOptical{}
-	mi := &file_taxonomy_proto_msgTypes[31]
+	mi := &file_taxonomy_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1705,7 +1952,7 @@ func (x *EquipmentTaxonomySensorElectroOptical) String() string {
 func (*EquipmentTaxonomySensorElectroOptical) ProtoMessage() {}
 
 func (x *EquipmentTaxonomySensorElectroOptical) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[31]
+	mi := &file_taxonomy_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1718,7 +1965,7 @@ func (x *EquipmentTaxonomySensorElectroOptical) ProtoReflect() protoreflect.Mess
 
 // Deprecated: Use EquipmentTaxonomySensorElectroOptical.ProtoReflect.Descriptor instead.
 func (*EquipmentTaxonomySensorElectroOptical) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{31}
+	return file_taxonomy_proto_rawDescGZIP(), []int{35}
 }
 
 type EquipmentTaxonomySensorEmplaced struct {
@@ -1729,7 +1976,7 @@ type EquipmentTaxonomySensorEmplaced struct {
 
 func (x *EquipmentTaxonomySensorEmplaced) Reset() {
 	*x = EquipmentTaxonomySensorEmplaced{}
-	mi := &file_taxonomy_proto_msgTypes[32]
+	mi := &file_taxonomy_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1741,7 +1988,7 @@ func (x *EquipmentTaxonomySensorEmplaced) String() string {
 func (*EquipmentTaxonomySensorEmplaced) ProtoMessage() {}
 
 func (x *EquipmentTaxonomySensorEmplaced) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[32]
+	mi := &file_taxonomy_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1754,7 +2001,43 @@ func (x *EquipmentTaxonomySensorEmplaced) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EquipmentTaxonomySensorEmplaced.ProtoReflect.Descriptor instead.
 func (*EquipmentTaxonomySensorEmplaced) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{32}
+	return file_taxonomy_proto_rawDescGZIP(), []int{36}
+}
+
+type EquipmentTaxonomySensorSeismic struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EquipmentTaxonomySensorSeismic) Reset() {
+	*x = EquipmentTaxonomySensorSeismic{}
+	mi := &file_taxonomy_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EquipmentTaxonomySensorSeismic) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EquipmentTaxonomySensorSeismic) ProtoMessage() {}
+
+func (x *EquipmentTaxonomySensorSeismic) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EquipmentTaxonomySensorSeismic.ProtoReflect.Descriptor instead.
+func (*EquipmentTaxonomySensorSeismic) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{37}
 }
 
 type EmitterTaxonomy struct {
@@ -1765,7 +2048,7 @@ type EmitterTaxonomy struct {
 
 func (x *EmitterTaxonomy) Reset() {
 	*x = EmitterTaxonomy{}
-	mi := &file_taxonomy_proto_msgTypes[33]
+	mi := &file_taxonomy_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1777,7 +2060,7 @@ func (x *EmitterTaxonomy) String() string {
 func (*EmitterTaxonomy) ProtoMessage() {}
 
 func (x *EmitterTaxonomy) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[33]
+	mi := &file_taxonomy_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1790,7 +2073,7 @@ func (x *EmitterTaxonomy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EmitterTaxonomy.ProtoReflect.Descriptor instead.
 func (*EmitterTaxonomy) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{33}
+	return file_taxonomy_proto_rawDescGZIP(), []int{38}
 }
 
 type TaskingTaxonomy struct {
@@ -1808,7 +2091,7 @@ type TaskingTaxonomy struct {
 
 func (x *TaskingTaxonomy) Reset() {
 	*x = TaskingTaxonomy{}
-	mi := &file_taxonomy_proto_msgTypes[34]
+	mi := &file_taxonomy_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1820,7 +2103,7 @@ func (x *TaskingTaxonomy) String() string {
 func (*TaskingTaxonomy) ProtoMessage() {}
 
 func (x *TaskingTaxonomy) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[34]
+	mi := &file_taxonomy_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1833,7 +2116,7 @@ func (x *TaskingTaxonomy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomy.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomy) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{34}
+	return file_taxonomy_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *TaskingTaxonomy) GetKind() isTaskingTaxonomy_Kind {
@@ -1920,7 +2203,7 @@ type TaskingTaxonomyCommission struct {
 
 func (x *TaskingTaxonomyCommission) Reset() {
 	*x = TaskingTaxonomyCommission{}
-	mi := &file_taxonomy_proto_msgTypes[35]
+	mi := &file_taxonomy_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1932,7 +2215,7 @@ func (x *TaskingTaxonomyCommission) String() string {
 func (*TaskingTaxonomyCommission) ProtoMessage() {}
 
 func (x *TaskingTaxonomyCommission) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[35]
+	mi := &file_taxonomy_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1945,7 +2228,7 @@ func (x *TaskingTaxonomyCommission) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyCommission.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyCommission) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{35}
+	return file_taxonomy_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *TaskingTaxonomyCommission) GetKind() isTaskingTaxonomyCommission_Kind {
@@ -2003,7 +2286,7 @@ type TaskingTaxonomyObserve struct {
 
 func (x *TaskingTaxonomyObserve) Reset() {
 	*x = TaskingTaxonomyObserve{}
-	mi := &file_taxonomy_proto_msgTypes[36]
+	mi := &file_taxonomy_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2015,7 +2298,7 @@ func (x *TaskingTaxonomyObserve) String() string {
 func (*TaskingTaxonomyObserve) ProtoMessage() {}
 
 func (x *TaskingTaxonomyObserve) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[36]
+	mi := &file_taxonomy_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2028,7 +2311,7 @@ func (x *TaskingTaxonomyObserve) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyObserve.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyObserve) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{36}
+	return file_taxonomy_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *TaskingTaxonomyObserve) GetKind() isTaskingTaxonomyObserve_Kind {
@@ -2101,7 +2384,7 @@ type TaskingTaxonomyMovement struct {
 
 func (x *TaskingTaxonomyMovement) Reset() {
 	*x = TaskingTaxonomyMovement{}
-	mi := &file_taxonomy_proto_msgTypes[37]
+	mi := &file_taxonomy_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2113,7 +2396,7 @@ func (x *TaskingTaxonomyMovement) String() string {
 func (*TaskingTaxonomyMovement) ProtoMessage() {}
 
 func (x *TaskingTaxonomyMovement) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[37]
+	mi := &file_taxonomy_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2126,7 +2409,7 @@ func (x *TaskingTaxonomyMovement) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyMovement.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyMovement) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{37}
+	return file_taxonomy_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *TaskingTaxonomyMovement) GetKind() isTaskingTaxonomyMovement_Kind {
@@ -2193,7 +2476,7 @@ type TaskingTaxonomyEffect struct {
 
 func (x *TaskingTaxonomyEffect) Reset() {
 	*x = TaskingTaxonomyEffect{}
-	mi := &file_taxonomy_proto_msgTypes[38]
+	mi := &file_taxonomy_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2205,7 +2488,7 @@ func (x *TaskingTaxonomyEffect) String() string {
 func (*TaskingTaxonomyEffect) ProtoMessage() {}
 
 func (x *TaskingTaxonomyEffect) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[38]
+	mi := &file_taxonomy_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2218,7 +2501,7 @@ func (x *TaskingTaxonomyEffect) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyEffect.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyEffect) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{38}
+	return file_taxonomy_proto_rawDescGZIP(), []int{43}
 }
 
 type TaskingTaxonomyLookAt struct {
@@ -2229,7 +2512,7 @@ type TaskingTaxonomyLookAt struct {
 
 func (x *TaskingTaxonomyLookAt) Reset() {
 	*x = TaskingTaxonomyLookAt{}
-	mi := &file_taxonomy_proto_msgTypes[39]
+	mi := &file_taxonomy_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2241,7 +2524,7 @@ func (x *TaskingTaxonomyLookAt) String() string {
 func (*TaskingTaxonomyLookAt) ProtoMessage() {}
 
 func (x *TaskingTaxonomyLookAt) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[39]
+	mi := &file_taxonomy_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2254,7 +2537,7 @@ func (x *TaskingTaxonomyLookAt) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyLookAt.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyLookAt) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{39}
+	return file_taxonomy_proto_rawDescGZIP(), []int{44}
 }
 
 type TaskingTaxonomyScan struct {
@@ -2265,7 +2548,7 @@ type TaskingTaxonomyScan struct {
 
 func (x *TaskingTaxonomyScan) Reset() {
 	*x = TaskingTaxonomyScan{}
-	mi := &file_taxonomy_proto_msgTypes[40]
+	mi := &file_taxonomy_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2277,7 +2560,7 @@ func (x *TaskingTaxonomyScan) String() string {
 func (*TaskingTaxonomyScan) ProtoMessage() {}
 
 func (x *TaskingTaxonomyScan) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[40]
+	mi := &file_taxonomy_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2290,7 +2573,7 @@ func (x *TaskingTaxonomyScan) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyScan.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyScan) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{40}
+	return file_taxonomy_proto_rawDescGZIP(), []int{45}
 }
 
 type TaskingTaxonomyTrack struct {
@@ -2301,7 +2584,7 @@ type TaskingTaxonomyTrack struct {
 
 func (x *TaskingTaxonomyTrack) Reset() {
 	*x = TaskingTaxonomyTrack{}
-	mi := &file_taxonomy_proto_msgTypes[41]
+	mi := &file_taxonomy_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2313,7 +2596,7 @@ func (x *TaskingTaxonomyTrack) String() string {
 func (*TaskingTaxonomyTrack) ProtoMessage() {}
 
 func (x *TaskingTaxonomyTrack) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[41]
+	mi := &file_taxonomy_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2326,7 +2609,7 @@ func (x *TaskingTaxonomyTrack) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyTrack.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyTrack) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{41}
+	return file_taxonomy_proto_rawDescGZIP(), []int{46}
 }
 
 type TaskingTaxonomyMoveTo struct {
@@ -2337,7 +2620,7 @@ type TaskingTaxonomyMoveTo struct {
 
 func (x *TaskingTaxonomyMoveTo) Reset() {
 	*x = TaskingTaxonomyMoveTo{}
-	mi := &file_taxonomy_proto_msgTypes[42]
+	mi := &file_taxonomy_proto_msgTypes[47]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2349,7 +2632,7 @@ func (x *TaskingTaxonomyMoveTo) String() string {
 func (*TaskingTaxonomyMoveTo) ProtoMessage() {}
 
 func (x *TaskingTaxonomyMoveTo) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[42]
+	mi := &file_taxonomy_proto_msgTypes[47]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2362,7 +2645,7 @@ func (x *TaskingTaxonomyMoveTo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyMoveTo.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyMoveTo) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{42}
+	return file_taxonomy_proto_rawDescGZIP(), []int{47}
 }
 
 type TaskingTaxonomyPatrol struct {
@@ -2373,7 +2656,7 @@ type TaskingTaxonomyPatrol struct {
 
 func (x *TaskingTaxonomyPatrol) Reset() {
 	*x = TaskingTaxonomyPatrol{}
-	mi := &file_taxonomy_proto_msgTypes[43]
+	mi := &file_taxonomy_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2385,7 +2668,7 @@ func (x *TaskingTaxonomyPatrol) String() string {
 func (*TaskingTaxonomyPatrol) ProtoMessage() {}
 
 func (x *TaskingTaxonomyPatrol) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[43]
+	mi := &file_taxonomy_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2398,7 +2681,7 @@ func (x *TaskingTaxonomyPatrol) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyPatrol.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyPatrol) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{43}
+	return file_taxonomy_proto_rawDescGZIP(), []int{48}
 }
 
 type TaskingTaxonomyFollow struct {
@@ -2409,7 +2692,7 @@ type TaskingTaxonomyFollow struct {
 
 func (x *TaskingTaxonomyFollow) Reset() {
 	*x = TaskingTaxonomyFollow{}
-	mi := &file_taxonomy_proto_msgTypes[44]
+	mi := &file_taxonomy_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2421,7 +2704,7 @@ func (x *TaskingTaxonomyFollow) String() string {
 func (*TaskingTaxonomyFollow) ProtoMessage() {}
 
 func (x *TaskingTaxonomyFollow) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[44]
+	mi := &file_taxonomy_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2434,7 +2717,7 @@ func (x *TaskingTaxonomyFollow) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyFollow.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyFollow) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{44}
+	return file_taxonomy_proto_rawDescGZIP(), []int{49}
 }
 
 type TaskingTaxonomyCommissionPosition struct {
@@ -2445,7 +2728,7 @@ type TaskingTaxonomyCommissionPosition struct {
 
 func (x *TaskingTaxonomyCommissionPosition) Reset() {
 	*x = TaskingTaxonomyCommissionPosition{}
-	mi := &file_taxonomy_proto_msgTypes[45]
+	mi := &file_taxonomy_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2457,7 +2740,7 @@ func (x *TaskingTaxonomyCommissionPosition) String() string {
 func (*TaskingTaxonomyCommissionPosition) ProtoMessage() {}
 
 func (x *TaskingTaxonomyCommissionPosition) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[45]
+	mi := &file_taxonomy_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2470,7 +2753,7 @@ func (x *TaskingTaxonomyCommissionPosition) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use TaskingTaxonomyCommissionPosition.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyCommissionPosition) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{45}
+	return file_taxonomy_proto_rawDescGZIP(), []int{50}
 }
 
 type TaskingTaxonomyCommissionCalibrate struct {
@@ -2481,7 +2764,7 @@ type TaskingTaxonomyCommissionCalibrate struct {
 
 func (x *TaskingTaxonomyCommissionCalibrate) Reset() {
 	*x = TaskingTaxonomyCommissionCalibrate{}
-	mi := &file_taxonomy_proto_msgTypes[46]
+	mi := &file_taxonomy_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2493,7 +2776,7 @@ func (x *TaskingTaxonomyCommissionCalibrate) String() string {
 func (*TaskingTaxonomyCommissionCalibrate) ProtoMessage() {}
 
 func (x *TaskingTaxonomyCommissionCalibrate) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[46]
+	mi := &file_taxonomy_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2506,14 +2789,14 @@ func (x *TaskingTaxonomyCommissionCalibrate) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use TaskingTaxonomyCommissionCalibrate.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyCommissionCalibrate) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{46}
+	return file_taxonomy_proto_rawDescGZIP(), []int{51}
 }
 
 var File_taxonomy_proto protoreflect.FileDescriptor
 
 const file_taxonomy_proto_rawDesc = "" +
 	"\n" +
-	"\x0etaxonomy.proto\x12\x05world\"\xae\x03\n" +
+	"\x0etaxonomy.proto\x12\x05world\"\xdc\x03\n" +
 	"\x16ClassificationTaxonomy\x12?\n" +
 	"\n" +
 	"confidence\x18\x01 \x01(\v2\x1f.world.ClassificationConfidenceR\n" +
@@ -2524,13 +2807,17 @@ const file_taxonomy_proto_rawDesc = "" +
 	"\x0einfrastructure\x18\f \x01(\v2\x1d.world.InfrastructureTaxonomyH\x00R\x0einfrastructure\x122\n" +
 	"\avehicle\x18\r \x01(\v2\x16.world.VehicleTaxonomyH\x00R\avehicle\x128\n" +
 	"\tequipment\x18\x0e \x01(\v2\x18.world.EquipmentTaxonomyH\x00R\tequipment\x122\n" +
-	"\aemitter\x18\x0f \x01(\v2\x16.world.EmitterTaxonomyH\x00R\aemitterB\x06\n" +
-	"\x04kind\"T\n" +
+	"\aemitter\x18\x0f \x01(\v2\x16.world.EmitterTaxonomyH\x00R\aemitter\x12,\n" +
+	"\x05other\x18\x10 \x01(\v2\x14.world.OtherTaxonomyH\x00R\x05otherB\x06\n" +
+	"\x04kind\"\x0f\n" +
+	"\rOtherTaxonomy\"\x9f\x01\n" +
 	"\x18ClassificationConfidence\x12\x1e\n" +
 	"\n" +
 	"confidence\x18\x01 \x01(\x02R\n" +
 	"confidence\x12\x18\n" +
-	"\apending\x18\x02 \x01(\bR\apending\"\x10\n" +
+	"\apending\x18\x02 \x01(\bR\apending\x122\n" +
+	"\x12confidence_percent\x18\x03 \x01(\rH\x00R\x11confidencePercent\x88\x01\x01B\x15\n" +
+	"\x13_confidence_percent\"\x10\n" +
 	"\x0ePersonTaxonomy\"w\n" +
 	"\x0eAnimalTaxonomy\x12,\n" +
 	"\x03air\x18\x01 \x01(\v2\x18.world.AnimalTaxonomyAirH\x00R\x03air\x12/\n" +
@@ -2576,8 +2863,15 @@ const file_taxonomy_proto_rawDesc = "" +
 	"\rmulti_wheeled\x18\x03 \x01(\v2\".world.VehicleTaxonomyMultiWheeledH\x00R\fmultiWheeledB\x06\n" +
 	"\x04kind\"\x18\n" +
 	"\x16VehicleTaxonomyTracked\"\x1b\n" +
-	"\x19VehicleTaxonomyTwoWheeled\"\x1d\n" +
-	"\x1bVehicleTaxonomyMultiWheeled\"\xf1\x01\n" +
+	"\x19VehicleTaxonomyTwoWheeled\"\xed\x01\n" +
+	"\x1bVehicleTaxonomyMultiWheeled\x12?\n" +
+	"\x05light\x18\x01 \x01(\v2'.world.VehicleTaxonomyMultiWheeledLightH\x00R\x05light\x12B\n" +
+	"\x06medium\x18\x02 \x01(\v2(.world.VehicleTaxonomyMultiWheeledMediumH\x00R\x06medium\x12?\n" +
+	"\x05heavy\x18\x03 \x01(\v2'.world.VehicleTaxonomyMultiWheeledHeavyH\x00R\x05heavyB\b\n" +
+	"\x06weight\"\"\n" +
+	" VehicleTaxonomyMultiWheeledLight\"#\n" +
+	"!VehicleTaxonomyMultiWheeledMedium\"\"\n" +
+	" VehicleTaxonomyMultiWheeledHeavy\"\xf1\x01\n" +
 	"\x12VehicleTaxonomyAir\x12C\n" +
 	"\n" +
 	"fixed_wing\x18\x01 \x01(\v2\".world.VehicleTaxonomyAirFixedWingH\x00R\tfixedWing\x12S\n" +
@@ -2591,7 +2885,7 @@ const file_taxonomy_proto_rawDesc = "" +
 	"\x19VehicleTaxonomySubsurface\"[\n" +
 	"\x11EquipmentTaxonomy\x12;\n" +
 	"\x06sensor\x18\x01 \x01(\v2\x1e.world.EquipmentTaxonomySensorH\x00R\x06sensor\x88\x01\x01B\t\n" +
-	"\a_sensor\"\xc1\x03\n" +
+	"\a_sensor\"\x84\x04\n" +
 	"\x17EquipmentTaxonomySensor\x12G\n" +
 	"\bemplaced\x18\x01 \x01(\v2&.world.EquipmentTaxonomySensorEmplacedH\x01R\bemplaced\x88\x01\x01\x12;\n" +
 	"\x05radar\x18\n" +
@@ -2599,7 +2893,8 @@ const file_taxonomy_proto_rawDesc = "" +
 	"\x02ew\x18\v \x01(\v2 .world.EquipmentTaxonomySensorEWH\x00R\x02ew\x128\n" +
 	"\x04cbrn\x18\f \x01(\v2\".world.EquipmentTaxonomySensorCBRNH\x00R\x04cbrn\x12D\n" +
 	"\bacoustic\x18\r \x01(\v2&.world.EquipmentTaxonomySensorAcousticH\x00R\bacoustic\x12W\n" +
-	"\x0felectro_optical\x18\x0e \x01(\v2,.world.EquipmentTaxonomySensorElectroOpticalH\x00R\x0eelectroOpticalB\x06\n" +
+	"\x0felectro_optical\x18\x0e \x01(\v2,.world.EquipmentTaxonomySensorElectroOpticalH\x00R\x0eelectroOptical\x12A\n" +
+	"\aseismic\x18\x0f \x01(\v2%.world.EquipmentTaxonomySensorSeismicH\x00R\aseismicB\x06\n" +
 	"\x04kindB\v\n" +
 	"\t_emplaced\"\x1e\n" +
 	"\x1cEquipmentTaxonomySensorRadar\"\x1b\n" +
@@ -2607,7 +2902,8 @@ const file_taxonomy_proto_rawDesc = "" +
 	"\x1bEquipmentTaxonomySensorCBRN\"!\n" +
 	"\x1fEquipmentTaxonomySensorAcoustic\"'\n" +
 	"%EquipmentTaxonomySensorElectroOptical\"!\n" +
-	"\x1fEquipmentTaxonomySensorEmplaced\"\x11\n" +
+	"\x1fEquipmentTaxonomySensorEmplaced\" \n" +
+	"\x1eEquipmentTaxonomySensorSeismic\"\x11\n" +
 	"\x0fEmitterTaxonomy\"\x8e\x02\n" +
 	"\x0fTaskingTaxonomy\x129\n" +
 	"\aobserve\x18\n" +
@@ -2654,107 +2950,117 @@ func file_taxonomy_proto_rawDescGZIP() []byte {
 	return file_taxonomy_proto_rawDescData
 }
 
-var file_taxonomy_proto_msgTypes = make([]protoimpl.MessageInfo, 47)
+var file_taxonomy_proto_msgTypes = make([]protoimpl.MessageInfo, 52)
 var file_taxonomy_proto_goTypes = []any{
 	(*ClassificationTaxonomy)(nil),                // 0: world.ClassificationTaxonomy
-	(*ClassificationConfidence)(nil),              // 1: world.ClassificationConfidence
-	(*PersonTaxonomy)(nil),                        // 2: world.PersonTaxonomy
-	(*AnimalTaxonomy)(nil),                        // 3: world.AnimalTaxonomy
-	(*AnimalTaxonomyBird)(nil),                    // 4: world.AnimalTaxonomyBird
-	(*AnimalTaxonomyAir)(nil),                     // 5: world.AnimalTaxonomyAir
-	(*AnimalTaxonomyHorse)(nil),                   // 6: world.AnimalTaxonomyHorse
-	(*AnimalTaxonomyLand)(nil),                    // 7: world.AnimalTaxonomyLand
-	(*InfrastructureTaxonomy)(nil),                // 8: world.InfrastructureTaxonomy
-	(*InfrastructureTaxonomyTower)(nil),           // 9: world.InfrastructureTaxonomyTower
-	(*InfrastructureTaxonomyBridge)(nil),          // 10: world.InfrastructureTaxonomyBridge
-	(*InfrastructureTaxonomyRoad)(nil),            // 11: world.InfrastructureTaxonomyRoad
-	(*InfrastructureTaxonomyDam)(nil),             // 12: world.InfrastructureTaxonomyDam
-	(*VehicleTaxonomy)(nil),                       // 13: world.VehicleTaxonomy
-	(*VehicleTaxonomyUnmanned)(nil),               // 14: world.VehicleTaxonomyUnmanned
-	(*VehicleTaxonomyLand)(nil),                   // 15: world.VehicleTaxonomyLand
-	(*VehicleTaxonomyTracked)(nil),                // 16: world.VehicleTaxonomyTracked
-	(*VehicleTaxonomyTwoWheeled)(nil),             // 17: world.VehicleTaxonomyTwoWheeled
-	(*VehicleTaxonomyMultiWheeled)(nil),           // 18: world.VehicleTaxonomyMultiWheeled
-	(*VehicleTaxonomyAir)(nil),                    // 19: world.VehicleTaxonomyAir
-	(*VehicleTaxonomyAirRotary)(nil),              // 20: world.VehicleTaxonomyAirRotary
-	(*VehicleTaxonomyAirFixedWing)(nil),           // 21: world.VehicleTaxonomyAirFixedWing
-	(*VehicleTaxonomyAirLighterThanAir)(nil),      // 22: world.VehicleTaxonomyAirLighterThanAir
-	(*VehicleTaxonomySea)(nil),                    // 23: world.VehicleTaxonomySea
-	(*VehicleTaxonomySubsurface)(nil),             // 24: world.VehicleTaxonomySubsurface
-	(*EquipmentTaxonomy)(nil),                     // 25: world.EquipmentTaxonomy
-	(*EquipmentTaxonomySensor)(nil),               // 26: world.EquipmentTaxonomySensor
-	(*EquipmentTaxonomySensorRadar)(nil),          // 27: world.EquipmentTaxonomySensorRadar
-	(*EquipmentTaxonomySensorEW)(nil),             // 28: world.EquipmentTaxonomySensorEW
-	(*EquipmentTaxonomySensorCBRN)(nil),           // 29: world.EquipmentTaxonomySensorCBRN
-	(*EquipmentTaxonomySensorAcoustic)(nil),       // 30: world.EquipmentTaxonomySensorAcoustic
-	(*EquipmentTaxonomySensorElectroOptical)(nil), // 31: world.EquipmentTaxonomySensorElectroOptical
-	(*EquipmentTaxonomySensorEmplaced)(nil),       // 32: world.EquipmentTaxonomySensorEmplaced
-	(*EmitterTaxonomy)(nil),                       // 33: world.EmitterTaxonomy
-	(*TaskingTaxonomy)(nil),                       // 34: world.TaskingTaxonomy
-	(*TaskingTaxonomyCommission)(nil),             // 35: world.TaskingTaxonomyCommission
-	(*TaskingTaxonomyObserve)(nil),                // 36: world.TaskingTaxonomyObserve
-	(*TaskingTaxonomyMovement)(nil),               // 37: world.TaskingTaxonomyMovement
-	(*TaskingTaxonomyEffect)(nil),                 // 38: world.TaskingTaxonomyEffect
-	(*TaskingTaxonomyLookAt)(nil),                 // 39: world.TaskingTaxonomyLookAt
-	(*TaskingTaxonomyScan)(nil),                   // 40: world.TaskingTaxonomyScan
-	(*TaskingTaxonomyTrack)(nil),                  // 41: world.TaskingTaxonomyTrack
-	(*TaskingTaxonomyMoveTo)(nil),                 // 42: world.TaskingTaxonomyMoveTo
-	(*TaskingTaxonomyPatrol)(nil),                 // 43: world.TaskingTaxonomyPatrol
-	(*TaskingTaxonomyFollow)(nil),                 // 44: world.TaskingTaxonomyFollow
-	(*TaskingTaxonomyCommissionPosition)(nil),     // 45: world.TaskingTaxonomyCommissionPosition
-	(*TaskingTaxonomyCommissionCalibrate)(nil),    // 46: world.TaskingTaxonomyCommissionCalibrate
+	(*OtherTaxonomy)(nil),                         // 1: world.OtherTaxonomy
+	(*ClassificationConfidence)(nil),              // 2: world.ClassificationConfidence
+	(*PersonTaxonomy)(nil),                        // 3: world.PersonTaxonomy
+	(*AnimalTaxonomy)(nil),                        // 4: world.AnimalTaxonomy
+	(*AnimalTaxonomyBird)(nil),                    // 5: world.AnimalTaxonomyBird
+	(*AnimalTaxonomyAir)(nil),                     // 6: world.AnimalTaxonomyAir
+	(*AnimalTaxonomyHorse)(nil),                   // 7: world.AnimalTaxonomyHorse
+	(*AnimalTaxonomyLand)(nil),                    // 8: world.AnimalTaxonomyLand
+	(*InfrastructureTaxonomy)(nil),                // 9: world.InfrastructureTaxonomy
+	(*InfrastructureTaxonomyTower)(nil),           // 10: world.InfrastructureTaxonomyTower
+	(*InfrastructureTaxonomyBridge)(nil),          // 11: world.InfrastructureTaxonomyBridge
+	(*InfrastructureTaxonomyRoad)(nil),            // 12: world.InfrastructureTaxonomyRoad
+	(*InfrastructureTaxonomyDam)(nil),             // 13: world.InfrastructureTaxonomyDam
+	(*VehicleTaxonomy)(nil),                       // 14: world.VehicleTaxonomy
+	(*VehicleTaxonomyUnmanned)(nil),               // 15: world.VehicleTaxonomyUnmanned
+	(*VehicleTaxonomyLand)(nil),                   // 16: world.VehicleTaxonomyLand
+	(*VehicleTaxonomyTracked)(nil),                // 17: world.VehicleTaxonomyTracked
+	(*VehicleTaxonomyTwoWheeled)(nil),             // 18: world.VehicleTaxonomyTwoWheeled
+	(*VehicleTaxonomyMultiWheeled)(nil),           // 19: world.VehicleTaxonomyMultiWheeled
+	(*VehicleTaxonomyMultiWheeledLight)(nil),      // 20: world.VehicleTaxonomyMultiWheeledLight
+	(*VehicleTaxonomyMultiWheeledMedium)(nil),     // 21: world.VehicleTaxonomyMultiWheeledMedium
+	(*VehicleTaxonomyMultiWheeledHeavy)(nil),      // 22: world.VehicleTaxonomyMultiWheeledHeavy
+	(*VehicleTaxonomyAir)(nil),                    // 23: world.VehicleTaxonomyAir
+	(*VehicleTaxonomyAirRotary)(nil),              // 24: world.VehicleTaxonomyAirRotary
+	(*VehicleTaxonomyAirFixedWing)(nil),           // 25: world.VehicleTaxonomyAirFixedWing
+	(*VehicleTaxonomyAirLighterThanAir)(nil),      // 26: world.VehicleTaxonomyAirLighterThanAir
+	(*VehicleTaxonomySea)(nil),                    // 27: world.VehicleTaxonomySea
+	(*VehicleTaxonomySubsurface)(nil),             // 28: world.VehicleTaxonomySubsurface
+	(*EquipmentTaxonomy)(nil),                     // 29: world.EquipmentTaxonomy
+	(*EquipmentTaxonomySensor)(nil),               // 30: world.EquipmentTaxonomySensor
+	(*EquipmentTaxonomySensorRadar)(nil),          // 31: world.EquipmentTaxonomySensorRadar
+	(*EquipmentTaxonomySensorEW)(nil),             // 32: world.EquipmentTaxonomySensorEW
+	(*EquipmentTaxonomySensorCBRN)(nil),           // 33: world.EquipmentTaxonomySensorCBRN
+	(*EquipmentTaxonomySensorAcoustic)(nil),       // 34: world.EquipmentTaxonomySensorAcoustic
+	(*EquipmentTaxonomySensorElectroOptical)(nil), // 35: world.EquipmentTaxonomySensorElectroOptical
+	(*EquipmentTaxonomySensorEmplaced)(nil),       // 36: world.EquipmentTaxonomySensorEmplaced
+	(*EquipmentTaxonomySensorSeismic)(nil),        // 37: world.EquipmentTaxonomySensorSeismic
+	(*EmitterTaxonomy)(nil),                       // 38: world.EmitterTaxonomy
+	(*TaskingTaxonomy)(nil),                       // 39: world.TaskingTaxonomy
+	(*TaskingTaxonomyCommission)(nil),             // 40: world.TaskingTaxonomyCommission
+	(*TaskingTaxonomyObserve)(nil),                // 41: world.TaskingTaxonomyObserve
+	(*TaskingTaxonomyMovement)(nil),               // 42: world.TaskingTaxonomyMovement
+	(*TaskingTaxonomyEffect)(nil),                 // 43: world.TaskingTaxonomyEffect
+	(*TaskingTaxonomyLookAt)(nil),                 // 44: world.TaskingTaxonomyLookAt
+	(*TaskingTaxonomyScan)(nil),                   // 45: world.TaskingTaxonomyScan
+	(*TaskingTaxonomyTrack)(nil),                  // 46: world.TaskingTaxonomyTrack
+	(*TaskingTaxonomyMoveTo)(nil),                 // 47: world.TaskingTaxonomyMoveTo
+	(*TaskingTaxonomyPatrol)(nil),                 // 48: world.TaskingTaxonomyPatrol
+	(*TaskingTaxonomyFollow)(nil),                 // 49: world.TaskingTaxonomyFollow
+	(*TaskingTaxonomyCommissionPosition)(nil),     // 50: world.TaskingTaxonomyCommissionPosition
+	(*TaskingTaxonomyCommissionCalibrate)(nil),    // 51: world.TaskingTaxonomyCommissionCalibrate
 }
 var file_taxonomy_proto_depIdxs = []int32{
-	1,  // 0: world.ClassificationTaxonomy.confidence:type_name -> world.ClassificationConfidence
-	2,  // 1: world.ClassificationTaxonomy.person:type_name -> world.PersonTaxonomy
-	3,  // 2: world.ClassificationTaxonomy.animal:type_name -> world.AnimalTaxonomy
-	8,  // 3: world.ClassificationTaxonomy.infrastructure:type_name -> world.InfrastructureTaxonomy
-	13, // 4: world.ClassificationTaxonomy.vehicle:type_name -> world.VehicleTaxonomy
-	25, // 5: world.ClassificationTaxonomy.equipment:type_name -> world.EquipmentTaxonomy
-	33, // 6: world.ClassificationTaxonomy.emitter:type_name -> world.EmitterTaxonomy
-	5,  // 7: world.AnimalTaxonomy.air:type_name -> world.AnimalTaxonomyAir
-	7,  // 8: world.AnimalTaxonomy.land:type_name -> world.AnimalTaxonomyLand
-	4,  // 9: world.AnimalTaxonomyAir.bird:type_name -> world.AnimalTaxonomyBird
-	6,  // 10: world.AnimalTaxonomyLand.horse:type_name -> world.AnimalTaxonomyHorse
-	9,  // 11: world.InfrastructureTaxonomy.tower:type_name -> world.InfrastructureTaxonomyTower
-	10, // 12: world.InfrastructureTaxonomy.bridge:type_name -> world.InfrastructureTaxonomyBridge
-	11, // 13: world.InfrastructureTaxonomy.road:type_name -> world.InfrastructureTaxonomyRoad
-	12, // 14: world.InfrastructureTaxonomy.dam:type_name -> world.InfrastructureTaxonomyDam
-	14, // 15: world.VehicleTaxonomy.unmanned:type_name -> world.VehicleTaxonomyUnmanned
-	15, // 16: world.VehicleTaxonomy.land:type_name -> world.VehicleTaxonomyLand
-	19, // 17: world.VehicleTaxonomy.air:type_name -> world.VehicleTaxonomyAir
-	23, // 18: world.VehicleTaxonomy.sea:type_name -> world.VehicleTaxonomySea
-	24, // 19: world.VehicleTaxonomy.subsurface:type_name -> world.VehicleTaxonomySubsurface
-	16, // 20: world.VehicleTaxonomyLand.tracked:type_name -> world.VehicleTaxonomyTracked
-	17, // 21: world.VehicleTaxonomyLand.two_wheeled:type_name -> world.VehicleTaxonomyTwoWheeled
-	18, // 22: world.VehicleTaxonomyLand.multi_wheeled:type_name -> world.VehicleTaxonomyMultiWheeled
-	21, // 23: world.VehicleTaxonomyAir.fixed_wing:type_name -> world.VehicleTaxonomyAirFixedWing
-	22, // 24: world.VehicleTaxonomyAir.lighter_than_air:type_name -> world.VehicleTaxonomyAirLighterThanAir
-	20, // 25: world.VehicleTaxonomyAir.rotary:type_name -> world.VehicleTaxonomyAirRotary
-	26, // 26: world.EquipmentTaxonomy.sensor:type_name -> world.EquipmentTaxonomySensor
-	32, // 27: world.EquipmentTaxonomySensor.emplaced:type_name -> world.EquipmentTaxonomySensorEmplaced
-	27, // 28: world.EquipmentTaxonomySensor.radar:type_name -> world.EquipmentTaxonomySensorRadar
-	28, // 29: world.EquipmentTaxonomySensor.ew:type_name -> world.EquipmentTaxonomySensorEW
-	29, // 30: world.EquipmentTaxonomySensor.cbrn:type_name -> world.EquipmentTaxonomySensorCBRN
-	30, // 31: world.EquipmentTaxonomySensor.acoustic:type_name -> world.EquipmentTaxonomySensorAcoustic
-	31, // 32: world.EquipmentTaxonomySensor.electro_optical:type_name -> world.EquipmentTaxonomySensorElectroOptical
-	36, // 33: world.TaskingTaxonomy.observe:type_name -> world.TaskingTaxonomyObserve
-	37, // 34: world.TaskingTaxonomy.movement:type_name -> world.TaskingTaxonomyMovement
-	38, // 35: world.TaskingTaxonomy.effect:type_name -> world.TaskingTaxonomyEffect
-	35, // 36: world.TaskingTaxonomy.commission:type_name -> world.TaskingTaxonomyCommission
-	45, // 37: world.TaskingTaxonomyCommission.position:type_name -> world.TaskingTaxonomyCommissionPosition
-	46, // 38: world.TaskingTaxonomyCommission.calibrate:type_name -> world.TaskingTaxonomyCommissionCalibrate
-	39, // 39: world.TaskingTaxonomyObserve.look_at:type_name -> world.TaskingTaxonomyLookAt
-	40, // 40: world.TaskingTaxonomyObserve.scan:type_name -> world.TaskingTaxonomyScan
-	41, // 41: world.TaskingTaxonomyObserve.track:type_name -> world.TaskingTaxonomyTrack
-	42, // 42: world.TaskingTaxonomyMovement.move_to:type_name -> world.TaskingTaxonomyMoveTo
-	43, // 43: world.TaskingTaxonomyMovement.patrol:type_name -> world.TaskingTaxonomyPatrol
-	44, // 44: world.TaskingTaxonomyMovement.follow:type_name -> world.TaskingTaxonomyFollow
-	45, // [45:45] is the sub-list for method output_type
-	45, // [45:45] is the sub-list for method input_type
-	45, // [45:45] is the sub-list for extension type_name
-	45, // [45:45] is the sub-list for extension extendee
-	0,  // [0:45] is the sub-list for field type_name
+	2,  // 0: world.ClassificationTaxonomy.confidence:type_name -> world.ClassificationConfidence
+	3,  // 1: world.ClassificationTaxonomy.person:type_name -> world.PersonTaxonomy
+	4,  // 2: world.ClassificationTaxonomy.animal:type_name -> world.AnimalTaxonomy
+	9,  // 3: world.ClassificationTaxonomy.infrastructure:type_name -> world.InfrastructureTaxonomy
+	14, // 4: world.ClassificationTaxonomy.vehicle:type_name -> world.VehicleTaxonomy
+	29, // 5: world.ClassificationTaxonomy.equipment:type_name -> world.EquipmentTaxonomy
+	38, // 6: world.ClassificationTaxonomy.emitter:type_name -> world.EmitterTaxonomy
+	1,  // 7: world.ClassificationTaxonomy.other:type_name -> world.OtherTaxonomy
+	6,  // 8: world.AnimalTaxonomy.air:type_name -> world.AnimalTaxonomyAir
+	8,  // 9: world.AnimalTaxonomy.land:type_name -> world.AnimalTaxonomyLand
+	5,  // 10: world.AnimalTaxonomyAir.bird:type_name -> world.AnimalTaxonomyBird
+	7,  // 11: world.AnimalTaxonomyLand.horse:type_name -> world.AnimalTaxonomyHorse
+	10, // 12: world.InfrastructureTaxonomy.tower:type_name -> world.InfrastructureTaxonomyTower
+	11, // 13: world.InfrastructureTaxonomy.bridge:type_name -> world.InfrastructureTaxonomyBridge
+	12, // 14: world.InfrastructureTaxonomy.road:type_name -> world.InfrastructureTaxonomyRoad
+	13, // 15: world.InfrastructureTaxonomy.dam:type_name -> world.InfrastructureTaxonomyDam
+	15, // 16: world.VehicleTaxonomy.unmanned:type_name -> world.VehicleTaxonomyUnmanned
+	16, // 17: world.VehicleTaxonomy.land:type_name -> world.VehicleTaxonomyLand
+	23, // 18: world.VehicleTaxonomy.air:type_name -> world.VehicleTaxonomyAir
+	27, // 19: world.VehicleTaxonomy.sea:type_name -> world.VehicleTaxonomySea
+	28, // 20: world.VehicleTaxonomy.subsurface:type_name -> world.VehicleTaxonomySubsurface
+	17, // 21: world.VehicleTaxonomyLand.tracked:type_name -> world.VehicleTaxonomyTracked
+	18, // 22: world.VehicleTaxonomyLand.two_wheeled:type_name -> world.VehicleTaxonomyTwoWheeled
+	19, // 23: world.VehicleTaxonomyLand.multi_wheeled:type_name -> world.VehicleTaxonomyMultiWheeled
+	20, // 24: world.VehicleTaxonomyMultiWheeled.light:type_name -> world.VehicleTaxonomyMultiWheeledLight
+	21, // 25: world.VehicleTaxonomyMultiWheeled.medium:type_name -> world.VehicleTaxonomyMultiWheeledMedium
+	22, // 26: world.VehicleTaxonomyMultiWheeled.heavy:type_name -> world.VehicleTaxonomyMultiWheeledHeavy
+	25, // 27: world.VehicleTaxonomyAir.fixed_wing:type_name -> world.VehicleTaxonomyAirFixedWing
+	26, // 28: world.VehicleTaxonomyAir.lighter_than_air:type_name -> world.VehicleTaxonomyAirLighterThanAir
+	24, // 29: world.VehicleTaxonomyAir.rotary:type_name -> world.VehicleTaxonomyAirRotary
+	30, // 30: world.EquipmentTaxonomy.sensor:type_name -> world.EquipmentTaxonomySensor
+	36, // 31: world.EquipmentTaxonomySensor.emplaced:type_name -> world.EquipmentTaxonomySensorEmplaced
+	31, // 32: world.EquipmentTaxonomySensor.radar:type_name -> world.EquipmentTaxonomySensorRadar
+	32, // 33: world.EquipmentTaxonomySensor.ew:type_name -> world.EquipmentTaxonomySensorEW
+	33, // 34: world.EquipmentTaxonomySensor.cbrn:type_name -> world.EquipmentTaxonomySensorCBRN
+	34, // 35: world.EquipmentTaxonomySensor.acoustic:type_name -> world.EquipmentTaxonomySensorAcoustic
+	35, // 36: world.EquipmentTaxonomySensor.electro_optical:type_name -> world.EquipmentTaxonomySensorElectroOptical
+	37, // 37: world.EquipmentTaxonomySensor.seismic:type_name -> world.EquipmentTaxonomySensorSeismic
+	41, // 38: world.TaskingTaxonomy.observe:type_name -> world.TaskingTaxonomyObserve
+	42, // 39: world.TaskingTaxonomy.movement:type_name -> world.TaskingTaxonomyMovement
+	43, // 40: world.TaskingTaxonomy.effect:type_name -> world.TaskingTaxonomyEffect
+	40, // 41: world.TaskingTaxonomy.commission:type_name -> world.TaskingTaxonomyCommission
+	50, // 42: world.TaskingTaxonomyCommission.position:type_name -> world.TaskingTaxonomyCommissionPosition
+	51, // 43: world.TaskingTaxonomyCommission.calibrate:type_name -> world.TaskingTaxonomyCommissionCalibrate
+	44, // 44: world.TaskingTaxonomyObserve.look_at:type_name -> world.TaskingTaxonomyLookAt
+	45, // 45: world.TaskingTaxonomyObserve.scan:type_name -> world.TaskingTaxonomyScan
+	46, // 46: world.TaskingTaxonomyObserve.track:type_name -> world.TaskingTaxonomyTrack
+	47, // 47: world.TaskingTaxonomyMovement.move_to:type_name -> world.TaskingTaxonomyMoveTo
+	48, // 48: world.TaskingTaxonomyMovement.patrol:type_name -> world.TaskingTaxonomyPatrol
+	49, // 49: world.TaskingTaxonomyMovement.follow:type_name -> world.TaskingTaxonomyFollow
+	50, // [50:50] is the sub-list for method output_type
+	50, // [50:50] is the sub-list for method input_type
+	50, // [50:50] is the sub-list for extension type_name
+	50, // [50:50] is the sub-list for extension extendee
+	0,  // [0:50] is the sub-list for field type_name
 }
 
 func init() { file_taxonomy_proto_init() }
@@ -2769,54 +3075,62 @@ func file_taxonomy_proto_init() {
 		(*ClassificationTaxonomy_Vehicle)(nil),
 		(*ClassificationTaxonomy_Equipment)(nil),
 		(*ClassificationTaxonomy_Emitter)(nil),
+		(*ClassificationTaxonomy_Other)(nil),
 	}
-	file_taxonomy_proto_msgTypes[3].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[2].OneofWrappers = []any{}
+	file_taxonomy_proto_msgTypes[4].OneofWrappers = []any{
 		(*AnimalTaxonomy_Air)(nil),
 		(*AnimalTaxonomy_Land)(nil),
 	}
-	file_taxonomy_proto_msgTypes[5].OneofWrappers = []any{}
-	file_taxonomy_proto_msgTypes[7].OneofWrappers = []any{}
+	file_taxonomy_proto_msgTypes[6].OneofWrappers = []any{}
 	file_taxonomy_proto_msgTypes[8].OneofWrappers = []any{}
-	file_taxonomy_proto_msgTypes[13].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[9].OneofWrappers = []any{}
+	file_taxonomy_proto_msgTypes[14].OneofWrappers = []any{
 		(*VehicleTaxonomy_Land)(nil),
 		(*VehicleTaxonomy_Air)(nil),
 		(*VehicleTaxonomy_Sea)(nil),
 		(*VehicleTaxonomy_Subsurface)(nil),
 	}
-	file_taxonomy_proto_msgTypes[15].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[16].OneofWrappers = []any{
 		(*VehicleTaxonomyLand_Tracked)(nil),
 		(*VehicleTaxonomyLand_TwoWheeled)(nil),
 		(*VehicleTaxonomyLand_MultiWheeled)(nil),
 	}
 	file_taxonomy_proto_msgTypes[19].OneofWrappers = []any{
+		(*VehicleTaxonomyMultiWheeled_Light)(nil),
+		(*VehicleTaxonomyMultiWheeled_Medium)(nil),
+		(*VehicleTaxonomyMultiWheeled_Heavy)(nil),
+	}
+	file_taxonomy_proto_msgTypes[23].OneofWrappers = []any{
 		(*VehicleTaxonomyAir_FixedWing)(nil),
 		(*VehicleTaxonomyAir_LighterThanAir)(nil),
 		(*VehicleTaxonomyAir_Rotary)(nil),
 	}
-	file_taxonomy_proto_msgTypes[25].OneofWrappers = []any{}
-	file_taxonomy_proto_msgTypes[26].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[29].OneofWrappers = []any{}
+	file_taxonomy_proto_msgTypes[30].OneofWrappers = []any{
 		(*EquipmentTaxonomySensor_Radar)(nil),
 		(*EquipmentTaxonomySensor_Ew)(nil),
 		(*EquipmentTaxonomySensor_Cbrn)(nil),
 		(*EquipmentTaxonomySensor_Acoustic)(nil),
 		(*EquipmentTaxonomySensor_ElectroOptical)(nil),
+		(*EquipmentTaxonomySensor_Seismic)(nil),
 	}
-	file_taxonomy_proto_msgTypes[34].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[39].OneofWrappers = []any{
 		(*TaskingTaxonomy_Observe)(nil),
 		(*TaskingTaxonomy_Movement)(nil),
 		(*TaskingTaxonomy_Effect)(nil),
 		(*TaskingTaxonomy_Commission)(nil),
 	}
-	file_taxonomy_proto_msgTypes[35].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[40].OneofWrappers = []any{
 		(*TaskingTaxonomyCommission_Position)(nil),
 		(*TaskingTaxonomyCommission_Calibrate)(nil),
 	}
-	file_taxonomy_proto_msgTypes[36].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[41].OneofWrappers = []any{
 		(*TaskingTaxonomyObserve_LookAt)(nil),
 		(*TaskingTaxonomyObserve_Scan)(nil),
 		(*TaskingTaxonomyObserve_Track)(nil),
 	}
-	file_taxonomy_proto_msgTypes[37].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[42].OneofWrappers = []any{
 		(*TaskingTaxonomyMovement_MoveTo)(nil),
 		(*TaskingTaxonomyMovement_Patrol)(nil),
 		(*TaskingTaxonomyMovement_Follow)(nil),
@@ -2827,7 +3141,7 @@ func file_taxonomy_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_taxonomy_proto_rawDesc), len(file_taxonomy_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   47,
+			NumMessages:   52,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

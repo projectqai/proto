@@ -326,6 +326,10 @@ export declare type Lease = Message<"world.Lease"> & {
 export declare const LeaseSchema: GenMessage<Lease>;
 
 /**
+ * all times are absolute wall clock. All involved systems must be synchronized to the same clock.
+ * federation does this automatically. Consumers that cannot sync (TimeSync or NTP) can estimate
+ * the upstream clock offset from EntityChangeEvent.now instead.
+ *
  * @generated from message world.Lifetime
  */
 export declare type Lifetime = Message<"world.Lifetime"> & {
@@ -346,7 +350,8 @@ export declare type Lifetime = Message<"world.Lifetime"> & {
 
   /**
    * last time we have seen this entity, normally between from and until
-   * if set, updates to an entity with older fresh value are ignored by default
+   * if set, updates to an existing entity are ignored if the write isn't newer than existing
+   * Also considered the _version_ of an entity.
    *
    * @generated from field: optional google.protobuf.Timestamp fresh = 3;
    */
@@ -423,6 +428,24 @@ export declare type GeoSpatialComponent = Message<"world.GeoSpatialComponent"> &
    * @generated from field: optional world.CovarianceMatrix covariance = 4;
    */
   covariance?: CovarianceMatrix;
+
+  /**
+   * fixed-point alternatives to the fields above, for bandwidth-constrained
+   * links: degrees × 1e7, and centimeters above ellipsoid (WGS84)
+   *
+   * @generated from field: optional sint32 latitude_e7 = 5;
+   */
+  latitudeE7?: number;
+
+  /**
+   * @generated from field: optional sint32 longitude_e7 = 6;
+   */
+  longitudeE7?: number;
+
+  /**
+   * @generated from field: optional sint32 altitude_cm = 7;
+   */
+  altitudeCm?: number;
 };
 
 /**
@@ -1104,6 +1127,18 @@ export declare type PolarOffset = Message<"world.PolarOffset"> & {
    * @generated from field: optional world.Quaternion orientation = 5;
    */
   orientation?: Quaternion;
+
+  /**
+   * fixed-point alternatives to azimuth and azimuth_error_deg, in centidegrees
+   *
+   * @generated from field: optional uint32 azimuth_cdeg = 6;
+   */
+  azimuthCdeg?: number;
+
+  /**
+   * @generated from field: optional uint32 azimuth_error_cdeg = 7;
+   */
+  azimuthErrorCdeg?: number;
 };
 
 /**
@@ -1739,6 +1774,30 @@ export declare type TransponderAIS = Message<"world.TransponderAIS"> & {
    * @generated from field: optional string vessel_name = 4;
    */
   vesselName?: string;
+
+  /**
+   * Distances in meters from the reported position reference point (the GNSS
+   * antenna) to the hull, per ITU-R M.1371 msg 5 / 24B. Length = bow + stern,
+   * beam = port + starboard. Absent when the transponder reports all zeros.
+   *
+   * @generated from field: optional uint32 dimension_to_bow_m = 5;
+   */
+  dimensionToBowM?: number;
+
+  /**
+   * @generated from field: optional uint32 dimension_to_stern_m = 6;
+   */
+  dimensionToSternM?: number;
+
+  /**
+   * @generated from field: optional uint32 dimension_to_port_m = 7;
+   */
+  dimensionToPortM?: number;
+
+  /**
+   * @generated from field: optional uint32 dimension_to_starboard_m = 8;
+   */
+  dimensionToStarboardM?: number;
 };
 
 /**
@@ -1809,6 +1868,11 @@ export declare type AdministrativeComponent = Message<"world.AdministrativeCompo
   owner?: string;
 
   /**
+   * @generated from field: optional string operator = 13;
+   */
+  operator?: string;
+
+  /**
    * @generated from field: optional string manufacturer = 4;
    */
   manufacturer?: string;
@@ -1843,14 +1907,31 @@ export declare type AdministrativeComponent = Message<"world.AdministrativeCompo
   heightM?: number;
 
   /**
+   * vertical extent below waterline
+   *
+   * @generated from field: optional float draught_m = 14;
+   */
+  draughtM?: number;
+
+  /**
    * @generated from field: optional float tonnage_gt = 8;
    */
   tonnageGt?: number;
 
   /**
+   * @generated from field: optional float deadweight_t = 15;
+   */
+  deadweightT?: number;
+
+  /**
    * @generated from field: optional float engine_power_kw = 9;
    */
   enginePowerKw?: number;
+
+  /**
+   * @generated from field: optional float speed_max_kn = 16;
+   */
+  speedMaxKn?: number;
 
   /**
    * @generated from field: repeated string images = 12;
@@ -2092,6 +2173,32 @@ export declare type CaptureComponent = Message<"world.CaptureComponent"> & {
 export declare const CaptureComponentSchema: GenMessage<CaptureComponent>;
 
 /**
+ * @generated from message world.CaptureFilter
+ */
+export declare type CaptureFilter = Message<"world.CaptureFilter"> & {
+  /**
+   * @generated from field: optional uint32 port = 1;
+   */
+  port?: number;
+
+  /**
+   * @generated from field: optional string content_type = 2;
+   */
+  contentType?: string;
+
+  /**
+   * @generated from field: optional string captured_by = 3;
+   */
+  capturedBy?: string;
+};
+
+/**
+ * Describes the message world.CaptureFilter.
+ * Use `create(CaptureFilterSchema)` to create a new message.
+ */
+export declare const CaptureFilterSchema: GenMessage<CaptureFilter>;
+
+/**
  * @generated from message world.PowerComponent
  */
 export declare type PowerComponent = Message<"world.PowerComponent"> & {
@@ -2129,6 +2236,13 @@ export declare type PowerComponent = Message<"world.PowerComponent"> & {
    * @generated from field: optional float capacity_used_mah = 5;
    */
   capacityUsedMah?: number;
+
+  /**
+   * battery charge remaining in percent (0 - 100)
+   *
+   * @generated from field: optional uint32 battery_charge_percent = 6;
+   */
+  batteryChargePercent?: number;
 };
 
 /**
@@ -2264,6 +2378,14 @@ export declare type DeviceComponent = Message<"world.DeviceComponent"> & {
    * @generated from field: optional string unique_hardware_id = 4;
    */
   uniqueHardwareId?: string;
+
+  /**
+   * numeric identity from a known list, for links too narrow for unique_hardware_id.
+   * a catalog maps it to unique_hardware_id.
+   *
+   * @generated from field: optional uint64 unique_hardware_index = 5;
+   */
+  uniqueHardwareIndex?: bigint;
 
   /**
    * @generated from field: world.DeviceState state = 6;
@@ -2422,6 +2544,13 @@ export declare type NodeDevice = Message<"world.NodeDevice"> & {
    * @generated from field: optional world.MissionPack mission = 8;
    */
   mission?: MissionPack;
+
+  /**
+   * Lowercase hex SHA-256 of the node's TLS leaf certificate
+   *
+   * @generated from field: optional string mtls_identity = 9;
+   */
+  mtlsIdentity?: string;
 };
 
 /**
@@ -2896,6 +3025,11 @@ export declare type EntityFilter = Message<"world.EntityFilter"> & {
   component: number[];
 
   /**
+   * @generated from field: optional world.CaptureFilter capture = 6;
+   */
+  capture?: CaptureFilter;
+
+  /**
    * @generated from field: optional world.ControllerFilter controller = 7;
    */
   controller?: ControllerFilter;
@@ -3299,6 +3433,15 @@ export declare type WatchBehavior = Message<"world.WatchBehavior"> & {
    * @generated from field: optional bool diff = 5;
    */
   diff?: boolean;
+
+  /**
+   * Send an EntityChangeHeartbeat event when the stream has been idle for this
+   * long, so consumers keep receiving EntityChangeEvent.now for clock offset
+   * estimation. unset = 30s, 0 = no heartbeats. values lower than 1000 are capped to 1s
+   *
+   * @generated from field: optional uint32 heartbeat_interval_ms = 6;
+   */
+  heartbeatIntervalMs?: number;
 };
 
 /**
@@ -3453,6 +3596,14 @@ export declare type EntityChangeEvent = Message<"world.EntityChangeEvent"> & {
    * @generated from field: world.EntityChange t = 2;
    */
   t: EntityChange;
+
+  /**
+   * upstream wall clock at the time this event was sent.
+   * Consumers should use TimeSync() ideally, but this is a good enough fallback when TimeSync isnt possible
+   *
+   * @generated from field: google.protobuf.Timestamp now = 3;
+   */
+  now?: Timestamp;
 };
 
 /**
@@ -4581,6 +4732,11 @@ export enum EntityChange {
    * @generated from enum value: EntityChangeUnobserved = 3;
    */
   EntityChangeUnobserved = 3,
+
+  /**
+   * @generated from enum value: EntityChangeHeartbeat = 4;
+   */
+  EntityChangeHeartbeat = 4,
 }
 
 /**

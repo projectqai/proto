@@ -31,6 +31,7 @@ class MetricKind(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     MetricKindSpeed: _ClassVar[MetricKind]
     MetricKindAcceleration: _ClassVar[MetricKind]
     MetricKindDepth: _ClassVar[MetricKind]
+    MetricKindArea: _ClassVar[MetricKind]
     MetricKindDataRate: _ClassVar[MetricKind]
     MetricKindLatency: _ClassVar[MetricKind]
     MetricKindDataSize: _ClassVar[MetricKind]
@@ -91,12 +92,15 @@ class MetricUnit(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     MetricUnitKnot: _ClassVar[MetricUnit]
     MetricUnitKilometerPerHour: _ClassVar[MetricUnit]
     MetricUnitMeterPerSecondSquared: _ClassVar[MetricUnit]
+    MetricUnitSquareMeter: _ClassVar[MetricUnit]
+    MetricUnitSquareKilometer: _ClassVar[MetricUnit]
     MetricUnitLux: _ClassVar[MetricUnit]
     MetricUnitDecibel: _ClassVar[MetricUnit]
     MetricUnitDecibelA: _ClassVar[MetricUnit]
     MetricUnitBitPerSecond: _ClassVar[MetricUnit]
     MetricUnitKilobitPerSecond: _ClassVar[MetricUnit]
     MetricUnitMegabitPerSecond: _ClassVar[MetricUnit]
+    MetricUnitKilobytePerSecond: _ClassVar[MetricUnit]
     MetricUnitByte: _ClassVar[MetricUnit]
     MetricUnitKilobyte: _ClassVar[MetricUnit]
     MetricUnitMegabyte: _ClassVar[MetricUnit]
@@ -182,6 +186,7 @@ MetricKindDistance: MetricKind
 MetricKindSpeed: MetricKind
 MetricKindAcceleration: MetricKind
 MetricKindDepth: MetricKind
+MetricKindArea: MetricKind
 MetricKindDataRate: MetricKind
 MetricKindLatency: MetricKind
 MetricKindDataSize: MetricKind
@@ -239,12 +244,15 @@ MetricUnitMeterPerSecond: MetricUnit
 MetricUnitKnot: MetricUnit
 MetricUnitKilometerPerHour: MetricUnit
 MetricUnitMeterPerSecondSquared: MetricUnit
+MetricUnitSquareMeter: MetricUnit
+MetricUnitSquareKilometer: MetricUnit
 MetricUnitLux: MetricUnit
 MetricUnitDecibel: MetricUnit
 MetricUnitDecibelA: MetricUnit
 MetricUnitBitPerSecond: MetricUnit
 MetricUnitKilobitPerSecond: MetricUnit
 MetricUnitMegabitPerSecond: MetricUnit
+MetricUnitKilobytePerSecond: MetricUnit
 MetricUnitByte: MetricUnit
 MetricUnitKilobyte: MetricUnit
 MetricUnitMegabyte: MetricUnit
