@@ -243,16 +243,24 @@ class EmitterTaxonomy(_message.Message):
     def __init__(self) -> None: ...
 
 class TaskingTaxonomy(_message.Message):
-    __slots__ = ("observe", "movement", "effect", "commission")
+    __slots__ = ("observe", "movement", "effect", "commission", "maintenance")
     OBSERVE_FIELD_NUMBER: _ClassVar[int]
     MOVEMENT_FIELD_NUMBER: _ClassVar[int]
     EFFECT_FIELD_NUMBER: _ClassVar[int]
     COMMISSION_FIELD_NUMBER: _ClassVar[int]
+    MAINTENANCE_FIELD_NUMBER: _ClassVar[int]
     observe: TaskingTaxonomyObserve
     movement: TaskingTaxonomyMovement
     effect: TaskingTaxonomyEffect
     commission: TaskingTaxonomyCommission
-    def __init__(self, observe: _Optional[_Union[TaskingTaxonomyObserve, _Mapping]] = ..., movement: _Optional[_Union[TaskingTaxonomyMovement, _Mapping]] = ..., effect: _Optional[_Union[TaskingTaxonomyEffect, _Mapping]] = ..., commission: _Optional[_Union[TaskingTaxonomyCommission, _Mapping]] = ...) -> None: ...
+    maintenance: TaskingTaxonomyMaintenance
+    def __init__(self, observe: _Optional[_Union[TaskingTaxonomyObserve, _Mapping]] = ..., movement: _Optional[_Union[TaskingTaxonomyMovement, _Mapping]] = ..., effect: _Optional[_Union[TaskingTaxonomyEffect, _Mapping]] = ..., commission: _Optional[_Union[TaskingTaxonomyCommission, _Mapping]] = ..., maintenance: _Optional[_Union[TaskingTaxonomyMaintenance, _Mapping]] = ...) -> None: ...
+
+class TaskingTaxonomyMaintenance(_message.Message):
+    __slots__ = ("update",)
+    UPDATE_FIELD_NUMBER: _ClassVar[int]
+    update: TaskingTaxonomyUpdate
+    def __init__(self, update: _Optional[_Union[TaskingTaxonomyUpdate, _Mapping]] = ...) -> None: ...
 
 class TaskingTaxonomyCommission(_message.Message):
     __slots__ = ("position", "calibrate")
@@ -315,5 +323,9 @@ class TaskingTaxonomyCommissionPosition(_message.Message):
     def __init__(self) -> None: ...
 
 class TaskingTaxonomyCommissionCalibrate(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
+
+class TaskingTaxonomyUpdate(_message.Message):
     __slots__ = ()
     def __init__(self) -> None: ...

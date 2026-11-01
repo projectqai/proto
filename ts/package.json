@@ -1,6 +1,6 @@
 {
   "name": "@projectqai/proto",
-  "version": "0.0.72",
+  "version": "0.0.76",
   "author": "projectq-release-bot",
   "type": "module",
   "exports": {
@@ -31,6 +31,6 @@
   "scripts": {
     "generate": "buf generate",
     "prepublishOnly": "bun run generate",
-    "release": "bun run generate && npm version patch && npm publish --access public"
+    "release": "bun run generate && npm version patch --workspaces=false && npm publish --access public --workspaces=false"
   }
 }

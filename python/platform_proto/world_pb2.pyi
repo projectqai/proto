@@ -4,6 +4,7 @@ from google.protobuf import timestamp_pb2 as _timestamp_pb2
 import manualcontrol_pb2 as _manualcontrol_pb2
 import metrics_pb2 as _metrics_pb2
 import policy_pb2 as _policy_pb2
+import software_pb2 as _software_pb2
 import tasking_pb2 as _tasking_pb2
 import taxonomy_pb2 as _taxonomy_pb2
 from google.protobuf.internal import containers as _containers
@@ -625,7 +626,7 @@ class ArtifactEncryption(_message.Message):
     def __init__(self) -> None: ...
 
 class ArtifactComponent(_message.Message):
-    __slots__ = ("id", "content_type", "location", "size_bytes", "sha256", "encryption", "parts")
+    __slots__ = ("id", "content_type", "location", "size_bytes", "sha256", "encryption", "parts", "software")
     class PartsEntry(_message.Message):
         __slots__ = ("key", "value")
         KEY_FIELD_NUMBER: _ClassVar[int]
@@ -640,6 +641,7 @@ class ArtifactComponent(_message.Message):
     SHA256_FIELD_NUMBER: _ClassVar[int]
     ENCRYPTION_FIELD_NUMBER: _ClassVar[int]
     PARTS_FIELD_NUMBER: _ClassVar[int]
+    SOFTWARE_FIELD_NUMBER: _ClassVar[int]
     id: str
     content_type: str
     location: _containers.RepeatedCompositeFieldContainer[ArtifactLocation]
@@ -647,7 +649,8 @@ class ArtifactComponent(_message.Message):
     sha256: str
     encryption: ArtifactEncryption
     parts: _containers.MessageMap[str, Artifact]
-    def __init__(self, id: _Optional[str] = ..., content_type: _Optional[str] = ..., location: _Optional[_Iterable[_Union[ArtifactLocation, _Mapping]]] = ..., size_bytes: _Optional[int] = ..., sha256: _Optional[str] = ..., encryption: _Optional[_Union[ArtifactEncryption, _Mapping]] = ..., parts: _Optional[_Mapping[str, Artifact]] = ...) -> None: ...
+    software: _software_pb2.SoftwareArtifact
+    def __init__(self, id: _Optional[str] = ..., content_type: _Optional[str] = ..., location: _Optional[_Iterable[_Union[ArtifactLocation, _Mapping]]] = ..., size_bytes: _Optional[int] = ..., sha256: _Optional[str] = ..., encryption: _Optional[_Union[ArtifactEncryption, _Mapping]] = ..., parts: _Optional[_Mapping[str, Artifact]] = ..., software: _Optional[_Union[_software_pb2.SoftwareArtifact, _Mapping]] = ...) -> None: ...
 
 class Artifact(_message.Message):
     __slots__ = ("content_type", "location", "size_bytes", "sha256")
@@ -1177,7 +1180,7 @@ class ConfigurableComponent(_message.Message):
     def __init__(self, schema: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., value: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., state: _Optional[_Union[ConfigurableState, str]] = ..., error: _Optional[str] = ..., label: _Optional[str] = ..., applied_version: _Optional[int] = ..., supported_device_classes: _Optional[_Iterable[_Union[DeviceClassOption, _Mapping]]] = ..., scheduled_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class DeviceComponent(_message.Message):
-    __slots__ = ("parent", "composition", "unique_hardware_id", "unique_hardware_index", "state", "error", "category", "node", "usb", "ip", "serial", "ethernet", "lpwan", "meshtastic", "ble")
+    __slots__ = ("parent", "composition", "unique_hardware_id", "unique_hardware_index", "state", "error", "category", "node", "usb", "ip", "serial", "ethernet", "lpwan", "meshtastic", "ble", "software", "info")
     PARENT_FIELD_NUMBER: _ClassVar[int]
     COMPOSITION_FIELD_NUMBER: _ClassVar[int]
     UNIQUE_HARDWARE_ID_FIELD_NUMBER: _ClassVar[int]
@@ -1194,6 +1197,8 @@ class DeviceComponent(_message.Message):
     LPWAN_FIELD_NUMBER: _ClassVar[int]
     MESHTASTIC_FIELD_NUMBER: _ClassVar[int]
     BLE_FIELD_NUMBER: _ClassVar[int]
+    SOFTWARE_FIELD_NUMBER: _ClassVar[int]
+    INFO_FIELD_NUMBER: _ClassVar[int]
     parent: str
     composition: _containers.RepeatedScalarFieldContainer[str]
     unique_hardware_id: str
@@ -1209,7 +1214,25 @@ class DeviceComponent(_message.Message):
     lpwan: LPWANDevice
     meshtastic: MeshtasticDevice
     ble: BleDevice
-    def __init__(self, parent: _Optional[str] = ..., composition: _Optional[_Iterable[str]] = ..., unique_hardware_id: _Optional[str] = ..., unique_hardware_index: _Optional[int] = ..., state: _Optional[_Union[DeviceState, str]] = ..., error: _Optional[str] = ..., category: _Optional[str] = ..., node: _Optional[_Union[NodeDevice, _Mapping]] = ..., usb: _Optional[_Union[UsbDevice, _Mapping]] = ..., ip: _Optional[_Union[IpDevice, _Mapping]] = ..., serial: _Optional[_Union[SerialDevice, _Mapping]] = ..., ethernet: _Optional[_Union[EthernetDevice, _Mapping]] = ..., lpwan: _Optional[_Union[LPWANDevice, _Mapping]] = ..., meshtastic: _Optional[_Union[MeshtasticDevice, _Mapping]] = ..., ble: _Optional[_Union[BleDevice, _Mapping]] = ..., **kwargs) -> None: ...
+    software: _software_pb2.DeviceSoftware
+    info: DeviceInformation
+    def __init__(self, parent: _Optional[str] = ..., composition: _Optional[_Iterable[str]] = ..., unique_hardware_id: _Optional[str] = ..., unique_hardware_index: _Optional[int] = ..., state: _Optional[_Union[DeviceState, str]] = ..., error: _Optional[str] = ..., category: _Optional[str] = ..., node: _Optional[_Union[NodeDevice, _Mapping]] = ..., usb: _Optional[_Union[UsbDevice, _Mapping]] = ..., ip: _Optional[_Union[IpDevice, _Mapping]] = ..., serial: _Optional[_Union[SerialDevice, _Mapping]] = ..., ethernet: _Optional[_Union[EthernetDevice, _Mapping]] = ..., lpwan: _Optional[_Union[LPWANDevice, _Mapping]] = ..., meshtastic: _Optional[_Union[MeshtasticDevice, _Mapping]] = ..., ble: _Optional[_Union[BleDevice, _Mapping]] = ..., software: _Optional[_Union[_software_pb2.DeviceSoftware, _Mapping]] = ..., info: _Optional[_Union[DeviceInformation, _Mapping]] = ..., **kwargs) -> None: ...
+
+class DeviceInformation(_message.Message):
+    __slots__ = ("manufacturer", "model", "part_number", "serial_number", "hardware_revision", "manufactured")
+    MANUFACTURER_FIELD_NUMBER: _ClassVar[int]
+    MODEL_FIELD_NUMBER: _ClassVar[int]
+    PART_NUMBER_FIELD_NUMBER: _ClassVar[int]
+    SERIAL_NUMBER_FIELD_NUMBER: _ClassVar[int]
+    HARDWARE_REVISION_FIELD_NUMBER: _ClassVar[int]
+    MANUFACTURED_FIELD_NUMBER: _ClassVar[int]
+    manufacturer: str
+    model: str
+    part_number: str
+    serial_number: str
+    hardware_revision: str
+    manufactured: _timestamp_pb2.Timestamp
+    def __init__(self, manufacturer: _Optional[str] = ..., model: _Optional[str] = ..., part_number: _Optional[str] = ..., serial_number: _Optional[str] = ..., hardware_revision: _Optional[str] = ..., manufactured: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class MissionPack(_message.Message):
     __slots__ = ("layouts", "entity_count", "pack_version", "imported_at", "artifact_count", "artifact_total_size")

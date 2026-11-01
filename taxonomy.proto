@@ -164,6 +164,14 @@ message TaskingTaxonomy {
     TaskingTaxonomyMovement movement = 11;
     TaskingTaxonomyEffect effect = 12;
     TaskingTaxonomyCommission commission = 13;
+    TaskingTaxonomyMaintenance maintenance = 14;
+  }
+}
+
+message TaskingTaxonomyMaintenance {
+  oneof kind {
+    // optional target: an artifact with ArtifactComponent.software
+    TaskingTaxonomyUpdate update = 1;
   }
 }
 
@@ -201,3 +209,5 @@ message TaskingTaxonomyFollow {}
 
 message TaskingTaxonomyCommissionPosition {}
 message TaskingTaxonomyCommissionCalibrate {}
+
+message TaskingTaxonomyUpdate {}

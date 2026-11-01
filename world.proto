@@ -8,6 +8,7 @@ import "google/protobuf/timestamp.proto";
 import "manualcontrol.proto";
 import "metrics.proto";
 import "policy.proto";
+import "software.proto";
 import "tasking.proto";
 import "taxonomy.proto";
 
@@ -258,6 +259,10 @@ message ArtifactComponent {
   optional ArtifactEncryption encryption = 6;
 
   map<string, Artifact> parts = 7;
+
+  oneof content {
+    SoftwareArtifact software = 8;
+  }
 }
 
 message Artifact {
@@ -881,6 +886,17 @@ message DeviceComponent {
   optional LPWANDevice lpwan = 25;
   optional MeshtasticDevice meshtastic = 26;
   optional BleDevice ble = 27;
+  optional DeviceSoftware software = 28;
+  optional DeviceInformation info = 30;
+}
+
+message DeviceInformation {
+  optional string manufacturer = 1; // ACME INC
+  optional string model = 2; // for display: "Green Slusher 3000"
+  optional string part_number = 3; // machine-readable model, e.g. Matter ProductID, Redfish PartNumber, "GR-SL-300"
+  optional string serial_number = 4;
+  optional string hardware_revision = 5;
+  optional google.protobuf.Timestamp manufactured = 6; // date of manufacture
 }
 
 message MissionPack {
