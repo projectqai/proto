@@ -1865,6 +1865,8 @@ export declare const TransponderComponentSchema: GenMessage<TransponderComponent
  */
 export declare type AdministrativeComponent = Message<"world.AdministrativeComponent"> & {
   /**
+   * registration by an authority, e.g. MMSI, ICAO address, tail number
+   *
    * @generated from field: optional string id = 1;
    */
   id?: string | undefined;
@@ -1890,9 +1892,32 @@ export declare type AdministrativeComponent = Message<"world.AdministrativeCompo
   manufacturer?: string | undefined;
 
   /**
+   * for display, e.g. "Green Slusher 3000"
+   *
    * @generated from field: optional string model = 5;
    */
   model?: string | undefined;
+
+  /**
+   * machine-readable model, e.g. ICAO type "B738", Matter ProductID
+   *
+   * @generated from field: optional string part_number = 18;
+   */
+  partNumber?: string | undefined;
+
+  /**
+   * by the manufacturer, e.g. MSN, VIN, USB serial
+   *
+   * @generated from field: optional string serial_number = 17;
+   */
+  serialNumber?: string | undefined;
+
+  /**
+   * e.g. board revision, "Block II"
+   *
+   * @generated from field: optional string hardware_revision = 19;
+   */
+  hardwareRevision?: string | undefined;
 
   /**
    * @generated from field: optional uint32 year_built = 6;
@@ -2469,11 +2494,6 @@ export declare type DeviceComponent = Message<"world.DeviceComponent"> & {
    * @generated from field: optional world.DeviceSoftware software = 28;
    */
   software?: DeviceSoftware | undefined;
-
-  /**
-   * @generated from field: optional world.DeviceInformation info = 30;
-   */
-  info?: DeviceInformation | undefined;
 };
 
 /**
@@ -2481,55 +2501,6 @@ export declare type DeviceComponent = Message<"world.DeviceComponent"> & {
  * Use `create(DeviceComponentSchema)` to create a new message.
  */
 export declare const DeviceComponentSchema: GenMessage<DeviceComponent>;
-
-/**
- * @generated from message world.DeviceInformation
- */
-export declare type DeviceInformation = Message<"world.DeviceInformation"> & {
-  /**
-   * ACME INC
-   *
-   * @generated from field: optional string manufacturer = 1;
-   */
-  manufacturer?: string | undefined;
-
-  /**
-   * for display: "Green Slusher 3000"
-   *
-   * @generated from field: optional string model = 2;
-   */
-  model?: string | undefined;
-
-  /**
-   * machine-readable model, e.g. Matter ProductID, Redfish PartNumber, "GR-SL-300"
-   *
-   * @generated from field: optional string part_number = 3;
-   */
-  partNumber?: string | undefined;
-
-  /**
-   * @generated from field: optional string serial_number = 4;
-   */
-  serialNumber?: string | undefined;
-
-  /**
-   * @generated from field: optional string hardware_revision = 5;
-   */
-  hardwareRevision?: string | undefined;
-
-  /**
-   * date of manufacture
-   *
-   * @generated from field: optional google.protobuf.Timestamp manufactured = 6;
-   */
-  manufactured?: Timestamp | undefined;
-};
-
-/**
- * Describes the message world.DeviceInformation.
- * Use `create(DeviceInformationSchema)` to create a new message.
- */
-export declare const DeviceInformationSchema: GenMessage<DeviceInformation>;
 
 /**
  * @generated from message world.MissionPack

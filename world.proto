@@ -649,12 +649,16 @@ message TransponderComponent {
 }
 
 message AdministrativeComponent {
+  // registration by an authority, e.g. MMSI, ICAO address, tail number
   optional string id = 1;
   optional string flag = 2;
   optional string owner = 3;
   optional string operator = 13;
   optional string manufacturer = 4;
-  optional string model = 5;
+  optional string model = 5; // for display, e.g. "Green Slusher 3000"
+  optional string part_number = 18; // machine-readable model, e.g. ICAO type "B738", Matter ProductID
+  optional string serial_number = 17; // by the manufacturer, e.g. MSN, VIN, USB serial
+  optional string hardware_revision = 19; // e.g. board revision, "Block II"
   optional uint32 year_built = 6;
   optional float length_m = 7;
   optional float width_m = 10; // beam / lateral extent
@@ -887,16 +891,6 @@ message DeviceComponent {
   optional MeshtasticDevice meshtastic = 26;
   optional BleDevice ble = 27;
   optional DeviceSoftware software = 28;
-  optional DeviceInformation info = 30;
-}
-
-message DeviceInformation {
-  optional string manufacturer = 1; // ACME INC
-  optional string model = 2; // for display: "Green Slusher 3000"
-  optional string part_number = 3; // machine-readable model, e.g. Matter ProductID, Redfish PartNumber, "GR-SL-300"
-  optional string serial_number = 4;
-  optional string hardware_revision = 5;
-  optional google.protobuf.Timestamp manufactured = 6; // date of manufacture
 }
 
 message MissionPack {

@@ -1019,13 +1019,16 @@ class TransponderComponent(_message.Message):
     def __init__(self, ais: _Optional[_Union[TransponderAIS, _Mapping]] = ..., adsb: _Optional[_Union[TransponderADSB, _Mapping]] = ...) -> None: ...
 
 class AdministrativeComponent(_message.Message):
-    __slots__ = ("id", "flag", "owner", "operator", "manufacturer", "model", "year_built", "length_m", "width_m", "height_m", "draught_m", "tonnage_gt", "deadweight_t", "engine_power_kw", "speed_max_kn", "images")
+    __slots__ = ("id", "flag", "owner", "operator", "manufacturer", "model", "part_number", "serial_number", "hardware_revision", "year_built", "length_m", "width_m", "height_m", "draught_m", "tonnage_gt", "deadweight_t", "engine_power_kw", "speed_max_kn", "images")
     ID_FIELD_NUMBER: _ClassVar[int]
     FLAG_FIELD_NUMBER: _ClassVar[int]
     OWNER_FIELD_NUMBER: _ClassVar[int]
     OPERATOR_FIELD_NUMBER: _ClassVar[int]
     MANUFACTURER_FIELD_NUMBER: _ClassVar[int]
     MODEL_FIELD_NUMBER: _ClassVar[int]
+    PART_NUMBER_FIELD_NUMBER: _ClassVar[int]
+    SERIAL_NUMBER_FIELD_NUMBER: _ClassVar[int]
+    HARDWARE_REVISION_FIELD_NUMBER: _ClassVar[int]
     YEAR_BUILT_FIELD_NUMBER: _ClassVar[int]
     LENGTH_M_FIELD_NUMBER: _ClassVar[int]
     WIDTH_M_FIELD_NUMBER: _ClassVar[int]
@@ -1042,6 +1045,9 @@ class AdministrativeComponent(_message.Message):
     operator: str
     manufacturer: str
     model: str
+    part_number: str
+    serial_number: str
+    hardware_revision: str
     year_built: int
     length_m: float
     width_m: float
@@ -1052,7 +1058,7 @@ class AdministrativeComponent(_message.Message):
     engine_power_kw: float
     speed_max_kn: float
     images: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, id: _Optional[str] = ..., flag: _Optional[str] = ..., owner: _Optional[str] = ..., operator: _Optional[str] = ..., manufacturer: _Optional[str] = ..., model: _Optional[str] = ..., year_built: _Optional[int] = ..., length_m: _Optional[float] = ..., width_m: _Optional[float] = ..., height_m: _Optional[float] = ..., draught_m: _Optional[float] = ..., tonnage_gt: _Optional[float] = ..., deadweight_t: _Optional[float] = ..., engine_power_kw: _Optional[float] = ..., speed_max_kn: _Optional[float] = ..., images: _Optional[_Iterable[str]] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., flag: _Optional[str] = ..., owner: _Optional[str] = ..., operator: _Optional[str] = ..., manufacturer: _Optional[str] = ..., model: _Optional[str] = ..., part_number: _Optional[str] = ..., serial_number: _Optional[str] = ..., hardware_revision: _Optional[str] = ..., year_built: _Optional[int] = ..., length_m: _Optional[float] = ..., width_m: _Optional[float] = ..., height_m: _Optional[float] = ..., draught_m: _Optional[float] = ..., tonnage_gt: _Optional[float] = ..., deadweight_t: _Optional[float] = ..., engine_power_kw: _Optional[float] = ..., speed_max_kn: _Optional[float] = ..., images: _Optional[_Iterable[str]] = ...) -> None: ...
 
 class NavigationComponent(_message.Message):
     __slots__ = ("mode", "armed", "emergency", "waypoint_current", "waypoint_total")
@@ -1180,7 +1186,7 @@ class ConfigurableComponent(_message.Message):
     def __init__(self, schema: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., value: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., state: _Optional[_Union[ConfigurableState, str]] = ..., error: _Optional[str] = ..., label: _Optional[str] = ..., applied_version: _Optional[int] = ..., supported_device_classes: _Optional[_Iterable[_Union[DeviceClassOption, _Mapping]]] = ..., scheduled_at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class DeviceComponent(_message.Message):
-    __slots__ = ("parent", "composition", "unique_hardware_id", "unique_hardware_index", "state", "error", "category", "node", "usb", "ip", "serial", "ethernet", "lpwan", "meshtastic", "ble", "software", "info")
+    __slots__ = ("parent", "composition", "unique_hardware_id", "unique_hardware_index", "state", "error", "category", "node", "usb", "ip", "serial", "ethernet", "lpwan", "meshtastic", "ble", "software")
     PARENT_FIELD_NUMBER: _ClassVar[int]
     COMPOSITION_FIELD_NUMBER: _ClassVar[int]
     UNIQUE_HARDWARE_ID_FIELD_NUMBER: _ClassVar[int]
@@ -1198,7 +1204,6 @@ class DeviceComponent(_message.Message):
     MESHTASTIC_FIELD_NUMBER: _ClassVar[int]
     BLE_FIELD_NUMBER: _ClassVar[int]
     SOFTWARE_FIELD_NUMBER: _ClassVar[int]
-    INFO_FIELD_NUMBER: _ClassVar[int]
     parent: str
     composition: _containers.RepeatedScalarFieldContainer[str]
     unique_hardware_id: str
@@ -1215,24 +1220,7 @@ class DeviceComponent(_message.Message):
     meshtastic: MeshtasticDevice
     ble: BleDevice
     software: _software_pb2.DeviceSoftware
-    info: DeviceInformation
-    def __init__(self, parent: _Optional[str] = ..., composition: _Optional[_Iterable[str]] = ..., unique_hardware_id: _Optional[str] = ..., unique_hardware_index: _Optional[int] = ..., state: _Optional[_Union[DeviceState, str]] = ..., error: _Optional[str] = ..., category: _Optional[str] = ..., node: _Optional[_Union[NodeDevice, _Mapping]] = ..., usb: _Optional[_Union[UsbDevice, _Mapping]] = ..., ip: _Optional[_Union[IpDevice, _Mapping]] = ..., serial: _Optional[_Union[SerialDevice, _Mapping]] = ..., ethernet: _Optional[_Union[EthernetDevice, _Mapping]] = ..., lpwan: _Optional[_Union[LPWANDevice, _Mapping]] = ..., meshtastic: _Optional[_Union[MeshtasticDevice, _Mapping]] = ..., ble: _Optional[_Union[BleDevice, _Mapping]] = ..., software: _Optional[_Union[_software_pb2.DeviceSoftware, _Mapping]] = ..., info: _Optional[_Union[DeviceInformation, _Mapping]] = ..., **kwargs) -> None: ...
-
-class DeviceInformation(_message.Message):
-    __slots__ = ("manufacturer", "model", "part_number", "serial_number", "hardware_revision", "manufactured")
-    MANUFACTURER_FIELD_NUMBER: _ClassVar[int]
-    MODEL_FIELD_NUMBER: _ClassVar[int]
-    PART_NUMBER_FIELD_NUMBER: _ClassVar[int]
-    SERIAL_NUMBER_FIELD_NUMBER: _ClassVar[int]
-    HARDWARE_REVISION_FIELD_NUMBER: _ClassVar[int]
-    MANUFACTURED_FIELD_NUMBER: _ClassVar[int]
-    manufacturer: str
-    model: str
-    part_number: str
-    serial_number: str
-    hardware_revision: str
-    manufactured: _timestamp_pb2.Timestamp
-    def __init__(self, manufacturer: _Optional[str] = ..., model: _Optional[str] = ..., part_number: _Optional[str] = ..., serial_number: _Optional[str] = ..., hardware_revision: _Optional[str] = ..., manufactured: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    def __init__(self, parent: _Optional[str] = ..., composition: _Optional[_Iterable[str]] = ..., unique_hardware_id: _Optional[str] = ..., unique_hardware_index: _Optional[int] = ..., state: _Optional[_Union[DeviceState, str]] = ..., error: _Optional[str] = ..., category: _Optional[str] = ..., node: _Optional[_Union[NodeDevice, _Mapping]] = ..., usb: _Optional[_Union[UsbDevice, _Mapping]] = ..., ip: _Optional[_Union[IpDevice, _Mapping]] = ..., serial: _Optional[_Union[SerialDevice, _Mapping]] = ..., ethernet: _Optional[_Union[EthernetDevice, _Mapping]] = ..., lpwan: _Optional[_Union[LPWANDevice, _Mapping]] = ..., meshtastic: _Optional[_Union[MeshtasticDevice, _Mapping]] = ..., ble: _Optional[_Union[BleDevice, _Mapping]] = ..., software: _Optional[_Union[_software_pb2.DeviceSoftware, _Mapping]] = ..., **kwargs) -> None: ...
 
 class MissionPack(_message.Message):
     __slots__ = ("layouts", "entity_count", "pack_version", "imported_at", "artifact_count", "artifact_total_size")
