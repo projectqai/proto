@@ -53,6 +53,8 @@ const (
 	WorldServiceGetSelfProcedure = "/world.WorldService/GetSelf"
 	// WorldServiceRunTaskProcedure is the fully-qualified name of the WorldService's RunTask RPC.
 	WorldServiceRunTaskProcedure = "/world.WorldService/RunTask"
+	// WorldServiceCancelTaskProcedure is the fully-qualified name of the WorldService's CancelTask RPC.
+	WorldServiceCancelTaskProcedure = "/world.WorldService/CancelTask"
 	// WorldServiceHardResetProcedure is the fully-qualified name of the WorldService's HardReset RPC.
 	WorldServiceHardResetProcedure = "/world.WorldService/HardReset"
 	// WorldServiceLoadMissionProcedure is the fully-qualified name of the WorldService's LoadMission
@@ -80,6 +82,9 @@ type WorldServiceClient interface {
 	GetSelf(context.Context, *connect.Request[_go.GetSelfRequest]) (*connect.Response[_go.GetSelfResponse], error)
 	// create an instance of a specific task entity
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
+	// clear or cancel an execution
+	// fails with FAILED_PRECONDITION when the execution cannot be cancelled
+	CancelTask(context.Context, *connect.Request[_go.CancelTaskRequest]) (*connect.Response[_go.CancelTaskResponse], error)
 	// clear all engine state including persistence
 	HardReset(context.Context, *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error)
 	// replace the world with a stored mission pack artifact
@@ -147,6 +152,12 @@ func NewWorldServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithSchema(worldServiceMethods.ByName("RunTask")),
 			connect.WithClientOptions(opts...),
 		),
+		cancelTask: connect.NewClient[_go.CancelTaskRequest, _go.CancelTaskResponse](
+			httpClient,
+			baseURL+WorldServiceCancelTaskProcedure,
+			connect.WithSchema(worldServiceMethods.ByName("CancelTask")),
+			connect.WithClientOptions(opts...),
+		),
 		hardReset: connect.NewClient[_go.HardResetRequest, _go.HardResetResponse](
 			httpClient,
 			baseURL+WorldServiceHardResetProcedure,
@@ -178,6 +189,7 @@ type worldServiceClient struct {
 	getLocalNode  *connect.Client[_go.GetLocalNodeRequest, _go.GetLocalNodeResponse]
 	getSelf       *connect.Client[_go.GetSelfRequest, _go.GetSelfResponse]
 	runTask       *connect.Client[_go.RunTaskRequest, _go.RunTaskResponse]
+	cancelTask    *connect.Client[_go.CancelTaskRequest, _go.CancelTaskResponse]
 	hardReset     *connect.Client[_go.HardResetRequest, _go.HardResetResponse]
 	loadMission   *connect.Client[_go.LoadMissionRequest, _go.LoadMissionResponse]
 	timeSync      *connect.Client[_go.TimeSyncRequest, _go.TimeSyncResponse]
@@ -223,6 +235,11 @@ func (c *worldServiceClient) RunTask(ctx context.Context, req *connect.Request[_
 	return c.runTask.CallUnary(ctx, req)
 }
 
+// CancelTask calls world.WorldService.CancelTask.
+func (c *worldServiceClient) CancelTask(ctx context.Context, req *connect.Request[_go.CancelTaskRequest]) (*connect.Response[_go.CancelTaskResponse], error) {
+	return c.cancelTask.CallUnary(ctx, req)
+}
+
 // HardReset calls world.WorldService.HardReset.
 func (c *worldServiceClient) HardReset(ctx context.Context, req *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error) {
 	return c.hardReset.CallUnary(ctx, req)
@@ -256,6 +273,9 @@ type WorldServiceHandler interface {
 	GetSelf(context.Context, *connect.Request[_go.GetSelfRequest]) (*connect.Response[_go.GetSelfResponse], error)
 	// create an instance of a specific task entity
 	RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error)
+	// clear or cancel an execution
+	// fails with FAILED_PRECONDITION when the execution cannot be cancelled
+	CancelTask(context.Context, *connect.Request[_go.CancelTaskRequest]) (*connect.Response[_go.CancelTaskResponse], error)
 	// clear all engine state including persistence
 	HardReset(context.Context, *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error)
 	// replace the world with a stored mission pack artifact
@@ -319,6 +339,12 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 		connect.WithSchema(worldServiceMethods.ByName("RunTask")),
 		connect.WithHandlerOptions(opts...),
 	)
+	worldServiceCancelTaskHandler := connect.NewUnaryHandler(
+		WorldServiceCancelTaskProcedure,
+		svc.CancelTask,
+		connect.WithSchema(worldServiceMethods.ByName("CancelTask")),
+		connect.WithHandlerOptions(opts...),
+	)
 	worldServiceHardResetHandler := connect.NewUnaryHandler(
 		WorldServiceHardResetProcedure,
 		svc.HardReset,
@@ -355,6 +381,8 @@ func NewWorldServiceHandler(svc WorldServiceHandler, opts ...connect.HandlerOpti
 			worldServiceGetSelfHandler.ServeHTTP(w, r)
 		case WorldServiceRunTaskProcedure:
 			worldServiceRunTaskHandler.ServeHTTP(w, r)
+		case WorldServiceCancelTaskProcedure:
+			worldServiceCancelTaskHandler.ServeHTTP(w, r)
 		case WorldServiceHardResetProcedure:
 			worldServiceHardResetHandler.ServeHTTP(w, r)
 		case WorldServiceLoadMissionProcedure:
@@ -400,6 +428,10 @@ func (UnimplementedWorldServiceHandler) GetSelf(context.Context, *connect.Reques
 
 func (UnimplementedWorldServiceHandler) RunTask(context.Context, *connect.Request[_go.RunTaskRequest]) (*connect.Response[_go.RunTaskResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.RunTask is not implemented"))
+}
+
+func (UnimplementedWorldServiceHandler) CancelTask(context.Context, *connect.Request[_go.CancelTaskRequest]) (*connect.Response[_go.CancelTaskResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("world.WorldService.CancelTask is not implemented"))
 }
 
 func (UnimplementedWorldServiceHandler) HardReset(context.Context, *connect.Request[_go.HardResetRequest]) (*connect.Response[_go.HardResetResponse], error) {

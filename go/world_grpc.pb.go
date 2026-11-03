@@ -27,6 +27,7 @@ const (
 	WorldService_GetLocalNode_FullMethodName  = "/world.WorldService/GetLocalNode"
 	WorldService_GetSelf_FullMethodName       = "/world.WorldService/GetSelf"
 	WorldService_RunTask_FullMethodName       = "/world.WorldService/RunTask"
+	WorldService_CancelTask_FullMethodName    = "/world.WorldService/CancelTask"
 	WorldService_HardReset_FullMethodName     = "/world.WorldService/HardReset"
 	WorldService_LoadMission_FullMethodName   = "/world.WorldService/LoadMission"
 	WorldService_TimeSync_FullMethodName      = "/world.WorldService/TimeSync"
@@ -54,6 +55,9 @@ type WorldServiceClient interface {
 	GetSelf(ctx context.Context, in *GetSelfRequest, opts ...grpc.CallOption) (*GetSelfResponse, error)
 	// create an instance of a specific task entity
 	RunTask(ctx context.Context, in *RunTaskRequest, opts ...grpc.CallOption) (*RunTaskResponse, error)
+	// clear or cancel an execution
+	// fails with FAILED_PRECONDITION when the execution cannot be cancelled
+	CancelTask(ctx context.Context, in *CancelTaskRequest, opts ...grpc.CallOption) (*CancelTaskResponse, error)
 	// clear all engine state including persistence
 	HardReset(ctx context.Context, in *HardResetRequest, opts ...grpc.CallOption) (*HardResetResponse, error)
 	// replace the world with a stored mission pack artifact
@@ -159,6 +163,16 @@ func (c *worldServiceClient) RunTask(ctx context.Context, in *RunTaskRequest, op
 	return out, nil
 }
 
+func (c *worldServiceClient) CancelTask(ctx context.Context, in *CancelTaskRequest, opts ...grpc.CallOption) (*CancelTaskResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CancelTaskResponse)
+	err := c.cc.Invoke(ctx, WorldService_CancelTask_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *worldServiceClient) HardReset(ctx context.Context, in *HardResetRequest, opts ...grpc.CallOption) (*HardResetResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(HardResetResponse)
@@ -211,6 +225,9 @@ type WorldServiceServer interface {
 	GetSelf(context.Context, *GetSelfRequest) (*GetSelfResponse, error)
 	// create an instance of a specific task entity
 	RunTask(context.Context, *RunTaskRequest) (*RunTaskResponse, error)
+	// clear or cancel an execution
+	// fails with FAILED_PRECONDITION when the execution cannot be cancelled
+	CancelTask(context.Context, *CancelTaskRequest) (*CancelTaskResponse, error)
 	// clear all engine state including persistence
 	HardReset(context.Context, *HardResetRequest) (*HardResetResponse, error)
 	// replace the world with a stored mission pack artifact
@@ -250,6 +267,9 @@ func (UnimplementedWorldServiceServer) GetSelf(context.Context, *GetSelfRequest)
 }
 func (UnimplementedWorldServiceServer) RunTask(context.Context, *RunTaskRequest) (*RunTaskResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RunTask not implemented")
+}
+func (UnimplementedWorldServiceServer) CancelTask(context.Context, *CancelTaskRequest) (*CancelTaskResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CancelTask not implemented")
 }
 func (UnimplementedWorldServiceServer) HardReset(context.Context, *HardResetRequest) (*HardResetResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method HardReset not implemented")
@@ -418,6 +438,24 @@ func _WorldService_RunTask_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorldService_CancelTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CancelTaskRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorldServiceServer).CancelTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorldService_CancelTask_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorldServiceServer).CancelTask(ctx, req.(*CancelTaskRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _WorldService_HardReset_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(HardResetRequest)
 	if err := dec(in); err != nil {
@@ -506,6 +544,10 @@ var WorldService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RunTask",
 			Handler:    _WorldService_RunTask_Handler,
+		},
+		{
+			MethodName: "CancelTask",
+			Handler:    _WorldService_CancelTask_Handler,
 		},
 		{
 			MethodName: "HardReset",

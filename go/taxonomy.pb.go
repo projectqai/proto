@@ -2085,6 +2085,7 @@ type TaskingTaxonomy struct {
 	//	*TaskingTaxonomy_Effect
 	//	*TaskingTaxonomy_Commission
 	//	*TaskingTaxonomy_Maintenance
+	//	*TaskingTaxonomy_Control
 	Kind          isTaskingTaxonomy_Kind `protobuf_oneof:"kind"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -2172,6 +2173,15 @@ func (x *TaskingTaxonomy) GetMaintenance() *TaskingTaxonomyMaintenance {
 	return nil
 }
 
+func (x *TaskingTaxonomy) GetControl() *TaskingTaxonomyControl {
+	if x != nil {
+		if x, ok := x.Kind.(*TaskingTaxonomy_Control); ok {
+			return x.Control
+		}
+	}
+	return nil
+}
+
 type isTaskingTaxonomy_Kind interface {
 	isTaskingTaxonomy_Kind()
 }
@@ -2196,6 +2206,10 @@ type TaskingTaxonomy_Maintenance struct {
 	Maintenance *TaskingTaxonomyMaintenance `protobuf:"bytes,14,opt,name=maintenance,proto3,oneof"`
 }
 
+type TaskingTaxonomy_Control struct {
+	Control *TaskingTaxonomyControl `protobuf:"bytes,15,opt,name=control,proto3,oneof"`
+}
+
 func (*TaskingTaxonomy_Observe) isTaskingTaxonomy_Kind() {}
 
 func (*TaskingTaxonomy_Movement) isTaskingTaxonomy_Kind() {}
@@ -2205,6 +2219,8 @@ func (*TaskingTaxonomy_Effect) isTaskingTaxonomy_Kind() {}
 func (*TaskingTaxonomy_Commission) isTaskingTaxonomy_Kind() {}
 
 func (*TaskingTaxonomy_Maintenance) isTaskingTaxonomy_Kind() {}
+
+func (*TaskingTaxonomy_Control) isTaskingTaxonomy_Kind() {}
 
 type TaskingTaxonomyMaintenance struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -2273,6 +2289,110 @@ type TaskingTaxonomyMaintenance_Update struct {
 
 func (*TaskingTaxonomyMaintenance_Update) isTaskingTaxonomyMaintenance_Kind() {}
 
+// changes the state of the assignee itself
+type TaskingTaxonomyControl struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Kind:
+	//
+	//	*TaskingTaxonomyControl_ModeChange
+	Kind          isTaskingTaxonomyControl_Kind `protobuf_oneof:"kind"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TaskingTaxonomyControl) Reset() {
+	*x = TaskingTaxonomyControl{}
+	mi := &file_taxonomy_proto_msgTypes[41]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TaskingTaxonomyControl) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TaskingTaxonomyControl) ProtoMessage() {}
+
+func (x *TaskingTaxonomyControl) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[41]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TaskingTaxonomyControl.ProtoReflect.Descriptor instead.
+func (*TaskingTaxonomyControl) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{41}
+}
+
+func (x *TaskingTaxonomyControl) GetKind() isTaskingTaxonomyControl_Kind {
+	if x != nil {
+		return x.Kind
+	}
+	return nil
+}
+
+func (x *TaskingTaxonomyControl) GetModeChange() *TaskingTaxonomyModeChange {
+	if x != nil {
+		if x, ok := x.Kind.(*TaskingTaxonomyControl_ModeChange); ok {
+			return x.ModeChange
+		}
+	}
+	return nil
+}
+
+type isTaskingTaxonomyControl_Kind interface {
+	isTaskingTaxonomyControl_Kind()
+}
+
+type TaskingTaxonomyControl_ModeChange struct {
+	ModeChange *TaskingTaxonomyModeChange `protobuf:"bytes,1,opt,name=mode_change,json=modeChange,proto3,oneof"`
+}
+
+func (*TaskingTaxonomyControl_ModeChange) isTaskingTaxonomyControl_Kind() {}
+
+// switches the assignee between options, see TaskableTarget.mode
+type TaskingTaxonomyModeChange struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TaskingTaxonomyModeChange) Reset() {
+	*x = TaskingTaxonomyModeChange{}
+	mi := &file_taxonomy_proto_msgTypes[42]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TaskingTaxonomyModeChange) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TaskingTaxonomyModeChange) ProtoMessage() {}
+
+func (x *TaskingTaxonomyModeChange) ProtoReflect() protoreflect.Message {
+	mi := &file_taxonomy_proto_msgTypes[42]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TaskingTaxonomyModeChange.ProtoReflect.Descriptor instead.
+func (*TaskingTaxonomyModeChange) Descriptor() ([]byte, []int) {
+	return file_taxonomy_proto_rawDescGZIP(), []int{42}
+}
+
 type TaskingTaxonomyCommission struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Kind:
@@ -2286,7 +2406,7 @@ type TaskingTaxonomyCommission struct {
 
 func (x *TaskingTaxonomyCommission) Reset() {
 	*x = TaskingTaxonomyCommission{}
-	mi := &file_taxonomy_proto_msgTypes[41]
+	mi := &file_taxonomy_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2298,7 +2418,7 @@ func (x *TaskingTaxonomyCommission) String() string {
 func (*TaskingTaxonomyCommission) ProtoMessage() {}
 
 func (x *TaskingTaxonomyCommission) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[41]
+	mi := &file_taxonomy_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2311,7 +2431,7 @@ func (x *TaskingTaxonomyCommission) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyCommission.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyCommission) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{41}
+	return file_taxonomy_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *TaskingTaxonomyCommission) GetKind() isTaskingTaxonomyCommission_Kind {
@@ -2369,7 +2489,7 @@ type TaskingTaxonomyObserve struct {
 
 func (x *TaskingTaxonomyObserve) Reset() {
 	*x = TaskingTaxonomyObserve{}
-	mi := &file_taxonomy_proto_msgTypes[42]
+	mi := &file_taxonomy_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2381,7 +2501,7 @@ func (x *TaskingTaxonomyObserve) String() string {
 func (*TaskingTaxonomyObserve) ProtoMessage() {}
 
 func (x *TaskingTaxonomyObserve) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[42]
+	mi := &file_taxonomy_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2394,7 +2514,7 @@ func (x *TaskingTaxonomyObserve) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyObserve.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyObserve) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{42}
+	return file_taxonomy_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *TaskingTaxonomyObserve) GetKind() isTaskingTaxonomyObserve_Kind {
@@ -2467,7 +2587,7 @@ type TaskingTaxonomyMovement struct {
 
 func (x *TaskingTaxonomyMovement) Reset() {
 	*x = TaskingTaxonomyMovement{}
-	mi := &file_taxonomy_proto_msgTypes[43]
+	mi := &file_taxonomy_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2479,7 +2599,7 @@ func (x *TaskingTaxonomyMovement) String() string {
 func (*TaskingTaxonomyMovement) ProtoMessage() {}
 
 func (x *TaskingTaxonomyMovement) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[43]
+	mi := &file_taxonomy_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2492,7 +2612,7 @@ func (x *TaskingTaxonomyMovement) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyMovement.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyMovement) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{43}
+	return file_taxonomy_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *TaskingTaxonomyMovement) GetKind() isTaskingTaxonomyMovement_Kind {
@@ -2559,7 +2679,7 @@ type TaskingTaxonomyEffect struct {
 
 func (x *TaskingTaxonomyEffect) Reset() {
 	*x = TaskingTaxonomyEffect{}
-	mi := &file_taxonomy_proto_msgTypes[44]
+	mi := &file_taxonomy_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2571,7 +2691,7 @@ func (x *TaskingTaxonomyEffect) String() string {
 func (*TaskingTaxonomyEffect) ProtoMessage() {}
 
 func (x *TaskingTaxonomyEffect) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[44]
+	mi := &file_taxonomy_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2584,7 +2704,7 @@ func (x *TaskingTaxonomyEffect) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyEffect.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyEffect) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{44}
+	return file_taxonomy_proto_rawDescGZIP(), []int{46}
 }
 
 type TaskingTaxonomyLookAt struct {
@@ -2595,7 +2715,7 @@ type TaskingTaxonomyLookAt struct {
 
 func (x *TaskingTaxonomyLookAt) Reset() {
 	*x = TaskingTaxonomyLookAt{}
-	mi := &file_taxonomy_proto_msgTypes[45]
+	mi := &file_taxonomy_proto_msgTypes[47]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2607,7 +2727,7 @@ func (x *TaskingTaxonomyLookAt) String() string {
 func (*TaskingTaxonomyLookAt) ProtoMessage() {}
 
 func (x *TaskingTaxonomyLookAt) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[45]
+	mi := &file_taxonomy_proto_msgTypes[47]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2620,7 +2740,7 @@ func (x *TaskingTaxonomyLookAt) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyLookAt.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyLookAt) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{45}
+	return file_taxonomy_proto_rawDescGZIP(), []int{47}
 }
 
 type TaskingTaxonomyScan struct {
@@ -2631,7 +2751,7 @@ type TaskingTaxonomyScan struct {
 
 func (x *TaskingTaxonomyScan) Reset() {
 	*x = TaskingTaxonomyScan{}
-	mi := &file_taxonomy_proto_msgTypes[46]
+	mi := &file_taxonomy_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2643,7 +2763,7 @@ func (x *TaskingTaxonomyScan) String() string {
 func (*TaskingTaxonomyScan) ProtoMessage() {}
 
 func (x *TaskingTaxonomyScan) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[46]
+	mi := &file_taxonomy_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2656,7 +2776,7 @@ func (x *TaskingTaxonomyScan) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyScan.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyScan) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{46}
+	return file_taxonomy_proto_rawDescGZIP(), []int{48}
 }
 
 type TaskingTaxonomyTrack struct {
@@ -2667,7 +2787,7 @@ type TaskingTaxonomyTrack struct {
 
 func (x *TaskingTaxonomyTrack) Reset() {
 	*x = TaskingTaxonomyTrack{}
-	mi := &file_taxonomy_proto_msgTypes[47]
+	mi := &file_taxonomy_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2679,7 +2799,7 @@ func (x *TaskingTaxonomyTrack) String() string {
 func (*TaskingTaxonomyTrack) ProtoMessage() {}
 
 func (x *TaskingTaxonomyTrack) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[47]
+	mi := &file_taxonomy_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2692,7 +2812,7 @@ func (x *TaskingTaxonomyTrack) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyTrack.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyTrack) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{47}
+	return file_taxonomy_proto_rawDescGZIP(), []int{49}
 }
 
 type TaskingTaxonomyMoveTo struct {
@@ -2703,7 +2823,7 @@ type TaskingTaxonomyMoveTo struct {
 
 func (x *TaskingTaxonomyMoveTo) Reset() {
 	*x = TaskingTaxonomyMoveTo{}
-	mi := &file_taxonomy_proto_msgTypes[48]
+	mi := &file_taxonomy_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2715,7 +2835,7 @@ func (x *TaskingTaxonomyMoveTo) String() string {
 func (*TaskingTaxonomyMoveTo) ProtoMessage() {}
 
 func (x *TaskingTaxonomyMoveTo) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[48]
+	mi := &file_taxonomy_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2728,7 +2848,7 @@ func (x *TaskingTaxonomyMoveTo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyMoveTo.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyMoveTo) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{48}
+	return file_taxonomy_proto_rawDescGZIP(), []int{50}
 }
 
 type TaskingTaxonomyPatrol struct {
@@ -2739,7 +2859,7 @@ type TaskingTaxonomyPatrol struct {
 
 func (x *TaskingTaxonomyPatrol) Reset() {
 	*x = TaskingTaxonomyPatrol{}
-	mi := &file_taxonomy_proto_msgTypes[49]
+	mi := &file_taxonomy_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2751,7 +2871,7 @@ func (x *TaskingTaxonomyPatrol) String() string {
 func (*TaskingTaxonomyPatrol) ProtoMessage() {}
 
 func (x *TaskingTaxonomyPatrol) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[49]
+	mi := &file_taxonomy_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2764,7 +2884,7 @@ func (x *TaskingTaxonomyPatrol) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyPatrol.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyPatrol) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{49}
+	return file_taxonomy_proto_rawDescGZIP(), []int{51}
 }
 
 type TaskingTaxonomyFollow struct {
@@ -2775,7 +2895,7 @@ type TaskingTaxonomyFollow struct {
 
 func (x *TaskingTaxonomyFollow) Reset() {
 	*x = TaskingTaxonomyFollow{}
-	mi := &file_taxonomy_proto_msgTypes[50]
+	mi := &file_taxonomy_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2787,7 +2907,7 @@ func (x *TaskingTaxonomyFollow) String() string {
 func (*TaskingTaxonomyFollow) ProtoMessage() {}
 
 func (x *TaskingTaxonomyFollow) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[50]
+	mi := &file_taxonomy_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2800,7 +2920,7 @@ func (x *TaskingTaxonomyFollow) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyFollow.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyFollow) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{50}
+	return file_taxonomy_proto_rawDescGZIP(), []int{52}
 }
 
 type TaskingTaxonomyCommissionPosition struct {
@@ -2811,7 +2931,7 @@ type TaskingTaxonomyCommissionPosition struct {
 
 func (x *TaskingTaxonomyCommissionPosition) Reset() {
 	*x = TaskingTaxonomyCommissionPosition{}
-	mi := &file_taxonomy_proto_msgTypes[51]
+	mi := &file_taxonomy_proto_msgTypes[53]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2823,7 +2943,7 @@ func (x *TaskingTaxonomyCommissionPosition) String() string {
 func (*TaskingTaxonomyCommissionPosition) ProtoMessage() {}
 
 func (x *TaskingTaxonomyCommissionPosition) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[51]
+	mi := &file_taxonomy_proto_msgTypes[53]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2836,7 +2956,7 @@ func (x *TaskingTaxonomyCommissionPosition) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use TaskingTaxonomyCommissionPosition.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyCommissionPosition) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{51}
+	return file_taxonomy_proto_rawDescGZIP(), []int{53}
 }
 
 type TaskingTaxonomyCommissionCalibrate struct {
@@ -2847,7 +2967,7 @@ type TaskingTaxonomyCommissionCalibrate struct {
 
 func (x *TaskingTaxonomyCommissionCalibrate) Reset() {
 	*x = TaskingTaxonomyCommissionCalibrate{}
-	mi := &file_taxonomy_proto_msgTypes[52]
+	mi := &file_taxonomy_proto_msgTypes[54]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2859,7 +2979,7 @@ func (x *TaskingTaxonomyCommissionCalibrate) String() string {
 func (*TaskingTaxonomyCommissionCalibrate) ProtoMessage() {}
 
 func (x *TaskingTaxonomyCommissionCalibrate) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[52]
+	mi := &file_taxonomy_proto_msgTypes[54]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2872,7 +2992,7 @@ func (x *TaskingTaxonomyCommissionCalibrate) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use TaskingTaxonomyCommissionCalibrate.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyCommissionCalibrate) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{52}
+	return file_taxonomy_proto_rawDescGZIP(), []int{54}
 }
 
 type TaskingTaxonomyUpdate struct {
@@ -2883,7 +3003,7 @@ type TaskingTaxonomyUpdate struct {
 
 func (x *TaskingTaxonomyUpdate) Reset() {
 	*x = TaskingTaxonomyUpdate{}
-	mi := &file_taxonomy_proto_msgTypes[53]
+	mi := &file_taxonomy_proto_msgTypes[55]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2895,7 +3015,7 @@ func (x *TaskingTaxonomyUpdate) String() string {
 func (*TaskingTaxonomyUpdate) ProtoMessage() {}
 
 func (x *TaskingTaxonomyUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_taxonomy_proto_msgTypes[53]
+	mi := &file_taxonomy_proto_msgTypes[55]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2908,7 +3028,7 @@ func (x *TaskingTaxonomyUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TaskingTaxonomyUpdate.ProtoReflect.Descriptor instead.
 func (*TaskingTaxonomyUpdate) Descriptor() ([]byte, []int) {
-	return file_taxonomy_proto_rawDescGZIP(), []int{53}
+	return file_taxonomy_proto_rawDescGZIP(), []int{55}
 }
 
 var File_taxonomy_proto protoreflect.FileDescriptor
@@ -3023,7 +3143,7 @@ const file_taxonomy_proto_rawDesc = "" +
 	"%EquipmentTaxonomySensorElectroOptical\"!\n" +
 	"\x1fEquipmentTaxonomySensorEmplaced\" \n" +
 	"\x1eEquipmentTaxonomySensorSeismic\"\x11\n" +
-	"\x0fEmitterTaxonomy\"\xd5\x02\n" +
+	"\x0fEmitterTaxonomy\"\x90\x03\n" +
 	"\x0fTaskingTaxonomy\x129\n" +
 	"\aobserve\x18\n" +
 	" \x01(\v2\x1d.world.TaskingTaxonomyObserveH\x00R\aobserve\x12<\n" +
@@ -3032,11 +3152,17 @@ const file_taxonomy_proto_rawDesc = "" +
 	"\n" +
 	"commission\x18\r \x01(\v2 .world.TaskingTaxonomyCommissionH\x00R\n" +
 	"commission\x12E\n" +
-	"\vmaintenance\x18\x0e \x01(\v2!.world.TaskingTaxonomyMaintenanceH\x00R\vmaintenanceB\x06\n" +
+	"\vmaintenance\x18\x0e \x01(\v2!.world.TaskingTaxonomyMaintenanceH\x00R\vmaintenance\x129\n" +
+	"\acontrol\x18\x0f \x01(\v2\x1d.world.TaskingTaxonomyControlH\x00R\acontrolB\x06\n" +
 	"\x04kind\"\\\n" +
 	"\x1aTaskingTaxonomyMaintenance\x126\n" +
 	"\x06update\x18\x01 \x01(\v2\x1c.world.TaskingTaxonomyUpdateH\x00R\x06updateB\x06\n" +
-	"\x04kind\"\xb6\x01\n" +
+	"\x04kind\"e\n" +
+	"\x16TaskingTaxonomyControl\x12C\n" +
+	"\vmode_change\x18\x01 \x01(\v2 .world.TaskingTaxonomyModeChangeH\x00R\n" +
+	"modeChangeB\x06\n" +
+	"\x04kind\"\x1b\n" +
+	"\x19TaskingTaxonomyModeChange\"\xb6\x01\n" +
 	"\x19TaskingTaxonomyCommission\x12F\n" +
 	"\bposition\x18\x01 \x01(\v2(.world.TaskingTaxonomyCommissionPositionH\x00R\bposition\x12I\n" +
 	"\tcalibrate\x18\x02 \x01(\v2).world.TaskingTaxonomyCommissionCalibrateH\x00R\tcalibrateB\x06\n" +
@@ -3074,7 +3200,7 @@ func file_taxonomy_proto_rawDescGZIP() []byte {
 	return file_taxonomy_proto_rawDescData
 }
 
-var file_taxonomy_proto_msgTypes = make([]protoimpl.MessageInfo, 54)
+var file_taxonomy_proto_msgTypes = make([]protoimpl.MessageInfo, 56)
 var file_taxonomy_proto_goTypes = []any{
 	(*ClassificationTaxonomy)(nil),                // 0: world.ClassificationTaxonomy
 	(*OtherTaxonomy)(nil),                         // 1: world.OtherTaxonomy
@@ -3117,19 +3243,21 @@ var file_taxonomy_proto_goTypes = []any{
 	(*EmitterTaxonomy)(nil),                       // 38: world.EmitterTaxonomy
 	(*TaskingTaxonomy)(nil),                       // 39: world.TaskingTaxonomy
 	(*TaskingTaxonomyMaintenance)(nil),            // 40: world.TaskingTaxonomyMaintenance
-	(*TaskingTaxonomyCommission)(nil),             // 41: world.TaskingTaxonomyCommission
-	(*TaskingTaxonomyObserve)(nil),                // 42: world.TaskingTaxonomyObserve
-	(*TaskingTaxonomyMovement)(nil),               // 43: world.TaskingTaxonomyMovement
-	(*TaskingTaxonomyEffect)(nil),                 // 44: world.TaskingTaxonomyEffect
-	(*TaskingTaxonomyLookAt)(nil),                 // 45: world.TaskingTaxonomyLookAt
-	(*TaskingTaxonomyScan)(nil),                   // 46: world.TaskingTaxonomyScan
-	(*TaskingTaxonomyTrack)(nil),                  // 47: world.TaskingTaxonomyTrack
-	(*TaskingTaxonomyMoveTo)(nil),                 // 48: world.TaskingTaxonomyMoveTo
-	(*TaskingTaxonomyPatrol)(nil),                 // 49: world.TaskingTaxonomyPatrol
-	(*TaskingTaxonomyFollow)(nil),                 // 50: world.TaskingTaxonomyFollow
-	(*TaskingTaxonomyCommissionPosition)(nil),     // 51: world.TaskingTaxonomyCommissionPosition
-	(*TaskingTaxonomyCommissionCalibrate)(nil),    // 52: world.TaskingTaxonomyCommissionCalibrate
-	(*TaskingTaxonomyUpdate)(nil),                 // 53: world.TaskingTaxonomyUpdate
+	(*TaskingTaxonomyControl)(nil),                // 41: world.TaskingTaxonomyControl
+	(*TaskingTaxonomyModeChange)(nil),             // 42: world.TaskingTaxonomyModeChange
+	(*TaskingTaxonomyCommission)(nil),             // 43: world.TaskingTaxonomyCommission
+	(*TaskingTaxonomyObserve)(nil),                // 44: world.TaskingTaxonomyObserve
+	(*TaskingTaxonomyMovement)(nil),               // 45: world.TaskingTaxonomyMovement
+	(*TaskingTaxonomyEffect)(nil),                 // 46: world.TaskingTaxonomyEffect
+	(*TaskingTaxonomyLookAt)(nil),                 // 47: world.TaskingTaxonomyLookAt
+	(*TaskingTaxonomyScan)(nil),                   // 48: world.TaskingTaxonomyScan
+	(*TaskingTaxonomyTrack)(nil),                  // 49: world.TaskingTaxonomyTrack
+	(*TaskingTaxonomyMoveTo)(nil),                 // 50: world.TaskingTaxonomyMoveTo
+	(*TaskingTaxonomyPatrol)(nil),                 // 51: world.TaskingTaxonomyPatrol
+	(*TaskingTaxonomyFollow)(nil),                 // 52: world.TaskingTaxonomyFollow
+	(*TaskingTaxonomyCommissionPosition)(nil),     // 53: world.TaskingTaxonomyCommissionPosition
+	(*TaskingTaxonomyCommissionCalibrate)(nil),    // 54: world.TaskingTaxonomyCommissionCalibrate
+	(*TaskingTaxonomyUpdate)(nil),                 // 55: world.TaskingTaxonomyUpdate
 }
 var file_taxonomy_proto_depIdxs = []int32{
 	2,  // 0: world.ClassificationTaxonomy.confidence:type_name -> world.ClassificationConfidence
@@ -3170,25 +3298,27 @@ var file_taxonomy_proto_depIdxs = []int32{
 	34, // 35: world.EquipmentTaxonomySensor.acoustic:type_name -> world.EquipmentTaxonomySensorAcoustic
 	35, // 36: world.EquipmentTaxonomySensor.electro_optical:type_name -> world.EquipmentTaxonomySensorElectroOptical
 	37, // 37: world.EquipmentTaxonomySensor.seismic:type_name -> world.EquipmentTaxonomySensorSeismic
-	42, // 38: world.TaskingTaxonomy.observe:type_name -> world.TaskingTaxonomyObserve
-	43, // 39: world.TaskingTaxonomy.movement:type_name -> world.TaskingTaxonomyMovement
-	44, // 40: world.TaskingTaxonomy.effect:type_name -> world.TaskingTaxonomyEffect
-	41, // 41: world.TaskingTaxonomy.commission:type_name -> world.TaskingTaxonomyCommission
+	44, // 38: world.TaskingTaxonomy.observe:type_name -> world.TaskingTaxonomyObserve
+	45, // 39: world.TaskingTaxonomy.movement:type_name -> world.TaskingTaxonomyMovement
+	46, // 40: world.TaskingTaxonomy.effect:type_name -> world.TaskingTaxonomyEffect
+	43, // 41: world.TaskingTaxonomy.commission:type_name -> world.TaskingTaxonomyCommission
 	40, // 42: world.TaskingTaxonomy.maintenance:type_name -> world.TaskingTaxonomyMaintenance
-	53, // 43: world.TaskingTaxonomyMaintenance.update:type_name -> world.TaskingTaxonomyUpdate
-	51, // 44: world.TaskingTaxonomyCommission.position:type_name -> world.TaskingTaxonomyCommissionPosition
-	52, // 45: world.TaskingTaxonomyCommission.calibrate:type_name -> world.TaskingTaxonomyCommissionCalibrate
-	45, // 46: world.TaskingTaxonomyObserve.look_at:type_name -> world.TaskingTaxonomyLookAt
-	46, // 47: world.TaskingTaxonomyObserve.scan:type_name -> world.TaskingTaxonomyScan
-	47, // 48: world.TaskingTaxonomyObserve.track:type_name -> world.TaskingTaxonomyTrack
-	48, // 49: world.TaskingTaxonomyMovement.move_to:type_name -> world.TaskingTaxonomyMoveTo
-	49, // 50: world.TaskingTaxonomyMovement.patrol:type_name -> world.TaskingTaxonomyPatrol
-	50, // 51: world.TaskingTaxonomyMovement.follow:type_name -> world.TaskingTaxonomyFollow
-	52, // [52:52] is the sub-list for method output_type
-	52, // [52:52] is the sub-list for method input_type
-	52, // [52:52] is the sub-list for extension type_name
-	52, // [52:52] is the sub-list for extension extendee
-	0,  // [0:52] is the sub-list for field type_name
+	41, // 43: world.TaskingTaxonomy.control:type_name -> world.TaskingTaxonomyControl
+	55, // 44: world.TaskingTaxonomyMaintenance.update:type_name -> world.TaskingTaxonomyUpdate
+	42, // 45: world.TaskingTaxonomyControl.mode_change:type_name -> world.TaskingTaxonomyModeChange
+	53, // 46: world.TaskingTaxonomyCommission.position:type_name -> world.TaskingTaxonomyCommissionPosition
+	54, // 47: world.TaskingTaxonomyCommission.calibrate:type_name -> world.TaskingTaxonomyCommissionCalibrate
+	47, // 48: world.TaskingTaxonomyObserve.look_at:type_name -> world.TaskingTaxonomyLookAt
+	48, // 49: world.TaskingTaxonomyObserve.scan:type_name -> world.TaskingTaxonomyScan
+	49, // 50: world.TaskingTaxonomyObserve.track:type_name -> world.TaskingTaxonomyTrack
+	50, // 51: world.TaskingTaxonomyMovement.move_to:type_name -> world.TaskingTaxonomyMoveTo
+	51, // 52: world.TaskingTaxonomyMovement.patrol:type_name -> world.TaskingTaxonomyPatrol
+	52, // 53: world.TaskingTaxonomyMovement.follow:type_name -> world.TaskingTaxonomyFollow
+	54, // [54:54] is the sub-list for method output_type
+	54, // [54:54] is the sub-list for method input_type
+	54, // [54:54] is the sub-list for extension type_name
+	54, // [54:54] is the sub-list for extension extendee
+	0,  // [0:54] is the sub-list for field type_name
 }
 
 func init() { file_taxonomy_proto_init() }
@@ -3249,20 +3379,24 @@ func file_taxonomy_proto_init() {
 		(*TaskingTaxonomy_Effect)(nil),
 		(*TaskingTaxonomy_Commission)(nil),
 		(*TaskingTaxonomy_Maintenance)(nil),
+		(*TaskingTaxonomy_Control)(nil),
 	}
 	file_taxonomy_proto_msgTypes[40].OneofWrappers = []any{
 		(*TaskingTaxonomyMaintenance_Update)(nil),
 	}
 	file_taxonomy_proto_msgTypes[41].OneofWrappers = []any{
+		(*TaskingTaxonomyControl_ModeChange)(nil),
+	}
+	file_taxonomy_proto_msgTypes[43].OneofWrappers = []any{
 		(*TaskingTaxonomyCommission_Position)(nil),
 		(*TaskingTaxonomyCommission_Calibrate)(nil),
 	}
-	file_taxonomy_proto_msgTypes[42].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[44].OneofWrappers = []any{
 		(*TaskingTaxonomyObserve_LookAt)(nil),
 		(*TaskingTaxonomyObserve_Scan)(nil),
 		(*TaskingTaxonomyObserve_Track)(nil),
 	}
-	file_taxonomy_proto_msgTypes[43].OneofWrappers = []any{
+	file_taxonomy_proto_msgTypes[45].OneofWrappers = []any{
 		(*TaskingTaxonomyMovement_MoveTo)(nil),
 		(*TaskingTaxonomyMovement_Patrol)(nil),
 		(*TaskingTaxonomyMovement_Follow)(nil),
@@ -3273,7 +3407,7 @@ func file_taxonomy_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_taxonomy_proto_rawDesc), len(file_taxonomy_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   54,
+			NumMessages:   56,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

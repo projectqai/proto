@@ -243,24 +243,36 @@ class EmitterTaxonomy(_message.Message):
     def __init__(self) -> None: ...
 
 class TaskingTaxonomy(_message.Message):
-    __slots__ = ("observe", "movement", "effect", "commission", "maintenance")
+    __slots__ = ("observe", "movement", "effect", "commission", "maintenance", "control")
     OBSERVE_FIELD_NUMBER: _ClassVar[int]
     MOVEMENT_FIELD_NUMBER: _ClassVar[int]
     EFFECT_FIELD_NUMBER: _ClassVar[int]
     COMMISSION_FIELD_NUMBER: _ClassVar[int]
     MAINTENANCE_FIELD_NUMBER: _ClassVar[int]
+    CONTROL_FIELD_NUMBER: _ClassVar[int]
     observe: TaskingTaxonomyObserve
     movement: TaskingTaxonomyMovement
     effect: TaskingTaxonomyEffect
     commission: TaskingTaxonomyCommission
     maintenance: TaskingTaxonomyMaintenance
-    def __init__(self, observe: _Optional[_Union[TaskingTaxonomyObserve, _Mapping]] = ..., movement: _Optional[_Union[TaskingTaxonomyMovement, _Mapping]] = ..., effect: _Optional[_Union[TaskingTaxonomyEffect, _Mapping]] = ..., commission: _Optional[_Union[TaskingTaxonomyCommission, _Mapping]] = ..., maintenance: _Optional[_Union[TaskingTaxonomyMaintenance, _Mapping]] = ...) -> None: ...
+    control: TaskingTaxonomyControl
+    def __init__(self, observe: _Optional[_Union[TaskingTaxonomyObserve, _Mapping]] = ..., movement: _Optional[_Union[TaskingTaxonomyMovement, _Mapping]] = ..., effect: _Optional[_Union[TaskingTaxonomyEffect, _Mapping]] = ..., commission: _Optional[_Union[TaskingTaxonomyCommission, _Mapping]] = ..., maintenance: _Optional[_Union[TaskingTaxonomyMaintenance, _Mapping]] = ..., control: _Optional[_Union[TaskingTaxonomyControl, _Mapping]] = ...) -> None: ...
 
 class TaskingTaxonomyMaintenance(_message.Message):
     __slots__ = ("update",)
     UPDATE_FIELD_NUMBER: _ClassVar[int]
     update: TaskingTaxonomyUpdate
     def __init__(self, update: _Optional[_Union[TaskingTaxonomyUpdate, _Mapping]] = ...) -> None: ...
+
+class TaskingTaxonomyControl(_message.Message):
+    __slots__ = ("mode_change",)
+    MODE_CHANGE_FIELD_NUMBER: _ClassVar[int]
+    mode_change: TaskingTaxonomyModeChange
+    def __init__(self, mode_change: _Optional[_Union[TaskingTaxonomyModeChange, _Mapping]] = ...) -> None: ...
+
+class TaskingTaxonomyModeChange(_message.Message):
+    __slots__ = ()
+    def __init__(self) -> None: ...
 
 class TaskingTaxonomyCommission(_message.Message):
     __slots__ = ("position", "calibrate")

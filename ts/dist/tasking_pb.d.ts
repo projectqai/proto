@@ -4,6 +4,7 @@
 
 import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
+import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { PlanarPoint } from "./geometry_pb.js";
 
 /**
@@ -29,6 +30,11 @@ export declare type TaskableTarget = Message<"world.TaskableTarget"> & {
    * @generated from field: optional world.TaskableTargetEntity entity = 3;
    */
   entity?: TaskableTargetEntity | undefined;
+
+  /**
+   * @generated from field: optional world.TaskableTargetMode mode = 4;
+   */
+  mode?: TaskableTargetMode | undefined;
 };
 
 /**
@@ -36,6 +42,94 @@ export declare type TaskableTarget = Message<"world.TaskableTarget"> & {
  * Use `create(TaskableTargetSchema)` to create a new message.
  */
 export declare const TaskableTargetSchema: GenMessage<TaskableTarget>;
+
+/**
+ * The taskable switches its assignee between options, such as an operating
+ * mode. The controller keeps active, until and next up to date; running the
+ * taskable with TaskExecutionTarget.mode requests an option.
+ *
+ * @generated from message world.TaskableTargetMode
+ */
+export declare type TaskableTargetMode = Message<"world.TaskableTargetMode"> & {
+  /**
+   * in the order a UI should show them
+   *
+   * @generated from field: repeated world.TaskableTargetModeOption options = 1;
+   */
+  options: TaskableTargetModeOption[];
+
+  /**
+   * the id of the option in effect, as the device reports it.
+   * may be one not in options, e.g. a failsafe the device entered on its own. unset: unknown
+   *
+   * @generated from field: optional string active = 2;
+   */
+  active?: string | undefined;
+
+  /**
+   * set: the device leaves active on its own at this time, e.g. a temporary
+   * option, and enters next. a requested switch that is settling reports its
+   * TaskExecutionComponent.eta instead
+   *
+   * @generated from field: optional google.protobuf.Timestamp until = 3;
+   */
+  until?: Timestamp | undefined;
+
+  /**
+   * with until: the id of the option entered then. unset: unknown
+   *
+   * @generated from field: optional string next = 4;
+   */
+  next?: string | undefined;
+
+  /**
+   * set: a two-state switch. the id of the option that means on, the other one is off
+   *
+   * @generated from field: optional string on = 5;
+   */
+  on?: string | undefined;
+};
+
+/**
+ * Describes the message world.TaskableTargetMode.
+ * Use `create(TaskableTargetModeSchema)` to create a new message.
+ */
+export declare const TaskableTargetModeSchema: GenMessage<TaskableTargetMode>;
+
+/**
+ * @generated from message world.TaskableTargetModeOption
+ */
+export declare type TaskableTargetModeOption = Message<"world.TaskableTargetModeOption"> & {
+  /**
+   * unique within the taskable
+   *
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: optional string label = 2;
+   */
+  label?: string | undefined;
+
+  /**
+   * @generated from field: optional string description = 3;
+   */
+  description?: string | undefined;
+
+  /**
+   * set: cannot be requested right now. the value says why, for humans, and may be empty
+   *
+   * @generated from field: optional string disabled = 4;
+   */
+  disabled?: string | undefined;
+};
+
+/**
+ * Describes the message world.TaskableTargetModeOption.
+ * Use `create(TaskableTargetModeOptionSchema)` to create a new message.
+ */
+export declare const TaskableTargetModeOptionSchema: GenMessage<TaskableTargetModeOption>;
 
 /**
  * @generated from message world.TaskableTargetPosition
@@ -125,6 +219,14 @@ export declare type TaskExecutionTarget = Message<"world.TaskExecutionTarget"> &
      */
     value: TaskExecutionTargetEntity;
     case: "entity";
+  } | {
+    /**
+     * TaskableTargetModeOption.id to switch to
+     *
+     * @generated from field: string mode = 4;
+     */
+    value: string;
+    case: "mode";
   } | { case: undefined; value?: undefined };
 };
 

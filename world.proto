@@ -59,9 +59,12 @@ message Entity {
   optional ConfigurationComponent config = 51;
   optional ConfigurableComponent configurable = 52;
 
-  // experimental, dont use yet externally
+
+  // eventually consistent tasking
+
   optional TaskableComponent taskable = 23;
   optional TaskExecutionComponent task_execution = 41;
+
   optional MissionComponent mission = 31;
   optional SensorComponent sensor = 37;
   optional InteractivityComponent interactivity = 60;
@@ -468,6 +471,7 @@ enum TaskableMode {
   TaskableModePriorityQueue = 3;
 }
 
+// owned by the controller, declaring what can be tasked
 message TaskableComponent {
   // priority for which task should be shown first. higher = more important
   optional uint32 priority = 1;
@@ -497,6 +501,15 @@ message TaskableComponent {
   // semantic meaning of the task (look-at, move-to, patrol, ...).
   // independent of `target` (shape of input).
   optional TaskingTaxonomy taxonomy = 12;
+
+  // set: the taskable exists but cannot run right now,
+  // the string is for humans, and may be empty
+  optional string disabled = 13;
+
+  // spawn and priority queue modes: how many executions the taskable keeps.
+  // RunTask fails while this many are pending or running, and otherwise
+  // expires the oldest finished ones to make room. unset: 10
+  optional uint32 max_executions = 14;
 }
 
 enum TaskExecutionState {
@@ -506,6 +519,7 @@ enum TaskExecutionState {
   TaskExecutionStateFailed = 3;
 }
 
+//created by the engine via RunTask, then owned by the controller
 message TaskExecutionComponent {
   // entity ID of the TaskableComponent that defines this task
   string task = 1;
@@ -516,13 +530,20 @@ message TaskExecutionComponent {
   // current execution state, updated by the controller
   TaskExecutionState state = 3;
 
-  // human-readable error or result message
+  // human-readable message: what the controller is doing while it runs,
+  // the result or error once it is done
   optional string reason = 4;
 
   // priority level for PriorityQueue mode (higher = more important)
   optional uint32 priority = 5;
 
   optional TaskExecutionTarget target = 6;
+
+  // set by the controller while it works on the task: when it expects to be done. unset: unknown
+  optional google.protobuf.Timestamp eta = 7;
+
+  // set by the controller while it works on the task: how far along it is, in percent from 0 to 100. unset: unknown
+  optional uint32 progress = 8;
 }
 
 message KinematicsEnu {
@@ -1027,8 +1048,25 @@ message MapLayerComponent {
 message ManualControlComponent {
   repeated ManualControlInput input = 1;
 }
+
+// A manual control frame. Push an entity stub carrying this component to send
+// one. Frames are commands, not state: the component lapses within a fraction of
+// a second, so a driver that stops hearing from its operator fails safe. Drivers
+// watch the entity and act on a frame only when `at` changes, since every other
+// update to the entity repeats the last frame.
+//
+// The first session to send takes control. Frames from another session are
+// rejected with FailedPrecondition until the holder releases or goes silent.
+// An empty input releases control.
 message TargetManualControlComponent {
   repeated ManualControlInput input = 1;
+
+  // opaque id the sender generates when it starts driving
+  optional string session = 2;
+
+  // when the node holding the entity received the frame. Set by that node;
+  // whatever the sender puts here is replaced.
+  optional google.protobuf.Timestamp at = 3;
 }
 
 // ---------------------------------------------
@@ -1384,6 +1422,14 @@ message RunTaskResponse {
   optional string humanReadableReason = 3;
 }
 
+message CancelTaskRequest {
+  // RunTaskResponse.executionId: the taskable for exclusive and reconcile
+  // taskables, the execution entity for spawned and queued ones
+  string executionId = 1;
+}
+
+message CancelTaskResponse {}
+
 message HardResetRequest {}
 message HardResetResponse {}
 
@@ -1435,6 +1481,10 @@ service WorldService {
 
   // create an instance of a specific task entity
   rpc RunTask(RunTaskRequest) returns (RunTaskResponse);
+
+  // clear or cancel an execution
+  // fails with FAILED_PRECONDITION when the execution cannot be cancelled
+  rpc CancelTask(CancelTaskRequest) returns (CancelTaskResponse);
 
   // clear all engine state including persistence
   rpc HardReset(HardResetRequest) returns (HardResetResponse);

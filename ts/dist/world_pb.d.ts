@@ -185,8 +185,6 @@ export declare type Entity = Message<"world.Entity"> & {
   configurable?: ConfigurableComponent | undefined;
 
   /**
-   * experimental, dont use yet externally
-   *
    * @generated from field: optional world.TaskableComponent taskable = 23;
    */
   taskable?: TaskableComponent | undefined;
@@ -1381,6 +1379,8 @@ export declare type TaskableAssignee = Message<"world.TaskableAssignee"> & {
 export declare const TaskableAssigneeSchema: GenMessage<TaskableAssignee>;
 
 /**
+ * owned by the controller, declaring what can be tasked
+ *
  * @generated from message world.TaskableComponent
  */
 export declare type TaskableComponent = Message<"world.TaskableComponent"> & {
@@ -1460,6 +1460,23 @@ export declare type TaskableComponent = Message<"world.TaskableComponent"> & {
    * @generated from field: optional world.TaskingTaxonomy taxonomy = 12;
    */
   taxonomy?: TaskingTaxonomy | undefined;
+
+  /**
+   * set: the taskable exists but cannot run right now,
+   * the string is for humans, and may be empty
+   *
+   * @generated from field: optional string disabled = 13;
+   */
+  disabled?: string | undefined;
+
+  /**
+   * spawn and priority queue modes: how many executions the taskable keeps.
+   * RunTask fails while this many are pending or running, and otherwise
+   * expires the oldest finished ones to make room. unset: 10
+   *
+   * @generated from field: optional uint32 max_executions = 14;
+   */
+  maxExecutions?: number | undefined;
 };
 
 /**
@@ -1469,6 +1486,8 @@ export declare type TaskableComponent = Message<"world.TaskableComponent"> & {
 export declare const TaskableComponentSchema: GenMessage<TaskableComponent>;
 
 /**
+ * created by the engine via RunTask, then owned by the controller
+ *
  * @generated from message world.TaskExecutionComponent
  */
 export declare type TaskExecutionComponent = Message<"world.TaskExecutionComponent"> & {
@@ -1495,7 +1514,8 @@ export declare type TaskExecutionComponent = Message<"world.TaskExecutionCompone
   state: TaskExecutionState;
 
   /**
-   * human-readable error or result message
+   * human-readable message: what the controller is doing while it runs,
+   * the result or error once it is done
    *
    * @generated from field: optional string reason = 4;
    */
@@ -1512,6 +1532,20 @@ export declare type TaskExecutionComponent = Message<"world.TaskExecutionCompone
    * @generated from field: optional world.TaskExecutionTarget target = 6;
    */
   target?: TaskExecutionTarget | undefined;
+
+  /**
+   * set by the controller while it works on the task: when it expects to be done. unset: unknown
+   *
+   * @generated from field: optional google.protobuf.Timestamp eta = 7;
+   */
+  eta?: Timestamp | undefined;
+
+  /**
+   * set by the controller while it works on the task: how far along it is, in percent from 0 to 100. unset: unknown
+   *
+   * @generated from field: optional uint32 progress = 8;
+   */
+  progress?: number | undefined;
 };
 
 /**
@@ -3014,6 +3048,16 @@ export declare type ManualControlComponent = Message<"world.ManualControlCompone
 export declare const ManualControlComponentSchema: GenMessage<ManualControlComponent>;
 
 /**
+ * A manual control frame. Push an entity stub carrying this component to send
+ * one. Frames are commands, not state: the component lapses within a fraction of
+ * a second, so a driver that stops hearing from its operator fails safe. Drivers
+ * watch the entity and act on a frame only when `at` changes, since every other
+ * update to the entity repeats the last frame.
+ *
+ * The first session to send takes control. Frames from another session are
+ * rejected with FailedPrecondition until the holder releases or goes silent.
+ * An empty input releases control.
+ *
  * @generated from message world.TargetManualControlComponent
  */
 export declare type TargetManualControlComponent = Message<"world.TargetManualControlComponent"> & {
@@ -3021,6 +3065,21 @@ export declare type TargetManualControlComponent = Message<"world.TargetManualCo
    * @generated from field: repeated world.ManualControlInput input = 1;
    */
   input: ManualControlInput[];
+
+  /**
+   * opaque id the sender generates when it starts driving
+   *
+   * @generated from field: optional string session = 2;
+   */
+  session?: string | undefined;
+
+  /**
+   * when the node holding the entity received the frame. Set by that node;
+   * whatever the sender puts here is replaced.
+   *
+   * @generated from field: optional google.protobuf.Timestamp at = 3;
+   */
+  at?: Timestamp | undefined;
 };
 
 /**
@@ -3866,6 +3925,37 @@ export declare type RunTaskResponse = Message<"world.RunTaskResponse"> & {
  * Use `create(RunTaskResponseSchema)` to create a new message.
  */
 export declare const RunTaskResponseSchema: GenMessage<RunTaskResponse>;
+
+/**
+ * @generated from message world.CancelTaskRequest
+ */
+export declare type CancelTaskRequest = Message<"world.CancelTaskRequest"> & {
+  /**
+   * RunTaskResponse.executionId: the taskable for exclusive and reconcile
+   * taskables, the execution entity for spawned and queued ones
+   *
+   * @generated from field: string executionId = 1;
+   */
+  executionId: string;
+};
+
+/**
+ * Describes the message world.CancelTaskRequest.
+ * Use `create(CancelTaskRequestSchema)` to create a new message.
+ */
+export declare const CancelTaskRequestSchema: GenMessage<CancelTaskRequest>;
+
+/**
+ * @generated from message world.CancelTaskResponse
+ */
+export declare type CancelTaskResponse = Message<"world.CancelTaskResponse"> & {
+};
+
+/**
+ * Describes the message world.CancelTaskResponse.
+ * Use `create(CancelTaskResponseSchema)` to create a new message.
+ */
+export declare const CancelTaskResponseSchema: GenMessage<CancelTaskResponse>;
 
 /**
  * @generated from message world.HardResetRequest
@@ -5149,6 +5239,17 @@ export declare const WorldService: GenService<{
     methodKind: "unary";
     input: typeof RunTaskRequestSchema;
     output: typeof RunTaskResponseSchema;
+  },
+  /**
+   * clear or cancel an execution
+   * fails with FAILED_PRECONDITION when the execution cannot be cancelled
+   *
+   * @generated from rpc world.WorldService.CancelTask
+   */
+  cancelTask: {
+    methodKind: "unary";
+    input: typeof CancelTaskRequestSchema;
+    output: typeof CancelTaskResponseSchema;
   },
   /**
    * clear all engine state including persistence

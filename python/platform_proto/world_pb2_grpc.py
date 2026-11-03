@@ -75,6 +75,11 @@ class WorldServiceStub(object):
                 request_serializer=world__pb2.RunTaskRequest.SerializeToString,
                 response_deserializer=world__pb2.RunTaskResponse.FromString,
                 _registered_method=True)
+        self.CancelTask = channel.unary_unary(
+                '/world.WorldService/CancelTask',
+                request_serializer=world__pb2.CancelTaskRequest.SerializeToString,
+                response_deserializer=world__pb2.CancelTaskResponse.FromString,
+                _registered_method=True)
         self.HardReset = channel.unary_unary(
                 '/world.WorldService/HardReset',
                 request_serializer=world__pb2.HardResetRequest.SerializeToString,
@@ -152,6 +157,14 @@ class WorldServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def CancelTask(self, request, context):
+        """clear or cancel an execution
+        fails with FAILED_PRECONDITION when the execution cannot be cancelled
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def HardReset(self, request, context):
         """clear all engine state including persistence
         """
@@ -215,6 +228,11 @@ def add_WorldServiceServicer_to_server(servicer, server):
                     servicer.RunTask,
                     request_deserializer=world__pb2.RunTaskRequest.FromString,
                     response_serializer=world__pb2.RunTaskResponse.SerializeToString,
+            ),
+            'CancelTask': grpc.unary_unary_rpc_method_handler(
+                    servicer.CancelTask,
+                    request_deserializer=world__pb2.CancelTaskRequest.FromString,
+                    response_serializer=world__pb2.CancelTaskResponse.SerializeToString,
             ),
             'HardReset': grpc.unary_unary_rpc_method_handler(
                     servicer.HardReset,
@@ -449,6 +467,33 @@ class WorldService(object):
             '/world.WorldService/RunTask',
             world__pb2.RunTaskRequest.SerializeToString,
             world__pb2.RunTaskResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def CancelTask(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/world.WorldService/CancelTask',
+            world__pb2.CancelTaskRequest.SerializeToString,
+            world__pb2.CancelTaskResponse.FromString,
             options,
             channel_credentials,
             insecure,

@@ -165,6 +165,7 @@ message TaskingTaxonomy {
     TaskingTaxonomyEffect effect = 12;
     TaskingTaxonomyCommission commission = 13;
     TaskingTaxonomyMaintenance maintenance = 14;
+    TaskingTaxonomyControl control = 15;
   }
 }
 
@@ -174,6 +175,16 @@ message TaskingTaxonomyMaintenance {
     TaskingTaxonomyUpdate update = 1;
   }
 }
+
+// changes the state of the assignee itself
+message TaskingTaxonomyControl {
+  oneof kind {
+    TaskingTaxonomyModeChange mode_change = 1;
+  }
+}
+
+// switches the assignee between options, see TaskableTarget.mode
+message TaskingTaxonomyModeChange {}
 
 message TaskingTaxonomyCommission {
   oneof kind {

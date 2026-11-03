@@ -773,6 +773,12 @@ export declare type TaskingTaxonomy = Message<"world.TaskingTaxonomy"> & {
      */
     value: TaskingTaxonomyMaintenance;
     case: "maintenance";
+  } | {
+    /**
+     * @generated from field: world.TaskingTaxonomyControl control = 15;
+     */
+    value: TaskingTaxonomyControl;
+    case: "control";
   } | { case: undefined; value?: undefined };
 };
 
@@ -805,6 +811,44 @@ export declare type TaskingTaxonomyMaintenance = Message<"world.TaskingTaxonomyM
  * Use `create(TaskingTaxonomyMaintenanceSchema)` to create a new message.
  */
 export declare const TaskingTaxonomyMaintenanceSchema: GenMessage<TaskingTaxonomyMaintenance>;
+
+/**
+ * changes the state of the assignee itself
+ *
+ * @generated from message world.TaskingTaxonomyControl
+ */
+export declare type TaskingTaxonomyControl = Message<"world.TaskingTaxonomyControl"> & {
+  /**
+   * @generated from oneof world.TaskingTaxonomyControl.kind
+   */
+  kind: {
+    /**
+     * @generated from field: world.TaskingTaxonomyModeChange mode_change = 1;
+     */
+    value: TaskingTaxonomyModeChange;
+    case: "modeChange";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyControl.
+ * Use `create(TaskingTaxonomyControlSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyControlSchema: GenMessage<TaskingTaxonomyControl>;
+
+/**
+ * switches the assignee between options, see TaskableTarget.mode
+ *
+ * @generated from message world.TaskingTaxonomyModeChange
+ */
+export declare type TaskingTaxonomyModeChange = Message<"world.TaskingTaxonomyModeChange"> & {
+};
+
+/**
+ * Describes the message world.TaskingTaxonomyModeChange.
+ * Use `create(TaskingTaxonomyModeChangeSchema)` to create a new message.
+ */
+export declare const TaskingTaxonomyModeChangeSchema: GenMessage<TaskingTaxonomyModeChange>;
 
 /**
  * @generated from message world.TaskingTaxonomyCommission

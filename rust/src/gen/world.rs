@@ -480,6 +480,7 @@ pub enum MetricUnit {
     BitPerSecond = 80,
     KilobitPerSecond = 81,
     MegabitPerSecond = 82,
+    KilobytePerSecond = 88,
     /// Data size
     Byte = 84,
     Kilobyte = 85,
@@ -596,6 +597,7 @@ impl MetricUnit {
             Self::BitPerSecond => "MetricUnitBitPerSecond",
             Self::KilobitPerSecond => "MetricUnitKilobitPerSecond",
             Self::MegabitPerSecond => "MetricUnitMegabitPerSecond",
+            Self::KilobytePerSecond => "MetricUnitKilobytePerSecond",
             Self::Byte => "MetricUnitByte",
             Self::Kilobyte => "MetricUnitKilobyte",
             Self::Megabyte => "MetricUnitMegabyte",
@@ -690,6 +692,7 @@ impl MetricUnit {
             "MetricUnitBitPerSecond" => Some(Self::BitPerSecond),
             "MetricUnitKilobitPerSecond" => Some(Self::KilobitPerSecond),
             "MetricUnitMegabitPerSecond" => Some(Self::MegabitPerSecond),
+            "MetricUnitKilobytePerSecond" => Some(Self::KilobytePerSecond),
             "MetricUnitByte" => Some(Self::Byte),
             "MetricUnitKilobyte" => Some(Self::Kilobyte),
             "MetricUnitMegabyte" => Some(Self::Megabyte),
@@ -970,6 +973,80 @@ impl PolicyAction {
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Software {
+    /// ordered by semver precedence if both are semver.
+    /// bare numbers count as semver: "7" is 7.0.0, "1.2" is 1.2.0, "0x1f" or "0X1F" is 31.0.0.
+    /// anything else is opaque: any difference is an update
+    #[prost(string, tag = "1")]
+    pub version: ::prost::alloc::string::String,
+    /// must match, e.g. "sentient-toaster-mk2.motor"
+    #[prost(string, optional, tag = "2")]
+    pub compatible: ::core::option::Option<::prost::alloc::string::String>,
+    /// build identity, e.g. RAUC manifest hash, OSTree commit. if set on both, overrides version
+    #[prost(string, optional, tag = "3")]
+    pub digest: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeviceSoftwareEntry {
+    #[prost(message, optional, tag = "1")]
+    pub software: ::core::option::Option<Software>,
+    #[prost(enumeration = "SoftwareState", tag = "2")]
+    pub state: i32,
+    #[prost(string, optional, tag = "3")]
+    pub slot: ::core::option::Option<::prost::alloc::string::String>,
+    /// task which installs or is currently installing this software
+    #[prost(string, optional, tag = "4")]
+    pub task: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DeviceSoftware {
+    #[prost(message, repeated, tag = "1")]
+    pub software: ::prost::alloc::vec::Vec<DeviceSoftwareEntry>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct SoftwareArtifact {
+    #[prost(message, repeated, tag = "1")]
+    pub software: ::prost::alloc::vec::Vec<Software>,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum SoftwareState {
+    Unspecified = 0,
+    Booted = 1,
+    Next = 2,
+    Inactive = 3,
+    Bad = 4,
+    Installable = 5,
+}
+impl SoftwareState {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "SoftwareStateUnspecified",
+            Self::Booted => "SoftwareStateBooted",
+            Self::Next => "SoftwareStateNext",
+            Self::Inactive => "SoftwareStateInactive",
+            Self::Bad => "SoftwareStateBad",
+            Self::Installable => "SoftwareStateInstallable",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "SoftwareStateUnspecified" => Some(Self::Unspecified),
+            "SoftwareStateBooted" => Some(Self::Booted),
+            "SoftwareStateNext" => Some(Self::Next),
+            "SoftwareStateInactive" => Some(Self::Inactive),
+            "SoftwareStateBad" => Some(Self::Bad),
+            "SoftwareStateInstallable" => Some(Self::Installable),
+            _ => None,
+        }
+    }
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskableTarget {
     #[prost(message, optional, tag = "1")]
     pub position: ::core::option::Option<TaskableTargetPosition>,
@@ -977,6 +1054,45 @@ pub struct TaskableTarget {
     pub waypoints: ::core::option::Option<TaskableTargetWaypoints>,
     #[prost(message, optional, tag = "3")]
     pub entity: ::core::option::Option<TaskableTargetEntity>,
+    #[prost(message, optional, tag = "4")]
+    pub mode: ::core::option::Option<TaskableTargetMode>,
+}
+/// The taskable switches its assignee between options, such as an operating
+/// mode. The controller keeps active, until and next up to date; running the
+/// taskable with TaskExecutionTarget.mode requests an option.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TaskableTargetMode {
+    /// in the order a UI should show them
+    #[prost(message, repeated, tag = "1")]
+    pub options: ::prost::alloc::vec::Vec<TaskableTargetModeOption>,
+    /// the id of the option in effect, as the device reports it.
+    /// may be one not in options, e.g. a failsafe the device entered on its own. unset: unknown
+    #[prost(string, optional, tag = "2")]
+    pub active: ::core::option::Option<::prost::alloc::string::String>,
+    /// set: the device leaves active on its own at this time, e.g. a temporary
+    /// option, and enters next. a requested switch that is settling reports its
+    /// TaskExecutionComponent.eta instead
+    #[prost(message, optional, tag = "3")]
+    pub until: ::core::option::Option<::prost_types::Timestamp>,
+    /// with until: the id of the option entered then. unset: unknown
+    #[prost(string, optional, tag = "4")]
+    pub next: ::core::option::Option<::prost::alloc::string::String>,
+    /// set: a two-state switch. the id of the option that means on, the other one is off
+    #[prost(string, optional, tag = "5")]
+    pub on: ::core::option::Option<::prost::alloc::string::String>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct TaskableTargetModeOption {
+    /// unique within the taskable
+    #[prost(string, tag = "1")]
+    pub id: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "2")]
+    pub label: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "3")]
+    pub description: ::core::option::Option<::prost::alloc::string::String>,
+    /// set: cannot be requested right now. the value says why, for humans, and may be empty
+    #[prost(string, optional, tag = "4")]
+    pub disabled: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TaskableTargetPosition {}
@@ -1001,7 +1117,7 @@ pub struct TaskableTargetEntity {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskExecutionTarget {
-    #[prost(oneof = "task_execution_target::Kind", tags = "1, 2, 3")]
+    #[prost(oneof = "task_execution_target::Kind", tags = "1, 2, 3, 4")]
     pub kind: ::core::option::Option<task_execution_target::Kind>,
 }
 /// Nested message and enum types in `TaskExecutionTarget`.
@@ -1014,6 +1130,9 @@ pub mod task_execution_target {
         Waypoints(super::TaskExecutionTargetWaypoints),
         #[prost(message, tag = "3")]
         Entity(super::TaskExecutionTargetEntity),
+        /// TaskableTargetModeOption.id to switch to
+        #[prost(string, tag = "4")]
+        Mode(::prost::alloc::string::String),
     }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1260,7 +1379,7 @@ pub struct EquipmentTaxonomySensorSeismic {}
 pub struct EmitterTaxonomy {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TaskingTaxonomy {
-    #[prost(oneof = "tasking_taxonomy::Kind", tags = "10, 11, 12, 13")]
+    #[prost(oneof = "tasking_taxonomy::Kind", tags = "10, 11, 12, 13, 14, 15")]
     pub kind: ::core::option::Option<tasking_taxonomy::Kind>,
 }
 /// Nested message and enum types in `TaskingTaxonomy`.
@@ -1275,8 +1394,43 @@ pub mod tasking_taxonomy {
         Effect(super::TaskingTaxonomyEffect),
         #[prost(message, tag = "13")]
         Commission(super::TaskingTaxonomyCommission),
+        #[prost(message, tag = "14")]
+        Maintenance(super::TaskingTaxonomyMaintenance),
+        #[prost(message, tag = "15")]
+        Control(super::TaskingTaxonomyControl),
     }
 }
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyMaintenance {
+    #[prost(oneof = "tasking_taxonomy_maintenance::Kind", tags = "1")]
+    pub kind: ::core::option::Option<tasking_taxonomy_maintenance::Kind>,
+}
+/// Nested message and enum types in `TaskingTaxonomyMaintenance`.
+pub mod tasking_taxonomy_maintenance {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Kind {
+        /// optional target: an artifact with ArtifactComponent.software
+        #[prost(message, tag = "1")]
+        Update(super::TaskingTaxonomyUpdate),
+    }
+}
+/// changes the state of the assignee itself
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyControl {
+    #[prost(oneof = "tasking_taxonomy_control::Kind", tags = "1")]
+    pub kind: ::core::option::Option<tasking_taxonomy_control::Kind>,
+}
+/// Nested message and enum types in `TaskingTaxonomyControl`.
+pub mod tasking_taxonomy_control {
+    #[derive(Clone, Copy, PartialEq, ::prost::Oneof)]
+    pub enum Kind {
+        #[prost(message, tag = "1")]
+        ModeChange(super::TaskingTaxonomyModeChange),
+    }
+}
+/// switches the assignee between options, see TaskableTarget.mode
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyModeChange {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TaskingTaxonomyCommission {
     #[prost(oneof = "tasking_taxonomy_commission::Kind", tags = "1, 2")]
@@ -1344,6 +1498,8 @@ pub struct TaskingTaxonomyFollow {}
 pub struct TaskingTaxonomyCommissionPosition {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TaskingTaxonomyCommissionCalibrate {}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct TaskingTaxonomyUpdate {}
 /// metadata
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Entity {
@@ -1411,7 +1567,6 @@ pub struct Entity {
     pub config: ::core::option::Option<ConfigurationComponent>,
     #[prost(message, optional, tag = "52")]
     pub configurable: ::core::option::Option<ConfigurableComponent>,
-    /// experimental, dont use yet externally
     #[prost(message, optional, tag = "23")]
     pub taskable: ::core::option::Option<TaskableComponent>,
     #[prost(message, optional, tag = "41")]
@@ -1466,6 +1621,9 @@ pub struct Lease {
     #[prost(message, optional, tag = "2")]
     pub expires: ::core::option::Option<::prost_types::Timestamp>,
 }
+/// all times are absolute wall clock. All involved systems must be synchronized to the same clock.
+/// federation does this automatically. Consumers that cannot sync (TimeSync or NTP) can estimate
+/// the upstream clock offset from EntityChangeEvent.now instead.
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct Lifetime {
     /// time this entity should become valid.
@@ -1476,7 +1634,8 @@ pub struct Lifetime {
     #[prost(message, optional, tag = "2")]
     pub until: ::core::option::Option<::prost_types::Timestamp>,
     /// last time we have seen this entity, normally between from and until
-    /// if set, updates to an entity with older fresh value are ignored by default
+    /// if set, updates to an existing entity are ignored if the write isn't newer than existing
+    /// Also considered the _version_ of an entity.
     #[prost(message, optional, tag = "3")]
     pub fresh: ::core::option::Option<::prost_types::Timestamp>,
 }
@@ -1622,6 +1781,16 @@ pub struct ArtifactComponent {
     pub encryption: ::core::option::Option<ArtifactEncryption>,
     #[prost(map = "string, message", tag = "7")]
     pub parts: ::std::collections::HashMap<::prost::alloc::string::String, Artifact>,
+    #[prost(oneof = "artifact_component::Content", tags = "8")]
+    pub content: ::core::option::Option<artifact_component::Content>,
+}
+/// Nested message and enum types in `ArtifactComponent`.
+pub mod artifact_component {
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Content {
+        #[prost(message, tag = "8")]
+        Software(super::SoftwareArtifact),
+    }
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Artifact {
@@ -1877,6 +2046,7 @@ pub struct TaskableAssignee {
     #[prost(string, optional, tag = "1")]
     pub entity_id: ::core::option::Option<::prost::alloc::string::String>,
 }
+/// owned by the controller, declaring what can be tasked
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskableComponent {
     /// priority for which task should be shown first. higher = more important
@@ -1915,7 +2085,17 @@ pub struct TaskableComponent {
     /// independent of `target` (shape of input).
     #[prost(message, optional, tag = "12")]
     pub taxonomy: ::core::option::Option<TaskingTaxonomy>,
+    /// set: the taskable exists but cannot run right now,
+    /// the string is for humans, and may be empty
+    #[prost(string, optional, tag = "13")]
+    pub disabled: ::core::option::Option<::prost::alloc::string::String>,
+    /// spawn and priority queue modes: how many executions the taskable keeps.
+    /// RunTask fails while this many are pending or running, and otherwise
+    /// expires the oldest finished ones to make room. unset: 10
+    #[prost(uint32, optional, tag = "14")]
+    pub max_executions: ::core::option::Option<u32>,
 }
+/// created by the engine via RunTask, then owned by the controller
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TaskExecutionComponent {
     /// entity ID of the TaskableComponent that defines this task
@@ -1928,7 +2108,8 @@ pub struct TaskExecutionComponent {
     /// current execution state, updated by the controller
     #[prost(enumeration = "TaskExecutionState", tag = "3")]
     pub state: i32,
-    /// human-readable error or result message
+    /// human-readable message: what the controller is doing while it runs,
+    /// the result or error once it is done
     #[prost(string, optional, tag = "4")]
     pub reason: ::core::option::Option<::prost::alloc::string::String>,
     /// priority level for PriorityQueue mode (higher = more important)
@@ -1936,6 +2117,12 @@ pub struct TaskExecutionComponent {
     pub priority: ::core::option::Option<u32>,
     #[prost(message, optional, tag = "6")]
     pub target: ::core::option::Option<TaskExecutionTarget>,
+    /// set by the controller while it works on the task: when it expects to be done. unset: unknown
+    #[prost(message, optional, tag = "7")]
+    pub eta: ::core::option::Option<::prost_types::Timestamp>,
+    /// set by the controller while it works on the task: how far along it is, in percent from 0 to 100. unset: unknown
+    #[prost(uint32, optional, tag = "8")]
+    pub progress: ::core::option::Option<u32>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct KinematicsEnu {
@@ -2075,6 +2262,7 @@ pub struct TransponderComponent {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct AdministrativeComponent {
+    /// registration by an authority, e.g. MMSI, ICAO address, tail number
     #[prost(string, optional, tag = "1")]
     pub id: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, optional, tag = "2")]
@@ -2085,8 +2273,18 @@ pub struct AdministrativeComponent {
     pub operator: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, optional, tag = "4")]
     pub manufacturer: ::core::option::Option<::prost::alloc::string::String>,
+    /// for display, e.g. "Green Slusher 3000"
     #[prost(string, optional, tag = "5")]
     pub model: ::core::option::Option<::prost::alloc::string::String>,
+    /// machine-readable model, e.g. ICAO type "B738", Matter ProductID
+    #[prost(string, optional, tag = "18")]
+    pub part_number: ::core::option::Option<::prost::alloc::string::String>,
+    /// by the manufacturer, e.g. MSN, VIN, USB serial
+    #[prost(string, optional, tag = "17")]
+    pub serial_number: ::core::option::Option<::prost::alloc::string::String>,
+    /// e.g. board revision, "Block II"
+    #[prost(string, optional, tag = "19")]
+    pub hardware_revision: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(uint32, optional, tag = "6")]
     pub year_built: ::core::option::Option<u32>,
     #[prost(float, optional, tag = "7")]
@@ -2287,6 +2485,10 @@ pub struct DeviceComponent {
     /// physical hardware even if it moves to a different port or node.
     #[prost(string, optional, tag = "4")]
     pub unique_hardware_id: ::core::option::Option<::prost::alloc::string::String>,
+    /// numeric identity from a known list, for links too narrow for unique_hardware_id.
+    /// a catalog maps it to unique_hardware_id.
+    #[prost(uint64, optional, tag = "5")]
+    pub unique_hardware_index: ::core::option::Option<u64>,
     #[prost(enumeration = "DeviceState", tag = "6")]
     pub state: i32,
     #[prost(string, optional, tag = "7")]
@@ -2314,6 +2516,8 @@ pub struct DeviceComponent {
     pub meshtastic: ::core::option::Option<MeshtasticDevice>,
     #[prost(message, optional, tag = "27")]
     pub ble: ::core::option::Option<BleDevice>,
+    #[prost(message, optional, tag = "28")]
+    pub software: ::core::option::Option<DeviceSoftware>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MissionPack {
@@ -2351,6 +2555,9 @@ pub struct NodeDevice {
     pub hydris_update_available: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(message, optional, tag = "8")]
     pub mission: ::core::option::Option<MissionPack>,
+    /// Lowercase hex SHA-256 of the node's TLS leaf certificate
+    #[prost(string, optional, tag = "9")]
+    pub mtls_identity: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct UsbDevice {
@@ -2508,10 +2715,26 @@ pub struct ManualControlComponent {
     #[prost(message, repeated, tag = "1")]
     pub input: ::prost::alloc::vec::Vec<ManualControlInput>,
 }
+/// A manual control frame. Push an entity stub carrying this component to send
+/// one. Frames are commands, not state: the component lapses within a fraction of
+/// a second, so a driver that stops hearing from its operator fails safe. Drivers
+/// watch the entity and act on a frame only when `at` changes, since every other
+/// update to the entity repeats the last frame.
+///
+/// The first session to send takes control. Frames from another session are
+/// rejected with FailedPrecondition until the holder releases or goes silent.
+/// An empty input releases control.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TargetManualControlComponent {
     #[prost(message, repeated, tag = "1")]
     pub input: ::prost::alloc::vec::Vec<ManualControlInput>,
+    /// opaque id the sender generates when it starts driving
+    #[prost(string, optional, tag = "2")]
+    pub session: ::core::option::Option<::prost::alloc::string::String>,
+    /// when the node holding the entity received the frame. Set by that node;
+    /// whatever the sender puts here is replaced.
+    #[prost(message, optional, tag = "3")]
+    pub at: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EntityFilter {
@@ -2693,6 +2916,11 @@ pub struct WatchBehavior {
     /// rather than the full entity. The initial snapshot always sends full entities.
     #[prost(bool, optional, tag = "5")]
     pub diff: ::core::option::Option<bool>,
+    /// Send an EntityChangeHeartbeat event when the stream has been idle for this
+    /// long, so consumers keep receiving EntityChangeEvent.now for clock offset
+    /// estimation. unset = 30s, 0 = no heartbeats. values lower than 1000 are capped to 1s
+    #[prost(uint32, optional, tag = "6")]
+    pub heartbeat_interval_ms: ::core::option::Option<u32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ListEntitiesRequest {
@@ -2746,6 +2974,10 @@ pub struct EntityChangeEvent {
     pub entity: ::core::option::Option<Entity>,
     #[prost(enumeration = "EntityChange", tag = "2")]
     pub t: i32,
+    /// upstream wall clock at the time this event was sent.
+    /// Consumers should use TimeSync() ideally, but this is a good enough fallback when TimeSync isnt possible
+    #[prost(message, optional, tag = "3")]
+    pub now: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EntityChangeBatch {
@@ -2813,6 +3045,15 @@ pub struct RunTaskResponse {
     #[prost(string, optional, tag = "3")]
     pub human_readable_reason: ::core::option::Option<::prost::alloc::string::String>,
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CancelTaskRequest {
+    /// RunTaskResponse.executionId: the taskable for exclusive and reconcile
+    /// taskables, the execution entity for spawned and queued ones
+    #[prost(string, tag = "1")]
+    pub execution_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct CancelTaskResponse {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct HardResetRequest {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
@@ -3509,6 +3750,7 @@ pub enum EntityChange {
     Updated = 1,
     Expired = 2,
     Unobserved = 3,
+    Heartbeat = 4,
 }
 impl EntityChange {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -3521,6 +3763,7 @@ impl EntityChange {
             Self::Updated => "EntityChangeUpdated",
             Self::Expired => "EntityChangeExpired",
             Self::Unobserved => "EntityChangeUnobserved",
+            Self::Heartbeat => "EntityChangeHeartbeat",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -3530,6 +3773,7 @@ impl EntityChange {
             "EntityChangeUpdated" => Some(Self::Updated),
             "EntityChangeExpired" => Some(Self::Expired),
             "EntityChangeUnobserved" => Some(Self::Unobserved),
+            "EntityChangeHeartbeat" => Some(Self::Heartbeat),
             _ => None,
         }
     }
@@ -4018,6 +4262,32 @@ pub mod world_service_client {
                 .insert(GrpcMethod::new("world.WorldService", "RunTask"));
             self.inner.unary(req, path, codec).await
         }
+        /// clear or cancel an execution
+        /// fails with FAILED_PRECONDITION when the execution cannot be cancelled
+        pub async fn cancel_task(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CancelTaskRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CancelTaskResponse>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic::codec::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/world.WorldService/CancelTask",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("world.WorldService", "CancelTask"));
+            self.inner.unary(req, path, codec).await
+        }
         /// clear all engine state including persistence
         pub async fn hard_reset(
             &mut self,
@@ -4172,6 +4442,15 @@ pub mod world_service_server {
             &self,
             request: tonic::Request<super::RunTaskRequest>,
         ) -> std::result::Result<tonic::Response<super::RunTaskResponse>, tonic::Status>;
+        /// clear or cancel an execution
+        /// fails with FAILED_PRECONDITION when the execution cannot be cancelled
+        async fn cancel_task(
+            &self,
+            request: tonic::Request<super::CancelTaskRequest>,
+        ) -> std::result::Result<
+            tonic::Response<super::CancelTaskResponse>,
+            tonic::Status,
+        >;
         /// clear all engine state including persistence
         async fn hard_reset(
             &self,
@@ -4620,6 +4899,51 @@ pub mod world_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = RunTaskSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/world.WorldService/CancelTask" => {
+                    #[allow(non_camel_case_types)]
+                    struct CancelTaskSvc<T: WorldService>(pub Arc<T>);
+                    impl<
+                        T: WorldService,
+                    > tonic::server::UnaryService<super::CancelTaskRequest>
+                    for CancelTaskSvc<T> {
+                        type Response = super::CancelTaskResponse;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::CancelTaskRequest>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as WorldService>::cancel_task(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = CancelTaskSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
