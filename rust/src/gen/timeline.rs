@@ -35,6 +35,9 @@ pub mod timeline_service_client {
     )]
     use tonic::codegen::*;
     use tonic::codegen::http::Uri;
+    /// TimelineService is deprecated: it was never implemented and modelled a
+    /// global, server-side replay. Use world.HistoryService (history.proto) for
+    /// scrubbing and HistoryService.Replay for playing, a stream per viewer.
     #[derive(Debug, Clone)]
     pub struct TimelineServiceClient<T> {
         inner: tonic::client::Grpc<T>,
@@ -115,6 +118,7 @@ pub mod timeline_service_client {
             self.inner = self.inner.max_encoding_message_size(limit);
             self
         }
+        #[deprecated]
         pub async fn move_timeline(
             &mut self,
             request: impl tonic::IntoRequest<super::MoveTimelineRequest>,
@@ -139,6 +143,7 @@ pub mod timeline_service_client {
                 .insert(GrpcMethod::new("timeline.TimelineService", "MoveTimeline"));
             self.inner.unary(req, path, codec).await
         }
+        #[deprecated]
         pub async fn get_timeline(
             &mut self,
             request: impl tonic::IntoRequest<super::GetTimelineRequest>,
@@ -199,6 +204,9 @@ pub mod timeline_service_server {
             tonic::Status,
         >;
     }
+    /// TimelineService is deprecated: it was never implemented and modelled a
+    /// global, server-side replay. Use world.HistoryService (history.proto) for
+    /// scrubbing and HistoryService.Replay for playing, a stream per viewer.
     #[derive(Debug)]
     pub struct TimelineServiceServer<T> {
         inner: Arc<T>,

@@ -9,11 +9,12 @@ import { file_google_protobuf_timestamp } from "@bufbuild/protobuf/wkt";
  * Describes the file timeline.proto.
  */
 export const file_timeline = /*@__PURE__*/
-  fileDesc("Cg50aW1lbGluZS5wcm90bxIIdGltZWxpbmUiFAoSR2V0VGltZWxpbmVSZXF1ZXN0Ip8BChNHZXRUaW1lbGluZVJlc3BvbnNlEicKA21pbhgBIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASJwoDbWF4GAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIOCgZmcm96ZW4YAyABKAgSJgoCYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIk0KE01vdmVUaW1lbGluZVJlcXVlc3QSDgoGZnJlZXplGAEgASgIEiYKAmF0GAIgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCJDChRNb3ZlVGltZWxpbmVSZXNwb25zZRIrCgdjdXJyZW50GAEgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcDKuAQoPVGltZWxpbmVTZXJ2aWNlEk0KDE1vdmVUaW1lbGluZRIdLnRpbWVsaW5lLk1vdmVUaW1lbGluZVJlcXVlc3QaHi50aW1lbGluZS5Nb3ZlVGltZWxpbmVSZXNwb25zZRJMCgtHZXRUaW1lbGluZRIcLnRpbWVsaW5lLkdldFRpbWVsaW5lUmVxdWVzdBodLnRpbWVsaW5lLkdldFRpbWVsaW5lUmVzcG9uc2UwAUIgWh5naXRodWIuY29tL3Byb2plY3RxYWkvcHJvdG8vZ29iBnByb3RvMw", [file_google_protobuf_timestamp]);
+  fileDesc("Cg50aW1lbGluZS5wcm90bxIIdGltZWxpbmUiGAoSR2V0VGltZWxpbmVSZXF1ZXN0OgIYASKjAQoTR2V0VGltZWxpbmVSZXNwb25zZRInCgNtaW4YASABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wEicKA21heBgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASDgoGZnJvemVuGAMgASgIEiYKAmF0GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcDoCGAEiUQoTTW92ZVRpbWVsaW5lUmVxdWVzdBIOCgZmcmVlemUYASABKAgSJgoCYXQYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wOgIYASJHChRNb3ZlVGltZWxpbmVSZXNwb25zZRIrCgdjdXJyZW50GAEgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcDoCGAEyvQEKD1RpbWVsaW5lU2VydmljZRJSCgxNb3ZlVGltZWxpbmUSHS50aW1lbGluZS5Nb3ZlVGltZWxpbmVSZXF1ZXN0Gh4udGltZWxpbmUuTW92ZVRpbWVsaW5lUmVzcG9uc2UiA4gCARJRCgtHZXRUaW1lbGluZRIcLnRpbWVsaW5lLkdldFRpbWVsaW5lUmVxdWVzdBodLnRpbWVsaW5lLkdldFRpbWVsaW5lUmVzcG9uc2UiA4gCATABGgOIAgFCIFoeZ2l0aHViLmNvbS9wcm9qZWN0cWFpL3Byb3RvL2dvYgZwcm90bzM", [file_google_protobuf_timestamp]);
 
 /**
  * Describes the message timeline.GetTimelineRequest.
  * Use `create(GetTimelineRequestSchema)` to create a new message.
+ * @deprecated
  */
 export const GetTimelineRequestSchema = /*@__PURE__*/
   messageDesc(file_timeline, 0);
@@ -21,6 +22,7 @@ export const GetTimelineRequestSchema = /*@__PURE__*/
 /**
  * Describes the message timeline.GetTimelineResponse.
  * Use `create(GetTimelineResponseSchema)` to create a new message.
+ * @deprecated
  */
 export const GetTimelineResponseSchema = /*@__PURE__*/
   messageDesc(file_timeline, 1);
@@ -28,6 +30,7 @@ export const GetTimelineResponseSchema = /*@__PURE__*/
 /**
  * Describes the message timeline.MoveTimelineRequest.
  * Use `create(MoveTimelineRequestSchema)` to create a new message.
+ * @deprecated
  */
 export const MoveTimelineRequestSchema = /*@__PURE__*/
   messageDesc(file_timeline, 2);
@@ -35,12 +38,18 @@ export const MoveTimelineRequestSchema = /*@__PURE__*/
 /**
  * Describes the message timeline.MoveTimelineResponse.
  * Use `create(MoveTimelineResponseSchema)` to create a new message.
+ * @deprecated
  */
 export const MoveTimelineResponseSchema = /*@__PURE__*/
   messageDesc(file_timeline, 3);
 
 /**
+ * TimelineService is deprecated: it was never implemented and modelled a
+ * global, server-side replay. Use world.HistoryService (history.proto) for
+ * scrubbing and HistoryService.Replay for playing, a stream per viewer.
+ *
  * @generated from service timeline.TimelineService
+ * @deprecated
  */
 export const TimelineService = /*@__PURE__*/
   serviceDesc(file_timeline, 0);

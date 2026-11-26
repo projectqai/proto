@@ -74,7 +74,7 @@ type WorldServiceClient interface {
 	WatchEntities(context.Context, *connect.Request[_go.ListEntitiesRequest]) (*connect.ServerStreamForClient[_go.EntityChangeEvent], error)
 	// Create or update an entity. Used by capabilities.
 	Push(context.Context, *connect.Request[_go.EntityChangeRequest]) (*connect.Response[_go.EntityChangeResponse], error)
-	// expire an entity, setting its lifetime.until to now
+	// expire an entity, or all entities matching a filter, setting lifetime.until to now
 	ExpireEntity(context.Context, *connect.Request[_go.ExpireEntityRequest]) (*connect.Response[_go.ExpireEntityResponse], error)
 	// get information about the local node the client is connected to
 	GetLocalNode(context.Context, *connect.Request[_go.GetLocalNodeRequest]) (*connect.Response[_go.GetLocalNodeResponse], error)
@@ -265,7 +265,7 @@ type WorldServiceHandler interface {
 	WatchEntities(context.Context, *connect.Request[_go.ListEntitiesRequest], *connect.ServerStream[_go.EntityChangeEvent]) error
 	// Create or update an entity. Used by capabilities.
 	Push(context.Context, *connect.Request[_go.EntityChangeRequest]) (*connect.Response[_go.EntityChangeResponse], error)
-	// expire an entity, setting its lifetime.until to now
+	// expire an entity, or all entities matching a filter, setting lifetime.until to now
 	ExpireEntity(context.Context, *connect.Request[_go.ExpireEntityRequest]) (*connect.Response[_go.ExpireEntityResponse], error)
 	// get information about the local node the client is connected to
 	GetLocalNode(context.Context, *connect.Request[_go.GetLocalNodeRequest]) (*connect.Response[_go.GetLocalNodeResponse], error)

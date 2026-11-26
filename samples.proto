@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package world;
+
+import "components.proto";
+import "google/protobuf/timestamp.proto";
+import "metrics.proto";
+
+option go_package = "github.com/projectqai/proto/go";
+
+// Sampled payloads carried as Entity components: video, images, waveforms
+// and raw MCAP channels, each a description component written before the
+// sample components it applies to.
+
+// What the entity's video is, as the driver streaming it found it (a
+// camera's MediaStream only declares what to expect). Written before the
+// frames it applies to, and again when it changes.
+message VideoComponent {
+  // a media type, e.g. "video/H264" or "video/H264; codecs=avc1.64001F"
+  string codec = 1;
+  // the display size of the video, in pixels, as streamed; unset when not
+  // known. When the size changes, VideoComponent is written again before
+  // the first frame of the new size.
+  optional uint32 width = 2;
+  optional uint32 height = 3;
+}
+
+// One unit of video, for codecs whose frames depend on each other. Its time is the entity's Lifetime.fresh. H.264/H.265 is Annex
+// B, and a keyframe's body starts with its parameter sets (SPS, PPS), so it
+// decodes on its own.
+message VideoFrameComponent {
+  bytes body = 1;
+  optional bool keyframe = 2;
+}
+
+// One image, decodable on its own: a snapshot, an MJPEG frame, a
+// spectrogram. Its time is Lifetime.fresh.
+message ImageComponent {
+  // a media type: "image/jpeg", "image/png", "image/x-raw; encoding=rgb8"
+  string format = 1;
+  optional uint32 width = 2;
+  optional uint32 height = 3;
+  optional uint32 stride = 4; // bytes per row of a raw image; unset: tight
+  bytes data = 5;
+}
+
+// What the entity's waveform is: audio, seismic, any sampled 1-D signal.
+// Written before the frames it applies to. Several channels share its
+// clock and rate (a microphone array); independent streams are separate
+// entities.
+message WaveformComponent {
+  // a media type: "audio/pcm; format=s16le", "audio/opus", ... PCM of
+  // fewer significant bits than its words says so: "audio/pcm;
+  // format=s32le; depth=24" (24-bit samples, right-aligned, sign-extended)
+  string format = 1;
+  uint32 sample_rate = 2;
+  uint32 channels = 3;
+
+  // what each channel is, in the order of a frame's samples ("mic0",
+  // "s0.x"); fewer than channels: the rest are not named
+  repeated string channel_names = 4;
+
+  // what the samples measure: a sample times scale is a value of kind in
+  // unit. Unset: not a calibrated quantity (audio as recorded); the samples
+  // are as their format says
+  optional MetricKind kind = 5;
+  MetricUnit unit = 6;
+  optional double scale = 7; // unit per sample count; a frame may say its own
+  // the values the sensor can report, in unit
+  optional MetricRange range = 8;
+}
+
+// One frame of a waveform: a codec frame, or a block of samples
+// (interleaved). Its time is that of its first sample, Lifetime.fresh.
+message WaveformFrameComponent {
+  bytes data = 1;
+  // unit per sample count of this frame, when it differs from the
+  // waveform's scale (a sensor that reports it as it measures)
+  optional double scale = 2;
+}
+
+// A channel of a foreign MCAP file, kept raw: what is not understood is
+// kept, readable once it is, and exported back as it came.
+message McapChannelComponent {
+  string topic = 1;
+  string message_encoding = 2; // "protobuf", "ros2msg", "json", ...
+  string schema_name = 3;
+  string schema_encoding = 4;
+  bytes schema = 5;
+  map<string, string> metadata = 6;
+}
+
+// One message of such a channel; its time is Lifetime.fresh.
+message McapMessageComponent {
+  bytes data = 1;
+}
+
+// How the pixels of an ImageMask are held in its data.
+enum ImageMaskEncoding {
+  // as ImageMaskEncodingBitmap
+  ImageMaskEncodingUnspecified = 0;
+  // width×height bits, row-major, eight to a byte with the first pixel in
+  // the most significant bit. Rows are not padded to a byte.
+  ImageMaskEncodingBitmap = 1;
+}
+
+// ImageMask marks pixels of a frame: those of the rectangle from (x, y),
+// width×height, in pixels of the frame (the detection's
+// ImageBoundingBox.frame_width×frame_height), that data marks. Pixels
+// outside the rectangle are not marked. A reader skips a mask in an
+// encoding it does not know.
+message ImageMask {
+  uint32 x = 1;
+  uint32 y = 2;
+  uint32 width = 3;
+  uint32 height = 4;
+  ImageMaskEncoding encoding = 5;
+  bytes data = 6;
+}
+
+// managed by the engine: the components read through sessions, and samples
+// flowing, on the entity. A producer watches its own entity for it and
+// produces while a component has readers.
+message StreamComponent {
+  message Stream {
+    EntityComponent component = 1;
+    // fresh of the last sample
+    optional google.protobuf.Timestamp last = 2;
+    // actors reading it
+    repeated string readers = 3;
+    // how long after a sample was captured (its fresh) it, and the changes
+    // citing it, arrive (measured by the engine: the 95th percentile of the
+    // last 5s, of the samples and of the changes citing them, whichever is
+    // larger; the declared MediaStream.latency_ms is in fresh already): a
+    // viewer that shows each frame this much later shows it, as a rule,
+    // with its own detections, and in step with the other streams it shows
+    // that way
+    optional uint32 latency_ms = 4;
+  }
+  repeated Stream streams = 1;
+}

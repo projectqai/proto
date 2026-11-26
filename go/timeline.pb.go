@@ -22,6 +22,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Deprecated: Marked as deprecated in timeline.proto.
 type GetTimelineRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -58,6 +59,7 @@ func (*GetTimelineRequest) Descriptor() ([]byte, []int) {
 	return file_timeline_proto_rawDescGZIP(), []int{0}
 }
 
+// Deprecated: Marked as deprecated in timeline.proto.
 type GetTimelineResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Min           *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=min,proto3" json:"min,omitempty"`
@@ -126,6 +128,7 @@ func (x *GetTimelineResponse) GetAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// Deprecated: Marked as deprecated in timeline.proto.
 type MoveTimelineRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Freeze        bool                   `protobuf:"varint,1,opt,name=freeze,proto3" json:"freeze,omitempty"`
@@ -178,6 +181,7 @@ func (x *MoveTimelineRequest) GetAt() *timestamppb.Timestamp {
 	return nil
 }
 
+// Deprecated: Marked as deprecated in timeline.proto.
 type MoveTimelineResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Current       *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=current,proto3" json:"current,omitempty"`
@@ -226,21 +230,21 @@ var File_timeline_proto protoreflect.FileDescriptor
 
 const file_timeline_proto_rawDesc = "" +
 	"\n" +
-	"\x0etimeline.proto\x12\btimeline\x1a\x1fgoogle/protobuf/timestamp.proto\"\x14\n" +
-	"\x12GetTimelineRequest\"\xb5\x01\n" +
+	"\x0etimeline.proto\x12\btimeline\x1a\x1fgoogle/protobuf/timestamp.proto\"\x18\n" +
+	"\x12GetTimelineRequest:\x02\x18\x01\"\xb9\x01\n" +
 	"\x13GetTimelineResponse\x12,\n" +
 	"\x03min\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x03min\x12,\n" +
 	"\x03max\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x03max\x12\x16\n" +
 	"\x06frozen\x18\x03 \x01(\bR\x06frozen\x12*\n" +
-	"\x02at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\x02at\"Y\n" +
+	"\x02at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\x02at:\x02\x18\x01\"]\n" +
 	"\x13MoveTimelineRequest\x12\x16\n" +
 	"\x06freeze\x18\x01 \x01(\bR\x06freeze\x12*\n" +
-	"\x02at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x02at\"L\n" +
+	"\x02at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x02at:\x02\x18\x01\"P\n" +
 	"\x14MoveTimelineResponse\x124\n" +
-	"\acurrent\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\acurrent2\xae\x01\n" +
-	"\x0fTimelineService\x12M\n" +
-	"\fMoveTimeline\x12\x1d.timeline.MoveTimelineRequest\x1a\x1e.timeline.MoveTimelineResponse\x12L\n" +
-	"\vGetTimeline\x12\x1c.timeline.GetTimelineRequest\x1a\x1d.timeline.GetTimelineResponse0\x01B Z\x1egithub.com/projectqai/proto/gob\x06proto3"
+	"\acurrent\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\acurrent:\x02\x18\x012\xbd\x01\n" +
+	"\x0fTimelineService\x12R\n" +
+	"\fMoveTimeline\x12\x1d.timeline.MoveTimelineRequest\x1a\x1e.timeline.MoveTimelineResponse\"\x03\x88\x02\x01\x12Q\n" +
+	"\vGetTimeline\x12\x1c.timeline.GetTimelineRequest\x1a\x1d.timeline.GetTimelineResponse\"\x03\x88\x02\x010\x01\x1a\x03\x88\x02\x01B Z\x1egithub.com/projectqai/proto/gob\x06proto3"
 
 var (
 	file_timeline_proto_rawDescOnce sync.Once

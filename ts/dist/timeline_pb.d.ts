@@ -13,6 +13,7 @@ export declare const file_timeline: GenFile;
 
 /**
  * @generated from message timeline.GetTimelineRequest
+ * @deprecated
  */
 export declare type GetTimelineRequest = Message<"timeline.GetTimelineRequest"> & {
 };
@@ -20,11 +21,13 @@ export declare type GetTimelineRequest = Message<"timeline.GetTimelineRequest"> 
 /**
  * Describes the message timeline.GetTimelineRequest.
  * Use `create(GetTimelineRequestSchema)` to create a new message.
+ * @deprecated
  */
 export declare const GetTimelineRequestSchema: GenMessage<GetTimelineRequest>;
 
 /**
  * @generated from message timeline.GetTimelineResponse
+ * @deprecated
  */
 export declare type GetTimelineResponse = Message<"timeline.GetTimelineResponse"> & {
   /**
@@ -51,11 +54,13 @@ export declare type GetTimelineResponse = Message<"timeline.GetTimelineResponse"
 /**
  * Describes the message timeline.GetTimelineResponse.
  * Use `create(GetTimelineResponseSchema)` to create a new message.
+ * @deprecated
  */
 export declare const GetTimelineResponseSchema: GenMessage<GetTimelineResponse>;
 
 /**
  * @generated from message timeline.MoveTimelineRequest
+ * @deprecated
  */
 export declare type MoveTimelineRequest = Message<"timeline.MoveTimelineRequest"> & {
   /**
@@ -72,11 +77,13 @@ export declare type MoveTimelineRequest = Message<"timeline.MoveTimelineRequest"
 /**
  * Describes the message timeline.MoveTimelineRequest.
  * Use `create(MoveTimelineRequestSchema)` to create a new message.
+ * @deprecated
  */
 export declare const MoveTimelineRequestSchema: GenMessage<MoveTimelineRequest>;
 
 /**
  * @generated from message timeline.MoveTimelineResponse
+ * @deprecated
  */
 export declare type MoveTimelineResponse = Message<"timeline.MoveTimelineResponse"> & {
   /**
@@ -88,15 +95,22 @@ export declare type MoveTimelineResponse = Message<"timeline.MoveTimelineRespons
 /**
  * Describes the message timeline.MoveTimelineResponse.
  * Use `create(MoveTimelineResponseSchema)` to create a new message.
+ * @deprecated
  */
 export declare const MoveTimelineResponseSchema: GenMessage<MoveTimelineResponse>;
 
 /**
+ * TimelineService is deprecated: it was never implemented and modelled a
+ * global, server-side replay. Use world.HistoryService (history.proto) for
+ * scrubbing and HistoryService.Replay for playing, a stream per viewer.
+ *
  * @generated from service timeline.TimelineService
+ * @deprecated
  */
 export declare const TimelineService: GenService<{
   /**
    * @generated from rpc timeline.TimelineService.MoveTimeline
+   * @deprecated
    */
   moveTimeline: {
     methodKind: "unary";
@@ -105,6 +119,7 @@ export declare const TimelineService: GenService<{
   },
   /**
    * @generated from rpc timeline.TimelineService.GetTimeline
+   * @deprecated
    */
   getTimeline: {
     methodKind: "server_streaming";

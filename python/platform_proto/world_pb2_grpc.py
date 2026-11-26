@@ -130,7 +130,7 @@ class WorldServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def ExpireEntity(self, request, context):
-        """expire an entity, setting its lifetime.until to now
+        """expire an entity, or all entities matching a filter, setting lifetime.until to now
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')

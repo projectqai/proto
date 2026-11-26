@@ -1,0 +1,346 @@
+syntax = "proto3";
+
+package world;
+
+import "components.proto";
+import "google/protobuf/timestamp.proto";
+import "world.proto";
+
+option go_package = "github.com/projectqai/proto/go";
+
+// HistoryService reads the node's recorded history (cold storage).
+// It is read only: nothing here touches the live world or its watchers.
+// Playing is one Replay stream per viewer; scrubbing in the UI is a sequence
+// of paused ones (speed 0), each the world at one instant.
+//
+// The recorder is configured through the recorder.service entity: its
+// config sets the storage limit and whether every span is recorded, and
+// its taskables recorder.clear, recorder.stop and recorder.resume act on it.
+
+// Which time the history is read on.
+enum HistoryTimeline {
+  // as HistoryTimelineFresh
+  HistoryTimelineUnspecified = 0;
+  // when it happened: Lifetime.fresh
+  HistoryTimelineFresh = 1;
+  // when this node accepted it: EntityChangeEvent.now as recorded
+  HistoryTimelineAccepted = 2;
+}
+
+message HistoryRangeRequest {
+  HistoryTimeline timeline = 1;
+}
+
+message HistoryRangeResponse {
+  // oldest and newest recorded instant. unset when nothing is recorded.
+  google.protobuf.Timestamp min = 1;
+  google.protobuf.Timestamp max = 2;
+}
+
+// The lanes of the entities matching filter within [from, until]: when each
+// was alive, computed from the history without sending every version.
+message HistoryLanesRequest {
+  google.protobuf.Timestamp from = 1;
+  google.protobuf.Timestamp until = 2;
+  EntityFilter filter = 3;
+  HistoryTimeline timeline = 4;
+  // at most this many entities, 0 or more than 500: 500
+  uint32 limit = 5;
+}
+
+message HistoryInterval {
+  google.protobuf.Timestamp from = 1;
+  google.protobuf.Timestamp until = 2;
+}
+
+message HistoryLane {
+  string entity_id = 1;
+  // its last label in the range, else its id
+  string label = 2;
+  // alive: each version's Lifetime.from (else fresh) to its until, or until
+  // the next version takes over or it expires; merged, clipped to the range
+  repeated HistoryInterval alive = 3;
+  // current: fresh to stale (else until), within alive
+  repeated HistoryInterval current = 4;
+  // its last classification.identity in the range, else unset
+  ClassificationIdentity identity = 5;
+}
+
+message HistoryLanesResponse {
+  // in order of first appearance
+  repeated HistoryLane lanes = 1;
+  // more entities matched than the limit; the others are left out
+  bool capped = 2;
+}
+
+message HistoryHistogramRequest {
+  google.protobuf.Timestamp from = 1;
+  google.protobuf.Timestamp until = 2;
+  // bucket width in milliseconds, 0 = the server picks about 120 buckets.
+  // The server may use wider buckets than asked: the width is a multiple
+  // of 10s (10000 ms) and at least a 2000th of the range. The response
+  // says the width used.
+  uint32 bucket_ms = 3;
+  HistoryTimeline timeline = 4;
+}
+
+enum HistoryEventKind {
+  HistoryEventKindInvalid = 0;
+  HistoryEventKindTrackNew = 1;
+  HistoryEventKindTrackLost = 2;
+  HistoryEventKindAlert = 3;
+  HistoryEventKindSensor = 4;
+  // a change accepted well after it happened (its fresh)
+  HistoryEventKindLate = 5;
+}
+
+message HistoryEvent {
+  google.protobuf.Timestamp at = 1;
+  HistoryEventKind kind = 2;
+  string entity_id = 3;
+  string label = 4;
+  // its entity's affiliation then: its classification.identity, else its
+  // symbol's standard identity, else unset. Files recorded before this was
+  // kept have none.
+  ClassificationIdentity identity = 5;
+}
+
+message HistoryBucket {
+  google.protobuf.Timestamp from = 1;
+  uint32 changes = 2;
+  uint32 detections = 3;
+  // changes accepted well after they happened
+  uint32 late = 4;
+  // the changes by their entity's affiliation: its
+  // classification.identity, else its symbol's standard identity. The
+  // changes with neither are not counted here. On the accepted timeline a
+  // late change is counted here where it happened, not where it arrived.
+  // Files recorded before this was counted have none.
+  HistoryAffiliationCounts affiliation = 5;
+}
+
+// Changes counted by affiliation, as ClassificationIdentity.
+message HistoryAffiliationCounts {
+  uint32 pending = 1;
+  uint32 unknown = 2;
+  uint32 friend = 3;
+  uint32 neutral = 4;
+  uint32 hostile = 5;
+  uint32 suspect = 6;
+}
+
+message HistoryHistogramResponse {
+  // the bucket width used, in milliseconds: at least the width asked for
+  uint32 bucket_ms = 1;
+  repeated HistoryBucket buckets = 2;
+  repeated HistoryEvent events = 3;
+}
+
+// The recorded samples of a sampled component of an entity, each with the
+// entities citing it. Reading needs the same right as reading the
+// component live (StreamService).
+message HistoryReadStreamRequest {
+  string entity_id = 1;
+  EntityComponent component = 2;
+
+  // the first sample's time (Lifetime.fresh) at the earliest
+  google.protobuf.Timestamp from = 3;
+
+  // the last sample's time at the latest. unset: to the end of what is
+  // recorded now
+  google.protobuf.Timestamp until = 4;
+
+  // start at the last keyframe at or before from instead, so that video
+  // read from there can be decoded
+  bool keyframe = 5;
+
+  HistoryTimeline timeline = 6;
+}
+
+// One recorded sample (a video frame, an image, a waveform frame, an MCAP
+// message) and the entities citing it: those with a Reference naming the
+// sample exactly (entity, component and from = its fresh). Today these are
+// the detections whose DetectionComponent.frame names it. A sample is returned
+// once the changes citing it are recorded, so a very recent sample may be
+// held back; a later read from the last sample's time returns it.
+message RecordedSample {
+  // the sample as recorded: its entity as it was written (when it
+  // happened: Lifetime.fresh), and now, when this node accepted it (the
+  // accepted timeline)
+  EntityChangeEvent event = 1;
+
+  // the entities citing this sample, each as its recorded changes citing
+  // the sample merge into it
+  repeated Entity citing = 2;
+}
+
+message HistoryReadStreamResponse {
+  // in order of their time
+  repeated RecordedSample samples = 1;
+}
+
+// Plays the history from an instant, for one viewer: the world as it was at
+// `at`, then the changes after it as they were recorded, paced at speed
+// times real time, until the replay reaches the present. Pausing is ending
+// the stream; a seek, a new speed or timeline is a new one.
+message HistoryReplayRequest {
+  // the instant to start at: as happened at `at` (fresh), or as known then
+  // (accepted)
+  google.protobuf.Timestamp at = 1;
+  EntityFilter filter = 2;
+  HistoryTimeline timeline = 3;
+  // times real time, at most 3600. unset: 1. 0: paused, the world at `at`
+  // is the only response and the stream ends after it (a seek while
+  // scrubbing)
+  optional double speed = 4;
+  // at most this many entities in the first response. 0 or more than
+  // 10000: 10000
+  uint32 limit = 5;
+}
+
+message HistoryReplayResponse {
+  // the replay's instant: the world up to it has been sent. Sent several
+  // times a second, with or without changes. In the first response it is
+  // the instant actually served, which may be clamped to the recorded
+  // range; unset there when nothing is recorded.
+  google.protobuf.Timestamp at = 1;
+  // the first response only: every entity matching the filter alive at
+  // `at`, as it was then, in order of id
+  repeated Entity entities = 2;
+  // what changed after the previous response's `at`, up to this one's, the
+  // last change of each entity only. An entity that stops matching the
+  // filter or whose lifetime ended comes as EntityChangeExpired.
+  repeated EntityChangeEvent changes = 3;
+  // the replay reached the present: this is the last response
+  bool live = 4;
+  // the first response only: more entities matched than the limit; the
+  // others are left out, and come only with their next change
+  bool capped = 5;
+}
+
+message HistoryClearRequest {}
+
+message HistoryClearResponse {}
+
+service HistoryService {
+  rpc Range(HistoryRangeRequest) returns (HistoryRangeResponse);
+  // the world as it was at an instant, then as it changed after it, paced;
+  // paused, the world at that instant alone
+  rpc Replay(HistoryReplayRequest) returns (stream HistoryReplayResponse);
+  // per entity, when it was alive within a range
+  rpc Lanes(HistoryLanesRequest) returns (HistoryLanesResponse);
+  rpc Histogram(HistoryHistogramRequest) returns (HistoryHistogramResponse);
+  // deletes the recorded history; recording continues
+  rpc Clear(HistoryClearRequest) returns (HistoryClearResponse);
+  // the recorded samples of a sampled component of an entity, each with
+  // the entities citing it
+  rpc ReadStream(HistoryReadStreamRequest) returns (stream HistoryReadStreamResponse);
+}
+
+// The index of a recorded MCAP file: the MCAP attachment "hydris/index",
+// one for the whole file. The recorder writes it into each file it records,
+// an export into the file it exports, and an import after the data of a file
+// it had to scan (one of another device, or of ours without an index). It
+// holds nothing the file's messages do not: without it, a file is scanned
+// again and given one.
+//
+// A scanned file keeps its data section as it came; after it come this
+// index and the keyframes it names, as attachments, then the file's own
+// summary records with the indexes of these added, and a footer:
+//
+//   hydris/index         this message
+//   hydris/keyframe/<k>  world.EntityChangeBatch: the world keyframe view k
+//                        (HistoryIndex.View) starts from, which the file
+//                        itself does not have
+//   hydris/entities      world.EntityChangeBatch: the entities made of a
+//                        foreign file's channels and of its recording, in
+//                        every keyframe of it
+//
+// The file's schemas, channels, attachments and message counts are its MCAP
+// summary's.
+message HistoryIndexEntry {
+  google.protobuf.Timestamp time = 1; // its log time (fresh)
+  uint64 chunk = 2; // offset of the MCAP chunk (or run of records) holding it
+}
+
+message HistoryIndex {
+  // where reading a channel can start: world keyframes, frames that start a
+  // group of pictures
+  message Keyframes {
+    uint32 channel = 1; // MCAP channel id in this file
+    repeated HistoryIndexEntry entries = 2;
+  }
+  repeated Keyframes keyframes = 1;
+
+  // the changes citing an entity (a Reference in them names it)
+  message Citations {
+    string entity_id = 1;
+    repeated HistoryIndexEntry entries = 2;
+  }
+  repeated Citations citations = 2;
+
+  // the timeline: histogram and markers
+  repeated HistoryBucket buckets = 3;
+  repeated HistoryEvent events = 4;
+
+  // artifact files were kept here (blobs, artifacts): an artifact is not
+  // kept beyond its lifetime
+  reserved 5, 6;
+  reserved "blobs", "artifacts";
+
+  // the routing channels of the entities in this file ("" the default), and
+  // whether it holds entities without Routing (internal)
+  repeated string routing_channels = 7;
+  bool internal = 8;
+
+  // the file is not written by hydris: its channels are mapped to ours
+  // when read (by schema and metadata)
+  bool foreign = 9;
+
+  // Seek points of a long file. To show the world at a time t, a reader
+  // takes a keyframe (a snapshot of every entity) from before t and replays
+  // the changes after it up to t. The recorder starts a new file with a
+  // keyframe every keyframe interval (a minute), so that never replays
+  // more than that. An export or an import is one file of hours: its views
+  // are its keyframes every interval, and where in the file the changes
+  // after each start. A reader reads each view as if it were one of the
+  // recorder's files: from its keyframe up to the next view's.
+  //
+  // A file the recorder writes starts with its only keyframe; it says no
+  // views.
+  message View {
+    // the keyframe holds the world as accepted up to this time, included;
+    // the view, what was accepted after it
+    google.protobuf.Timestamp accepted = 1;
+    // where the view's messages start: the offset of the chunk (or run of
+    // records) holding the first of them. The first view also holds
+    // whatever comes before it in the file.
+    uint64 chunk = 2;
+    // where the keyframe is. Set: it is the file's own world keyframe
+    // message of this log time, in that chunk (an export writes them), and
+    // the view's messages are those after it. Unset: it is the attachment
+    // hydris/keyframe/<the view's number, from 0> (a scan writes them, the
+    // file having none), and the view's messages start with the chunk.
+    google.protobuf.Timestamp keyframe_time = 3;
+  }
+  // in the order of the file
+  repeated View views = 10;
+
+  // A stretch of the file that is read on its own: an MCAP chunk, or a run
+  // of records outside chunks.
+  message Chunk {
+    uint64 offset = 1; // of its first record
+    uint64 length = 2; // in bytes, its records' headers included
+    // the fresh (log) times of the messages it holds; unset: none
+    google.protobuf.Timestamp start = 3;
+    google.protobuf.Timestamp end = 4;
+    // the accepted (publish) time of its first message; unset: not known
+    google.protobuf.Timestamp first_accepted = 5;
+    // the MCAP channel ids of the messages it holds, ascending: a read of
+    // one channel skips the chunks that hold none of it. Empty: not known
+    repeated uint32 channels = 6;
+  }
+  // in the order of the file; empty: the file's MCAP chunk indexes (with
+  // their message indexes) say
+  repeated Chunk chunks = 11;
+}

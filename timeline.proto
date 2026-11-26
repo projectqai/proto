@@ -6,8 +6,11 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/projectqai/proto/go";
 
-message GetTimelineRequest {}
+message GetTimelineRequest {
+  option deprecated = true;
+}
 message GetTimelineResponse {
+  option deprecated = true;
   google.protobuf.Timestamp min = 1;
   google.protobuf.Timestamp max = 2;
   bool frozen = 3;
@@ -15,15 +18,25 @@ message GetTimelineResponse {
 }
 
 message MoveTimelineRequest {
+  option deprecated = true;
   bool freeze = 1;
   google.protobuf.Timestamp at = 2;
 }
 
 message MoveTimelineResponse {
+  option deprecated = true;
   google.protobuf.Timestamp current = 1;
 }
 
+// TimelineService is deprecated: it was never implemented and modelled a
+// global, server-side replay. Use world.HistoryService (history.proto) for
+// scrubbing and HistoryService.Replay for playing, a stream per viewer.
 service TimelineService {
-  rpc MoveTimeline(MoveTimelineRequest) returns (MoveTimelineResponse);
-  rpc GetTimeline(GetTimelineRequest) returns (stream GetTimelineResponse);
+  option deprecated = true;
+  rpc MoveTimeline(MoveTimelineRequest) returns (MoveTimelineResponse) {
+    option deprecated = true;
+  }
+  rpc GetTimeline(GetTimelineRequest) returns (stream GetTimelineResponse) {
+    option deprecated = true;
+  }
 }

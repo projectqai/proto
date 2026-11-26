@@ -173,6 +173,25 @@ impl LineStyle {
         }
     }
 }
+/// How the engine treats a component, as an option on the Entity field that
+/// holds it. Options are schema only: the wire and JSON are unchanged. The
+/// engine reads them from the descriptors once, at startup.
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct ComponentBehavior {
+    /// values may bypass the reconciler: every value is delivered to readers
+    /// and recorded, and which of them reach head is the engine's decision
+    #[prost(bool, tag = "1")]
+    pub sampled: bool,
+    /// only the engine produces this; pushed values are dropped
+    #[prost(bool, tag = "2")]
+    pub managed: bool,
+    /// never leaves the node
+    #[prost(bool, tag = "3")]
+    pub local: bool,
+    /// never persisted
+    #[prost(bool, tag = "4")]
+    pub volatile: bool,
+}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct MetricRange {
     #[prost(oneof = "metric_range::Min", tags = "1, 2, 3, 4")]
@@ -810,6 +829,212 @@ impl AlertLevel {
         }
     }
 }
+/// Points at an entity, or at samples of one of its components. The field
+/// that holds it says what for (a detection's frame, its references, ...).
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Reference {
+    #[prost(string, tag = "1")]
+    pub entity_id: ::prost::alloc::string::String,
+    /// when, in fresh time. Unset: the entity as it is now. from alone: that
+    /// instant, and with component the one sample whose fresh it is, matched
+    /// exactly. With until: the span from `from` up to and including until.
+    #[prost(message, optional, tag = "2")]
+    pub from: ::core::option::Option<::prost_types::Timestamp>,
+    #[prost(message, optional, tag = "3")]
+    pub until: ::core::option::Option<::prost_types::Timestamp>,
+    /// the component whose samples are meant: (entity, component, fresh) names
+    /// a sample, and an entity may hold several sampled components. Unset: the
+    /// entity itself, not a sample of it.
+    #[prost(enumeration = "EntityComponent", optional, tag = "10")]
+    pub component: ::core::option::Option<i32>,
+}
+/// Proto field numbers of Entity component fields.
+/// Used in EntityFilter.component and Lifetime.components.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum EntityComponent {
+    Unspecified = 0,
+    Label = 2,
+    Controller = 3,
+    Lifetime = 4,
+    Priority = 5,
+    Lease = 6,
+    Routing = 7,
+    Geo = 11,
+    Symbol = 12,
+    Camera = 15,
+    Detection = 16,
+    Bearing = 17,
+    Track = 21,
+    Locator = 22,
+    Taskable = 23,
+    Kinematics = 24,
+    Shape = 25,
+    Classification = 26,
+    Transponder = 27,
+    Administrative = 28,
+    LocalShape = 29,
+    Orientation = 30,
+    Mission = 31,
+    Link = 32,
+    Power = 33,
+    Navigation = 34,
+    Capture = 35,
+    Metric = 36,
+    Sensor = 37,
+    Pose = 38,
+    Chat = 39,
+    TaskExecution = 41,
+    Gnss = 42,
+    Device = 50,
+    Config = 51,
+    Configurable = 52,
+    Interactivity = 60,
+    Artifact = 61,
+    TargetPose = 62,
+    Assembly = 40,
+    MapLayer = 63,
+    ManualControl = 64,
+    TargetManualControl = 65,
+    Bounds = 66,
+    Policy = 67,
+    Authorization = 68,
+    Measurement = 69,
+    Stream = 70,
+    VideoFrame = 73,
+    Video = 74,
+    McapChannel = 75,
+    McapMessage = 76,
+    Image = 77,
+    Waveform = 78,
+    WaveformFrame = 79,
+}
+impl EntityComponent {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "EntityComponentUnspecified",
+            Self::Label => "EntityComponentLabel",
+            Self::Controller => "EntityComponentController",
+            Self::Lifetime => "EntityComponentLifetime",
+            Self::Priority => "EntityComponentPriority",
+            Self::Lease => "EntityComponentLease",
+            Self::Routing => "EntityComponentRouting",
+            Self::Geo => "EntityComponentGeo",
+            Self::Symbol => "EntityComponentSymbol",
+            Self::Camera => "EntityComponentCamera",
+            Self::Detection => "EntityComponentDetection",
+            Self::Bearing => "EntityComponentBearing",
+            Self::Track => "EntityComponentTrack",
+            Self::Locator => "EntityComponentLocator",
+            Self::Taskable => "EntityComponentTaskable",
+            Self::Kinematics => "EntityComponentKinematics",
+            Self::Shape => "EntityComponentShape",
+            Self::Classification => "EntityComponentClassification",
+            Self::Transponder => "EntityComponentTransponder",
+            Self::Administrative => "EntityComponentAdministrative",
+            Self::LocalShape => "EntityComponentLocalShape",
+            Self::Orientation => "EntityComponentOrientation",
+            Self::Mission => "EntityComponentMission",
+            Self::Link => "EntityComponentLink",
+            Self::Power => "EntityComponentPower",
+            Self::Navigation => "EntityComponentNavigation",
+            Self::Capture => "EntityComponentCapture",
+            Self::Metric => "EntityComponentMetric",
+            Self::Sensor => "EntityComponentSensor",
+            Self::Pose => "EntityComponentPose",
+            Self::Chat => "EntityComponentChat",
+            Self::TaskExecution => "EntityComponentTaskExecution",
+            Self::Gnss => "EntityComponentGnss",
+            Self::Device => "EntityComponentDevice",
+            Self::Config => "EntityComponentConfig",
+            Self::Configurable => "EntityComponentConfigurable",
+            Self::Interactivity => "EntityComponentInteractivity",
+            Self::Artifact => "EntityComponentArtifact",
+            Self::TargetPose => "EntityComponentTargetPose",
+            Self::Assembly => "EntityComponentAssembly",
+            Self::MapLayer => "EntityComponentMapLayer",
+            Self::ManualControl => "EntityComponentManualControl",
+            Self::TargetManualControl => "EntityComponentTargetManualControl",
+            Self::Bounds => "EntityComponentBounds",
+            Self::Policy => "EntityComponentPolicy",
+            Self::Authorization => "EntityComponentAuthorization",
+            Self::Measurement => "EntityComponentMeasurement",
+            Self::Stream => "EntityComponentStream",
+            Self::VideoFrame => "EntityComponentVideoFrame",
+            Self::Video => "EntityComponentVideo",
+            Self::McapChannel => "EntityComponentMcapChannel",
+            Self::McapMessage => "EntityComponentMcapMessage",
+            Self::Image => "EntityComponentImage",
+            Self::Waveform => "EntityComponentWaveform",
+            Self::WaveformFrame => "EntityComponentWaveformFrame",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "EntityComponentUnspecified" => Some(Self::Unspecified),
+            "EntityComponentLabel" => Some(Self::Label),
+            "EntityComponentController" => Some(Self::Controller),
+            "EntityComponentLifetime" => Some(Self::Lifetime),
+            "EntityComponentPriority" => Some(Self::Priority),
+            "EntityComponentLease" => Some(Self::Lease),
+            "EntityComponentRouting" => Some(Self::Routing),
+            "EntityComponentGeo" => Some(Self::Geo),
+            "EntityComponentSymbol" => Some(Self::Symbol),
+            "EntityComponentCamera" => Some(Self::Camera),
+            "EntityComponentDetection" => Some(Self::Detection),
+            "EntityComponentBearing" => Some(Self::Bearing),
+            "EntityComponentTrack" => Some(Self::Track),
+            "EntityComponentLocator" => Some(Self::Locator),
+            "EntityComponentTaskable" => Some(Self::Taskable),
+            "EntityComponentKinematics" => Some(Self::Kinematics),
+            "EntityComponentShape" => Some(Self::Shape),
+            "EntityComponentClassification" => Some(Self::Classification),
+            "EntityComponentTransponder" => Some(Self::Transponder),
+            "EntityComponentAdministrative" => Some(Self::Administrative),
+            "EntityComponentLocalShape" => Some(Self::LocalShape),
+            "EntityComponentOrientation" => Some(Self::Orientation),
+            "EntityComponentMission" => Some(Self::Mission),
+            "EntityComponentLink" => Some(Self::Link),
+            "EntityComponentPower" => Some(Self::Power),
+            "EntityComponentNavigation" => Some(Self::Navigation),
+            "EntityComponentCapture" => Some(Self::Capture),
+            "EntityComponentMetric" => Some(Self::Metric),
+            "EntityComponentSensor" => Some(Self::Sensor),
+            "EntityComponentPose" => Some(Self::Pose),
+            "EntityComponentChat" => Some(Self::Chat),
+            "EntityComponentTaskExecution" => Some(Self::TaskExecution),
+            "EntityComponentGnss" => Some(Self::Gnss),
+            "EntityComponentDevice" => Some(Self::Device),
+            "EntityComponentConfig" => Some(Self::Config),
+            "EntityComponentConfigurable" => Some(Self::Configurable),
+            "EntityComponentInteractivity" => Some(Self::Interactivity),
+            "EntityComponentArtifact" => Some(Self::Artifact),
+            "EntityComponentTargetPose" => Some(Self::TargetPose),
+            "EntityComponentAssembly" => Some(Self::Assembly),
+            "EntityComponentMapLayer" => Some(Self::MapLayer),
+            "EntityComponentManualControl" => Some(Self::ManualControl),
+            "EntityComponentTargetManualControl" => Some(Self::TargetManualControl),
+            "EntityComponentBounds" => Some(Self::Bounds),
+            "EntityComponentPolicy" => Some(Self::Policy),
+            "EntityComponentAuthorization" => Some(Self::Authorization),
+            "EntityComponentMeasurement" => Some(Self::Measurement),
+            "EntityComponentStream" => Some(Self::Stream),
+            "EntityComponentVideoFrame" => Some(Self::VideoFrame),
+            "EntityComponentVideo" => Some(Self::Video),
+            "EntityComponentMcapChannel" => Some(Self::McapChannel),
+            "EntityComponentMcapMessage" => Some(Self::McapMessage),
+            "EntityComponentImage" => Some(Self::Image),
+            "EntityComponentWaveform" => Some(Self::Waveform),
+            "EntityComponentWaveformFrame" => Some(Self::WaveformFrame),
+            _ => None,
+        }
+    }
+}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct ManualControlInput {
     #[prost(message, optional, tag = "1")]
@@ -968,6 +1193,201 @@ impl PolicyAction {
             "PolicyActionAllow" => Some(Self::Allow),
             "PolicyActionLog" => Some(Self::Log),
             "PolicyActionDefer" => Some(Self::Defer),
+            _ => None,
+        }
+    }
+}
+/// What the entity's video is, as the driver streaming it found it (a
+/// camera's MediaStream only declares what to expect). Written before the
+/// frames it applies to, and again when it changes.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VideoComponent {
+    /// a media type, e.g. "video/H264" or "video/H264; codecs=avc1.64001F"
+    #[prost(string, tag = "1")]
+    pub codec: ::prost::alloc::string::String,
+    /// the display size of the video, in pixels, as streamed; unset when not
+    /// known. When the size changes, VideoComponent is written again before
+    /// the first frame of the new size.
+    #[prost(uint32, optional, tag = "2")]
+    pub width: ::core::option::Option<u32>,
+    #[prost(uint32, optional, tag = "3")]
+    pub height: ::core::option::Option<u32>,
+}
+/// One unit of video, for codecs whose frames depend on each other. Its time is the entity's Lifetime.fresh. H.264/H.265 is Annex
+/// B, and a keyframe's body starts with its parameter sets (SPS, PPS), so it
+/// decodes on its own.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct VideoFrameComponent {
+    #[prost(bytes = "vec", tag = "1")]
+    pub body: ::prost::alloc::vec::Vec<u8>,
+    #[prost(bool, optional, tag = "2")]
+    pub keyframe: ::core::option::Option<bool>,
+}
+/// One image, decodable on its own: a snapshot, an MJPEG frame, a
+/// spectrogram. Its time is Lifetime.fresh.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ImageComponent {
+    /// a media type: "image/jpeg", "image/png", "image/x-raw; encoding=rgb8"
+    #[prost(string, tag = "1")]
+    pub format: ::prost::alloc::string::String,
+    #[prost(uint32, optional, tag = "2")]
+    pub width: ::core::option::Option<u32>,
+    #[prost(uint32, optional, tag = "3")]
+    pub height: ::core::option::Option<u32>,
+    /// bytes per row of a raw image; unset: tight
+    #[prost(uint32, optional, tag = "4")]
+    pub stride: ::core::option::Option<u32>,
+    #[prost(bytes = "vec", tag = "5")]
+    pub data: ::prost::alloc::vec::Vec<u8>,
+}
+/// What the entity's waveform is: audio, seismic, any sampled 1-D signal.
+/// Written before the frames it applies to. Several channels share its
+/// clock and rate (a microphone array); independent streams are separate
+/// entities.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct WaveformComponent {
+    /// a media type: "audio/pcm; format=s16le", "audio/opus", ... PCM of
+    /// fewer significant bits than its words says so: "audio/pcm;
+    /// format=s32le; depth=24" (24-bit samples, right-aligned, sign-extended)
+    #[prost(string, tag = "1")]
+    pub format: ::prost::alloc::string::String,
+    #[prost(uint32, tag = "2")]
+    pub sample_rate: u32,
+    #[prost(uint32, tag = "3")]
+    pub channels: u32,
+    /// what each channel is, in the order of a frame's samples ("mic0",
+    /// "s0.x"); fewer than channels: the rest are not named
+    #[prost(string, repeated, tag = "4")]
+    pub channel_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// what the samples measure: a sample times scale is a value of kind in
+    /// unit. Unset: not a calibrated quantity (audio as recorded); the samples
+    /// are as their format says
+    #[prost(enumeration = "MetricKind", optional, tag = "5")]
+    pub kind: ::core::option::Option<i32>,
+    #[prost(enumeration = "MetricUnit", tag = "6")]
+    pub unit: i32,
+    /// unit per sample count; a frame may say its own
+    #[prost(double, optional, tag = "7")]
+    pub scale: ::core::option::Option<f64>,
+    /// the values the sensor can report, in unit
+    #[prost(message, optional, tag = "8")]
+    pub range: ::core::option::Option<MetricRange>,
+}
+/// One frame of a waveform: a codec frame, or a block of samples
+/// (interleaved). Its time is that of its first sample, Lifetime.fresh.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct WaveformFrameComponent {
+    #[prost(bytes = "vec", tag = "1")]
+    pub data: ::prost::alloc::vec::Vec<u8>,
+    /// unit per sample count of this frame, when it differs from the
+    /// waveform's scale (a sensor that reports it as it measures)
+    #[prost(double, optional, tag = "2")]
+    pub scale: ::core::option::Option<f64>,
+}
+/// A channel of a foreign MCAP file, kept raw: what is not understood is
+/// kept, readable once it is, and exported back as it came.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct McapChannelComponent {
+    #[prost(string, tag = "1")]
+    pub topic: ::prost::alloc::string::String,
+    /// "protobuf", "ros2msg", "json", ...
+    #[prost(string, tag = "2")]
+    pub message_encoding: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub schema_name: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub schema_encoding: ::prost::alloc::string::String,
+    #[prost(bytes = "vec", tag = "5")]
+    pub schema: ::prost::alloc::vec::Vec<u8>,
+    #[prost(map = "string, string", tag = "6")]
+    pub metadata: ::std::collections::HashMap<
+        ::prost::alloc::string::String,
+        ::prost::alloc::string::String,
+    >,
+}
+/// One message of such a channel; its time is Lifetime.fresh.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct McapMessageComponent {
+    #[prost(bytes = "vec", tag = "1")]
+    pub data: ::prost::alloc::vec::Vec<u8>,
+}
+/// ImageMask marks pixels of a frame: those of the rectangle from (x, y),
+/// width×height, in pixels of the frame (the detection's
+/// ImageBoundingBox.frame_width×frame_height), that data marks. Pixels
+/// outside the rectangle are not marked. A reader skips a mask in an
+/// encoding it does not know.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ImageMask {
+    #[prost(uint32, tag = "1")]
+    pub x: u32,
+    #[prost(uint32, tag = "2")]
+    pub y: u32,
+    #[prost(uint32, tag = "3")]
+    pub width: u32,
+    #[prost(uint32, tag = "4")]
+    pub height: u32,
+    #[prost(enumeration = "ImageMaskEncoding", tag = "5")]
+    pub encoding: i32,
+    #[prost(bytes = "vec", tag = "6")]
+    pub data: ::prost::alloc::vec::Vec<u8>,
+}
+/// managed by the engine: the components read through sessions, and samples
+/// flowing, on the entity. A producer watches its own entity for it and
+/// produces while a component has readers.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct StreamComponent {
+    #[prost(message, repeated, tag = "1")]
+    pub streams: ::prost::alloc::vec::Vec<stream_component::Stream>,
+}
+/// Nested message and enum types in `StreamComponent`.
+pub mod stream_component {
+    #[derive(Clone, PartialEq, ::prost::Message)]
+    pub struct Stream {
+        #[prost(enumeration = "super::EntityComponent", tag = "1")]
+        pub component: i32,
+        /// fresh of the last sample
+        #[prost(message, optional, tag = "2")]
+        pub last: ::core::option::Option<::prost_types::Timestamp>,
+        /// actors reading it
+        #[prost(string, repeated, tag = "3")]
+        pub readers: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+        /// how long after a sample was captured (its fresh) it, and the changes
+        /// citing it, arrive (measured by the engine: the 95th percentile of the
+        /// last 5s, of the samples and of the changes citing them, whichever is
+        /// larger; the declared MediaStream.latency_ms is in fresh already): a
+        /// viewer that shows each frame this much later shows it, as a rule,
+        /// with its own detections, and in step with the other streams it shows
+        /// that way
+        #[prost(uint32, optional, tag = "4")]
+        pub latency_ms: ::core::option::Option<u32>,
+    }
+}
+/// How the pixels of an ImageMask are held in its data.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ImageMaskEncoding {
+    /// as ImageMaskEncodingBitmap
+    Unspecified = 0,
+    /// width×height bits, row-major, eight to a byte with the first pixel in
+    /// the most significant bit. Rows are not padded to a byte.
+    Bitmap = 1,
+}
+impl ImageMaskEncoding {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "ImageMaskEncodingUnspecified",
+            Self::Bitmap => "ImageMaskEncodingBitmap",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "ImageMaskEncodingUnspecified" => Some(Self::Unspecified),
+            "ImageMaskEncodingBitmap" => Some(Self::Bitmap),
             _ => None,
         }
     }
@@ -1597,6 +2017,22 @@ pub struct Entity {
     pub authorization: ::core::option::Option<AuthorizationComponent>,
     #[prost(message, optional, tag = "69")]
     pub measurement: ::core::option::Option<MeasurementComponent>,
+    #[prost(message, optional, tag = "70")]
+    pub stream: ::core::option::Option<StreamComponent>,
+    #[prost(message, optional, tag = "73")]
+    pub video_frame: ::core::option::Option<VideoFrameComponent>,
+    #[prost(message, optional, tag = "74")]
+    pub video: ::core::option::Option<VideoComponent>,
+    #[prost(message, optional, tag = "75")]
+    pub mcap_channel: ::core::option::Option<McapChannelComponent>,
+    #[prost(message, optional, tag = "76")]
+    pub mcap_message: ::core::option::Option<McapMessageComponent>,
+    #[prost(message, optional, tag = "77")]
+    pub image: ::core::option::Option<ImageComponent>,
+    #[prost(message, optional, tag = "78")]
+    pub waveform: ::core::option::Option<WaveformComponent>,
+    #[prost(message, optional, tag = "79")]
+    pub waveform_frame: ::core::option::Option<WaveformFrameComponent>,
 }
 /// A controller owns an entity or change
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -1638,6 +2074,12 @@ pub struct Lifetime {
     /// Also considered the _version_ of an entity.
     #[prost(message, optional, tag = "3")]
     pub fresh: ::core::option::Option<::prost_types::Timestamp>,
+    /// time this entity stops being current: displays should drop or dim it
+    /// from here on, although it stays in the world (queries, fusion, history)
+    /// until `until`. Normally between fresh and until; unset means current
+    /// until `until`.
+    #[prost(message, optional, tag = "4")]
+    pub stale: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Channel {
@@ -1702,10 +2144,23 @@ pub struct InteractivityComponent {
     #[prost(string, optional, tag = "3")]
     pub reference_url: ::core::option::Option<::prost::alloc::string::String>,
 }
+/// A source a camera is declared to have: where it is reached and what it is
+/// expected to be, as an operator or a driver that found the camera writes
+/// it. It is a declaration, not data. What the source really carries is
+/// written by the driver that pulls it, as components of the stream's entity
+/// (the camera itself for its main stream, the child `<camera>.<role>`, e.g.
+/// `<camera>.sub`, for another role): VideoComponent and VideoFrameComponent
+/// for video, ImageComponent for images.
+///
+/// Where the two differ the components are right. codec says what to expect
+/// before the source was reached (an RTSP camera declared H264 can turn out
+/// to send JPEG, and is then streamed as images); readers decode by
+/// VideoComponent.codec or ImageComponent.format, never by this.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MediaStream {
     #[prost(string, tag = "1")]
     pub label: ::prost::alloc::string::String,
+    /// this is the ingress url. the engine connects to it from the node to source it
     #[prost(string, tag = "2")]
     pub url: ::prost::alloc::string::String,
     #[prost(enumeration = "MediaStreamProtocol", tag = "3")]
@@ -1713,18 +2168,30 @@ pub struct MediaStream {
     /// stream role (main, sub, snapshot)
     #[prost(enumeration = "MediaStreamRole", tag = "9")]
     pub role: i32,
-    /// video codec, e.g. "H264", "H265"
+    /// the codec expected, by its short name: "H264", "H265", "MJPEG". The
+    /// streamed VideoComponent.codec and ImageComponent.format are media types
+    /// instead ("video/H264", "image/jpeg"), and say what was found.
     #[prost(string, tag = "10")]
     pub codec: ::prost::alloc::string::String,
-    /// resolution width in pixels
+    /// the resolution expected, in pixels. What is streamed can differ: its
+    /// VideoComponent or ImageComponent says what it is.
     #[prost(int32, optional, tag = "11")]
     pub width: ::core::option::Option<i32>,
-    /// resolution height in pixels
     #[prost(int32, optional, tag = "12")]
     pub height: ::core::option::Option<i32>,
     /// wall-clock time of the first frame (mediaTime=0)
     #[prost(message, optional, tag = "13")]
     pub epoch: ::core::option::Option<::prost_types::Timestamp>,
+    /// how much later than it was captured the source stamps a frame (or the
+    /// frame arrives, for a source without capture times), in milliseconds:
+    /// taken off every frame's time. A per-camera calibration, so that cameras
+    /// that stamp at different points (exposure, encoding, sending) line up;
+    /// may be negative. Declared, and applied before a frame is written: a
+    /// sample's Lifetime.fresh already has it taken off. Not to be confused
+    /// with StreamComponent.Stream.latency_ms, which the engine measures from
+    /// that fresh on.
+    #[prost(int32, optional, tag = "14")]
+    pub latency_ms: ::core::option::Option<i32>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct CameraComponent {
@@ -1756,7 +2223,16 @@ pub struct CameraComponent {
     #[prost(double, optional, tag = "7")]
     pub fov_tele: ::core::option::Option<f64>,
 }
-/// reference to external system
+/// Where an artifact's content is: a URL of an external system, or
+///
+///    stream:<entity>/<component>?from=<RFC 3339>\[&until=<RFC 3339>\]
+///
+/// recorded samples of an entity's sampled component (as a Reference names
+/// them): from alone, the one sample whose fresh it is; with until, those
+/// from `from` up to and including until. GET /artifacts/{id} serves them as
+/// the artifact's content_type: as recorded when that is their format, else
+/// converted (waveform frames as audio/wav, raw images as image/png). The
+/// artifact entity carries what the stream is (e.g. a WaveformComponent).
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ArtifactLocation {
     #[prost(string, tag = "1")]
@@ -1818,6 +2294,23 @@ pub struct ImageBoundingBox {
     #[prost(uint32, tag = "6")]
     pub frame_height: u32,
 }
+/// What a detector found. A detector of video follows these rules, which
+/// synced views (media sessions that draw each frame's detections into it)
+/// rely on:
+///   - every detection names the frame it was made from (frame), and the
+///     detections of one frame are pushed together, before the detector
+///     takes its next frame (MediaService.GrabFrame);
+///   - a detection stands for its frame and the later frames only until the
+///     detector's next result is due: a view shows it on frames up to one
+///     and a half of the detector's usual interval between analyzed frames
+///     after its own, and on none later, expired or not (a live view, which
+///     shows frames before their detections can come, shows the newest
+///     until the next result is overdue). An object still there is reported
+///     again with every frame analyzed; one gone is just not reported any
+///     more;
+///   - while a detector takes frames of a stream, the stream counts as
+///     analyzed, finding something or not: views of it stay synced, so a
+///     detector does not have to report empty frames.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct DetectionComponent {
     #[prost(string, optional, tag = "1")]
@@ -1837,6 +2330,20 @@ pub struct DetectionComponent {
     pub image_bbox: ::core::option::Option<ImageBoundingBox>,
     #[prost(float, optional, tag = "6")]
     pub confidence: ::core::option::Option<f32>,
+    /// the sample this detection was made from: its entity, component and
+    /// from = its fresh. Several detections of one frame name
+    /// the same frame. A synced media session, live or replaying, shows each
+    /// frame with the detections made from it, and the frames after it with
+    /// them only until the detector's next result is due (see above).
+    #[prost(message, optional, tag = "7")]
+    pub frame: ::core::option::Option<Reference>,
+    /// the object's pixels in that frame, from a segmentation model
+    #[prost(message, optional, tag = "8")]
+    pub image_mask: ::core::option::Option<ImageMask>,
+    /// what supports this detection, with positions. The engine keeps evidence
+    /// as the ids written there plus every references\[\].entity_id
+    #[prost(message, repeated, tag = "9")]
+    pub references: ::prost::alloc::vec::Vec<Reference>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct BoundsComponent {
@@ -1991,22 +2498,34 @@ pub mod target_pose_component {
         Polar(super::PolarOffset),
     }
 }
-/// Angular velocity around the entity's own body axes
+/// Angular velocity around the entity's own RFU body axes: x right,
+/// y forward, z up. Same axes and signs as the angles in
+/// OrientationComponent; each rate is right-handed about its axis.
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct AngularVelocity {
-    /// radians per second
+    /// radians per second about y (forward), positive right wing down
     #[prost(double, tag = "1")]
     pub roll_rate: f64,
-    /// radians per second
+    /// radians per second about x (right), positive nose up
     #[prost(double, tag = "2")]
     pub pitch_rate: f64,
-    /// radians per second
+    /// radians per second about z (up), positive turning left; heading falls
     #[prost(double, tag = "3")]
     pub yaw_rate: f64,
 }
 /// Absolute orientation in the world, relative to the local ENU frame.
 /// For root entities this is set directly; for child entities the engine
 /// computes it by composing orientations down the pose tree.
+///
+/// ENU world, RFU (right-forward-up) body. The quaternion rotates the body
+/// frame into the local ENU frame (x east, y north, z up). The body axes are
+/// x right, y forward and z up, so at identity a body faces north with its
+/// right side to the east. Angles are right-handed about the body axes, with
+/// the same signs as AngularVelocity: pitch about x (positive nose up), roll
+/// about y (positive right wing down), yaw about z (positive turning left).
+/// The quaternion is yaw ⊗ pitch ⊗ roll. A heading is a compass bearing,
+/// clockwise from north, so heading = -yaw: heading 030 is z = sin(-15°),
+/// w = cos(-15°).
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct OrientationComponent {
     #[prost(message, optional, tag = "1")]
@@ -2030,6 +2549,10 @@ pub struct TrackComponent {
     /// confidence that this is a valid track
     #[prost(float, optional, tag = "5")]
     pub confidence: ::core::option::Option<f32>,
+    /// what supports this track, with positions; evidence is kept as on
+    /// DetectionComponent
+    #[prost(message, repeated, tag = "6")]
+    pub references: ::prost::alloc::vec::Vec<Reference>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct LocatorComponent {
@@ -2634,6 +3157,28 @@ pub struct BleDevice {
     /// advertised GATT service UUIDs
     #[prost(string, repeated, tag = "4")]
     pub service_uuids: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
+    /// manufacturer-specific advertisement data, one element per company ID
+    #[prost(message, repeated, tag = "5")]
+    pub manufacturer_data: ::prost::alloc::vec::Vec<BleManufacturerData>,
+    /// service data advertisement elements, one per service UUID
+    #[prost(message, repeated, tag = "6")]
+    pub service_data: ::prost::alloc::vec::Vec<BleServiceData>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BleManufacturerData {
+    /// Bluetooth SIG company identifier
+    #[prost(uint32, tag = "1")]
+    pub company_id: u32,
+    #[prost(bytes = "vec", tag = "2")]
+    pub data: ::prost::alloc::vec::Vec<u8>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct BleServiceData {
+    /// lowercase service UUID
+    #[prost(string, tag = "1")]
+    pub uuid: ::prost::alloc::string::String,
+    #[prost(bytes = "vec", tag = "2")]
+    pub data: ::prost::alloc::vec::Vec<u8>,
 }
 /// Configuration pushed onto an entity. The engine delivers entities with
 /// Config to the matching controller via Reconcile.
@@ -2763,6 +3308,8 @@ pub struct EntityFilter {
     /// entity must be routed to this channel
     #[prost(message, optional, tag = "10")]
     pub channel: ::core::option::Option<ChannelFilter>,
+    #[prost(message, optional, tag = "11")]
+    pub detection: ::core::option::Option<DetectionFilter>,
     #[prost(message, optional, tag = "50")]
     pub device: ::core::option::Option<DeviceFilter>,
     #[prost(message, optional, tag = "51")]
@@ -2782,6 +3329,13 @@ pub struct ControllerFilter {
     pub node: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, optional, tag = "3")]
     pub origin: ::core::option::Option<::prost::alloc::string::String>,
+}
+/// matches entities with a detection component
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct DetectionFilter {
+    /// only detections made by this detector (detection.detectorEntityId)
+    #[prost(string, optional, tag = "1")]
+    pub detector: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct TrackFilter {
@@ -2912,8 +3466,11 @@ pub struct WatchBehavior {
     /// values lower than 1000 might be capped to 1s
     #[prost(uint32, optional, tag = "4")]
     pub keepalive_interval_ms: ::core::option::Option<u32>,
-    /// When true, update events only contain the components that actually changed
-    /// rather than the full entity. The initial snapshot always sends full entities.
+    /// When true, EntityChangeUpdated events only contain the components that
+    /// changed since this consumer last received the entity, plus id, lifetime
+    /// and controller: merge them into the local copy, each component replacing
+    /// the one held. The first send of an entity, keepalives, and updates that
+    /// removed a component come as EntityChangeReplaced with the whole entity.
     #[prost(bool, optional, tag = "5")]
     pub diff: ::core::option::Option<bool>,
     /// Send an EntityChangeHeartbeat event when the stream has been idle for this
@@ -2954,13 +3511,24 @@ pub struct EntityChangeRequest {
     #[prost(message, repeated, tag = "2")]
     pub replacements: ::prost::alloc::vec::Vec<Entity>,
 }
+/// Set either id or filter, not both.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ExpireEntityRequest {
+    /// expire one entity. NotFound if it doesn't exist
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
+    /// expire every entity matching this filter, e.g. all detections:
+    /// {component: \[EntityComponentDetection\]}. Must not be empty; use
+    /// HardReset to clear everything. Matching nothing is not an error.
+    #[prost(message, optional, tag = "2")]
+    pub filter: ::core::option::Option<EntityFilter>,
 }
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct ExpireEntityResponse {}
+pub struct ExpireEntityResponse {
+    /// number of entities expired
+    #[prost(uint32, tag = "1")]
+    pub expired: u32,
+}
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EntityChangeResponse {
     #[prost(bool, tag = "1")]
@@ -2974,8 +3542,12 @@ pub struct EntityChangeEvent {
     pub entity: ::core::option::Option<Entity>,
     #[prost(enumeration = "EntityChange", tag = "2")]
     pub t: i32,
-    /// upstream wall clock at the time this event was sent.
-    /// Consumers should use TimeSync() ideally, but this is a good enough fallback when TimeSync isnt possible
+    /// this node's clock when it handled the change. In the recorded history
+    /// that is when the node accepted it: the accepted timeline (as known), as
+    /// opposed to the entity's Lifetime.fresh, when it happened (as happened).
+    /// In WatchEntities it is when the event was sent, so that a client without
+    /// TimeSync can estimate the node's clock offset; it is not when the change
+    /// happened or was accepted, so clients place changes in time by fresh.
     #[prost(message, optional, tag = "3")]
     pub now: ::core::option::Option<::prost_types::Timestamp>,
 }
@@ -2983,6 +3555,10 @@ pub struct EntityChangeEvent {
 pub struct EntityChangeBatch {
     #[prost(message, repeated, tag = "1")]
     pub events: ::prost::alloc::vec::Vec<EntityChangeEvent>,
+    /// every live entity at this time: one not in it does not exist. A cache of
+    /// the state for scrubbing; reading forward it changes nothing
+    #[prost(bool, tag = "2")]
+    pub keyframe: bool,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct GetEntityRequest {
@@ -3166,6 +3742,9 @@ impl GnssFixType {
         }
     }
 }
+/// How a camera stream is reached at MediaStream.url. The engine pulls every
+/// protocol but Iframe and Webrtc; an Iframe stream is a web page that
+/// clients embed, e.g. a YouTube live stream.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
 pub enum MediaStreamProtocol {
@@ -3751,6 +4330,10 @@ pub enum EntityChange {
     Expired = 2,
     Unobserved = 3,
     Heartbeat = 4,
+    /// the whole entity: replace the local copy, dropping components it lacks.
+    /// Only sent to WatchBehavior.diff consumers; others get EntityChangeUpdated
+    /// with the whole entity
+    Replaced = 6,
 }
 impl EntityChange {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -3764,6 +4347,7 @@ impl EntityChange {
             Self::Expired => "EntityChangeExpired",
             Self::Unobserved => "EntityChangeUnobserved",
             Self::Heartbeat => "EntityChangeHeartbeat",
+            Self::Replaced => "EntityChangeReplaced",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -3774,169 +4358,7 @@ impl EntityChange {
             "EntityChangeExpired" => Some(Self::Expired),
             "EntityChangeUnobserved" => Some(Self::Unobserved),
             "EntityChangeHeartbeat" => Some(Self::Heartbeat),
-            _ => None,
-        }
-    }
-}
-/// Proto field numbers of Entity component fields.
-/// Used in EntityFilter.component and Lifetime.components.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum EntityComponent {
-    Unspecified = 0,
-    Label = 2,
-    Controller = 3,
-    Lifetime = 4,
-    Priority = 5,
-    Lease = 6,
-    Routing = 7,
-    Geo = 11,
-    Symbol = 12,
-    Camera = 15,
-    Detection = 16,
-    Bearing = 17,
-    Track = 21,
-    Locator = 22,
-    Taskable = 23,
-    Kinematics = 24,
-    Shape = 25,
-    Classification = 26,
-    Transponder = 27,
-    Administrative = 28,
-    LocalShape = 29,
-    Orientation = 30,
-    Mission = 31,
-    Link = 32,
-    Power = 33,
-    Navigation = 34,
-    Capture = 35,
-    Metric = 36,
-    Sensor = 37,
-    Pose = 38,
-    Chat = 39,
-    TaskExecution = 41,
-    Gnss = 42,
-    Device = 50,
-    Config = 51,
-    Configurable = 52,
-    Interactivity = 60,
-    Artifact = 61,
-    TargetPose = 62,
-    Assembly = 40,
-    MapLayer = 63,
-    ManualControl = 64,
-    TargetManualControl = 65,
-    Bounds = 66,
-    Policy = 67,
-    Authorization = 68,
-    Measurement = 69,
-}
-impl EntityComponent {
-    /// String value of the enum field names used in the ProtoBuf definition.
-    ///
-    /// The values are not transformed in any way and thus are considered stable
-    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
-    pub fn as_str_name(&self) -> &'static str {
-        match self {
-            Self::Unspecified => "EntityComponentUnspecified",
-            Self::Label => "EntityComponentLabel",
-            Self::Controller => "EntityComponentController",
-            Self::Lifetime => "EntityComponentLifetime",
-            Self::Priority => "EntityComponentPriority",
-            Self::Lease => "EntityComponentLease",
-            Self::Routing => "EntityComponentRouting",
-            Self::Geo => "EntityComponentGeo",
-            Self::Symbol => "EntityComponentSymbol",
-            Self::Camera => "EntityComponentCamera",
-            Self::Detection => "EntityComponentDetection",
-            Self::Bearing => "EntityComponentBearing",
-            Self::Track => "EntityComponentTrack",
-            Self::Locator => "EntityComponentLocator",
-            Self::Taskable => "EntityComponentTaskable",
-            Self::Kinematics => "EntityComponentKinematics",
-            Self::Shape => "EntityComponentShape",
-            Self::Classification => "EntityComponentClassification",
-            Self::Transponder => "EntityComponentTransponder",
-            Self::Administrative => "EntityComponentAdministrative",
-            Self::LocalShape => "EntityComponentLocalShape",
-            Self::Orientation => "EntityComponentOrientation",
-            Self::Mission => "EntityComponentMission",
-            Self::Link => "EntityComponentLink",
-            Self::Power => "EntityComponentPower",
-            Self::Navigation => "EntityComponentNavigation",
-            Self::Capture => "EntityComponentCapture",
-            Self::Metric => "EntityComponentMetric",
-            Self::Sensor => "EntityComponentSensor",
-            Self::Pose => "EntityComponentPose",
-            Self::Chat => "EntityComponentChat",
-            Self::TaskExecution => "EntityComponentTaskExecution",
-            Self::Gnss => "EntityComponentGnss",
-            Self::Device => "EntityComponentDevice",
-            Self::Config => "EntityComponentConfig",
-            Self::Configurable => "EntityComponentConfigurable",
-            Self::Interactivity => "EntityComponentInteractivity",
-            Self::Artifact => "EntityComponentArtifact",
-            Self::TargetPose => "EntityComponentTargetPose",
-            Self::Assembly => "EntityComponentAssembly",
-            Self::MapLayer => "EntityComponentMapLayer",
-            Self::ManualControl => "EntityComponentManualControl",
-            Self::TargetManualControl => "EntityComponentTargetManualControl",
-            Self::Bounds => "EntityComponentBounds",
-            Self::Policy => "EntityComponentPolicy",
-            Self::Authorization => "EntityComponentAuthorization",
-            Self::Measurement => "EntityComponentMeasurement",
-        }
-    }
-    /// Creates an enum from field names used in the ProtoBuf definition.
-    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
-        match value {
-            "EntityComponentUnspecified" => Some(Self::Unspecified),
-            "EntityComponentLabel" => Some(Self::Label),
-            "EntityComponentController" => Some(Self::Controller),
-            "EntityComponentLifetime" => Some(Self::Lifetime),
-            "EntityComponentPriority" => Some(Self::Priority),
-            "EntityComponentLease" => Some(Self::Lease),
-            "EntityComponentRouting" => Some(Self::Routing),
-            "EntityComponentGeo" => Some(Self::Geo),
-            "EntityComponentSymbol" => Some(Self::Symbol),
-            "EntityComponentCamera" => Some(Self::Camera),
-            "EntityComponentDetection" => Some(Self::Detection),
-            "EntityComponentBearing" => Some(Self::Bearing),
-            "EntityComponentTrack" => Some(Self::Track),
-            "EntityComponentLocator" => Some(Self::Locator),
-            "EntityComponentTaskable" => Some(Self::Taskable),
-            "EntityComponentKinematics" => Some(Self::Kinematics),
-            "EntityComponentShape" => Some(Self::Shape),
-            "EntityComponentClassification" => Some(Self::Classification),
-            "EntityComponentTransponder" => Some(Self::Transponder),
-            "EntityComponentAdministrative" => Some(Self::Administrative),
-            "EntityComponentLocalShape" => Some(Self::LocalShape),
-            "EntityComponentOrientation" => Some(Self::Orientation),
-            "EntityComponentMission" => Some(Self::Mission),
-            "EntityComponentLink" => Some(Self::Link),
-            "EntityComponentPower" => Some(Self::Power),
-            "EntityComponentNavigation" => Some(Self::Navigation),
-            "EntityComponentCapture" => Some(Self::Capture),
-            "EntityComponentMetric" => Some(Self::Metric),
-            "EntityComponentSensor" => Some(Self::Sensor),
-            "EntityComponentPose" => Some(Self::Pose),
-            "EntityComponentChat" => Some(Self::Chat),
-            "EntityComponentTaskExecution" => Some(Self::TaskExecution),
-            "EntityComponentGnss" => Some(Self::Gnss),
-            "EntityComponentDevice" => Some(Self::Device),
-            "EntityComponentConfig" => Some(Self::Config),
-            "EntityComponentConfigurable" => Some(Self::Configurable),
-            "EntityComponentInteractivity" => Some(Self::Interactivity),
-            "EntityComponentArtifact" => Some(Self::Artifact),
-            "EntityComponentTargetPose" => Some(Self::TargetPose),
-            "EntityComponentAssembly" => Some(Self::Assembly),
-            "EntityComponentMapLayer" => Some(Self::MapLayer),
-            "EntityComponentManualControl" => Some(Self::ManualControl),
-            "EntityComponentTargetManualControl" => Some(Self::TargetManualControl),
-            "EntityComponentBounds" => Some(Self::Bounds),
-            "EntityComponentPolicy" => Some(Self::Policy),
-            "EntityComponentAuthorization" => Some(Self::Authorization),
-            "EntityComponentMeasurement" => Some(Self::Measurement),
+            "EntityChangeReplaced" => Some(Self::Replaced),
             _ => None,
         }
     }
@@ -4162,7 +4584,7 @@ pub mod world_service_client {
             req.extensions_mut().insert(GrpcMethod::new("world.WorldService", "Push"));
             self.inner.unary(req, path, codec).await
         }
-        /// expire an entity, setting its lifetime.until to now
+        /// expire an entity, or all entities matching a filter, setting lifetime.until to now
         pub async fn expire_entity(
             &mut self,
             request: impl tonic::IntoRequest<super::ExpireEntityRequest>,
@@ -4416,7 +4838,7 @@ pub mod world_service_server {
             tonic::Response<super::EntityChangeResponse>,
             tonic::Status,
         >;
-        /// expire an entity, setting its lifetime.until to now
+        /// expire an entity, or all entities matching a filter, setting lifetime.until to now
         async fn expire_entity(
             &self,
             request: tonic::Request<super::ExpireEntityRequest>,

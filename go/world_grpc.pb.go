@@ -47,7 +47,7 @@ type WorldServiceClient interface {
 	WatchEntities(ctx context.Context, in *ListEntitiesRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[EntityChangeEvent], error)
 	// Create or update an entity. Used by capabilities.
 	Push(ctx context.Context, in *EntityChangeRequest, opts ...grpc.CallOption) (*EntityChangeResponse, error)
-	// expire an entity, setting its lifetime.until to now
+	// expire an entity, or all entities matching a filter, setting lifetime.until to now
 	ExpireEntity(ctx context.Context, in *ExpireEntityRequest, opts ...grpc.CallOption) (*ExpireEntityResponse, error)
 	// get information about the local node the client is connected to
 	GetLocalNode(ctx context.Context, in *GetLocalNodeRequest, opts ...grpc.CallOption) (*GetLocalNodeResponse, error)
@@ -217,7 +217,7 @@ type WorldServiceServer interface {
 	WatchEntities(*ListEntitiesRequest, grpc.ServerStreamingServer[EntityChangeEvent]) error
 	// Create or update an entity. Used by capabilities.
 	Push(context.Context, *EntityChangeRequest) (*EntityChangeResponse, error)
-	// expire an entity, setting its lifetime.until to now
+	// expire an entity, or all entities matching a filter, setting lifetime.until to now
 	ExpireEntity(context.Context, *ExpireEntityRequest) (*ExpireEntityResponse, error)
 	// get information about the local node the client is connected to
 	GetLocalNode(context.Context, *GetLocalNodeRequest) (*GetLocalNodeResponse, error)

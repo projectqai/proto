@@ -1,9 +1,12 @@
+import behavior_pb2 as _behavior_pb2
+import components_pb2 as _components_pb2
 import geometry_pb2 as _geometry_pb2
 from google.protobuf import struct_pb2 as _struct_pb2
 from google.protobuf import timestamp_pb2 as _timestamp_pb2
 import manualcontrol_pb2 as _manualcontrol_pb2
 import metrics_pb2 as _metrics_pb2
 import policy_pb2 as _policy_pb2
+import samples_pb2 as _samples_pb2
 import software_pb2 as _software_pb2
 import tasking_pb2 as _tasking_pb2
 import taxonomy_pb2 as _taxonomy_pb2
@@ -171,56 +174,7 @@ class EntityChange(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     EntityChangeExpired: _ClassVar[EntityChange]
     EntityChangeUnobserved: _ClassVar[EntityChange]
     EntityChangeHeartbeat: _ClassVar[EntityChange]
-
-class EntityComponent(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
-    __slots__ = ()
-    EntityComponentUnspecified: _ClassVar[EntityComponent]
-    EntityComponentLabel: _ClassVar[EntityComponent]
-    EntityComponentController: _ClassVar[EntityComponent]
-    EntityComponentLifetime: _ClassVar[EntityComponent]
-    EntityComponentPriority: _ClassVar[EntityComponent]
-    EntityComponentLease: _ClassVar[EntityComponent]
-    EntityComponentRouting: _ClassVar[EntityComponent]
-    EntityComponentGeo: _ClassVar[EntityComponent]
-    EntityComponentSymbol: _ClassVar[EntityComponent]
-    EntityComponentCamera: _ClassVar[EntityComponent]
-    EntityComponentDetection: _ClassVar[EntityComponent]
-    EntityComponentBearing: _ClassVar[EntityComponent]
-    EntityComponentTrack: _ClassVar[EntityComponent]
-    EntityComponentLocator: _ClassVar[EntityComponent]
-    EntityComponentTaskable: _ClassVar[EntityComponent]
-    EntityComponentKinematics: _ClassVar[EntityComponent]
-    EntityComponentShape: _ClassVar[EntityComponent]
-    EntityComponentClassification: _ClassVar[EntityComponent]
-    EntityComponentTransponder: _ClassVar[EntityComponent]
-    EntityComponentAdministrative: _ClassVar[EntityComponent]
-    EntityComponentLocalShape: _ClassVar[EntityComponent]
-    EntityComponentOrientation: _ClassVar[EntityComponent]
-    EntityComponentMission: _ClassVar[EntityComponent]
-    EntityComponentLink: _ClassVar[EntityComponent]
-    EntityComponentPower: _ClassVar[EntityComponent]
-    EntityComponentNavigation: _ClassVar[EntityComponent]
-    EntityComponentCapture: _ClassVar[EntityComponent]
-    EntityComponentMetric: _ClassVar[EntityComponent]
-    EntityComponentSensor: _ClassVar[EntityComponent]
-    EntityComponentPose: _ClassVar[EntityComponent]
-    EntityComponentChat: _ClassVar[EntityComponent]
-    EntityComponentTaskExecution: _ClassVar[EntityComponent]
-    EntityComponentGnss: _ClassVar[EntityComponent]
-    EntityComponentDevice: _ClassVar[EntityComponent]
-    EntityComponentConfig: _ClassVar[EntityComponent]
-    EntityComponentConfigurable: _ClassVar[EntityComponent]
-    EntityComponentInteractivity: _ClassVar[EntityComponent]
-    EntityComponentArtifact: _ClassVar[EntityComponent]
-    EntityComponentTargetPose: _ClassVar[EntityComponent]
-    EntityComponentAssembly: _ClassVar[EntityComponent]
-    EntityComponentMapLayer: _ClassVar[EntityComponent]
-    EntityComponentManualControl: _ClassVar[EntityComponent]
-    EntityComponentTargetManualControl: _ClassVar[EntityComponent]
-    EntityComponentBounds: _ClassVar[EntityComponent]
-    EntityComponentPolicy: _ClassVar[EntityComponent]
-    EntityComponentAuthorization: _ClassVar[EntityComponent]
-    EntityComponentMeasurement: _ClassVar[EntityComponent]
+    EntityChangeReplaced: _ClassVar[EntityChange]
 
 class TaskStatus(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
@@ -340,60 +294,14 @@ EntityChangeUpdated: EntityChange
 EntityChangeExpired: EntityChange
 EntityChangeUnobserved: EntityChange
 EntityChangeHeartbeat: EntityChange
-EntityComponentUnspecified: EntityComponent
-EntityComponentLabel: EntityComponent
-EntityComponentController: EntityComponent
-EntityComponentLifetime: EntityComponent
-EntityComponentPriority: EntityComponent
-EntityComponentLease: EntityComponent
-EntityComponentRouting: EntityComponent
-EntityComponentGeo: EntityComponent
-EntityComponentSymbol: EntityComponent
-EntityComponentCamera: EntityComponent
-EntityComponentDetection: EntityComponent
-EntityComponentBearing: EntityComponent
-EntityComponentTrack: EntityComponent
-EntityComponentLocator: EntityComponent
-EntityComponentTaskable: EntityComponent
-EntityComponentKinematics: EntityComponent
-EntityComponentShape: EntityComponent
-EntityComponentClassification: EntityComponent
-EntityComponentTransponder: EntityComponent
-EntityComponentAdministrative: EntityComponent
-EntityComponentLocalShape: EntityComponent
-EntityComponentOrientation: EntityComponent
-EntityComponentMission: EntityComponent
-EntityComponentLink: EntityComponent
-EntityComponentPower: EntityComponent
-EntityComponentNavigation: EntityComponent
-EntityComponentCapture: EntityComponent
-EntityComponentMetric: EntityComponent
-EntityComponentSensor: EntityComponent
-EntityComponentPose: EntityComponent
-EntityComponentChat: EntityComponent
-EntityComponentTaskExecution: EntityComponent
-EntityComponentGnss: EntityComponent
-EntityComponentDevice: EntityComponent
-EntityComponentConfig: EntityComponent
-EntityComponentConfigurable: EntityComponent
-EntityComponentInteractivity: EntityComponent
-EntityComponentArtifact: EntityComponent
-EntityComponentTargetPose: EntityComponent
-EntityComponentAssembly: EntityComponent
-EntityComponentMapLayer: EntityComponent
-EntityComponentManualControl: EntityComponent
-EntityComponentTargetManualControl: EntityComponent
-EntityComponentBounds: EntityComponent
-EntityComponentPolicy: EntityComponent
-EntityComponentAuthorization: EntityComponent
-EntityComponentMeasurement: EntityComponent
+EntityChangeReplaced: EntityChange
 TaskStatusInvalid: TaskStatus
 TaskStatusRunning: TaskStatus
 TaskStatusCompleted: TaskStatus
 TaskStatusFailed: TaskStatus
 
 class Entity(_message.Message):
-    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "gnss", "device", "link", "pose", "target_pose", "local_shape", "metric", "config", "configurable", "taskable", "task_execution", "mission", "sensor", "interactivity", "artifact", "chat", "assembly", "map_layer", "manual_control", "target_manual_control", "bounds", "policy", "authorization", "measurement")
+    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "gnss", "device", "link", "pose", "target_pose", "local_shape", "metric", "config", "configurable", "taskable", "task_execution", "mission", "sensor", "interactivity", "artifact", "chat", "assembly", "map_layer", "manual_control", "target_manual_control", "bounds", "policy", "authorization", "measurement", "stream", "video_frame", "video", "mcap_channel", "mcap_message", "image", "waveform", "waveform_frame")
     ID_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     CONTROLLER_FIELD_NUMBER: _ClassVar[int]
@@ -441,6 +349,14 @@ class Entity(_message.Message):
     POLICY_FIELD_NUMBER: _ClassVar[int]
     AUTHORIZATION_FIELD_NUMBER: _ClassVar[int]
     MEASUREMENT_FIELD_NUMBER: _ClassVar[int]
+    STREAM_FIELD_NUMBER: _ClassVar[int]
+    VIDEO_FRAME_FIELD_NUMBER: _ClassVar[int]
+    VIDEO_FIELD_NUMBER: _ClassVar[int]
+    MCAP_CHANNEL_FIELD_NUMBER: _ClassVar[int]
+    MCAP_MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    IMAGE_FIELD_NUMBER: _ClassVar[int]
+    WAVEFORM_FIELD_NUMBER: _ClassVar[int]
+    WAVEFORM_FRAME_FIELD_NUMBER: _ClassVar[int]
     id: str
     label: str
     controller: Controller
@@ -488,7 +404,15 @@ class Entity(_message.Message):
     policy: _policy_pb2.PolicyComponent
     authorization: _policy_pb2.AuthorizationComponent
     measurement: MeasurementComponent
-    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., gnss: _Optional[_Union[GnssComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ..., map_layer: _Optional[_Union[MapLayerComponent, _Mapping]] = ..., manual_control: _Optional[_Union[ManualControlComponent, _Mapping]] = ..., target_manual_control: _Optional[_Union[TargetManualControlComponent, _Mapping]] = ..., bounds: _Optional[_Union[BoundsComponent, _Mapping]] = ..., policy: _Optional[_Union[_policy_pb2.PolicyComponent, _Mapping]] = ..., authorization: _Optional[_Union[_policy_pb2.AuthorizationComponent, _Mapping]] = ..., measurement: _Optional[_Union[MeasurementComponent, _Mapping]] = ...) -> None: ...
+    stream: _samples_pb2.StreamComponent
+    video_frame: _samples_pb2.VideoFrameComponent
+    video: _samples_pb2.VideoComponent
+    mcap_channel: _samples_pb2.McapChannelComponent
+    mcap_message: _samples_pb2.McapMessageComponent
+    image: _samples_pb2.ImageComponent
+    waveform: _samples_pb2.WaveformComponent
+    waveform_frame: _samples_pb2.WaveformFrameComponent
+    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., gnss: _Optional[_Union[GnssComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ..., map_layer: _Optional[_Union[MapLayerComponent, _Mapping]] = ..., manual_control: _Optional[_Union[ManualControlComponent, _Mapping]] = ..., target_manual_control: _Optional[_Union[TargetManualControlComponent, _Mapping]] = ..., bounds: _Optional[_Union[BoundsComponent, _Mapping]] = ..., policy: _Optional[_Union[_policy_pb2.PolicyComponent, _Mapping]] = ..., authorization: _Optional[_Union[_policy_pb2.AuthorizationComponent, _Mapping]] = ..., measurement: _Optional[_Union[MeasurementComponent, _Mapping]] = ..., stream: _Optional[_Union[_samples_pb2.StreamComponent, _Mapping]] = ..., video_frame: _Optional[_Union[_samples_pb2.VideoFrameComponent, _Mapping]] = ..., video: _Optional[_Union[_samples_pb2.VideoComponent, _Mapping]] = ..., mcap_channel: _Optional[_Union[_samples_pb2.McapChannelComponent, _Mapping]] = ..., mcap_message: _Optional[_Union[_samples_pb2.McapMessageComponent, _Mapping]] = ..., image: _Optional[_Union[_samples_pb2.ImageComponent, _Mapping]] = ..., waveform: _Optional[_Union[_samples_pb2.WaveformComponent, _Mapping]] = ..., waveform_frame: _Optional[_Union[_samples_pb2.WaveformFrameComponent, _Mapping]] = ...) -> None: ...
 
 class Controller(_message.Message):
     __slots__ = ("id", "node", "origin")
@@ -509,13 +433,15 @@ class Lease(_message.Message):
     def __init__(self, controller: _Optional[str] = ..., expires: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class Lifetime(_message.Message):
-    __slots__ = ("until", "fresh")
+    __slots__ = ("until", "fresh", "stale")
     FROM_FIELD_NUMBER: _ClassVar[int]
     UNTIL_FIELD_NUMBER: _ClassVar[int]
     FRESH_FIELD_NUMBER: _ClassVar[int]
+    STALE_FIELD_NUMBER: _ClassVar[int]
     until: _timestamp_pb2.Timestamp
     fresh: _timestamp_pb2.Timestamp
-    def __init__(self, until: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., fresh: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., **kwargs) -> None: ...
+    stale: _timestamp_pb2.Timestamp
+    def __init__(self, until: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., fresh: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., stale: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., **kwargs) -> None: ...
 
 class Channel(_message.Message):
     __slots__ = ("name",)
@@ -578,7 +504,7 @@ class InteractivityComponent(_message.Message):
     def __init__(self, icon: _Optional[str] = ..., reference_url: _Optional[str] = ...) -> None: ...
 
 class MediaStream(_message.Message):
-    __slots__ = ("label", "url", "protocol", "role", "codec", "width", "height", "epoch")
+    __slots__ = ("label", "url", "protocol", "role", "codec", "width", "height", "epoch", "latency_ms")
     LABEL_FIELD_NUMBER: _ClassVar[int]
     URL_FIELD_NUMBER: _ClassVar[int]
     PROTOCOL_FIELD_NUMBER: _ClassVar[int]
@@ -587,6 +513,7 @@ class MediaStream(_message.Message):
     WIDTH_FIELD_NUMBER: _ClassVar[int]
     HEIGHT_FIELD_NUMBER: _ClassVar[int]
     EPOCH_FIELD_NUMBER: _ClassVar[int]
+    LATENCY_MS_FIELD_NUMBER: _ClassVar[int]
     label: str
     url: str
     protocol: MediaStreamProtocol
@@ -595,7 +522,8 @@ class MediaStream(_message.Message):
     width: int
     height: int
     epoch: _timestamp_pb2.Timestamp
-    def __init__(self, label: _Optional[str] = ..., url: _Optional[str] = ..., protocol: _Optional[_Union[MediaStreamProtocol, str]] = ..., role: _Optional[_Union[MediaStreamRole, str]] = ..., codec: _Optional[str] = ..., width: _Optional[int] = ..., height: _Optional[int] = ..., epoch: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
+    latency_ms: int
+    def __init__(self, label: _Optional[str] = ..., url: _Optional[str] = ..., protocol: _Optional[_Union[MediaStreamProtocol, str]] = ..., role: _Optional[_Union[MediaStreamRole, str]] = ..., codec: _Optional[str] = ..., width: _Optional[int] = ..., height: _Optional[int] = ..., epoch: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., latency_ms: _Optional[int] = ...) -> None: ...
 
 class CameraComponent(_message.Message):
     __slots__ = ("streams", "focal_point", "fov", "range_min", "range_max", "fov_wide", "fov_tele")
@@ -681,20 +609,26 @@ class ImageBoundingBox(_message.Message):
     def __init__(self, x: _Optional[int] = ..., y: _Optional[int] = ..., width: _Optional[int] = ..., height: _Optional[int] = ..., frame_width: _Optional[int] = ..., frame_height: _Optional[int] = ...) -> None: ...
 
 class DetectionComponent(_message.Message):
-    __slots__ = ("detectorEntityId", "classification", "lastMeasured", "evidence", "image_bbox", "confidence")
+    __slots__ = ("detectorEntityId", "classification", "lastMeasured", "evidence", "image_bbox", "confidence", "frame", "image_mask", "references")
     DETECTORENTITYID_FIELD_NUMBER: _ClassVar[int]
     CLASSIFICATION_FIELD_NUMBER: _ClassVar[int]
     LASTMEASURED_FIELD_NUMBER: _ClassVar[int]
     EVIDENCE_FIELD_NUMBER: _ClassVar[int]
     IMAGE_BBOX_FIELD_NUMBER: _ClassVar[int]
     CONFIDENCE_FIELD_NUMBER: _ClassVar[int]
+    FRAME_FIELD_NUMBER: _ClassVar[int]
+    IMAGE_MASK_FIELD_NUMBER: _ClassVar[int]
+    REFERENCES_FIELD_NUMBER: _ClassVar[int]
     detectorEntityId: str
     classification: str
     lastMeasured: _timestamp_pb2.Timestamp
     evidence: _containers.RepeatedScalarFieldContainer[str]
     image_bbox: ImageBoundingBox
     confidence: float
-    def __init__(self, detectorEntityId: _Optional[str] = ..., classification: _Optional[str] = ..., lastMeasured: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., evidence: _Optional[_Iterable[str]] = ..., image_bbox: _Optional[_Union[ImageBoundingBox, _Mapping]] = ..., confidence: _Optional[float] = ...) -> None: ...
+    frame: _components_pb2.Reference
+    image_mask: _samples_pb2.ImageMask
+    references: _containers.RepeatedCompositeFieldContainer[_components_pb2.Reference]
+    def __init__(self, detectorEntityId: _Optional[str] = ..., classification: _Optional[str] = ..., lastMeasured: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., evidence: _Optional[_Iterable[str]] = ..., image_bbox: _Optional[_Union[ImageBoundingBox, _Mapping]] = ..., confidence: _Optional[float] = ..., frame: _Optional[_Union[_components_pb2.Reference, _Mapping]] = ..., image_mask: _Optional[_Union[_samples_pb2.ImageMask, _Mapping]] = ..., references: _Optional[_Iterable[_Union[_components_pb2.Reference, _Mapping]]] = ...) -> None: ...
 
 class BoundsComponent(_message.Message):
     __slots__ = ("width_m", "height_m", "depth_m", "covariance")
@@ -829,18 +763,20 @@ class OrientationComponent(_message.Message):
     def __init__(self, orientation: _Optional[_Union[Quaternion, _Mapping]] = ..., covariance: _Optional[_Union[CovarianceMatrix, _Mapping]] = ...) -> None: ...
 
 class TrackComponent(_message.Message):
-    __slots__ = ("tracker", "history", "prediction", "evidence", "confidence")
+    __slots__ = ("tracker", "history", "prediction", "evidence", "confidence", "references")
     TRACKER_FIELD_NUMBER: _ClassVar[int]
     HISTORY_FIELD_NUMBER: _ClassVar[int]
     PREDICTION_FIELD_NUMBER: _ClassVar[int]
     EVIDENCE_FIELD_NUMBER: _ClassVar[int]
     CONFIDENCE_FIELD_NUMBER: _ClassVar[int]
+    REFERENCES_FIELD_NUMBER: _ClassVar[int]
     tracker: str
     history: str
     prediction: str
     evidence: _containers.RepeatedScalarFieldContainer[str]
     confidence: float
-    def __init__(self, tracker: _Optional[str] = ..., history: _Optional[str] = ..., prediction: _Optional[str] = ..., evidence: _Optional[_Iterable[str]] = ..., confidence: _Optional[float] = ...) -> None: ...
+    references: _containers.RepeatedCompositeFieldContainer[_components_pb2.Reference]
+    def __init__(self, tracker: _Optional[str] = ..., history: _Optional[str] = ..., prediction: _Optional[str] = ..., evidence: _Optional[_Iterable[str]] = ..., confidence: _Optional[float] = ..., references: _Optional[_Iterable[_Union[_components_pb2.Reference, _Mapping]]] = ...) -> None: ...
 
 class LocatorComponent(_message.Message):
     __slots__ = ("locatedEntityId",)
@@ -1342,14 +1278,34 @@ class LPWANDevice(_message.Message):
     def __init__(self, eui: _Optional[str] = ..., address: _Optional[str] = ...) -> None: ...
 
 class BleDevice(_message.Message):
-    __slots__ = ("address", "name", "service_uuids")
+    __slots__ = ("address", "name", "service_uuids", "manufacturer_data", "service_data")
     ADDRESS_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     SERVICE_UUIDS_FIELD_NUMBER: _ClassVar[int]
+    MANUFACTURER_DATA_FIELD_NUMBER: _ClassVar[int]
+    SERVICE_DATA_FIELD_NUMBER: _ClassVar[int]
     address: str
     name: str
     service_uuids: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, address: _Optional[str] = ..., name: _Optional[str] = ..., service_uuids: _Optional[_Iterable[str]] = ...) -> None: ...
+    manufacturer_data: _containers.RepeatedCompositeFieldContainer[BleManufacturerData]
+    service_data: _containers.RepeatedCompositeFieldContainer[BleServiceData]
+    def __init__(self, address: _Optional[str] = ..., name: _Optional[str] = ..., service_uuids: _Optional[_Iterable[str]] = ..., manufacturer_data: _Optional[_Iterable[_Union[BleManufacturerData, _Mapping]]] = ..., service_data: _Optional[_Iterable[_Union[BleServiceData, _Mapping]]] = ...) -> None: ...
+
+class BleManufacturerData(_message.Message):
+    __slots__ = ("company_id", "data")
+    COMPANY_ID_FIELD_NUMBER: _ClassVar[int]
+    DATA_FIELD_NUMBER: _ClassVar[int]
+    company_id: int
+    data: bytes
+    def __init__(self, company_id: _Optional[int] = ..., data: _Optional[bytes] = ...) -> None: ...
+
+class BleServiceData(_message.Message):
+    __slots__ = ("uuid", "data")
+    UUID_FIELD_NUMBER: _ClassVar[int]
+    DATA_FIELD_NUMBER: _ClassVar[int]
+    uuid: str
+    data: bytes
+    def __init__(self, uuid: _Optional[str] = ..., data: _Optional[bytes] = ...) -> None: ...
 
 class ConfigurationComponent(_message.Message):
     __slots__ = ("value", "version")
@@ -1424,7 +1380,7 @@ class TargetManualControlComponent(_message.Message):
     def __init__(self, input: _Optional[_Iterable[_Union[_manualcontrol_pb2.ManualControlInput, _Mapping]]] = ..., session: _Optional[str] = ..., at: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class EntityFilter(_message.Message):
-    __slots__ = ("id", "label", "geo", "taskable", "component", "capture", "controller", "track", "mission", "channel", "device", "config")
+    __slots__ = ("id", "label", "geo", "taskable", "component", "capture", "controller", "track", "mission", "channel", "detection", "device", "config")
     ID_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     GEO_FIELD_NUMBER: _ClassVar[int]
@@ -1435,6 +1391,7 @@ class EntityFilter(_message.Message):
     TRACK_FIELD_NUMBER: _ClassVar[int]
     MISSION_FIELD_NUMBER: _ClassVar[int]
     CHANNEL_FIELD_NUMBER: _ClassVar[int]
+    DETECTION_FIELD_NUMBER: _ClassVar[int]
     DEVICE_FIELD_NUMBER: _ClassVar[int]
     CONFIG_FIELD_NUMBER: _ClassVar[int]
     OR_FIELD_NUMBER: _ClassVar[int]
@@ -1449,9 +1406,10 @@ class EntityFilter(_message.Message):
     track: TrackFilter
     mission: MissionFilter
     channel: ChannelFilter
+    detection: DetectionFilter
     device: DeviceFilter
     config: ConfigurationFilter
-    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., geo: _Optional[_Union[GeoFilter, _Mapping]] = ..., taskable: _Optional[_Union[TaskableFilter, _Mapping]] = ..., component: _Optional[_Iterable[int]] = ..., capture: _Optional[_Union[CaptureFilter, _Mapping]] = ..., controller: _Optional[_Union[ControllerFilter, _Mapping]] = ..., track: _Optional[_Union[TrackFilter, _Mapping]] = ..., mission: _Optional[_Union[MissionFilter, _Mapping]] = ..., channel: _Optional[_Union[ChannelFilter, _Mapping]] = ..., device: _Optional[_Union[DeviceFilter, _Mapping]] = ..., config: _Optional[_Union[ConfigurationFilter, _Mapping]] = ..., **kwargs) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., geo: _Optional[_Union[GeoFilter, _Mapping]] = ..., taskable: _Optional[_Union[TaskableFilter, _Mapping]] = ..., component: _Optional[_Iterable[int]] = ..., capture: _Optional[_Union[CaptureFilter, _Mapping]] = ..., controller: _Optional[_Union[ControllerFilter, _Mapping]] = ..., track: _Optional[_Union[TrackFilter, _Mapping]] = ..., mission: _Optional[_Union[MissionFilter, _Mapping]] = ..., channel: _Optional[_Union[ChannelFilter, _Mapping]] = ..., detection: _Optional[_Union[DetectionFilter, _Mapping]] = ..., device: _Optional[_Union[DeviceFilter, _Mapping]] = ..., config: _Optional[_Union[ConfigurationFilter, _Mapping]] = ..., **kwargs) -> None: ...
 
 class ControllerFilter(_message.Message):
     __slots__ = ("id", "node", "origin")
@@ -1462,6 +1420,12 @@ class ControllerFilter(_message.Message):
     node: str
     origin: str
     def __init__(self, id: _Optional[str] = ..., node: _Optional[str] = ..., origin: _Optional[str] = ...) -> None: ...
+
+class DetectionFilter(_message.Message):
+    __slots__ = ("detector",)
+    DETECTOR_FIELD_NUMBER: _ClassVar[int]
+    detector: str
+    def __init__(self, detector: _Optional[str] = ...) -> None: ...
 
 class TrackFilter(_message.Message):
     __slots__ = ("tracker",)
@@ -1602,14 +1566,18 @@ class EntityChangeRequest(_message.Message):
     def __init__(self, changes: _Optional[_Iterable[_Union[Entity, _Mapping]]] = ..., replacements: _Optional[_Iterable[_Union[Entity, _Mapping]]] = ...) -> None: ...
 
 class ExpireEntityRequest(_message.Message):
-    __slots__ = ("id",)
+    __slots__ = ("id", "filter")
     ID_FIELD_NUMBER: _ClassVar[int]
+    FILTER_FIELD_NUMBER: _ClassVar[int]
     id: str
-    def __init__(self, id: _Optional[str] = ...) -> None: ...
+    filter: EntityFilter
+    def __init__(self, id: _Optional[str] = ..., filter: _Optional[_Union[EntityFilter, _Mapping]] = ...) -> None: ...
 
 class ExpireEntityResponse(_message.Message):
-    __slots__ = ()
-    def __init__(self) -> None: ...
+    __slots__ = ("expired",)
+    EXPIRED_FIELD_NUMBER: _ClassVar[int]
+    expired: int
+    def __init__(self, expired: _Optional[int] = ...) -> None: ...
 
 class EntityChangeResponse(_message.Message):
     __slots__ = ("accepted", "debug")
@@ -1630,10 +1598,12 @@ class EntityChangeEvent(_message.Message):
     def __init__(self, entity: _Optional[_Union[Entity, _Mapping]] = ..., t: _Optional[_Union[EntityChange, str]] = ..., now: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ...) -> None: ...
 
 class EntityChangeBatch(_message.Message):
-    __slots__ = ("events",)
+    __slots__ = ("events", "keyframe")
     EVENTS_FIELD_NUMBER: _ClassVar[int]
+    KEYFRAME_FIELD_NUMBER: _ClassVar[int]
     events: _containers.RepeatedCompositeFieldContainer[EntityChangeEvent]
-    def __init__(self, events: _Optional[_Iterable[_Union[EntityChangeEvent, _Mapping]]] = ...) -> None: ...
+    keyframe: bool
+    def __init__(self, events: _Optional[_Iterable[_Union[EntityChangeEvent, _Mapping]]] = ..., keyframe: bool = ...) -> None: ...
 
 class GetEntityRequest(_message.Message):
     __slots__ = ("id", "dump_internal")

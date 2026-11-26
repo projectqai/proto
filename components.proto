@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package world;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/projectqai/proto/go";
+
+// Proto field numbers of Entity component fields.
+// Used in EntityFilter.component and Lifetime.components.
+enum EntityComponent {
+  EntityComponentUnspecified = 0;
+  EntityComponentLabel = 2;
+  EntityComponentController = 3;
+  EntityComponentLifetime = 4;
+  EntityComponentPriority = 5;
+  EntityComponentLease = 6;
+  EntityComponentRouting = 7;
+  EntityComponentGeo = 11;
+  EntityComponentSymbol = 12;
+  EntityComponentCamera = 15;
+  EntityComponentDetection = 16;
+  EntityComponentBearing = 17;
+  EntityComponentTrack = 21;
+  EntityComponentLocator = 22;
+  EntityComponentTaskable = 23;
+  EntityComponentKinematics = 24;
+  EntityComponentShape = 25;
+  EntityComponentClassification = 26;
+  EntityComponentTransponder = 27;
+  EntityComponentAdministrative = 28;
+  EntityComponentLocalShape = 29;
+  EntityComponentOrientation = 30;
+  EntityComponentMission = 31;
+  EntityComponentLink = 32;
+  EntityComponentPower = 33;
+  EntityComponentNavigation = 34;
+  EntityComponentCapture = 35;
+  EntityComponentMetric = 36;
+  EntityComponentSensor = 37;
+  EntityComponentPose = 38;
+  EntityComponentChat = 39;
+  EntityComponentTaskExecution = 41;
+  EntityComponentGnss = 42;
+  EntityComponentDevice = 50;
+  EntityComponentConfig = 51;
+  EntityComponentConfigurable = 52;
+  EntityComponentInteractivity = 60;
+  EntityComponentArtifact = 61;
+  EntityComponentTargetPose = 62;
+  EntityComponentAssembly = 40;
+  EntityComponentMapLayer = 63;
+  EntityComponentManualControl = 64;
+  EntityComponentTargetManualControl = 65;
+  EntityComponentBounds = 66;
+  EntityComponentPolicy = 67;
+  EntityComponentAuthorization = 68;
+  EntityComponentMeasurement = 69;
+  EntityComponentStream = 70;
+  EntityComponentVideoFrame = 73;
+  EntityComponentVideo = 74;
+  EntityComponentMcapChannel = 75;
+  EntityComponentMcapMessage = 76;
+  EntityComponentImage = 77;
+  EntityComponentWaveform = 78;
+  EntityComponentWaveformFrame = 79;
+}
+
+// Points at an entity, or at samples of one of its components. The field
+// that holds it says what for (a detection's frame, its references, ...).
+message Reference {
+  string entity_id = 1;
+
+  // when, in fresh time. Unset: the entity as it is now. from alone: that
+  // instant, and with component the one sample whose fresh it is, matched
+  // exactly. With until: the span from `from` up to and including until.
+  optional google.protobuf.Timestamp from = 2;
+  optional google.protobuf.Timestamp until = 3;
+
+  // the component whose samples are meant: (entity, component, fresh) names
+  // a sample, and an entity may hold several sampled components. Unset: the
+  // entity itself, not a sample of it.
+  optional EntityComponent component = 10;
+}

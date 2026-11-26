@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package world;
+
+import "components.proto";
+import "google/protobuf/timestamp.proto";
+import "world.proto";
+
+option go_package = "github.com/projectqai/proto/go";
+
+// ---------------------------------------------
+// Streams: every value of a component of an entity, in order.
+//
+// There are no topics: a component of an entity is one stream. A value of a
+// sampled component (see ComponentBehavior) is a sample: it bypasses the
+// reconciler, is delivered to every reader of its component and recorded,
+// and reaches head only as the engine decides (e.g. a preview). Values of
+// other components are reconciled as on a push; their accepted values can
+// be read through sessions too, in order with the samples written with
+// them.
+//
+// A sample's time is its entity's Lifetime.fresh, set by its producer, else
+// by the engine (unique and increasing per entity and component). A sample
+// is identified by (entity, component, fresh); a second one is dropped
+// without an error.
+//
+// A value is an Entity: either one sample (one sampled component) or a
+// change of reconciled components, reconciled as one change. Components
+// only the engine produces (ComponentBehavior.managed) are not written:
+// see StreamWriteRequest.
+//
+// The engine retains, per entity and component, the values since the last
+// keyframe (VideoFrameComponent.keyframe; every image is one), else the
+// latest value, minus those past their Lifetime.until. A new reader gets
+// them first, unless skip_retained.
+//
+// Who reads which component is listed by the engine in the entity's
+// StreamComponent, so that a producer knows when it is wanted.
+
+// a component of an entity, read or written through a session
+message StreamScope {
+  string entity_id = 1;
+  EntityComponent component = 2;
+}
+
+// opens a session: every scope is checked once, here (is.read or is.write
+// on the entity, with the component as rule input). One denial fails the
+// open.
+message OpenStream {
+  repeated StreamScope read = 1;
+  repeated StreamScope write = 2;
+
+  // do not deliver the retained values, only live ones
+  optional bool skip_retained = 3;
+
+  // queue at most this many undelivered values for this reader. A reader
+  // that falls behind loses the oldest, or skips to the next keyframe, and
+  // is told how many it missed. 1: only the newest value.
+  optional uint32 buffer = 5;
+
+  // send an empty values response when nothing else was sent for this
+  // long. unset = 30s, 0 = never
+  optional uint32 heartbeat_interval_ms = 6;
+}
+
+// values written or read: each an entity with its id, Lifetime.fresh and
+// its component(s), as in Push and in the history.
+//
+// A sample that duplicates one already accepted (same entity, component
+// and fresh) is dropped without an error.
+//
+// A request is rejected whole (InvalidArgument), and nothing of it is
+// written, when a value has no id, carries no component, carries a
+// component only the engine produces (ComponentBehavior.managed), or
+// carries a sampled component together with any other component. A
+// session write rejected so ends the session; an OpenStream naming a
+// managed component as a write scope fails.
+message StreamWriteRequest {
+  repeated Entity values = 1;
+}
+
+message StreamWriteResponse {
+  // per value, in order: for a sample, its fresh, accepted or dropped as a
+  // duplicate alike (a fresh does not say whether it was new); for a
+  // change, the fresh the reconciler gave it, or an empty Timestamp when
+  // it was not accepted (older than what the world has).
+  repeated google.protobuf.Timestamp fresh = 1;
+}
+
+message StreamOpened {}
+
+message StreamRequest {
+  oneof msg {
+    OpenStream open = 1; // first, once
+    StreamWriteRequest write = 2;
+  }
+}
+
+message StreamResponse {
+  oneof msg {
+    StreamOpened opened = 1;
+    StreamWriteResponse ack = 2;
+    StreamReadResponse values = 3;
+  }
+}
+
+message StreamReadResponse {
+  // in the order written. Empty on a heartbeat
+  repeated Entity values = 1;
+
+  // how many values the engine dropped for this reader since the previous
+  // response because its buffer was full
+  optional uint64 missed = 3;
+}
+
+service StreamService {
+  // a session: OpenStream first, then writes. Values of the read scopes
+  // arrive as they are written. Not usable from browsers.
+  rpc Open(stream StreamRequest) returns (stream StreamResponse);
+
+  // a read-only session (no write scopes), where a two-way stream is not
+  // available
+  rpc OpenRead(OpenStream) returns (stream StreamResponse);
+
+  // write values, checked per call. A producer writing continuously uses
+  // a session (Open) instead, checked once
+  rpc Write(StreamWriteRequest) returns (StreamWriteResponse);
+}

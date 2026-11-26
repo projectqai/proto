@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package world;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "github.com/projectqai/proto/go";
+
+// How the engine treats a component, as an option on the Entity field that
+// holds it. Options are schema only: the wire and JSON are unchanged. The
+// engine reads them from the descriptors once, at startup.
+message ComponentBehavior {
+  // values may bypass the reconciler: every value is delivered to readers
+  // and recorded, and which of them reach head is the engine's decision
+  bool sampled = 1;
+
+  // only the engine produces this; pushed values are dropped
+  bool managed = 2;
+
+  // never leaves the node
+  bool local = 3;
+
+  // never persisted
+  bool volatile = 4;
+}
+
+// Numbers away from 50000: libraries linked into the same binary register
+// there (gosapient uses 50001), and extension numbers are global.
+extend google.protobuf.FieldOptions {
+  optional ComponentBehavior behavior = 73101;
+
+  // on a repeated field inside a component: merge elements by this field of
+  // theirs instead of replacing the list
+  optional string merge_key = 73102;
+}

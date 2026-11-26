@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package world;
 
+import "behavior.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/projectqai/proto/go";
@@ -284,5 +285,5 @@ enum AlertLevel {
 }
 
 message MetricComponent {
-  repeated Metric metrics = 1;
+  repeated Metric metrics = 1 [(merge_key) = "id"];
 }

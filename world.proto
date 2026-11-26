@@ -2,12 +2,15 @@ syntax = "proto3";
 
 package world;
 
+import "behavior.proto";
+import "components.proto";
 import "geometry.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "manualcontrol.proto";
 import "metrics.proto";
 import "policy.proto";
+import "samples.proto";
 import "software.proto";
 import "tasking.proto";
 import "taxonomy.proto";
@@ -17,22 +20,24 @@ option go_package = "github.com/projectqai/proto/go";
 // ---------------------------------------
 
 message Entity {
-  // metadata
 
+  // metadata
   string id = 1;
   optional string label = 2;
 
   optional Controller controller = 3;
   optional Lifetime lifetime = 4;
   optional Priority priority = 5;
-  optional Lease lease = 6;
+  optional Lease lease = 6 [(behavior) = {
+    local: true
+    volatile: true
+  }];
   optional Routing routing = 7;
   reserved 8;
   reserved 9;
   reserved 10;
 
   // cop
-
   optional GeoSpatialComponent geo = 11;
   optional SymbolComponent symbol = 12;
   optional CameraComponent camera = 15;
@@ -53,31 +58,47 @@ message Entity {
   optional DeviceComponent device = 50;
   optional LinkComponent link = 32;
   optional PoseComponent pose = 38;
-  optional TargetPoseComponent target_pose = 62;
   optional LocalShapeComponent local_shape = 29;
-  optional MetricComponent metric = 36;
-  optional ConfigurationComponent config = 51;
-  optional ConfigurableComponent configurable = 52;
-
-
-  // eventually consistent tasking
-
-  optional TaskableComponent taskable = 23;
-  optional TaskExecutionComponent task_execution = 41;
-
   optional MissionComponent mission = 31;
   optional SensorComponent sensor = 37;
   optional InteractivityComponent interactivity = 60;
-  optional ArtifactComponent artifact = 61;
   optional ChatComponent chat = 39;
   optional AssemblyComponent assembly = 40;
   optional MapLayerComponent map_layer = 63;
-  optional ManualControlComponent manual_control = 64;
-  optional TargetManualControlComponent target_manual_control = 65;
   optional BoundsComponent bounds = 66;
-  optional PolicyComponent policy = 67;
-  optional AuthorizationComponent authorization = 68;
   optional MeasurementComponent measurement = 69;
+  optional MetricComponent metric = 36;
+
+  // control
+  optional TargetPoseComponent target_pose = 62;
+  optional ConfigurationComponent config = 51 [(behavior) = {local: true}];
+  optional ConfigurableComponent configurable = 52;
+  optional TaskableComponent taskable = 23;
+  optional TaskExecutionComponent task_execution = 41;
+  optional ManualControlComponent manual_control = 64;
+  optional TargetManualControlComponent target_manual_control = 65 [(behavior) = {sampled: true}];
+
+  // infrastructure
+  optional PolicyComponent policy = 67;
+  optional ArtifactComponent artifact = 61;
+  optional AuthorizationComponent authorization = 68;
+
+  // raw data streams
+  optional StreamComponent stream = 70 [(behavior) = {
+    managed: true
+    local: true
+    volatile: true
+  }];
+
+  optional VideoFrameComponent video_frame = 73 [(behavior) = {sampled: true}];
+  optional VideoComponent video = 74;
+  optional McapChannelComponent mcap_channel = 75;
+  optional McapMessageComponent mcap_message = 76 [(behavior) = {sampled: true}];
+  optional ImageComponent image = 77 [(behavior) = {sampled: true}];
+  optional WaveformComponent waveform = 78;
+  optional WaveformFrameComponent waveform_frame = 79 [(behavior) = {sampled: true}];
+
+  // when adding anything, remember to also add it to components.proto and to the filters
 }
 
 // A controller owns an entity or change
@@ -113,6 +134,12 @@ message Lifetime {
   // if set, updates to an existing entity are ignored if the write isn't newer than existing
   // Also considered the _version_ of an entity.
   optional google.protobuf.Timestamp fresh = 3;
+
+  // time this entity stops being current: displays should drop or dim it
+  // from here on, although it stays in the world (queries, fusion, history)
+  // until `until`. Normally between fresh and until; unset means current
+  // until `until`.
+  optional google.protobuf.Timestamp stale = 4;
 }
 
 enum Priority {
@@ -190,6 +217,9 @@ message InteractivityComponent {
   optional string reference_url = 3;
 }
 
+// How a camera stream is reached at MediaStream.url. The engine pulls every
+// protocol but Iframe and Webrtc; an Iframe stream is a web page that
+// clients embed, e.g. a YouTube live stream.
 enum MediaStreamProtocol {
   MediaStreamProtocolUnspecified = 0;
   MediaStreamProtocolWebrtc = 1;
@@ -207,15 +237,45 @@ enum MediaStreamRole {
   MediaStreamRoleSnapshot = 3; // still image capture
 }
 
+// A source a camera is declared to have: where it is reached and what it is
+// expected to be, as an operator or a driver that found the camera writes
+// it. It is a declaration, not data. What the source really carries is
+// written by the driver that pulls it, as components of the stream's entity
+// (the camera itself for its main stream, the child `<camera>.<role>`, e.g.
+// `<camera>.sub`, for another role): VideoComponent and VideoFrameComponent
+// for video, ImageComponent for images.
+//
+// Where the two differ the components are right. codec says what to expect
+// before the source was reached (an RTSP camera declared H264 can turn out
+// to send JPEG, and is then streamed as images); readers decode by
+// VideoComponent.codec or ImageComponent.format, never by this.
 message MediaStream {
   string label = 1;
+
+  // this is the ingress url. the engine connects to it from the node to source it
   string url = 2;
+
   MediaStreamProtocol protocol = 3;
   MediaStreamRole role = 9; // stream role (main, sub, snapshot)
-  string codec = 10; // video codec, e.g. "H264", "H265"
-  optional int32 width = 11; // resolution width in pixels
-  optional int32 height = 12; // resolution height in pixels
+  // the codec expected, by its short name: "H264", "H265", "MJPEG". The
+  // streamed VideoComponent.codec and ImageComponent.format are media types
+  // instead ("video/H264", "image/jpeg"), and say what was found.
+  string codec = 10;
+  // the resolution expected, in pixels. What is streamed can differ: its
+  // VideoComponent or ImageComponent says what it is.
+  optional int32 width = 11;
+  optional int32 height = 12;
   optional google.protobuf.Timestamp epoch = 13; // wall-clock time of the first frame (mediaTime=0)
+
+  // how much later than it was captured the source stamps a frame (or the
+  // frame arrives, for a source without capture times), in milliseconds:
+  // taken off every frame's time. A per-camera calibration, so that cameras
+  // that stamp at different points (exposure, encoding, sending) line up;
+  // may be negative. Declared, and applied before a frame is written: a
+  // sample's Lifetime.fresh already has it taken off. Not to be confused
+  // with StreamComponent.Stream.latency_ms, which the engine measures from
+  // that fresh on.
+  optional int32 latency_ms = 14;
 }
 
 message CameraComponent {
@@ -243,7 +303,16 @@ message CameraComponent {
   optional double fov_tele = 7; // horizontal FOV at max zoom (degrees)
 }
 
-// reference to external system
+// Where an artifact's content is: a URL of an external system, or
+//
+//   stream:<entity>/<component>?from=<RFC 3339>[&until=<RFC 3339>]
+//
+// recorded samples of an entity's sampled component (as a Reference names
+// them): from alone, the one sample whose fresh it is; with until, those
+// from `from` up to and including until. GET /artifacts/{id} serves them as
+// the artifact's content_type: as recorded when that is their format, else
+// converted (waveform frames as audio/wav, raw images as image/png). The
+// artifact entity carries what the stream is (e.g. a WaveformComponent).
 message ArtifactLocation {
   string url = 1;
 }
@@ -284,6 +353,23 @@ message ImageBoundingBox {
   uint32 frame_height = 6;
 }
 
+// What a detector found. A detector of video follows these rules, which
+// synced views (media sessions that draw each frame's detections into it)
+// rely on:
+//  - every detection names the frame it was made from (frame), and the
+//    detections of one frame are pushed together, before the detector
+//    takes its next frame (MediaService.GrabFrame);
+//  - a detection stands for its frame and the later frames only until the
+//    detector's next result is due: a view shows it on frames up to one
+//    and a half of the detector's usual interval between analyzed frames
+//    after its own, and on none later, expired or not (a live view, which
+//    shows frames before their detections can come, shows the newest
+//    until the next result is overdue). An object still there is reported
+//    again with every frame analyzed; one gone is just not reported any
+//    more;
+//  - while a detector takes frames of a stream, the stream counts as
+//    analyzed, finding something or not: views of it stay synced, so a
+//    detector does not have to report empty frames.
 message DetectionComponent {
   optional string detectorEntityId = 1;
 
@@ -298,6 +384,20 @@ message DetectionComponent {
 
   optional ImageBoundingBox image_bbox = 5;
   optional float confidence = 6;
+
+  // the sample this detection was made from: its entity, component and
+  // from = its fresh. Several detections of one frame name
+  // the same frame. A synced media session, live or replaying, shows each
+  // frame with the detections made from it, and the frames after it with
+  // them only until the detector's next result is due (see above).
+  optional Reference frame = 7;
+
+  // the object's pixels in that frame, from a segmentation model
+  optional ImageMask image_mask = 8;
+
+  // what supports this detection, with positions. The engine keeps evidence
+  // as the ids written there plus every references[].entity_id
+  repeated Reference references = 9;
 }
 
 message BoundsComponent {
@@ -409,16 +509,28 @@ message TargetPoseComponent {
   }
 }
 
-// Angular velocity around the entity's own body axes
+// Angular velocity around the entity's own RFU body axes: x right,
+// y forward, z up. Same axes and signs as the angles in
+// OrientationComponent; each rate is right-handed about its axis.
 message AngularVelocity {
-  double roll_rate = 1; // radians per second
-  double pitch_rate = 2; // radians per second
-  double yaw_rate = 3; // radians per second
+  double roll_rate = 1; // radians per second about y (forward), positive right wing down
+  double pitch_rate = 2; // radians per second about x (right), positive nose up
+  double yaw_rate = 3; // radians per second about z (up), positive turning left; heading falls
 }
 
 // Absolute orientation in the world, relative to the local ENU frame.
 // For root entities this is set directly; for child entities the engine
 // computes it by composing orientations down the pose tree.
+//
+// ENU world, RFU (right-forward-up) body. The quaternion rotates the body
+// frame into the local ENU frame (x east, y north, z up). The body axes are
+// x right, y forward and z up, so at identity a body faces north with its
+// right side to the east. Angles are right-handed about the body axes, with
+// the same signs as AngularVelocity: pitch about x (positive nose up), roll
+// about y (positive right wing down), yaw about z (positive turning left).
+// The quaternion is yaw ⊗ pitch ⊗ roll. A heading is a compass bearing,
+// clockwise from north, so heading = -yaw: heading 030 is z = sin(-15°),
+// w = cos(-15°).
 message OrientationComponent {
   Quaternion orientation = 1;
   optional CovarianceMatrix covariance = 2;
@@ -438,6 +550,10 @@ message TrackComponent {
 
   // confidence that this is a valid track
   optional float confidence = 5;
+
+  // what supports this track, with positions; evidence is kept as on
+  // DetectionComponent
+  repeated Reference references = 6;
 }
 
 message LocatorComponent {
@@ -991,6 +1107,24 @@ message BleDevice {
 
   // advertised GATT service UUIDs
   repeated string service_uuids = 4;
+
+  // manufacturer-specific advertisement data, one element per company ID
+  repeated BleManufacturerData manufacturer_data = 5;
+
+  // service data advertisement elements, one per service UUID
+  repeated BleServiceData service_data = 6;
+}
+
+message BleManufacturerData {
+  // Bluetooth SIG company identifier
+  uint32 company_id = 1;
+  bytes data = 2;
+}
+
+message BleServiceData {
+  // lowercase service UUID
+  string uuid = 1;
+  bytes data = 2;
 }
 
 // Configuration pushed onto an entity. The engine delivers entities with
@@ -1083,6 +1217,7 @@ message EntityFilter {
   optional MissionFilter mission = 9;
 
   optional ChannelFilter channel = 10; // entity must be routed to this channel
+  optional DetectionFilter detection = 11;
 
   optional DeviceFilter device = 50;
   optional ConfigurationFilter config = 51;
@@ -1095,6 +1230,12 @@ message ControllerFilter {
   optional string id = 1;
   optional string node = 2;
   optional string origin = 3;
+}
+
+// matches entities with a detection component
+message DetectionFilter {
+  // only detections made by this detector (detection.detectorEntityId)
+  optional string detector = 1;
 }
 
 message TrackFilter {
@@ -1244,8 +1385,11 @@ message WatchBehavior {
   // values lower than 1000 might be capped to 1s
   optional uint32 keepalive_interval_ms = 4;
 
-  // When true, update events only contain the components that actually changed
-  // rather than the full entity. The initial snapshot always sends full entities.
+  // When true, EntityChangeUpdated events only contain the components that
+  // changed since this consumer last received the entity, plus id, lifetime
+  // and controller: merge them into the local copy, each component replacing
+  // the one held. The first send of an entity, keepalives, and updates that
+  // removed a component come as EntityChangeReplaced with the whole entity.
   optional bool diff = 5;
 
   // Send an EntityChangeHeartbeat event when the stream has been idle for this
@@ -1283,11 +1427,21 @@ message EntityChangeRequest {
   repeated Entity replacements = 2;
 }
 
+// Set either id or filter, not both.
 message ExpireEntityRequest {
+  // expire one entity. NotFound if it doesn't exist
   string id = 1;
+
+  // expire every entity matching this filter, e.g. all detections:
+  // {component: [EntityComponentDetection]}. Must not be empty; use
+  // HardReset to clear everything. Matching nothing is not an error.
+  optional EntityFilter filter = 2;
 }
 
-message ExpireEntityResponse {}
+message ExpireEntityResponse {
+  // number of entities expired
+  uint32 expired = 1;
+}
 
 message EntityChangeResponse {
   bool accepted = 1;
@@ -1300,71 +1454,31 @@ enum EntityChange {
   EntityChangeExpired = 2;
   EntityChangeUnobserved = 3;
   EntityChangeHeartbeat = 4;
-}
-
-// Proto field numbers of Entity component fields.
-// Used in EntityFilter.component and Lifetime.components.
-enum EntityComponent {
-  EntityComponentUnspecified = 0;
-  EntityComponentLabel = 2;
-  EntityComponentController = 3;
-  EntityComponentLifetime = 4;
-  EntityComponentPriority = 5;
-  EntityComponentLease = 6;
-  EntityComponentRouting = 7;
-  EntityComponentGeo = 11;
-  EntityComponentSymbol = 12;
-  EntityComponentCamera = 15;
-  EntityComponentDetection = 16;
-  EntityComponentBearing = 17;
-  EntityComponentTrack = 21;
-  EntityComponentLocator = 22;
-  EntityComponentTaskable = 23;
-  EntityComponentKinematics = 24;
-  EntityComponentShape = 25;
-  EntityComponentClassification = 26;
-  EntityComponentTransponder = 27;
-  EntityComponentAdministrative = 28;
-  EntityComponentLocalShape = 29;
-  EntityComponentOrientation = 30;
-  EntityComponentMission = 31;
-  EntityComponentLink = 32;
-  EntityComponentPower = 33;
-  EntityComponentNavigation = 34;
-  EntityComponentCapture = 35;
-  EntityComponentMetric = 36;
-  EntityComponentSensor = 37;
-  EntityComponentPose = 38;
-  EntityComponentChat = 39;
-  EntityComponentTaskExecution = 41;
-  EntityComponentGnss = 42;
-  EntityComponentDevice = 50;
-  EntityComponentConfig = 51;
-  EntityComponentConfigurable = 52;
-  EntityComponentInteractivity = 60;
-  EntityComponentArtifact = 61;
-  EntityComponentTargetPose = 62;
-  EntityComponentAssembly = 40;
-  EntityComponentMapLayer = 63;
-  EntityComponentManualControl = 64;
-  EntityComponentTargetManualControl = 65;
-  EntityComponentBounds = 66;
-  EntityComponentPolicy = 67;
-  EntityComponentAuthorization = 68;
-  EntityComponentMeasurement = 69;
+  // the whole entity: replace the local copy, dropping components it lacks.
+  // Only sent to WatchBehavior.diff consumers; others get EntityChangeUpdated
+  // with the whole entity
+  EntityChangeReplaced = 6;
 }
 
 message EntityChangeEvent {
   Entity entity = 1;
   EntityChange t = 2;
 
-  // upstream wall clock at the time this event was sent.
-  // Consumers should use TimeSync() ideally, but this is a good enough fallback when TimeSync isnt possible
+  // this node's clock when it handled the change. In the recorded history
+  // that is when the node accepted it: the accepted timeline (as known), as
+  // opposed to the entity's Lifetime.fresh, when it happened (as happened).
+  // In WatchEntities it is when the event was sent, so that a client without
+  // TimeSync can estimate the node's clock offset; it is not when the change
+  // happened or was accepted, so clients place changes in time by fresh.
   google.protobuf.Timestamp now = 3;
 }
 
 message EntityChangeBatch {
   repeated EntityChangeEvent events = 1;
+
+  // every live entity at this time: one not in it does not exist. A cache of
+  // the state for scrubbing; reading forward it changes nothing
+  bool keyframe = 2;
 }
 
 message GetEntityRequest {
@@ -1470,7 +1584,7 @@ service WorldService {
   // Create or update an entity. Used by capabilities.
   rpc Push(EntityChangeRequest) returns (EntityChangeResponse);
 
-  // expire an entity, setting its lifetime.until to now
+  // expire an entity, or all entities matching a filter, setting lifetime.until to now
   rpc ExpireEntity(ExpireEntityRequest) returns (ExpireEntityResponse);
 
   // get information about the local node the client is connected to

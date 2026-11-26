@@ -42,8 +42,12 @@ const (
 )
 
 // TimelineServiceClient is a client for the timeline.TimelineService service.
+//
+// Deprecated: do not use.
 type TimelineServiceClient interface {
+	// Deprecated: do not use.
 	MoveTimeline(context.Context, *connect.Request[_go.MoveTimelineRequest]) (*connect.Response[_go.MoveTimelineResponse], error)
+	// Deprecated: do not use.
 	GetTimeline(context.Context, *connect.Request[_go.GetTimelineRequest]) (*connect.ServerStreamForClient[_go.GetTimelineResponse], error)
 }
 
@@ -54,6 +58,8 @@ type TimelineServiceClient interface {
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
+//
+// Deprecated: do not use.
 func NewTimelineServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) TimelineServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
 	timelineServiceMethods := _go.File_timeline_proto.Services().ByName("TimelineService").Methods()
@@ -80,18 +86,26 @@ type timelineServiceClient struct {
 }
 
 // MoveTimeline calls timeline.TimelineService.MoveTimeline.
+//
+// Deprecated: do not use.
 func (c *timelineServiceClient) MoveTimeline(ctx context.Context, req *connect.Request[_go.MoveTimelineRequest]) (*connect.Response[_go.MoveTimelineResponse], error) {
 	return c.moveTimeline.CallUnary(ctx, req)
 }
 
 // GetTimeline calls timeline.TimelineService.GetTimeline.
+//
+// Deprecated: do not use.
 func (c *timelineServiceClient) GetTimeline(ctx context.Context, req *connect.Request[_go.GetTimelineRequest]) (*connect.ServerStreamForClient[_go.GetTimelineResponse], error) {
 	return c.getTimeline.CallServerStream(ctx, req)
 }
 
 // TimelineServiceHandler is an implementation of the timeline.TimelineService service.
+//
+// Deprecated: do not use.
 type TimelineServiceHandler interface {
+	// Deprecated: do not use.
 	MoveTimeline(context.Context, *connect.Request[_go.MoveTimelineRequest]) (*connect.Response[_go.MoveTimelineResponse], error)
+	// Deprecated: do not use.
 	GetTimeline(context.Context, *connect.Request[_go.GetTimelineRequest], *connect.ServerStream[_go.GetTimelineResponse]) error
 }
 
@@ -100,6 +114,8 @@ type TimelineServiceHandler interface {
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
+//
+// Deprecated: do not use.
 func NewTimelineServiceHandler(svc TimelineServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	timelineServiceMethods := _go.File_timeline_proto.Services().ByName("TimelineService").Methods()
 	timelineServiceMoveTimelineHandler := connect.NewUnaryHandler(

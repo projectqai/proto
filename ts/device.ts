@@ -1,4 +1,4 @@
-import { createClient, type Client, ConnectError, Code } from "@connectrpc/connect";
+import { createClient, type Client } from "@connectrpc/connect";
 import { createTransport } from "@connectrpc/connect/protocol-connect";
 import type { UniversalClientFn } from "@connectrpc/connect/protocol";
 import { create, clone, type JsonObject, type JsonValue } from "@bufbuild/protobuf";
@@ -166,10 +166,9 @@ export interface AttachOptions<S extends SchemaProperties = Record<string, never
 // Internals
 
 const DEFAULT_INTERVAL = 10_000;
-
-function isCanceled(err: unknown): boolean {
-	return err instanceof ConnectError && err.code === Code.Canceled;
-}
+// A heartbeat keeps the device alive for this many intervals, so a late or
+// failed heartbeat does not expire it before the next one.
+const HEARTBEAT_TTL_INTERVALS = 3;
 
 export function sleep(ms: number, signal: AbortSignal): Promise<void> {
 	return new Promise((resolve) => {
@@ -238,7 +237,7 @@ export async function attach<S extends SchemaProperties = Record<string, never>>
 			id: entityID,
 			device,
 			lifetime: create(LifetimeSchema, {
-				until: create(TimestampSchema, { seconds: BigInt(Math.floor((Date.now() + interval + 1_000) / 1000)) }),
+				until: create(TimestampSchema, { seconds: BigInt(Math.floor((Date.now() + HEARTBEAT_TTL_INTERVALS * interval) / 1000)) }),
 			}),
 		});
 		if (result) {
@@ -254,12 +253,19 @@ export async function attach<S extends SchemaProperties = Record<string, never>>
 	};
 
 	const outerAbort = new AbortController();
+	let heartbeatFailing = false;
 	const tick = async () => {
 		if (outerAbort.signal.aborted) return;
 		try {
 			const r = await health();
 			if (r !== false) await pushHeartbeat(r === true ? undefined : r);
-		} catch { /* health check failed */ }
+			if (heartbeatFailing) console.log(`heartbeat ok again entity=${entityID}`);
+			heartbeatFailing = false;
+		} catch (err) {
+			// logged once per outage, not every interval
+			if (!heartbeatFailing) console.error(`heartbeat failed entity=${entityID}`, err);
+			heartbeatFailing = true;
+		}
 	};
 	tick();
 	heartbeatId = setInterval(tick, interval);
@@ -306,7 +312,7 @@ export async function attach<S extends SchemaProperties = Record<string, never>>
 				try {
 					if (opts.init) await opts.init(client, extractConfig(e, schema), childSignal);
 				} catch (err) {
-					if (childSignal.aborted || isCanceled(err)) return;
+					if (childSignal.aborted) return;
 					console.error(`init failed entity=${entityID}`, err);
 					await pushState(e, ConfigurableState.ConfigurableStateFailed, String(err));
 					await sleep(5_000, childSignal);
@@ -319,7 +325,9 @@ export async function attach<S extends SchemaProperties = Record<string, never>>
 				try {
 					await opts.run(client, extractConfig(e, schema), childSignal);
 				} catch (err) {
-					if (childSignal.aborted || isCanceled(err)) return;
+					// Only our own abort ends the loop. A Canceled error from the
+					// engine is a failure like any other: retry.
+					if (childSignal.aborted) return;
 					console.error(`error, restarting entity=${entityID}`, err);
 					await pushState(e, ConfigurableState.ConfigurableStateFailed, String(err));
 				}
@@ -329,10 +337,11 @@ export async function attach<S extends SchemaProperties = Record<string, never>>
 		})();
 	};
 
-	// Watch for config changes — retry on transient stream errors
+	// Watch for config changes. The watch keeps the plugin running, so any
+	// end of it short of the caller's own signal reconnects.
 
 	try {
-		while (!outerAbort.signal.aborted) {
+		while (!outerAbort.signal.aborted && !opts.signal?.aborted) {
 			const stream = client.watchEntities(
 				create(ListEntitiesRequestSchema, { filter: create(EntityFilterSchema, { id: entityID }) }),
 				...(opts.signal ? [{ signal: opts.signal }] : []),
@@ -356,13 +365,14 @@ export async function attach<S extends SchemaProperties = Record<string, never>>
 					currentConfigVersion = e.config.version;
 					start(e);
 				}
-				break; // clean end of stream
+				if (opts.signal?.aborted) break;
+				console.error(`watch stream ended, reconnecting entity=${entityID}`);
 			} catch (err) {
-				if (isCanceled(err) || opts.signal?.aborted) break;
+				if (opts.signal?.aborted) break;
 				console.error(`watch stream error, reconnecting entity=${entityID}`, err);
-				stop();
-				await sleep(5_000, outerAbort.signal);
 			}
+			stop();
+			await sleep(5_000, outerAbort.signal);
 		}
 	} finally {
 		stop();

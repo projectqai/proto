@@ -26,8 +26,16 @@ const (
 // TimelineServiceClient is the client API for TimelineService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// TimelineService is deprecated: it was never implemented and modelled a
+// global, server-side replay. Use world.HistoryService (history.proto) for
+// scrubbing and HistoryService.Replay for playing, a stream per viewer.
+//
+// Deprecated: Do not use.
 type TimelineServiceClient interface {
+	// Deprecated: Do not use.
 	MoveTimeline(ctx context.Context, in *MoveTimelineRequest, opts ...grpc.CallOption) (*MoveTimelineResponse, error)
+	// Deprecated: Do not use.
 	GetTimeline(ctx context.Context, in *GetTimelineRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GetTimelineResponse], error)
 }
 
@@ -35,10 +43,12 @@ type timelineServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
+// Deprecated: Do not use.
 func NewTimelineServiceClient(cc grpc.ClientConnInterface) TimelineServiceClient {
 	return &timelineServiceClient{cc}
 }
 
+// Deprecated: Do not use.
 func (c *timelineServiceClient) MoveTimeline(ctx context.Context, in *MoveTimelineRequest, opts ...grpc.CallOption) (*MoveTimelineResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(MoveTimelineResponse)
@@ -49,6 +59,7 @@ func (c *timelineServiceClient) MoveTimeline(ctx context.Context, in *MoveTimeli
 	return out, nil
 }
 
+// Deprecated: Do not use.
 func (c *timelineServiceClient) GetTimeline(ctx context.Context, in *GetTimelineRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GetTimelineResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &TimelineService_ServiceDesc.Streams[0], TimelineService_GetTimeline_FullMethodName, cOpts...)
@@ -71,8 +82,16 @@ type TimelineService_GetTimelineClient = grpc.ServerStreamingClient[GetTimelineR
 // TimelineServiceServer is the server API for TimelineService service.
 // All implementations must embed UnimplementedTimelineServiceServer
 // for forward compatibility.
+//
+// TimelineService is deprecated: it was never implemented and modelled a
+// global, server-side replay. Use world.HistoryService (history.proto) for
+// scrubbing and HistoryService.Replay for playing, a stream per viewer.
+//
+// Deprecated: Do not use.
 type TimelineServiceServer interface {
+	// Deprecated: Do not use.
 	MoveTimeline(context.Context, *MoveTimelineRequest) (*MoveTimelineResponse, error)
+	// Deprecated: Do not use.
 	GetTimeline(*GetTimelineRequest, grpc.ServerStreamingServer[GetTimelineResponse]) error
 	mustEmbedUnimplementedTimelineServiceServer()
 }
@@ -100,6 +119,7 @@ type UnsafeTimelineServiceServer interface {
 	mustEmbedUnimplementedTimelineServiceServer()
 }
 
+// Deprecated: Do not use.
 func RegisterTimelineServiceServer(s grpc.ServiceRegistrar, srv TimelineServiceServer) {
 	// If the following call panics, it indicates UnimplementedTimelineServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an

@@ -26,7 +26,10 @@ if _version_not_supported:
 
 
 class TimelineServiceStub(object):
-    """Missing associated documentation comment in .proto file."""
+    """TimelineService is deprecated: it was never implemented and modelled a
+    global, server-side replay. Use world.HistoryService (history.proto) for
+    scrubbing and HistoryService.Replay for playing, a stream per viewer.
+    """
 
     def __init__(self, channel):
         """Constructor.
@@ -47,7 +50,10 @@ class TimelineServiceStub(object):
 
 
 class TimelineServiceServicer(object):
-    """Missing associated documentation comment in .proto file."""
+    """TimelineService is deprecated: it was never implemented and modelled a
+    global, server-side replay. Use world.HistoryService (history.proto) for
+    scrubbing and HistoryService.Replay for playing, a stream per viewer.
+    """
 
     def MoveTimeline(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -83,7 +89,10 @@ def add_TimelineServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class TimelineService(object):
-    """Missing associated documentation comment in .proto file."""
+    """TimelineService is deprecated: it was never implemented and modelled a
+    global, server-side replay. Use world.HistoryService (history.proto) for
+    scrubbing and HistoryService.Replay for playing, a stream per viewer.
+    """
 
     @staticmethod
     def MoveTimeline(request,

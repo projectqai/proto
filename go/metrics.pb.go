@@ -1079,7 +1079,7 @@ var File_metrics_proto protoreflect.FileDescriptor
 
 const file_metrics_proto_rawDesc = "" +
 	"\n" +
-	"\rmetrics.proto\x12\x05world\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9f\x02\n" +
+	"\rmetrics.proto\x12\x05world\x1a\x0ebehavior.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9f\x02\n" +
 	"\vMetricRange\x12\x1f\n" +
 	"\n" +
 	"min_double\x18\x01 \x01(\x01H\x00R\tminDouble\x12\x1d\n" +
@@ -1120,9 +1120,9 @@ const file_metrics_proto_rawDesc = "" +
 	"\f_measured_atB\b\n" +
 	"\x06_rangeB\v\n" +
 	"\t_clippingB\v\n" +
-	"\t_alerting\":\n" +
-	"\x0fMetricComponent\x12'\n" +
-	"\ametrics\x18\x01 \x03(\v2\r.world.MetricR\ametrics*\xc5\t\n" +
+	"\t_alerting\"B\n" +
+	"\x0fMetricComponent\x12/\n" +
+	"\ametrics\x18\x01 \x03(\v2\r.world.MetricB\x06\xf2\xd8#\x02idR\ametrics*\xc5\t\n" +
 	"\n" +
 	"MetricKind\x12\x19\n" +
 	"\x15MetricKindUnspecified\x10\x00\x12\x19\n" +
@@ -1323,6 +1323,7 @@ func file_metrics_proto_init() {
 	if File_metrics_proto != nil {
 		return
 	}
+	file_behavior_proto_init()
 	file_metrics_proto_msgTypes[0].OneofWrappers = []any{
 		(*MetricRange_MinDouble)(nil),
 		(*MetricRange_MinFloat)(nil),

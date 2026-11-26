@@ -1,0 +1,131 @@
+from google.protobuf import timestamp_pb2 as _timestamp_pb2
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Optional, Union as _Union
+
+DESCRIPTOR: _descriptor.FileDescriptor
+
+class EntityComponent(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    EntityComponentUnspecified: _ClassVar[EntityComponent]
+    EntityComponentLabel: _ClassVar[EntityComponent]
+    EntityComponentController: _ClassVar[EntityComponent]
+    EntityComponentLifetime: _ClassVar[EntityComponent]
+    EntityComponentPriority: _ClassVar[EntityComponent]
+    EntityComponentLease: _ClassVar[EntityComponent]
+    EntityComponentRouting: _ClassVar[EntityComponent]
+    EntityComponentGeo: _ClassVar[EntityComponent]
+    EntityComponentSymbol: _ClassVar[EntityComponent]
+    EntityComponentCamera: _ClassVar[EntityComponent]
+    EntityComponentDetection: _ClassVar[EntityComponent]
+    EntityComponentBearing: _ClassVar[EntityComponent]
+    EntityComponentTrack: _ClassVar[EntityComponent]
+    EntityComponentLocator: _ClassVar[EntityComponent]
+    EntityComponentTaskable: _ClassVar[EntityComponent]
+    EntityComponentKinematics: _ClassVar[EntityComponent]
+    EntityComponentShape: _ClassVar[EntityComponent]
+    EntityComponentClassification: _ClassVar[EntityComponent]
+    EntityComponentTransponder: _ClassVar[EntityComponent]
+    EntityComponentAdministrative: _ClassVar[EntityComponent]
+    EntityComponentLocalShape: _ClassVar[EntityComponent]
+    EntityComponentOrientation: _ClassVar[EntityComponent]
+    EntityComponentMission: _ClassVar[EntityComponent]
+    EntityComponentLink: _ClassVar[EntityComponent]
+    EntityComponentPower: _ClassVar[EntityComponent]
+    EntityComponentNavigation: _ClassVar[EntityComponent]
+    EntityComponentCapture: _ClassVar[EntityComponent]
+    EntityComponentMetric: _ClassVar[EntityComponent]
+    EntityComponentSensor: _ClassVar[EntityComponent]
+    EntityComponentPose: _ClassVar[EntityComponent]
+    EntityComponentChat: _ClassVar[EntityComponent]
+    EntityComponentTaskExecution: _ClassVar[EntityComponent]
+    EntityComponentGnss: _ClassVar[EntityComponent]
+    EntityComponentDevice: _ClassVar[EntityComponent]
+    EntityComponentConfig: _ClassVar[EntityComponent]
+    EntityComponentConfigurable: _ClassVar[EntityComponent]
+    EntityComponentInteractivity: _ClassVar[EntityComponent]
+    EntityComponentArtifact: _ClassVar[EntityComponent]
+    EntityComponentTargetPose: _ClassVar[EntityComponent]
+    EntityComponentAssembly: _ClassVar[EntityComponent]
+    EntityComponentMapLayer: _ClassVar[EntityComponent]
+    EntityComponentManualControl: _ClassVar[EntityComponent]
+    EntityComponentTargetManualControl: _ClassVar[EntityComponent]
+    EntityComponentBounds: _ClassVar[EntityComponent]
+    EntityComponentPolicy: _ClassVar[EntityComponent]
+    EntityComponentAuthorization: _ClassVar[EntityComponent]
+    EntityComponentMeasurement: _ClassVar[EntityComponent]
+    EntityComponentStream: _ClassVar[EntityComponent]
+    EntityComponentVideoFrame: _ClassVar[EntityComponent]
+    EntityComponentVideo: _ClassVar[EntityComponent]
+    EntityComponentMcapChannel: _ClassVar[EntityComponent]
+    EntityComponentMcapMessage: _ClassVar[EntityComponent]
+    EntityComponentImage: _ClassVar[EntityComponent]
+    EntityComponentWaveform: _ClassVar[EntityComponent]
+    EntityComponentWaveformFrame: _ClassVar[EntityComponent]
+EntityComponentUnspecified: EntityComponent
+EntityComponentLabel: EntityComponent
+EntityComponentController: EntityComponent
+EntityComponentLifetime: EntityComponent
+EntityComponentPriority: EntityComponent
+EntityComponentLease: EntityComponent
+EntityComponentRouting: EntityComponent
+EntityComponentGeo: EntityComponent
+EntityComponentSymbol: EntityComponent
+EntityComponentCamera: EntityComponent
+EntityComponentDetection: EntityComponent
+EntityComponentBearing: EntityComponent
+EntityComponentTrack: EntityComponent
+EntityComponentLocator: EntityComponent
+EntityComponentTaskable: EntityComponent
+EntityComponentKinematics: EntityComponent
+EntityComponentShape: EntityComponent
+EntityComponentClassification: EntityComponent
+EntityComponentTransponder: EntityComponent
+EntityComponentAdministrative: EntityComponent
+EntityComponentLocalShape: EntityComponent
+EntityComponentOrientation: EntityComponent
+EntityComponentMission: EntityComponent
+EntityComponentLink: EntityComponent
+EntityComponentPower: EntityComponent
+EntityComponentNavigation: EntityComponent
+EntityComponentCapture: EntityComponent
+EntityComponentMetric: EntityComponent
+EntityComponentSensor: EntityComponent
+EntityComponentPose: EntityComponent
+EntityComponentChat: EntityComponent
+EntityComponentTaskExecution: EntityComponent
+EntityComponentGnss: EntityComponent
+EntityComponentDevice: EntityComponent
+EntityComponentConfig: EntityComponent
+EntityComponentConfigurable: EntityComponent
+EntityComponentInteractivity: EntityComponent
+EntityComponentArtifact: EntityComponent
+EntityComponentTargetPose: EntityComponent
+EntityComponentAssembly: EntityComponent
+EntityComponentMapLayer: EntityComponent
+EntityComponentManualControl: EntityComponent
+EntityComponentTargetManualControl: EntityComponent
+EntityComponentBounds: EntityComponent
+EntityComponentPolicy: EntityComponent
+EntityComponentAuthorization: EntityComponent
+EntityComponentMeasurement: EntityComponent
+EntityComponentStream: EntityComponent
+EntityComponentVideoFrame: EntityComponent
+EntityComponentVideo: EntityComponent
+EntityComponentMcapChannel: EntityComponent
+EntityComponentMcapMessage: EntityComponent
+EntityComponentImage: EntityComponent
+EntityComponentWaveform: EntityComponent
+EntityComponentWaveformFrame: EntityComponent
+
+class Reference(_message.Message):
+    __slots__ = ("entity_id", "until", "component")
+    ENTITY_ID_FIELD_NUMBER: _ClassVar[int]
+    FROM_FIELD_NUMBER: _ClassVar[int]
+    UNTIL_FIELD_NUMBER: _ClassVar[int]
+    COMPONENT_FIELD_NUMBER: _ClassVar[int]
+    entity_id: str
+    until: _timestamp_pb2.Timestamp
+    component: EntityComponent
+    def __init__(self, entity_id: _Optional[str] = ..., until: _Optional[_Union[_timestamp_pb2.Timestamp, _Mapping]] = ..., component: _Optional[_Union[EntityComponent, str]] = ..., **kwargs) -> None: ...

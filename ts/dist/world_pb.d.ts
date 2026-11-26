@@ -6,8 +6,10 @@ import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobu
 import type { JsonObject, Message } from "@bufbuild/protobuf";
 import type { MetricComponent, MetricKind } from "./metrics_pb.js";
 import type { AuthorizationComponent, PolicyComponent } from "./policy_pb.js";
+import type { ImageComponent, ImageMask, McapChannelComponent, McapMessageComponent, StreamComponent, VideoComponent, VideoFrameComponent, WaveformComponent, WaveformFrameComponent } from "./samples_pb.js";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { DeviceSoftware, SoftwareArtifact } from "./software_pb.js";
+import type { Reference } from "./components_pb.js";
 import type { TaskableTarget, TaskExecutionTarget } from "./tasking_pb.js";
 import type { ClassificationTaxonomy, TaskingTaxonomy } from "./taxonomy_pb.js";
 import type { GeometryExtrusion, LocalGeometry, PlanarGeometry, PlanarPoint } from "./geometry_pb.js";
@@ -19,12 +21,12 @@ import type { ManualControlInput } from "./manualcontrol_pb.js";
 export declare const file_world: GenFile;
 
 /**
- * metadata
- *
  * @generated from message world.Entity
  */
 export declare type Entity = Message<"world.Entity"> & {
   /**
+   * metadata
+   *
    * @generated from field: string id = 1;
    */
   id: string;
@@ -60,6 +62,8 @@ export declare type Entity = Message<"world.Entity"> & {
   routing?: Routing | undefined;
 
   /**
+   * cop
+   *
    * @generated from field: optional world.GeoSpatialComponent geo = 11;
    */
   geo?: GeoSpatialComponent | undefined;
@@ -160,19 +164,61 @@ export declare type Entity = Message<"world.Entity"> & {
   pose?: PoseComponent | undefined;
 
   /**
-   * @generated from field: optional world.TargetPoseComponent target_pose = 62;
-   */
-  targetPose?: TargetPoseComponent | undefined;
-
-  /**
    * @generated from field: optional world.LocalShapeComponent local_shape = 29;
    */
   localShape?: LocalShapeComponent | undefined;
 
   /**
+   * @generated from field: optional world.MissionComponent mission = 31;
+   */
+  mission?: MissionComponent | undefined;
+
+  /**
+   * @generated from field: optional world.SensorComponent sensor = 37;
+   */
+  sensor?: SensorComponent | undefined;
+
+  /**
+   * @generated from field: optional world.InteractivityComponent interactivity = 60;
+   */
+  interactivity?: InteractivityComponent | undefined;
+
+  /**
+   * @generated from field: optional world.ChatComponent chat = 39;
+   */
+  chat?: ChatComponent | undefined;
+
+  /**
+   * @generated from field: optional world.AssemblyComponent assembly = 40;
+   */
+  assembly?: AssemblyComponent | undefined;
+
+  /**
+   * @generated from field: optional world.MapLayerComponent map_layer = 63;
+   */
+  mapLayer?: MapLayerComponent | undefined;
+
+  /**
+   * @generated from field: optional world.BoundsComponent bounds = 66;
+   */
+  bounds?: BoundsComponent | undefined;
+
+  /**
+   * @generated from field: optional world.MeasurementComponent measurement = 69;
+   */
+  measurement?: MeasurementComponent | undefined;
+
+  /**
    * @generated from field: optional world.MetricComponent metric = 36;
    */
   metric?: MetricComponent | undefined;
+
+  /**
+   * control
+   *
+   * @generated from field: optional world.TargetPoseComponent target_pose = 62;
+   */
+  targetPose?: TargetPoseComponent | undefined;
 
   /**
    * @generated from field: optional world.ConfigurationComponent config = 51;
@@ -195,41 +241,6 @@ export declare type Entity = Message<"world.Entity"> & {
   taskExecution?: TaskExecutionComponent | undefined;
 
   /**
-   * @generated from field: optional world.MissionComponent mission = 31;
-   */
-  mission?: MissionComponent | undefined;
-
-  /**
-   * @generated from field: optional world.SensorComponent sensor = 37;
-   */
-  sensor?: SensorComponent | undefined;
-
-  /**
-   * @generated from field: optional world.InteractivityComponent interactivity = 60;
-   */
-  interactivity?: InteractivityComponent | undefined;
-
-  /**
-   * @generated from field: optional world.ArtifactComponent artifact = 61;
-   */
-  artifact?: ArtifactComponent | undefined;
-
-  /**
-   * @generated from field: optional world.ChatComponent chat = 39;
-   */
-  chat?: ChatComponent | undefined;
-
-  /**
-   * @generated from field: optional world.AssemblyComponent assembly = 40;
-   */
-  assembly?: AssemblyComponent | undefined;
-
-  /**
-   * @generated from field: optional world.MapLayerComponent map_layer = 63;
-   */
-  mapLayer?: MapLayerComponent | undefined;
-
-  /**
    * @generated from field: optional world.ManualControlComponent manual_control = 64;
    */
   manualControl?: ManualControlComponent | undefined;
@@ -240,14 +251,16 @@ export declare type Entity = Message<"world.Entity"> & {
   targetManualControl?: TargetManualControlComponent | undefined;
 
   /**
-   * @generated from field: optional world.BoundsComponent bounds = 66;
-   */
-  bounds?: BoundsComponent | undefined;
-
-  /**
+   * infrastructure
+   *
    * @generated from field: optional world.PolicyComponent policy = 67;
    */
   policy?: PolicyComponent | undefined;
+
+  /**
+   * @generated from field: optional world.ArtifactComponent artifact = 61;
+   */
+  artifact?: ArtifactComponent | undefined;
 
   /**
    * @generated from field: optional world.AuthorizationComponent authorization = 68;
@@ -255,9 +268,46 @@ export declare type Entity = Message<"world.Entity"> & {
   authorization?: AuthorizationComponent | undefined;
 
   /**
-   * @generated from field: optional world.MeasurementComponent measurement = 69;
+   * raw data streams
+   *
+   * @generated from field: optional world.StreamComponent stream = 70;
    */
-  measurement?: MeasurementComponent | undefined;
+  stream?: StreamComponent | undefined;
+
+  /**
+   * @generated from field: optional world.VideoFrameComponent video_frame = 73;
+   */
+  videoFrame?: VideoFrameComponent | undefined;
+
+  /**
+   * @generated from field: optional world.VideoComponent video = 74;
+   */
+  video?: VideoComponent | undefined;
+
+  /**
+   * @generated from field: optional world.McapChannelComponent mcap_channel = 75;
+   */
+  mcapChannel?: McapChannelComponent | undefined;
+
+  /**
+   * @generated from field: optional world.McapMessageComponent mcap_message = 76;
+   */
+  mcapMessage?: McapMessageComponent | undefined;
+
+  /**
+   * @generated from field: optional world.ImageComponent image = 77;
+   */
+  image?: ImageComponent | undefined;
+
+  /**
+   * @generated from field: optional world.WaveformComponent waveform = 78;
+   */
+  waveform?: WaveformComponent | undefined;
+
+  /**
+   * @generated from field: optional world.WaveformFrameComponent waveform_frame = 79;
+   */
+  waveformFrame?: WaveformFrameComponent | undefined;
 };
 
 /**
@@ -355,6 +405,16 @@ export declare type Lifetime = Message<"world.Lifetime"> & {
    * @generated from field: optional google.protobuf.Timestamp fresh = 3;
    */
   fresh?: Timestamp | undefined;
+
+  /**
+   * time this entity stops being current: displays should drop or dim it
+   * from here on, although it stays in the world (queries, fusion, history)
+   * until `until`. Normally between fresh and until; unset means current
+   * until `until`.
+   *
+   * @generated from field: optional google.protobuf.Timestamp stale = 4;
+   */
+  stale?: Timestamp | undefined;
 };
 
 /**
@@ -536,6 +596,19 @@ export declare type InteractivityComponent = Message<"world.InteractivityCompone
 export declare const InteractivityComponentSchema: GenMessage<InteractivityComponent>;
 
 /**
+ * A source a camera is declared to have: where it is reached and what it is
+ * expected to be, as an operator or a driver that found the camera writes
+ * it. It is a declaration, not data. What the source really carries is
+ * written by the driver that pulls it, as components of the stream's entity
+ * (the camera itself for its main stream, the child `<camera>.<role>`, e.g.
+ * `<camera>.sub`, for another role): VideoComponent and VideoFrameComponent
+ * for video, ImageComponent for images.
+ *
+ * Where the two differ the components are right. codec says what to expect
+ * before the source was reached (an RTSP camera declared H264 can turn out
+ * to send JPEG, and is then streamed as images); readers decode by
+ * VideoComponent.codec or ImageComponent.format, never by this.
+ *
  * @generated from message world.MediaStream
  */
 export declare type MediaStream = Message<"world.MediaStream"> & {
@@ -545,6 +618,8 @@ export declare type MediaStream = Message<"world.MediaStream"> & {
   label: string;
 
   /**
+   * this is the ingress url. the engine connects to it from the node to source it
+   *
    * @generated from field: string url = 2;
    */
   url: string;
@@ -562,22 +637,23 @@ export declare type MediaStream = Message<"world.MediaStream"> & {
   role: MediaStreamRole;
 
   /**
-   * video codec, e.g. "H264", "H265"
+   * the codec expected, by its short name: "H264", "H265", "MJPEG". The
+   * streamed VideoComponent.codec and ImageComponent.format are media types
+   * instead ("video/H264", "image/jpeg"), and say what was found.
    *
    * @generated from field: string codec = 10;
    */
   codec: string;
 
   /**
-   * resolution width in pixels
+   * the resolution expected, in pixels. What is streamed can differ: its
+   * VideoComponent or ImageComponent says what it is.
    *
    * @generated from field: optional int32 width = 11;
    */
   width?: number | undefined;
 
   /**
-   * resolution height in pixels
-   *
    * @generated from field: optional int32 height = 12;
    */
   height?: number | undefined;
@@ -588,6 +664,20 @@ export declare type MediaStream = Message<"world.MediaStream"> & {
    * @generated from field: optional google.protobuf.Timestamp epoch = 13;
    */
   epoch?: Timestamp | undefined;
+
+  /**
+   * how much later than it was captured the source stamps a frame (or the
+   * frame arrives, for a source without capture times), in milliseconds:
+   * taken off every frame's time. A per-camera calibration, so that cameras
+   * that stamp at different points (exposure, encoding, sending) line up;
+   * may be negative. Declared, and applied before a frame is written: a
+   * sample's Lifetime.fresh already has it taken off. Not to be confused
+   * with StreamComponent.Stream.latency_ms, which the engine measures from
+   * that fresh on.
+   *
+   * @generated from field: optional int32 latency_ms = 14;
+   */
+  latencyMs?: number | undefined;
 };
 
 /**
@@ -662,7 +752,16 @@ export declare type CameraComponent = Message<"world.CameraComponent"> & {
 export declare const CameraComponentSchema: GenMessage<CameraComponent>;
 
 /**
- * reference to external system
+ * Where an artifact's content is: a URL of an external system, or
+ *
+ *   stream:<entity>/<component>?from=<RFC 3339>[&until=<RFC 3339>]
+ *
+ * recorded samples of an entity's sampled component (as a Reference names
+ * them): from alone, the one sample whose fresh it is; with until, those
+ * from `from` up to and including until. GET /artifacts/{id} serves them as
+ * the artifact's content_type: as recorded when that is their format, else
+ * converted (waveform frames as audio/wav, raw images as image/png). The
+ * artifact entity carries what the stream is (e.g. a WaveformComponent).
  *
  * @generated from message world.ArtifactLocation
  */
@@ -822,6 +921,24 @@ export declare type ImageBoundingBox = Message<"world.ImageBoundingBox"> & {
 export declare const ImageBoundingBoxSchema: GenMessage<ImageBoundingBox>;
 
 /**
+ * What a detector found. A detector of video follows these rules, which
+ * synced views (media sessions that draw each frame's detections into it)
+ * rely on:
+ *  - every detection names the frame it was made from (frame), and the
+ *    detections of one frame are pushed together, before the detector
+ *    takes its next frame (MediaService.GrabFrame);
+ *  - a detection stands for its frame and the later frames only until the
+ *    detector's next result is due: a view shows it on frames up to one
+ *    and a half of the detector's usual interval between analyzed frames
+ *    after its own, and on none later, expired or not (a live view, which
+ *    shows frames before their detections can come, shows the newest
+ *    until the next result is overdue). An object still there is reported
+ *    again with every frame analyzed; one gone is just not reported any
+ *    more;
+ *  - while a detector takes frames of a stream, the stream counts as
+ *    analyzed, finding something or not: views of it stay synced, so a
+ *    detector does not have to report empty frames.
+ *
  * @generated from message world.DetectionComponent
  */
 export declare type DetectionComponent = Message<"world.DetectionComponent"> & {
@@ -862,6 +979,32 @@ export declare type DetectionComponent = Message<"world.DetectionComponent"> & {
    * @generated from field: optional float confidence = 6;
    */
   confidence?: number | undefined;
+
+  /**
+   * the sample this detection was made from: its entity, component and
+   * from = its fresh. Several detections of one frame name
+   * the same frame. A synced media session, live or replaying, shows each
+   * frame with the detections made from it, and the frames after it with
+   * them only until the detector's next result is due (see above).
+   *
+   * @generated from field: optional world.Reference frame = 7;
+   */
+  frame?: Reference | undefined;
+
+  /**
+   * the object's pixels in that frame, from a segmentation model
+   *
+   * @generated from field: optional world.ImageMask image_mask = 8;
+   */
+  imageMask?: ImageMask | undefined;
+
+  /**
+   * what supports this detection, with positions. The engine keeps evidence
+   * as the ids written there plus every references[].entity_id
+   *
+   * @generated from field: repeated world.Reference references = 9;
+   */
+  references: Reference[];
 };
 
 /**
@@ -1228,27 +1371,29 @@ export declare type TargetPoseComponent = Message<"world.TargetPoseComponent"> &
 export declare const TargetPoseComponentSchema: GenMessage<TargetPoseComponent>;
 
 /**
- * Angular velocity around the entity's own body axes
+ * Angular velocity around the entity's own RFU body axes: x right,
+ * y forward, z up. Same axes and signs as the angles in
+ * OrientationComponent; each rate is right-handed about its axis.
  *
  * @generated from message world.AngularVelocity
  */
 export declare type AngularVelocity = Message<"world.AngularVelocity"> & {
   /**
-   * radians per second
+   * radians per second about y (forward), positive right wing down
    *
    * @generated from field: double roll_rate = 1;
    */
   rollRate: number;
 
   /**
-   * radians per second
+   * radians per second about x (right), positive nose up
    *
    * @generated from field: double pitch_rate = 2;
    */
   pitchRate: number;
 
   /**
-   * radians per second
+   * radians per second about z (up), positive turning left; heading falls
    *
    * @generated from field: double yaw_rate = 3;
    */
@@ -1265,6 +1410,16 @@ export declare const AngularVelocitySchema: GenMessage<AngularVelocity>;
  * Absolute orientation in the world, relative to the local ENU frame.
  * For root entities this is set directly; for child entities the engine
  * computes it by composing orientations down the pose tree.
+ *
+ * ENU world, RFU (right-forward-up) body. The quaternion rotates the body
+ * frame into the local ENU frame (x east, y north, z up). The body axes are
+ * x right, y forward and z up, so at identity a body faces north with its
+ * right side to the east. Angles are right-handed about the body axes, with
+ * the same signs as AngularVelocity: pitch about x (positive nose up), roll
+ * about y (positive right wing down), yaw about z (positive turning left).
+ * The quaternion is yaw ⊗ pitch ⊗ roll. A heading is a compass bearing,
+ * clockwise from north, so heading = -yaw: heading 030 is z = sin(-15°),
+ * w = cos(-15°).
  *
  * @generated from message world.OrientationComponent
  */
@@ -1322,6 +1477,14 @@ export declare type TrackComponent = Message<"world.TrackComponent"> & {
    * @generated from field: optional float confidence = 5;
    */
   confidence?: number | undefined;
+
+  /**
+   * what supports this track, with positions; evidence is kept as on
+   * DetectionComponent
+   *
+   * @generated from field: repeated world.Reference references = 6;
+   */
+  references: Reference[];
 };
 
 /**
@@ -2838,6 +3001,20 @@ export declare type BleDevice = Message<"world.BleDevice"> & {
    * @generated from field: repeated string service_uuids = 4;
    */
   serviceUuids: string[];
+
+  /**
+   * manufacturer-specific advertisement data, one element per company ID
+   *
+   * @generated from field: repeated world.BleManufacturerData manufacturer_data = 5;
+   */
+  manufacturerData: BleManufacturerData[];
+
+  /**
+   * service data advertisement elements, one per service UUID
+   *
+   * @generated from field: repeated world.BleServiceData service_data = 6;
+   */
+  serviceData: BleServiceData[];
 };
 
 /**
@@ -2845,6 +3022,52 @@ export declare type BleDevice = Message<"world.BleDevice"> & {
  * Use `create(BleDeviceSchema)` to create a new message.
  */
 export declare const BleDeviceSchema: GenMessage<BleDevice>;
+
+/**
+ * @generated from message world.BleManufacturerData
+ */
+export declare type BleManufacturerData = Message<"world.BleManufacturerData"> & {
+  /**
+   * Bluetooth SIG company identifier
+   *
+   * @generated from field: uint32 company_id = 1;
+   */
+  companyId: number;
+
+  /**
+   * @generated from field: bytes data = 2;
+   */
+  data: Uint8Array;
+};
+
+/**
+ * Describes the message world.BleManufacturerData.
+ * Use `create(BleManufacturerDataSchema)` to create a new message.
+ */
+export declare const BleManufacturerDataSchema: GenMessage<BleManufacturerData>;
+
+/**
+ * @generated from message world.BleServiceData
+ */
+export declare type BleServiceData = Message<"world.BleServiceData"> & {
+  /**
+   * lowercase service UUID
+   *
+   * @generated from field: string uuid = 1;
+   */
+  uuid: string;
+
+  /**
+   * @generated from field: bytes data = 2;
+   */
+  data: Uint8Array;
+};
+
+/**
+ * Describes the message world.BleServiceData.
+ * Use `create(BleServiceDataSchema)` to create a new message.
+ */
+export declare const BleServiceDataSchema: GenMessage<BleServiceData>;
 
 /**
  * Configuration pushed onto an entity. The engine delivers entities with
@@ -3153,6 +3376,11 @@ export declare type EntityFilter = Message<"world.EntityFilter"> & {
   channel?: ChannelFilter | undefined;
 
   /**
+   * @generated from field: optional world.DetectionFilter detection = 11;
+   */
+  detection?: DetectionFilter | undefined;
+
+  /**
    * @generated from field: optional world.DeviceFilter device = 50;
    */
   device?: DeviceFilter | undefined;
@@ -3208,6 +3436,26 @@ export declare type ControllerFilter = Message<"world.ControllerFilter"> & {
  * Use `create(ControllerFilterSchema)` to create a new message.
  */
 export declare const ControllerFilterSchema: GenMessage<ControllerFilter>;
+
+/**
+ * matches entities with a detection component
+ *
+ * @generated from message world.DetectionFilter
+ */
+export declare type DetectionFilter = Message<"world.DetectionFilter"> & {
+  /**
+   * only detections made by this detector (detection.detectorEntityId)
+   *
+   * @generated from field: optional string detector = 1;
+   */
+  detector?: string | undefined;
+};
+
+/**
+ * Describes the message world.DetectionFilter.
+ * Use `create(DetectionFilterSchema)` to create a new message.
+ */
+export declare const DetectionFilterSchema: GenMessage<DetectionFilter>;
 
 /**
  * @generated from message world.TrackFilter
@@ -3528,8 +3776,11 @@ export declare type WatchBehavior = Message<"world.WatchBehavior"> & {
   keepaliveIntervalMs?: number | undefined;
 
   /**
-   * When true, update events only contain the components that actually changed
-   * rather than the full entity. The initial snapshot always sends full entities.
+   * When true, EntityChangeUpdated events only contain the components that
+   * changed since this consumer last received the entity, plus id, lifetime
+   * and controller: merge them into the local copy, each component replacing
+   * the one held. The first send of an entity, keepalives, and updates that
+   * removed a component come as EntityChangeReplaced with the whole entity.
    *
    * @generated from field: optional bool diff = 5;
    */
@@ -3636,13 +3887,26 @@ export declare type EntityChangeRequest = Message<"world.EntityChangeRequest"> &
 export declare const EntityChangeRequestSchema: GenMessage<EntityChangeRequest>;
 
 /**
+ * Set either id or filter, not both.
+ *
  * @generated from message world.ExpireEntityRequest
  */
 export declare type ExpireEntityRequest = Message<"world.ExpireEntityRequest"> & {
   /**
+   * expire one entity. NotFound if it doesn't exist
+   *
    * @generated from field: string id = 1;
    */
   id: string;
+
+  /**
+   * expire every entity matching this filter, e.g. all detections:
+   * {component: [EntityComponentDetection]}. Must not be empty; use
+   * HardReset to clear everything. Matching nothing is not an error.
+   *
+   * @generated from field: optional world.EntityFilter filter = 2;
+   */
+  filter?: EntityFilter | undefined;
 };
 
 /**
@@ -3655,6 +3919,12 @@ export declare const ExpireEntityRequestSchema: GenMessage<ExpireEntityRequest>;
  * @generated from message world.ExpireEntityResponse
  */
 export declare type ExpireEntityResponse = Message<"world.ExpireEntityResponse"> & {
+  /**
+   * number of entities expired
+   *
+   * @generated from field: uint32 expired = 1;
+   */
+  expired: number;
 };
 
 /**
@@ -3699,8 +3969,12 @@ export declare type EntityChangeEvent = Message<"world.EntityChangeEvent"> & {
   t: EntityChange;
 
   /**
-   * upstream wall clock at the time this event was sent.
-   * Consumers should use TimeSync() ideally, but this is a good enough fallback when TimeSync isnt possible
+   * this node's clock when it handled the change. In the recorded history
+   * that is when the node accepted it: the accepted timeline (as known), as
+   * opposed to the entity's Lifetime.fresh, when it happened (as happened).
+   * In WatchEntities it is when the event was sent, so that a client without
+   * TimeSync can estimate the node's clock offset; it is not when the change
+   * happened or was accepted, so clients place changes in time by fresh.
    *
    * @generated from field: google.protobuf.Timestamp now = 3;
    */
@@ -3721,6 +3995,14 @@ export declare type EntityChangeBatch = Message<"world.EntityChangeBatch"> & {
    * @generated from field: repeated world.EntityChangeEvent events = 1;
    */
   events: EntityChangeEvent[];
+
+  /**
+   * every live entity at this time: one not in it does not exist. A cache of
+   * the state for scrubbing; reading forward it changes nothing
+   *
+   * @generated from field: bool keyframe = 2;
+   */
+  keyframe: boolean;
 };
 
 /**
@@ -4150,6 +4432,10 @@ export enum GnssFixType {
 export declare const GnssFixTypeSchema: GenEnum<GnssFixType>;
 
 /**
+ * How a camera stream is reached at MediaStream.url. The engine pulls every
+ * protocol but Iframe and Webrtc; an Iframe stream is a web page that
+ * clients embed, e.g. a YouTube live stream.
+ *
  * @generated from enum world.MediaStreamProtocol
  */
 export enum MediaStreamProtocol {
@@ -4869,260 +5155,21 @@ export enum EntityChange {
    * @generated from enum value: EntityChangeHeartbeat = 4;
    */
   EntityChangeHeartbeat = 4,
+
+  /**
+   * the whole entity: replace the local copy, dropping components it lacks.
+   * Only sent to WatchBehavior.diff consumers; others get EntityChangeUpdated
+   * with the whole entity
+   *
+   * @generated from enum value: EntityChangeReplaced = 6;
+   */
+  EntityChangeReplaced = 6,
 }
 
 /**
  * Describes the enum world.EntityChange.
  */
 export declare const EntityChangeSchema: GenEnum<EntityChange>;
-
-/**
- * Proto field numbers of Entity component fields.
- * Used in EntityFilter.component and Lifetime.components.
- *
- * @generated from enum world.EntityComponent
- */
-export enum EntityComponent {
-  /**
-   * @generated from enum value: EntityComponentUnspecified = 0;
-   */
-  EntityComponentUnspecified = 0,
-
-  /**
-   * @generated from enum value: EntityComponentLabel = 2;
-   */
-  EntityComponentLabel = 2,
-
-  /**
-   * @generated from enum value: EntityComponentController = 3;
-   */
-  EntityComponentController = 3,
-
-  /**
-   * @generated from enum value: EntityComponentLifetime = 4;
-   */
-  EntityComponentLifetime = 4,
-
-  /**
-   * @generated from enum value: EntityComponentPriority = 5;
-   */
-  EntityComponentPriority = 5,
-
-  /**
-   * @generated from enum value: EntityComponentLease = 6;
-   */
-  EntityComponentLease = 6,
-
-  /**
-   * @generated from enum value: EntityComponentRouting = 7;
-   */
-  EntityComponentRouting = 7,
-
-  /**
-   * @generated from enum value: EntityComponentGeo = 11;
-   */
-  EntityComponentGeo = 11,
-
-  /**
-   * @generated from enum value: EntityComponentSymbol = 12;
-   */
-  EntityComponentSymbol = 12,
-
-  /**
-   * @generated from enum value: EntityComponentCamera = 15;
-   */
-  EntityComponentCamera = 15,
-
-  /**
-   * @generated from enum value: EntityComponentDetection = 16;
-   */
-  EntityComponentDetection = 16,
-
-  /**
-   * @generated from enum value: EntityComponentBearing = 17;
-   */
-  EntityComponentBearing = 17,
-
-  /**
-   * @generated from enum value: EntityComponentTrack = 21;
-   */
-  EntityComponentTrack = 21,
-
-  /**
-   * @generated from enum value: EntityComponentLocator = 22;
-   */
-  EntityComponentLocator = 22,
-
-  /**
-   * @generated from enum value: EntityComponentTaskable = 23;
-   */
-  EntityComponentTaskable = 23,
-
-  /**
-   * @generated from enum value: EntityComponentKinematics = 24;
-   */
-  EntityComponentKinematics = 24,
-
-  /**
-   * @generated from enum value: EntityComponentShape = 25;
-   */
-  EntityComponentShape = 25,
-
-  /**
-   * @generated from enum value: EntityComponentClassification = 26;
-   */
-  EntityComponentClassification = 26,
-
-  /**
-   * @generated from enum value: EntityComponentTransponder = 27;
-   */
-  EntityComponentTransponder = 27,
-
-  /**
-   * @generated from enum value: EntityComponentAdministrative = 28;
-   */
-  EntityComponentAdministrative = 28,
-
-  /**
-   * @generated from enum value: EntityComponentLocalShape = 29;
-   */
-  EntityComponentLocalShape = 29,
-
-  /**
-   * @generated from enum value: EntityComponentOrientation = 30;
-   */
-  EntityComponentOrientation = 30,
-
-  /**
-   * @generated from enum value: EntityComponentMission = 31;
-   */
-  EntityComponentMission = 31,
-
-  /**
-   * @generated from enum value: EntityComponentLink = 32;
-   */
-  EntityComponentLink = 32,
-
-  /**
-   * @generated from enum value: EntityComponentPower = 33;
-   */
-  EntityComponentPower = 33,
-
-  /**
-   * @generated from enum value: EntityComponentNavigation = 34;
-   */
-  EntityComponentNavigation = 34,
-
-  /**
-   * @generated from enum value: EntityComponentCapture = 35;
-   */
-  EntityComponentCapture = 35,
-
-  /**
-   * @generated from enum value: EntityComponentMetric = 36;
-   */
-  EntityComponentMetric = 36,
-
-  /**
-   * @generated from enum value: EntityComponentSensor = 37;
-   */
-  EntityComponentSensor = 37,
-
-  /**
-   * @generated from enum value: EntityComponentPose = 38;
-   */
-  EntityComponentPose = 38,
-
-  /**
-   * @generated from enum value: EntityComponentChat = 39;
-   */
-  EntityComponentChat = 39,
-
-  /**
-   * @generated from enum value: EntityComponentTaskExecution = 41;
-   */
-  EntityComponentTaskExecution = 41,
-
-  /**
-   * @generated from enum value: EntityComponentGnss = 42;
-   */
-  EntityComponentGnss = 42,
-
-  /**
-   * @generated from enum value: EntityComponentDevice = 50;
-   */
-  EntityComponentDevice = 50,
-
-  /**
-   * @generated from enum value: EntityComponentConfig = 51;
-   */
-  EntityComponentConfig = 51,
-
-  /**
-   * @generated from enum value: EntityComponentConfigurable = 52;
-   */
-  EntityComponentConfigurable = 52,
-
-  /**
-   * @generated from enum value: EntityComponentInteractivity = 60;
-   */
-  EntityComponentInteractivity = 60,
-
-  /**
-   * @generated from enum value: EntityComponentArtifact = 61;
-   */
-  EntityComponentArtifact = 61,
-
-  /**
-   * @generated from enum value: EntityComponentTargetPose = 62;
-   */
-  EntityComponentTargetPose = 62,
-
-  /**
-   * @generated from enum value: EntityComponentAssembly = 40;
-   */
-  EntityComponentAssembly = 40,
-
-  /**
-   * @generated from enum value: EntityComponentMapLayer = 63;
-   */
-  EntityComponentMapLayer = 63,
-
-  /**
-   * @generated from enum value: EntityComponentManualControl = 64;
-   */
-  EntityComponentManualControl = 64,
-
-  /**
-   * @generated from enum value: EntityComponentTargetManualControl = 65;
-   */
-  EntityComponentTargetManualControl = 65,
-
-  /**
-   * @generated from enum value: EntityComponentBounds = 66;
-   */
-  EntityComponentBounds = 66,
-
-  /**
-   * @generated from enum value: EntityComponentPolicy = 67;
-   */
-  EntityComponentPolicy = 67,
-
-  /**
-   * @generated from enum value: EntityComponentAuthorization = 68;
-   */
-  EntityComponentAuthorization = 68,
-
-  /**
-   * @generated from enum value: EntityComponentMeasurement = 69;
-   */
-  EntityComponentMeasurement = 69,
-}
-
-/**
- * Describes the enum world.EntityComponent.
- */
-export declare const EntityComponentSchema: GenEnum<EntityComponent>;
 
 /**
  * @generated from enum world.TaskStatus
@@ -5201,7 +5248,7 @@ export declare const WorldService: GenService<{
     output: typeof EntityChangeResponseSchema;
   },
   /**
-   * expire an entity, setting its lifetime.until to now
+   * expire an entity, or all entities matching a filter, setting lifetime.until to now
    *
    * @generated from rpc world.WorldService.ExpireEntity
    */

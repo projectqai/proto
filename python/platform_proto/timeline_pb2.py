@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0etimeline.proto\x12\x08timeline\x1a\x1fgoogle/protobuf/timestamp.proto\"\x14\n\x12GetTimelineRequest\"\x9f\x01\n\x13GetTimelineResponse\x12\'\n\x03min\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\'\n\x03max\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0e\n\x06\x66rozen\x18\x03 \x01(\x08\x12&\n\x02\x61t\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"M\n\x13MoveTimelineRequest\x12\x0e\n\x06\x66reeze\x18\x01 \x01(\x08\x12&\n\x02\x61t\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"C\n\x14MoveTimelineResponse\x12+\n\x07\x63urrent\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp2\xae\x01\n\x0fTimelineService\x12M\n\x0cMoveTimeline\x12\x1d.timeline.MoveTimelineRequest\x1a\x1e.timeline.MoveTimelineResponse\x12L\n\x0bGetTimeline\x12\x1c.timeline.GetTimelineRequest\x1a\x1d.timeline.GetTimelineResponse0\x01\x42 Z\x1egithub.com/projectqai/proto/gob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0etimeline.proto\x12\x08timeline\x1a\x1fgoogle/protobuf/timestamp.proto\"\x18\n\x12GetTimelineRequest:\x02\x18\x01\"\xa3\x01\n\x13GetTimelineResponse\x12\'\n\x03min\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\'\n\x03max\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x0e\n\x06\x66rozen\x18\x03 \x01(\x08\x12&\n\x02\x61t\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp:\x02\x18\x01\"Q\n\x13MoveTimelineRequest\x12\x0e\n\x06\x66reeze\x18\x01 \x01(\x08\x12&\n\x02\x61t\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp:\x02\x18\x01\"G\n\x14MoveTimelineResponse\x12+\n\x07\x63urrent\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp:\x02\x18\x01\x32\xbd\x01\n\x0fTimelineService\x12R\n\x0cMoveTimeline\x12\x1d.timeline.MoveTimelineRequest\x1a\x1e.timeline.MoveTimelineResponse\"\x03\x88\x02\x01\x12Q\n\x0bGetTimeline\x12\x1c.timeline.GetTimelineRequest\x1a\x1d.timeline.GetTimelineResponse\"\x03\x88\x02\x01\x30\x01\x1a\x03\x88\x02\x01\x42 Z\x1egithub.com/projectqai/proto/gob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,14 +33,28 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'timeline_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'Z\036github.com/projectqai/proto/go'
+  _globals['_GETTIMELINEREQUEST']._loaded_options = None
+  _globals['_GETTIMELINEREQUEST']._serialized_options = b'\030\001'
+  _globals['_GETTIMELINERESPONSE']._loaded_options = None
+  _globals['_GETTIMELINERESPONSE']._serialized_options = b'\030\001'
+  _globals['_MOVETIMELINEREQUEST']._loaded_options = None
+  _globals['_MOVETIMELINEREQUEST']._serialized_options = b'\030\001'
+  _globals['_MOVETIMELINERESPONSE']._loaded_options = None
+  _globals['_MOVETIMELINERESPONSE']._serialized_options = b'\030\001'
+  _globals['_TIMELINESERVICE']._loaded_options = None
+  _globals['_TIMELINESERVICE']._serialized_options = b'\210\002\001'
+  _globals['_TIMELINESERVICE'].methods_by_name['MoveTimeline']._loaded_options = None
+  _globals['_TIMELINESERVICE'].methods_by_name['MoveTimeline']._serialized_options = b'\210\002\001'
+  _globals['_TIMELINESERVICE'].methods_by_name['GetTimeline']._loaded_options = None
+  _globals['_TIMELINESERVICE'].methods_by_name['GetTimeline']._serialized_options = b'\210\002\001'
   _globals['_GETTIMELINEREQUEST']._serialized_start=61
-  _globals['_GETTIMELINEREQUEST']._serialized_end=81
-  _globals['_GETTIMELINERESPONSE']._serialized_start=84
-  _globals['_GETTIMELINERESPONSE']._serialized_end=243
-  _globals['_MOVETIMELINEREQUEST']._serialized_start=245
-  _globals['_MOVETIMELINEREQUEST']._serialized_end=322
-  _globals['_MOVETIMELINERESPONSE']._serialized_start=324
-  _globals['_MOVETIMELINERESPONSE']._serialized_end=391
-  _globals['_TIMELINESERVICE']._serialized_start=394
-  _globals['_TIMELINESERVICE']._serialized_end=568
+  _globals['_GETTIMELINEREQUEST']._serialized_end=85
+  _globals['_GETTIMELINERESPONSE']._serialized_start=88
+  _globals['_GETTIMELINERESPONSE']._serialized_end=251
+  _globals['_MOVETIMELINEREQUEST']._serialized_start=253
+  _globals['_MOVETIMELINEREQUEST']._serialized_end=334
+  _globals['_MOVETIMELINERESPONSE']._serialized_start=336
+  _globals['_MOVETIMELINERESPONSE']._serialized_end=407
+  _globals['_TIMELINESERVICE']._serialized_start=410
+  _globals['_TIMELINESERVICE']._serialized_end=599
 # @@protoc_insertion_point(module_scope)
