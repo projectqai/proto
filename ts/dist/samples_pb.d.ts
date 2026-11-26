@@ -22,7 +22,11 @@ export declare const file_samples: GenFile;
  */
 export declare type VideoComponent = Message<"world.VideoComponent"> & {
   /**
-   * a media type, e.g. "video/H264" or "video/H264; codecs=avc1.64001F"
+   * a WebCodecs codec string: "avc1.64001F" (H264), "hvc1.1.6.L93.B0"
+   * (H265), with the profile and level of the stream's SPS; the bare
+   * "avc1" or "hvc1" while the driver has not seen one. The frames are
+   * Annex B with the parameter sets in-band, as WebCodecs decodes them
+   * without a description.
    *
    * @generated from field: string codec = 1;
    */
@@ -82,11 +86,21 @@ export declare const VideoFrameComponentSchema: GenMessage<VideoFrameComponent>;
  */
 export declare type ImageComponent = Message<"world.ImageComponent"> & {
   /**
-   * a media type: "image/jpeg", "image/png", "image/x-raw; encoding=rgb8"
-   *
-   * @generated from field: string format = 1;
+   * @generated from oneof world.ImageComponent.encoding
    */
-  format: string;
+  encoding: {
+    /**
+     * @generated from field: world.ImagePixels pixels = 6;
+     */
+    value: ImagePixels;
+    case: "pixels";
+  } | {
+    /**
+     * @generated from field: world.ImageCodec codec = 7;
+     */
+    value: ImageCodec;
+    case: "codec";
+  } | { case: undefined; value?: undefined };
 
   /**
    * @generated from field: optional uint32 width = 2;
@@ -97,13 +111,6 @@ export declare type ImageComponent = Message<"world.ImageComponent"> & {
    * @generated from field: optional uint32 height = 3;
    */
   height?: number | undefined;
-
-  /**
-   * bytes per row of a raw image; unset: tight
-   *
-   * @generated from field: optional uint32 stride = 4;
-   */
-  stride?: number | undefined;
 
   /**
    * @generated from field: bytes data = 5;
@@ -118,6 +125,62 @@ export declare type ImageComponent = Message<"world.ImageComponent"> & {
 export declare const ImageComponentSchema: GenMessage<ImageComponent>;
 
 /**
+ * An encoded image, as WebCodecs' ImageDecoder takes it (ImageDecoderInit).
+ *
+ * @generated from message world.ImageCodec
+ */
+export declare type ImageCodec = Message<"world.ImageCodec"> & {
+  /**
+   * its media type: "image/jpeg", "image/png", "image/webp"
+   *
+   * @generated from field: string type = 1;
+   */
+  type: string;
+};
+
+/**
+ * Describes the message world.ImageCodec.
+ * Use `create(ImageCodecSchema)` to create a new message.
+ */
+export declare const ImageCodecSchema: GenMessage<ImageCodec>;
+
+/**
+ * The pixels of a raw image: its planes in data, as WebCodecs' PlaneLayout
+ * places them.
+ *
+ * @generated from message world.ImagePixels
+ */
+export declare type ImagePixels = Message<"world.ImagePixels"> & {
+  /**
+   * @generated from field: world.ImagePixelFormat format = 1;
+   */
+  format: ImagePixelFormat;
+
+  /**
+   * bytes per row of each plane, in order; fewer than the planes: the
+   * rest are tight (a chroma plane: as wide as the format says)
+   *
+   * @generated from field: repeated uint32 strides = 2;
+   */
+  strides: number[];
+
+  /**
+   * where each plane starts in data, in bytes, in order; fewer than the
+   * planes: the rest start where the one before ends (its rows times its
+   * stride), the first at 0
+   *
+   * @generated from field: repeated uint32 offsets = 3;
+   */
+  offsets: number[];
+};
+
+/**
+ * Describes the message world.ImagePixels.
+ * Use `create(ImagePixelsSchema)` to create a new message.
+ */
+export declare const ImagePixelsSchema: GenMessage<ImagePixels>;
+
+/**
  * What the entity's waveform is: audio, seismic, any sampled 1-D signal.
  * Written before the frames it applies to. Several channels share its
  * clock and rate (a microphone array); independent streams are separate
@@ -127,13 +190,23 @@ export declare const ImageComponentSchema: GenMessage<ImageComponent>;
  */
 export declare type WaveformComponent = Message<"world.WaveformComponent"> & {
   /**
-   * a media type: "audio/pcm; format=s16le", "audio/opus", ... PCM of
-   * fewer significant bits than its words says so: "audio/pcm;
-   * format=s32le; depth=24" (24-bit samples, right-aligned, sign-extended)
+   * how the frames carry the samples
    *
-   * @generated from field: string format = 1;
+   * @generated from oneof world.WaveformComponent.encoding
    */
-  format: string;
+  encoding: {
+    /**
+     * @generated from field: world.WaveformPcm pcm = 12;
+     */
+    value: WaveformPcm;
+    case: "pcm";
+  } | {
+    /**
+     * @generated from field: world.WaveformCodec codec = 13;
+     */
+    value: WaveformCodec;
+    case: "codec";
+  } | { case: undefined; value?: undefined };
 
   /**
    * @generated from field: uint32 sample_rate = 2;
@@ -156,7 +229,7 @@ export declare type WaveformComponent = Message<"world.WaveformComponent"> & {
   /**
    * what the samples measure: a sample times scale is a value of kind in
    * unit. Unset: not a calibrated quantity (audio as recorded); the samples
-   * are as their format says
+   * are as their encoding says
    *
    * @generated from field: optional world.MetricKind kind = 5;
    */
@@ -180,6 +253,24 @@ export declare type WaveformComponent = Message<"world.WaveformComponent"> & {
    * @generated from field: optional world.MetricRange range = 8;
    */
   range?: MetricRange | undefined;
+
+  /**
+   * the device clock a frame's ticks count, in ticks per second; unset:
+   * frames carry no ticks
+   *
+   * @generated from field: optional double tick_rate_hz = 10;
+   */
+  tickRateHz?: number | undefined;
+
+  /**
+   * names that clock: the frames of waveforms on the same clock (the
+   * microphones and the accelerometers of one board) are aligned by their
+   * ticks, which are exact where Lifetime.fresh is not. Unset: a clock of
+   * this waveform's own
+   *
+   * @generated from field: optional string clock = 11;
+   */
+  clock?: string | undefined;
 };
 
 /**
@@ -189,8 +280,70 @@ export declare type WaveformComponent = Message<"world.WaveformComponent"> & {
 export declare const WaveformComponentSchema: GenMessage<WaveformComponent>;
 
 /**
- * One frame of a waveform: a codec frame, or a block of samples
- * (interleaved). Its time is that of its first sample, Lifetime.fresh.
+ * Raw samples: a frame is an AudioData buffer of WebCodecs, of format.
+ *
+ * @generated from message world.WaveformPcm
+ */
+export declare type WaveformPcm = Message<"world.WaveformPcm"> & {
+  /**
+   * @generated from field: world.WaveformSampleFormat format = 1;
+   */
+  format: WaveformSampleFormat;
+
+  /**
+   * significant bits of a sample, right-aligned and sign-extended in its
+   * word (24 of S32: a 24-bit converter). Unset: all of them. A player
+   * scales by the bits not used, else it plays 2^(32-24) times too quiet
+   *
+   * @generated from field: optional uint32 valid_bits = 2;
+   */
+  validBits?: number | undefined;
+};
+
+/**
+ * Describes the message world.WaveformPcm.
+ * Use `create(WaveformPcmSchema)` to create a new message.
+ */
+export declare const WaveformPcmSchema: GenMessage<WaveformPcm>;
+
+/**
+ * Encoded samples: a frame is one packet of the codec, an
+ * EncodedAudioChunk of WebCodecs.
+ *
+ * @generated from message world.WaveformCodec
+ */
+export declare type WaveformCodec = Message<"world.WaveformCodec"> & {
+  /**
+   * a WebCodecs codec string: "opus", "mp3", "flac", "mp4a.40.2" (AAC-LC)
+   *
+   * @generated from field: string codec = 1;
+   */
+  codec: string;
+
+  /**
+   * AudioDecoderConfig.description, as the codec registry defines it for
+   * the codec (OpusHead, AudioSpecificConfig, "fLaC" and STREAMINFO);
+   * empty for a codec whose packets need none (mp3, AAC in ADTS). When
+   * it changes, WaveformComponent is written again before the first frame
+   * it applies to.
+   *
+   * @generated from field: bytes description = 2;
+   */
+  description: Uint8Array;
+};
+
+/**
+ * Describes the message world.WaveformCodec.
+ * Use `create(WaveformCodecSchema)` to create a new message.
+ */
+export declare const WaveformCodecSchema: GenMessage<WaveformCodec>;
+
+/**
+ * One frame of a waveform: a packet of its codec, or a block of samples in
+ * its PCM sample format. Its time is that of its first sample,
+ * Lifetime.fresh; its duration is samples / sample_rate.
+ * What a frame says of its samples applies to it alone: the next frame
+ * says it again or it no longer holds.
  *
  * @generated from message world.WaveformFrameComponent
  */
@@ -207,6 +360,65 @@ export declare type WaveformFrameComponent = Message<"world.WaveformFrameCompone
    * @generated from field: optional double scale = 2;
    */
   scale?: number | undefined;
+
+  /**
+   * samples per channel that are valid, counted from the first; the rest
+   * of each channel is padding (zero), not signal. Unset: all of them. A
+   * codec's packet: the samples it decodes to (EncodedAudioChunk.duration),
+   * which a reader does not know without decoding it, so it is set
+   *
+   * @generated from field: optional uint32 samples = 3;
+   */
+  samples?: number | undefined;
+
+  /**
+   * samples per channel lost between the previous frame and this one: the
+   * signal does not continue from there. 0: it does, as far as the
+   * producer knows (a gap in fresh says so too)
+   *
+   * @generated from field: uint64 lost = 4;
+   */
+  lost: bigint;
+
+  /**
+   * samples are missing inside this frame, an unknown number (an
+   * overflowed FIFO): the frame is not continuous within itself
+   *
+   * @generated from field: bool discontinuous = 5;
+   */
+  discontinuous: boolean;
+
+  /**
+   * the first frame after the capture restarted: nothing before it
+   * continues into it
+   *
+   * @generated from field: bool restarted = 6;
+   */
+  restarted: boolean;
+
+  /**
+   * channels, by their index in the frame, that carried no valid data in
+   * at least part of this frame (zeroed there): a microphone or a sensor
+   * that failed or did not answer
+   *
+   * @generated from field: repeated uint32 invalid_channels = 7;
+   */
+  invalidChannels: number[];
+
+  /**
+   * some sample hit full scale: the signal was clipped
+   *
+   * @generated from field: bool clipped = 8;
+   */
+  clipped: boolean;
+
+  /**
+   * the device clock (WaveformComponent.tick_rate_hz) at the first sample;
+   * unset: not known
+   *
+   * @generated from field: optional uint64 ticks = 9;
+   */
+  ticks?: bigint | undefined;
 };
 
 /**
@@ -388,6 +600,141 @@ export declare type StreamComponent_Stream = Message<"world.StreamComponent.Stre
  * Use `create(StreamComponent_StreamSchema)` to create a new message.
  */
 export declare const StreamComponent_StreamSchema: GenMessage<StreamComponent_Stream>;
+
+/**
+ * A pixel format: a WebCodecs VideoPixelFormat of the same name, or one
+ * it lacks (RGB, BGR, GRAY8) that sensors and Foxglove raw images have.
+ *
+ * @generated from enum world.ImagePixelFormat
+ */
+export enum ImagePixelFormat {
+  /**
+   * @generated from enum value: ImagePixelFormatUnspecified = 0;
+   */
+  ImagePixelFormatUnspecified = 0,
+
+  /**
+   * 8 bits each: R, G, B; B, G, R
+   *
+   * @generated from enum value: ImagePixelFormatRGB = 1;
+   */
+  ImagePixelFormatRGB = 1,
+
+  /**
+   * @generated from enum value: ImagePixelFormatBGR = 2;
+   */
+  ImagePixelFormatBGR = 2,
+
+  /**
+   * 8 bits each, the fourth unused (X) or alpha (A)
+   *
+   * @generated from enum value: ImagePixelFormatRGBA = 3;
+   */
+  ImagePixelFormatRGBA = 3,
+
+  /**
+   * @generated from enum value: ImagePixelFormatRGBX = 4;
+   */
+  ImagePixelFormatRGBX = 4,
+
+  /**
+   * @generated from enum value: ImagePixelFormatBGRA = 5;
+   */
+  ImagePixelFormatBGRA = 5,
+
+  /**
+   * @generated from enum value: ImagePixelFormatBGRX = 6;
+   */
+  ImagePixelFormatBGRX = 6,
+
+  /**
+   * luma only, 8 bits
+   *
+   * @generated from enum value: ImagePixelFormatGRAY8 = 7;
+   */
+  ImagePixelFormatGRAY8 = 7,
+
+  /**
+   * planes Y, U, V; U and V of half the width and height. YUV is BT.601
+   * of limited range (Y 16-235), as video has it
+   *
+   * @generated from enum value: ImagePixelFormatI420 = 8;
+   */
+  ImagePixelFormatI420 = 8,
+
+  /**
+   * planes Y and UV interleaved; UV of half the height
+   *
+   * @generated from enum value: ImagePixelFormatNV12 = 9;
+   */
+  ImagePixelFormatNV12 = 9,
+}
+
+/**
+ * Describes the enum world.ImagePixelFormat.
+ */
+export declare const ImagePixelFormatSchema: GenEnum<ImagePixelFormat>;
+
+/**
+ * A sample format: a WebCodecs AudioSampleFormat (u8, s16, s32, f32, and
+ * their -planar forms), little endian. Interleaved: sample 0 of every
+ * channel, then sample 1 of every channel, ... Planar: every sample of
+ * channel 0, then every sample of channel 1, ...: the frame split in
+ * channels equal runs.
+ *
+ * @generated from enum world.WaveformSampleFormat
+ */
+export enum WaveformSampleFormat {
+  /**
+   * @generated from enum value: WaveformSampleFormatUnspecified = 0;
+   */
+  WaveformSampleFormatUnspecified = 0,
+
+  /**
+   * @generated from enum value: WaveformSampleFormatU8 = 1;
+   */
+  WaveformSampleFormatU8 = 1,
+
+  /**
+   * @generated from enum value: WaveformSampleFormatS16 = 2;
+   */
+  WaveformSampleFormatS16 = 2,
+
+  /**
+   * @generated from enum value: WaveformSampleFormatS32 = 3;
+   */
+  WaveformSampleFormatS32 = 3,
+
+  /**
+   * @generated from enum value: WaveformSampleFormatF32 = 4;
+   */
+  WaveformSampleFormatF32 = 4,
+
+  /**
+   * @generated from enum value: WaveformSampleFormatU8Planar = 5;
+   */
+  WaveformSampleFormatU8Planar = 5,
+
+  /**
+   * @generated from enum value: WaveformSampleFormatS16Planar = 6;
+   */
+  WaveformSampleFormatS16Planar = 6,
+
+  /**
+   * @generated from enum value: WaveformSampleFormatS32Planar = 7;
+   */
+  WaveformSampleFormatS32Planar = 7,
+
+  /**
+   * @generated from enum value: WaveformSampleFormatF32Planar = 8;
+   */
+  WaveformSampleFormatF32Planar = 8,
+}
+
+/**
+ * Describes the enum world.WaveformSampleFormat.
+ */
+export declare const WaveformSampleFormatSchema: GenEnum<WaveformSampleFormat>;
 
 /**
  * How the pixels of an ImageMask are held in its data.

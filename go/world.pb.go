@@ -1046,64 +1046,69 @@ func (TaskStatus) EnumDescriptor() ([]byte, []int) {
 }
 
 type Entity struct {
-	state               protoimpl.MessageState        `protogen:"open.v1"`
-	Id                  string                        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Label               *string                       `protobuf:"bytes,2,opt,name=label,proto3,oneof" json:"label,omitempty"`
-	Controller          *Controller                   `protobuf:"bytes,3,opt,name=controller,proto3,oneof" json:"controller,omitempty"`
-	Lifetime            *Lifetime                     `protobuf:"bytes,4,opt,name=lifetime,proto3,oneof" json:"lifetime,omitempty"`
-	Priority            *Priority                     `protobuf:"varint,5,opt,name=priority,proto3,enum=world.Priority,oneof" json:"priority,omitempty"`
-	Lease               *Lease                        `protobuf:"bytes,6,opt,name=lease,proto3,oneof" json:"lease,omitempty"`
-	Routing             *Routing                      `protobuf:"bytes,7,opt,name=routing,proto3,oneof" json:"routing,omitempty"`
-	Geo                 *GeoSpatialComponent          `protobuf:"bytes,11,opt,name=geo,proto3,oneof" json:"geo,omitempty"`
-	Symbol              *SymbolComponent              `protobuf:"bytes,12,opt,name=symbol,proto3,oneof" json:"symbol,omitempty"`
-	Camera              *CameraComponent              `protobuf:"bytes,15,opt,name=camera,proto3,oneof" json:"camera,omitempty"`
-	Detection           *DetectionComponent           `protobuf:"bytes,16,opt,name=detection,proto3,oneof" json:"detection,omitempty"`
-	Bearing             *BearingComponent             `protobuf:"bytes,17,opt,name=bearing,proto3,oneof" json:"bearing,omitempty"`
-	Track               *TrackComponent               `protobuf:"bytes,21,opt,name=track,proto3,oneof" json:"track,omitempty"`
-	Locator             *LocatorComponent             `protobuf:"bytes,22,opt,name=locator,proto3,oneof" json:"locator,omitempty"`
-	Kinematics          *KinematicsComponent          `protobuf:"bytes,24,opt,name=kinematics,proto3,oneof" json:"kinematics,omitempty"`
-	Shape               *GeoShapeComponent            `protobuf:"bytes,25,opt,name=shape,proto3,oneof" json:"shape,omitempty"`
-	Classification      *ClassificationComponent      `protobuf:"bytes,26,opt,name=classification,proto3,oneof" json:"classification,omitempty"`
-	Transponder         *TransponderComponent         `protobuf:"bytes,27,opt,name=transponder,proto3,oneof" json:"transponder,omitempty"`
-	Administrative      *AdministrativeComponent      `protobuf:"bytes,28,opt,name=administrative,proto3,oneof" json:"administrative,omitempty"`
-	Orientation         *OrientationComponent         `protobuf:"bytes,30,opt,name=orientation,proto3,oneof" json:"orientation,omitempty"`
-	Navigation          *NavigationComponent          `protobuf:"bytes,34,opt,name=navigation,proto3,oneof" json:"navigation,omitempty"`
-	Power               *PowerComponent               `protobuf:"bytes,33,opt,name=power,proto3,oneof" json:"power,omitempty"`
-	Capture             *CaptureComponent             `protobuf:"bytes,35,opt,name=capture,proto3,oneof" json:"capture,omitempty"`
-	Gnss                *GnssComponent                `protobuf:"bytes,42,opt,name=gnss,proto3,oneof" json:"gnss,omitempty"`
-	Device              *DeviceComponent              `protobuf:"bytes,50,opt,name=device,proto3,oneof" json:"device,omitempty"`
-	Link                *LinkComponent                `protobuf:"bytes,32,opt,name=link,proto3,oneof" json:"link,omitempty"`
-	Pose                *PoseComponent                `protobuf:"bytes,38,opt,name=pose,proto3,oneof" json:"pose,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// metadata
+	Id         string      `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Label      *string     `protobuf:"bytes,2,opt,name=label,proto3,oneof" json:"label,omitempty"`
+	Controller *Controller `protobuf:"bytes,3,opt,name=controller,proto3,oneof" json:"controller,omitempty"`
+	Lifetime   *Lifetime   `protobuf:"bytes,4,opt,name=lifetime,proto3,oneof" json:"lifetime,omitempty"`
+	Priority   *Priority   `protobuf:"varint,5,opt,name=priority,proto3,enum=world.Priority,oneof" json:"priority,omitempty"`
+	Lease      *Lease      `protobuf:"bytes,6,opt,name=lease,proto3,oneof" json:"lease,omitempty"`
+	Routing    *Routing    `protobuf:"bytes,7,opt,name=routing,proto3,oneof" json:"routing,omitempty"`
+	// cop
+	Geo            *GeoSpatialComponent     `protobuf:"bytes,11,opt,name=geo,proto3,oneof" json:"geo,omitempty"`
+	Symbol         *SymbolComponent         `protobuf:"bytes,12,opt,name=symbol,proto3,oneof" json:"symbol,omitempty"`
+	Camera         *CameraComponent         `protobuf:"bytes,15,opt,name=camera,proto3,oneof" json:"camera,omitempty"`
+	Detection      *DetectionComponent      `protobuf:"bytes,16,opt,name=detection,proto3,oneof" json:"detection,omitempty"`
+	Bearing        *BearingComponent        `protobuf:"bytes,17,opt,name=bearing,proto3,oneof" json:"bearing,omitempty"`
+	Track          *TrackComponent          `protobuf:"bytes,21,opt,name=track,proto3,oneof" json:"track,omitempty"`
+	Locator        *LocatorComponent        `protobuf:"bytes,22,opt,name=locator,proto3,oneof" json:"locator,omitempty"`
+	Kinematics     *KinematicsComponent     `protobuf:"bytes,24,opt,name=kinematics,proto3,oneof" json:"kinematics,omitempty"`
+	Shape          *GeoShapeComponent       `protobuf:"bytes,25,opt,name=shape,proto3,oneof" json:"shape,omitempty"`
+	Classification *ClassificationComponent `protobuf:"bytes,26,opt,name=classification,proto3,oneof" json:"classification,omitempty"`
+	Transponder    *TransponderComponent    `protobuf:"bytes,27,opt,name=transponder,proto3,oneof" json:"transponder,omitempty"`
+	Administrative *AdministrativeComponent `protobuf:"bytes,28,opt,name=administrative,proto3,oneof" json:"administrative,omitempty"`
+	Orientation    *OrientationComponent    `protobuf:"bytes,30,opt,name=orientation,proto3,oneof" json:"orientation,omitempty"`
+	Navigation     *NavigationComponent     `protobuf:"bytes,34,opt,name=navigation,proto3,oneof" json:"navigation,omitempty"`
+	Power          *PowerComponent          `protobuf:"bytes,33,opt,name=power,proto3,oneof" json:"power,omitempty"`
+	Capture        *CaptureComponent        `protobuf:"bytes,35,opt,name=capture,proto3,oneof" json:"capture,omitempty"`
+	Gnss           *GnssComponent           `protobuf:"bytes,42,opt,name=gnss,proto3,oneof" json:"gnss,omitempty"`
+	Device         *DeviceComponent         `protobuf:"bytes,50,opt,name=device,proto3,oneof" json:"device,omitempty"`
+	Link           *LinkComponent           `protobuf:"bytes,32,opt,name=link,proto3,oneof" json:"link,omitempty"`
+	Pose           *PoseComponent           `protobuf:"bytes,38,opt,name=pose,proto3,oneof" json:"pose,omitempty"`
+	LocalShape     *LocalShapeComponent     `protobuf:"bytes,29,opt,name=local_shape,json=localShape,proto3,oneof" json:"local_shape,omitempty"`
+	Mission        *MissionComponent        `protobuf:"bytes,31,opt,name=mission,proto3,oneof" json:"mission,omitempty"`
+	Sensor         *SensorComponent         `protobuf:"bytes,37,opt,name=sensor,proto3,oneof" json:"sensor,omitempty"`
+	Interactivity  *InteractivityComponent  `protobuf:"bytes,60,opt,name=interactivity,proto3,oneof" json:"interactivity,omitempty"`
+	Chat           *ChatComponent           `protobuf:"bytes,39,opt,name=chat,proto3,oneof" json:"chat,omitempty"`
+	Assembly       *AssemblyComponent       `protobuf:"bytes,40,opt,name=assembly,proto3,oneof" json:"assembly,omitempty"`
+	MapLayer       *MapLayerComponent       `protobuf:"bytes,63,opt,name=map_layer,json=mapLayer,proto3,oneof" json:"map_layer,omitempty"`
+	Bounds         *BoundsComponent         `protobuf:"bytes,66,opt,name=bounds,proto3,oneof" json:"bounds,omitempty"`
+	Measurement    *MeasurementComponent    `protobuf:"bytes,69,opt,name=measurement,proto3,oneof" json:"measurement,omitempty"`
+	Metric         *MetricComponent         `protobuf:"bytes,36,opt,name=metric,proto3,oneof" json:"metric,omitempty"`
+	// control
 	TargetPose          *TargetPoseComponent          `protobuf:"bytes,62,opt,name=target_pose,json=targetPose,proto3,oneof" json:"target_pose,omitempty"`
-	LocalShape          *LocalShapeComponent          `protobuf:"bytes,29,opt,name=local_shape,json=localShape,proto3,oneof" json:"local_shape,omitempty"`
-	Metric              *MetricComponent              `protobuf:"bytes,36,opt,name=metric,proto3,oneof" json:"metric,omitempty"`
 	Config              *ConfigurationComponent       `protobuf:"bytes,51,opt,name=config,proto3,oneof" json:"config,omitempty"`
 	Configurable        *ConfigurableComponent        `protobuf:"bytes,52,opt,name=configurable,proto3,oneof" json:"configurable,omitempty"`
 	Taskable            *TaskableComponent            `protobuf:"bytes,23,opt,name=taskable,proto3,oneof" json:"taskable,omitempty"`
 	TaskExecution       *TaskExecutionComponent       `protobuf:"bytes,41,opt,name=task_execution,json=taskExecution,proto3,oneof" json:"task_execution,omitempty"`
-	Mission             *MissionComponent             `protobuf:"bytes,31,opt,name=mission,proto3,oneof" json:"mission,omitempty"`
-	Sensor              *SensorComponent              `protobuf:"bytes,37,opt,name=sensor,proto3,oneof" json:"sensor,omitempty"`
-	Interactivity       *InteractivityComponent       `protobuf:"bytes,60,opt,name=interactivity,proto3,oneof" json:"interactivity,omitempty"`
-	Artifact            *ArtifactComponent            `protobuf:"bytes,61,opt,name=artifact,proto3,oneof" json:"artifact,omitempty"`
-	Chat                *ChatComponent                `protobuf:"bytes,39,opt,name=chat,proto3,oneof" json:"chat,omitempty"`
-	Assembly            *AssemblyComponent            `protobuf:"bytes,40,opt,name=assembly,proto3,oneof" json:"assembly,omitempty"`
-	MapLayer            *MapLayerComponent            `protobuf:"bytes,63,opt,name=map_layer,json=mapLayer,proto3,oneof" json:"map_layer,omitempty"`
 	ManualControl       *ManualControlComponent       `protobuf:"bytes,64,opt,name=manual_control,json=manualControl,proto3,oneof" json:"manual_control,omitempty"`
 	TargetManualControl *TargetManualControlComponent `protobuf:"bytes,65,opt,name=target_manual_control,json=targetManualControl,proto3,oneof" json:"target_manual_control,omitempty"`
-	Bounds              *BoundsComponent              `protobuf:"bytes,66,opt,name=bounds,proto3,oneof" json:"bounds,omitempty"`
-	Policy              *PolicyComponent              `protobuf:"bytes,67,opt,name=policy,proto3,oneof" json:"policy,omitempty"`
-	Authorization       *AuthorizationComponent       `protobuf:"bytes,68,opt,name=authorization,proto3,oneof" json:"authorization,omitempty"`
-	Measurement         *MeasurementComponent         `protobuf:"bytes,69,opt,name=measurement,proto3,oneof" json:"measurement,omitempty"`
-	Stream              *StreamComponent              `protobuf:"bytes,70,opt,name=stream,proto3,oneof" json:"stream,omitempty"`
-	VideoFrame          *VideoFrameComponent          `protobuf:"bytes,73,opt,name=video_frame,json=videoFrame,proto3,oneof" json:"video_frame,omitempty"`
-	Video               *VideoComponent               `protobuf:"bytes,74,opt,name=video,proto3,oneof" json:"video,omitempty"`
-	McapChannel         *McapChannelComponent         `protobuf:"bytes,75,opt,name=mcap_channel,json=mcapChannel,proto3,oneof" json:"mcap_channel,omitempty"`
-	McapMessage         *McapMessageComponent         `protobuf:"bytes,76,opt,name=mcap_message,json=mcapMessage,proto3,oneof" json:"mcap_message,omitempty"`
-	Image               *ImageComponent               `protobuf:"bytes,77,opt,name=image,proto3,oneof" json:"image,omitempty"`
-	Waveform            *WaveformComponent            `protobuf:"bytes,78,opt,name=waveform,proto3,oneof" json:"waveform,omitempty"`
-	WaveformFrame       *WaveformFrameComponent       `protobuf:"bytes,79,opt,name=waveform_frame,json=waveformFrame,proto3,oneof" json:"waveform_frame,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// infrastructure
+	Policy        *PolicyComponent        `protobuf:"bytes,67,opt,name=policy,proto3,oneof" json:"policy,omitempty"`
+	Artifact      *ArtifactComponent      `protobuf:"bytes,61,opt,name=artifact,proto3,oneof" json:"artifact,omitempty"`
+	Authorization *AuthorizationComponent `protobuf:"bytes,68,opt,name=authorization,proto3,oneof" json:"authorization,omitempty"`
+	// raw data streams
+	Stream        *StreamComponent        `protobuf:"bytes,70,opt,name=stream,proto3,oneof" json:"stream,omitempty"`
+	VideoFrame    *VideoFrameComponent    `protobuf:"bytes,73,opt,name=video_frame,json=videoFrame,proto3,oneof" json:"video_frame,omitempty"`
+	Video         *VideoComponent         `protobuf:"bytes,74,opt,name=video,proto3,oneof" json:"video,omitempty"`
+	McapChannel   *McapChannelComponent   `protobuf:"bytes,75,opt,name=mcap_channel,json=mcapChannel,proto3,oneof" json:"mcap_channel,omitempty"`
+	McapMessage   *McapMessageComponent   `protobuf:"bytes,76,opt,name=mcap_message,json=mcapMessage,proto3,oneof" json:"mcap_message,omitempty"`
+	Image         *ImageComponent         `protobuf:"bytes,77,opt,name=image,proto3,oneof" json:"image,omitempty"`
+	Waveform      *WaveformComponent      `protobuf:"bytes,78,opt,name=waveform,proto3,oneof" json:"waveform,omitempty"`
+	WaveformFrame *WaveformFrameComponent `protobuf:"bytes,79,opt,name=waveform_frame,json=waveformFrame,proto3,oneof" json:"waveform_frame,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Entity) Reset() {
@@ -1325,13 +1330,6 @@ func (x *Entity) GetPose() *PoseComponent {
 	return nil
 }
 
-func (x *Entity) GetTargetPose() *TargetPoseComponent {
-	if x != nil {
-		return x.TargetPose
-	}
-	return nil
-}
-
 func (x *Entity) GetLocalShape() *LocalShapeComponent {
 	if x != nil {
 		return x.LocalShape
@@ -1339,9 +1337,72 @@ func (x *Entity) GetLocalShape() *LocalShapeComponent {
 	return nil
 }
 
+func (x *Entity) GetMission() *MissionComponent {
+	if x != nil {
+		return x.Mission
+	}
+	return nil
+}
+
+func (x *Entity) GetSensor() *SensorComponent {
+	if x != nil {
+		return x.Sensor
+	}
+	return nil
+}
+
+func (x *Entity) GetInteractivity() *InteractivityComponent {
+	if x != nil {
+		return x.Interactivity
+	}
+	return nil
+}
+
+func (x *Entity) GetChat() *ChatComponent {
+	if x != nil {
+		return x.Chat
+	}
+	return nil
+}
+
+func (x *Entity) GetAssembly() *AssemblyComponent {
+	if x != nil {
+		return x.Assembly
+	}
+	return nil
+}
+
+func (x *Entity) GetMapLayer() *MapLayerComponent {
+	if x != nil {
+		return x.MapLayer
+	}
+	return nil
+}
+
+func (x *Entity) GetBounds() *BoundsComponent {
+	if x != nil {
+		return x.Bounds
+	}
+	return nil
+}
+
+func (x *Entity) GetMeasurement() *MeasurementComponent {
+	if x != nil {
+		return x.Measurement
+	}
+	return nil
+}
+
 func (x *Entity) GetMetric() *MetricComponent {
 	if x != nil {
 		return x.Metric
+	}
+	return nil
+}
+
+func (x *Entity) GetTargetPose() *TargetPoseComponent {
+	if x != nil {
+		return x.TargetPose
 	}
 	return nil
 }
@@ -1374,55 +1435,6 @@ func (x *Entity) GetTaskExecution() *TaskExecutionComponent {
 	return nil
 }
 
-func (x *Entity) GetMission() *MissionComponent {
-	if x != nil {
-		return x.Mission
-	}
-	return nil
-}
-
-func (x *Entity) GetSensor() *SensorComponent {
-	if x != nil {
-		return x.Sensor
-	}
-	return nil
-}
-
-func (x *Entity) GetInteractivity() *InteractivityComponent {
-	if x != nil {
-		return x.Interactivity
-	}
-	return nil
-}
-
-func (x *Entity) GetArtifact() *ArtifactComponent {
-	if x != nil {
-		return x.Artifact
-	}
-	return nil
-}
-
-func (x *Entity) GetChat() *ChatComponent {
-	if x != nil {
-		return x.Chat
-	}
-	return nil
-}
-
-func (x *Entity) GetAssembly() *AssemblyComponent {
-	if x != nil {
-		return x.Assembly
-	}
-	return nil
-}
-
-func (x *Entity) GetMapLayer() *MapLayerComponent {
-	if x != nil {
-		return x.MapLayer
-	}
-	return nil
-}
-
 func (x *Entity) GetManualControl() *ManualControlComponent {
 	if x != nil {
 		return x.ManualControl
@@ -1437,13 +1449,6 @@ func (x *Entity) GetTargetManualControl() *TargetManualControlComponent {
 	return nil
 }
 
-func (x *Entity) GetBounds() *BoundsComponent {
-	if x != nil {
-		return x.Bounds
-	}
-	return nil
-}
-
 func (x *Entity) GetPolicy() *PolicyComponent {
 	if x != nil {
 		return x.Policy
@@ -1451,16 +1456,16 @@ func (x *Entity) GetPolicy() *PolicyComponent {
 	return nil
 }
 
-func (x *Entity) GetAuthorization() *AuthorizationComponent {
+func (x *Entity) GetArtifact() *ArtifactComponent {
 	if x != nil {
-		return x.Authorization
+		return x.Artifact
 	}
 	return nil
 }
 
-func (x *Entity) GetMeasurement() *MeasurementComponent {
+func (x *Entity) GetAuthorization() *AuthorizationComponent {
 	if x != nil {
-		return x.Measurement
+		return x.Authorization
 	}
 	return nil
 }
@@ -2101,7 +2106,7 @@ func (x *InteractivityComponent) GetReferenceUrl() string {
 // Where the two differ the components are right. codec says what to expect
 // before the source was reached (an RTSP camera declared H264 can turn out
 // to send JPEG, and is then streamed as images); readers decode by
-// VideoComponent.codec or ImageComponent.format, never by this.
+// VideoComponent.codec or ImageComponent.codec, never by this.
 type MediaStream struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	Label string                 `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
@@ -2110,8 +2115,9 @@ type MediaStream struct {
 	Protocol MediaStreamProtocol `protobuf:"varint,3,opt,name=protocol,proto3,enum=world.MediaStreamProtocol" json:"protocol,omitempty"`
 	Role     MediaStreamRole     `protobuf:"varint,9,opt,name=role,proto3,enum=world.MediaStreamRole" json:"role,omitempty"` // stream role (main, sub, snapshot)
 	// the codec expected, by its short name: "H264", "H265", "MJPEG". The
-	// streamed VideoComponent.codec and ImageComponent.format are media types
-	// instead ("video/H264", "image/jpeg"), and say what was found.
+	// streamed VideoComponent.codec (a WebCodecs codec string, "avc1.64001F")
+	// and ImageComponent.codec (a media type, "image/jpeg") say what was
+	// found.
 	Codec string `protobuf:"bytes,10,opt,name=codec,proto3" json:"codec,omitempty"`
 	// the resolution expected, in pixels. What is streamed can differ: its
 	// VideoComponent or ImageComponent says what it is.
@@ -9657,28 +9663,28 @@ const file_world_proto_rawDesc = "" +
 	"\x06device\x182 \x01(\v2\x16.world.DeviceComponentH\x17R\x06device\x88\x01\x01\x12-\n" +
 	"\x04link\x18  \x01(\v2\x14.world.LinkComponentH\x18R\x04link\x88\x01\x01\x12-\n" +
 	"\x04pose\x18& \x01(\v2\x14.world.PoseComponentH\x19R\x04pose\x88\x01\x01\x12@\n" +
-	"\vtarget_pose\x18> \x01(\v2\x1a.world.TargetPoseComponentH\x1aR\n" +
-	"targetPose\x88\x01\x01\x12@\n" +
-	"\vlocal_shape\x18\x1d \x01(\v2\x1a.world.LocalShapeComponentH\x1bR\n" +
-	"localShape\x88\x01\x01\x123\n" +
-	"\x06metric\x18$ \x01(\v2\x16.world.MetricComponentH\x1cR\x06metric\x88\x01\x01\x12B\n" +
-	"\x06config\x183 \x01(\v2\x1d.world.ConfigurationComponentB\x06\xea\xd8#\x02\x18\x01H\x1dR\x06config\x88\x01\x01\x12E\n" +
-	"\fconfigurable\x184 \x01(\v2\x1c.world.ConfigurableComponentH\x1eR\fconfigurable\x88\x01\x01\x129\n" +
-	"\btaskable\x18\x17 \x01(\v2\x18.world.TaskableComponentH\x1fR\btaskable\x88\x01\x01\x12I\n" +
-	"\x0etask_execution\x18) \x01(\v2\x1d.world.TaskExecutionComponentH R\rtaskExecution\x88\x01\x01\x126\n" +
-	"\amission\x18\x1f \x01(\v2\x17.world.MissionComponentH!R\amission\x88\x01\x01\x123\n" +
-	"\x06sensor\x18% \x01(\v2\x16.world.SensorComponentH\"R\x06sensor\x88\x01\x01\x12H\n" +
-	"\rinteractivity\x18< \x01(\v2\x1d.world.InteractivityComponentH#R\rinteractivity\x88\x01\x01\x129\n" +
-	"\bartifact\x18= \x01(\v2\x18.world.ArtifactComponentH$R\bartifact\x88\x01\x01\x12-\n" +
-	"\x04chat\x18' \x01(\v2\x14.world.ChatComponentH%R\x04chat\x88\x01\x01\x129\n" +
-	"\bassembly\x18( \x01(\v2\x18.world.AssemblyComponentH&R\bassembly\x88\x01\x01\x12:\n" +
-	"\tmap_layer\x18? \x01(\v2\x18.world.MapLayerComponentH'R\bmapLayer\x88\x01\x01\x12I\n" +
-	"\x0emanual_control\x18@ \x01(\v2\x1d.world.ManualControlComponentH(R\rmanualControl\x88\x01\x01\x12d\n" +
-	"\x15target_manual_control\x18A \x01(\v2#.world.TargetManualControlComponentB\x06\xea\xd8#\x02\b\x01H)R\x13targetManualControl\x88\x01\x01\x123\n" +
-	"\x06bounds\x18B \x01(\v2\x16.world.BoundsComponentH*R\x06bounds\x88\x01\x01\x123\n" +
-	"\x06policy\x18C \x01(\v2\x16.world.PolicyComponentH+R\x06policy\x88\x01\x01\x12H\n" +
-	"\rauthorization\x18D \x01(\v2\x1d.world.AuthorizationComponentH,R\rauthorization\x88\x01\x01\x12B\n" +
-	"\vmeasurement\x18E \x01(\v2\x1b.world.MeasurementComponentH-R\vmeasurement\x88\x01\x01\x12?\n" +
+	"\vlocal_shape\x18\x1d \x01(\v2\x1a.world.LocalShapeComponentH\x1aR\n" +
+	"localShape\x88\x01\x01\x126\n" +
+	"\amission\x18\x1f \x01(\v2\x17.world.MissionComponentH\x1bR\amission\x88\x01\x01\x123\n" +
+	"\x06sensor\x18% \x01(\v2\x16.world.SensorComponentH\x1cR\x06sensor\x88\x01\x01\x12H\n" +
+	"\rinteractivity\x18< \x01(\v2\x1d.world.InteractivityComponentH\x1dR\rinteractivity\x88\x01\x01\x12-\n" +
+	"\x04chat\x18' \x01(\v2\x14.world.ChatComponentH\x1eR\x04chat\x88\x01\x01\x129\n" +
+	"\bassembly\x18( \x01(\v2\x18.world.AssemblyComponentH\x1fR\bassembly\x88\x01\x01\x12:\n" +
+	"\tmap_layer\x18? \x01(\v2\x18.world.MapLayerComponentH R\bmapLayer\x88\x01\x01\x123\n" +
+	"\x06bounds\x18B \x01(\v2\x16.world.BoundsComponentH!R\x06bounds\x88\x01\x01\x12B\n" +
+	"\vmeasurement\x18E \x01(\v2\x1b.world.MeasurementComponentH\"R\vmeasurement\x88\x01\x01\x123\n" +
+	"\x06metric\x18$ \x01(\v2\x16.world.MetricComponentH#R\x06metric\x88\x01\x01\x12@\n" +
+	"\vtarget_pose\x18> \x01(\v2\x1a.world.TargetPoseComponentH$R\n" +
+	"targetPose\x88\x01\x01\x12B\n" +
+	"\x06config\x183 \x01(\v2\x1d.world.ConfigurationComponentB\x06\xea\xd8#\x02\x18\x01H%R\x06config\x88\x01\x01\x12E\n" +
+	"\fconfigurable\x184 \x01(\v2\x1c.world.ConfigurableComponentH&R\fconfigurable\x88\x01\x01\x129\n" +
+	"\btaskable\x18\x17 \x01(\v2\x18.world.TaskableComponentH'R\btaskable\x88\x01\x01\x12I\n" +
+	"\x0etask_execution\x18) \x01(\v2\x1d.world.TaskExecutionComponentH(R\rtaskExecution\x88\x01\x01\x12I\n" +
+	"\x0emanual_control\x18@ \x01(\v2\x1d.world.ManualControlComponentH)R\rmanualControl\x88\x01\x01\x12d\n" +
+	"\x15target_manual_control\x18A \x01(\v2#.world.TargetManualControlComponentB\x06\xea\xd8#\x02\b\x01H*R\x13targetManualControl\x88\x01\x01\x123\n" +
+	"\x06policy\x18C \x01(\v2\x16.world.PolicyComponentH+R\x06policy\x88\x01\x01\x129\n" +
+	"\bartifact\x18= \x01(\v2\x18.world.ArtifactComponentH,R\bartifact\x88\x01\x01\x12H\n" +
+	"\rauthorization\x18D \x01(\v2\x1d.world.AuthorizationComponentH-R\rauthorization\x88\x01\x01\x12?\n" +
 	"\x06stream\x18F \x01(\v2\x16.world.StreamComponentB\n" +
 	"\xea\xd8#\x06\x10\x01\x18\x01 \x01H.R\x06stream\x88\x01\x01\x12H\n" +
 	"\vvideo_frame\x18I \x01(\v2\x1a.world.VideoFrameComponentB\x06\xea\xd8#\x02\b\x01H/R\n" +
@@ -9720,28 +9726,28 @@ const file_world_proto_rawDesc = "" +
 	"\a_deviceB\a\n" +
 	"\x05_linkB\a\n" +
 	"\x05_poseB\x0e\n" +
-	"\f_target_poseB\x0e\n" +
-	"\f_local_shapeB\t\n" +
-	"\a_metricB\t\n" +
-	"\a_configB\x0f\n" +
-	"\r_configurableB\v\n" +
-	"\t_taskableB\x11\n" +
-	"\x0f_task_executionB\n" +
+	"\f_local_shapeB\n" +
 	"\n" +
 	"\b_missionB\t\n" +
 	"\a_sensorB\x10\n" +
-	"\x0e_interactivityB\v\n" +
-	"\t_artifactB\a\n" +
+	"\x0e_interactivityB\a\n" +
 	"\x05_chatB\v\n" +
 	"\t_assemblyB\f\n" +
 	"\n" +
-	"_map_layerB\x11\n" +
+	"_map_layerB\t\n" +
+	"\a_boundsB\x0e\n" +
+	"\f_measurementB\t\n" +
+	"\a_metricB\x0e\n" +
+	"\f_target_poseB\t\n" +
+	"\a_configB\x0f\n" +
+	"\r_configurableB\v\n" +
+	"\t_taskableB\x11\n" +
+	"\x0f_task_executionB\x11\n" +
 	"\x0f_manual_controlB\x18\n" +
 	"\x16_target_manual_controlB\t\n" +
-	"\a_boundsB\t\n" +
-	"\a_policyB\x10\n" +
-	"\x0e_authorizationB\x0e\n" +
-	"\f_measurementB\t\n" +
+	"\a_policyB\v\n" +
+	"\t_artifactB\x10\n" +
+	"\x0e_authorizationB\t\n" +
 	"\a_streamB\x0e\n" +
 	"\f_video_frameB\b\n" +
 	"\x06_videoB\x0f\n" +
@@ -11055,26 +11061,26 @@ var file_world_proto_depIdxs = []int32{
 	72,  // 22: world.Entity.device:type_name -> world.DeviceComponent
 	66,  // 23: world.Entity.link:type_name -> world.LinkComponent
 	41,  // 24: world.Entity.pose:type_name -> world.PoseComponent
-	42,  // 25: world.Entity.target_pose:type_name -> world.TargetPoseComponent
-	55,  // 26: world.Entity.local_shape:type_name -> world.LocalShapeComponent
-	134, // 27: world.Entity.metric:type_name -> world.MetricComponent
-	84,  // 28: world.Entity.config:type_name -> world.ConfigurationComponent
-	71,  // 29: world.Entity.configurable:type_name -> world.ConfigurableComponent
-	49,  // 30: world.Entity.taskable:type_name -> world.TaskableComponent
-	50,  // 31: world.Entity.task_execution:type_name -> world.TaskExecutionComponent
-	65,  // 32: world.Entity.mission:type_name -> world.MissionComponent
-	36,  // 33: world.Entity.sensor:type_name -> world.SensorComponent
-	25,  // 34: world.Entity.interactivity:type_name -> world.InteractivityComponent
-	30,  // 35: world.Entity.artifact:type_name -> world.ArtifactComponent
-	85,  // 36: world.Entity.chat:type_name -> world.ChatComponent
-	86,  // 37: world.Entity.assembly:type_name -> world.AssemblyComponent
-	87,  // 38: world.Entity.map_layer:type_name -> world.MapLayerComponent
-	88,  // 39: world.Entity.manual_control:type_name -> world.ManualControlComponent
-	89,  // 40: world.Entity.target_manual_control:type_name -> world.TargetManualControlComponent
-	34,  // 41: world.Entity.bounds:type_name -> world.BoundsComponent
+	55,  // 25: world.Entity.local_shape:type_name -> world.LocalShapeComponent
+	65,  // 26: world.Entity.mission:type_name -> world.MissionComponent
+	36,  // 27: world.Entity.sensor:type_name -> world.SensorComponent
+	25,  // 28: world.Entity.interactivity:type_name -> world.InteractivityComponent
+	85,  // 29: world.Entity.chat:type_name -> world.ChatComponent
+	86,  // 30: world.Entity.assembly:type_name -> world.AssemblyComponent
+	87,  // 31: world.Entity.map_layer:type_name -> world.MapLayerComponent
+	34,  // 32: world.Entity.bounds:type_name -> world.BoundsComponent
+	56,  // 33: world.Entity.measurement:type_name -> world.MeasurementComponent
+	134, // 34: world.Entity.metric:type_name -> world.MetricComponent
+	42,  // 35: world.Entity.target_pose:type_name -> world.TargetPoseComponent
+	84,  // 36: world.Entity.config:type_name -> world.ConfigurationComponent
+	71,  // 37: world.Entity.configurable:type_name -> world.ConfigurableComponent
+	49,  // 38: world.Entity.taskable:type_name -> world.TaskableComponent
+	50,  // 39: world.Entity.task_execution:type_name -> world.TaskExecutionComponent
+	88,  // 40: world.Entity.manual_control:type_name -> world.ManualControlComponent
+	89,  // 41: world.Entity.target_manual_control:type_name -> world.TargetManualControlComponent
 	135, // 42: world.Entity.policy:type_name -> world.PolicyComponent
-	136, // 43: world.Entity.authorization:type_name -> world.AuthorizationComponent
-	56,  // 44: world.Entity.measurement:type_name -> world.MeasurementComponent
+	30,  // 43: world.Entity.artifact:type_name -> world.ArtifactComponent
+	136, // 44: world.Entity.authorization:type_name -> world.AuthorizationComponent
 	137, // 45: world.Entity.stream:type_name -> world.StreamComponent
 	138, // 46: world.Entity.video_frame:type_name -> world.VideoFrameComponent
 	139, // 47: world.Entity.video:type_name -> world.VideoComponent

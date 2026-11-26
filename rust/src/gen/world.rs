@@ -1202,7 +1202,11 @@ impl PolicyAction {
 /// frames it applies to, and again when it changes.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct VideoComponent {
-    /// a media type, e.g. "video/H264" or "video/H264; codecs=avc1.64001F"
+    /// a WebCodecs codec string: "avc1.64001F" (H264), "hvc1.1.6.L93.B0"
+    /// (H265), with the profile and level of the stream's SPS; the bare
+    /// "avc1" or "hvc1" while the driver has not seen one. The frames are
+    /// Annex B with the parameter sets in-band, as WebCodecs decodes them
+    /// without a description.
     #[prost(string, tag = "1")]
     pub codec: ::prost::alloc::string::String,
     /// the display size of the video, in pixels, as streamed; unset when not
@@ -1227,18 +1231,47 @@ pub struct VideoFrameComponent {
 /// spectrogram. Its time is Lifetime.fresh.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ImageComponent {
-    /// a media type: "image/jpeg", "image/png", "image/x-raw; encoding=rgb8"
-    #[prost(string, tag = "1")]
-    pub format: ::prost::alloc::string::String,
     #[prost(uint32, optional, tag = "2")]
     pub width: ::core::option::Option<u32>,
     #[prost(uint32, optional, tag = "3")]
     pub height: ::core::option::Option<u32>,
-    /// bytes per row of a raw image; unset: tight
-    #[prost(uint32, optional, tag = "4")]
-    pub stride: ::core::option::Option<u32>,
     #[prost(bytes = "vec", tag = "5")]
     pub data: ::prost::alloc::vec::Vec<u8>,
+    #[prost(oneof = "image_component::Encoding", tags = "6, 7")]
+    pub encoding: ::core::option::Option<image_component::Encoding>,
+}
+/// Nested message and enum types in `ImageComponent`.
+pub mod image_component {
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Encoding {
+        #[prost(message, tag = "6")]
+        Pixels(super::ImagePixels),
+        #[prost(message, tag = "7")]
+        Codec(super::ImageCodec),
+    }
+}
+/// An encoded image, as WebCodecs' ImageDecoder takes it (ImageDecoderInit).
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ImageCodec {
+    /// its media type: "image/jpeg", "image/png", "image/webp"
+    #[prost(string, tag = "1")]
+    pub r#type: ::prost::alloc::string::String,
+}
+/// The pixels of a raw image: its planes in data, as WebCodecs' PlaneLayout
+/// places them.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ImagePixels {
+    #[prost(enumeration = "ImagePixelFormat", tag = "1")]
+    pub format: i32,
+    /// bytes per row of each plane, in order; fewer than the planes: the
+    /// rest are tight (a chroma plane: as wide as the format says)
+    #[prost(uint32, repeated, tag = "2")]
+    pub strides: ::prost::alloc::vec::Vec<u32>,
+    /// where each plane starts in data, in bytes, in order; fewer than the
+    /// planes: the rest start where the one before ends (its rows times its
+    /// stride), the first at 0
+    #[prost(uint32, repeated, tag = "3")]
+    pub offsets: ::prost::alloc::vec::Vec<u32>,
 }
 /// What the entity's waveform is: audio, seismic, any sampled 1-D signal.
 /// Written before the frames it applies to. Several channels share its
@@ -1246,11 +1279,6 @@ pub struct ImageComponent {
 /// entities.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct WaveformComponent {
-    /// a media type: "audio/pcm; format=s16le", "audio/opus", ... PCM of
-    /// fewer significant bits than its words says so: "audio/pcm;
-    /// format=s32le; depth=24" (24-bit samples, right-aligned, sign-extended)
-    #[prost(string, tag = "1")]
-    pub format: ::prost::alloc::string::String,
     #[prost(uint32, tag = "2")]
     pub sample_rate: u32,
     #[prost(uint32, tag = "3")]
@@ -1261,7 +1289,7 @@ pub struct WaveformComponent {
     pub channel_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     /// what the samples measure: a sample times scale is a value of kind in
     /// unit. Unset: not a calibrated quantity (audio as recorded); the samples
-    /// are as their format says
+    /// are as their encoding says
     #[prost(enumeration = "MetricKind", optional, tag = "5")]
     pub kind: ::core::option::Option<i32>,
     #[prost(enumeration = "MetricUnit", tag = "6")]
@@ -1272,9 +1300,62 @@ pub struct WaveformComponent {
     /// the values the sensor can report, in unit
     #[prost(message, optional, tag = "8")]
     pub range: ::core::option::Option<MetricRange>,
+    /// the device clock a frame's ticks count, in ticks per second; unset:
+    /// frames carry no ticks
+    #[prost(double, optional, tag = "10")]
+    pub tick_rate_hz: ::core::option::Option<f64>,
+    /// names that clock: the frames of waveforms on the same clock (the
+    /// microphones and the accelerometers of one board) are aligned by their
+    /// ticks, which are exact where Lifetime.fresh is not. Unset: a clock of
+    /// this waveform's own
+    #[prost(string, optional, tag = "11")]
+    pub clock: ::core::option::Option<::prost::alloc::string::String>,
+    /// how the frames carry the samples
+    #[prost(oneof = "waveform_component::Encoding", tags = "12, 13")]
+    pub encoding: ::core::option::Option<waveform_component::Encoding>,
 }
-/// One frame of a waveform: a codec frame, or a block of samples
-/// (interleaved). Its time is that of its first sample, Lifetime.fresh.
+/// Nested message and enum types in `WaveformComponent`.
+pub mod waveform_component {
+    /// how the frames carry the samples
+    #[derive(Clone, PartialEq, ::prost::Oneof)]
+    pub enum Encoding {
+        #[prost(message, tag = "12")]
+        Pcm(super::WaveformPcm),
+        #[prost(message, tag = "13")]
+        Codec(super::WaveformCodec),
+    }
+}
+/// Raw samples: a frame is an AudioData buffer of WebCodecs, of format.
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct WaveformPcm {
+    #[prost(enumeration = "WaveformSampleFormat", tag = "1")]
+    pub format: i32,
+    /// significant bits of a sample, right-aligned and sign-extended in its
+    /// word (24 of S32: a 24-bit converter). Unset: all of them. A player
+    /// scales by the bits not used, else it plays 2^(32-24) times too quiet
+    #[prost(uint32, optional, tag = "2")]
+    pub valid_bits: ::core::option::Option<u32>,
+}
+/// Encoded samples: a frame is one packet of the codec, an
+/// EncodedAudioChunk of WebCodecs.
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct WaveformCodec {
+    /// a WebCodecs codec string: "opus", "mp3", "flac", "mp4a.40.2" (AAC-LC)
+    #[prost(string, tag = "1")]
+    pub codec: ::prost::alloc::string::String,
+    /// AudioDecoderConfig.description, as the codec registry defines it for
+    /// the codec (OpusHead, AudioSpecificConfig, "fLaC" and STREAMINFO);
+    /// empty for a codec whose packets need none (mp3, AAC in ADTS). When
+    /// it changes, WaveformComponent is written again before the first frame
+    /// it applies to.
+    #[prost(bytes = "vec", tag = "2")]
+    pub description: ::prost::alloc::vec::Vec<u8>,
+}
+/// One frame of a waveform: a packet of its codec, or a block of samples in
+/// its PCM sample format. Its time is that of its first sample,
+/// Lifetime.fresh; its duration is samples / sample_rate.
+/// What a frame says of its samples applies to it alone: the next frame
+/// says it again or it no longer holds.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct WaveformFrameComponent {
     #[prost(bytes = "vec", tag = "1")]
@@ -1283,6 +1364,37 @@ pub struct WaveformFrameComponent {
     /// waveform's scale (a sensor that reports it as it measures)
     #[prost(double, optional, tag = "2")]
     pub scale: ::core::option::Option<f64>,
+    /// samples per channel that are valid, counted from the first; the rest
+    /// of each channel is padding (zero), not signal. Unset: all of them. A
+    /// codec's packet: the samples it decodes to (EncodedAudioChunk.duration),
+    /// which a reader does not know without decoding it, so it is set
+    #[prost(uint32, optional, tag = "3")]
+    pub samples: ::core::option::Option<u32>,
+    /// samples per channel lost between the previous frame and this one: the
+    /// signal does not continue from there. 0: it does, as far as the
+    /// producer knows (a gap in fresh says so too)
+    #[prost(uint64, tag = "4")]
+    pub lost: u64,
+    /// samples are missing inside this frame, an unknown number (an
+    /// overflowed FIFO): the frame is not continuous within itself
+    #[prost(bool, tag = "5")]
+    pub discontinuous: bool,
+    /// the first frame after the capture restarted: nothing before it
+    /// continues into it
+    #[prost(bool, tag = "6")]
+    pub restarted: bool,
+    /// channels, by their index in the frame, that carried no valid data in
+    /// at least part of this frame (zeroed there): a microphone or a sensor
+    /// that failed or did not answer
+    #[prost(uint32, repeated, tag = "7")]
+    pub invalid_channels: ::prost::alloc::vec::Vec<u32>,
+    /// some sample hit full scale: the signal was clipped
+    #[prost(bool, tag = "8")]
+    pub clipped: bool,
+    /// the device clock (WaveformComponent.tick_rate_hz) at the first sample;
+    /// unset: not known
+    #[prost(uint64, optional, tag = "9")]
+    pub ticks: ::core::option::Option<u64>,
 }
 /// A channel of a foreign MCAP file, kept raw: what is not understood is
 /// kept, readable once it is, and exported back as it came.
@@ -1360,6 +1472,116 @@ pub mod stream_component {
         /// that way
         #[prost(uint32, optional, tag = "4")]
         pub latency_ms: ::core::option::Option<u32>,
+    }
+}
+/// A pixel format: a WebCodecs VideoPixelFormat of the same name, or one
+/// it lacks (RGB, BGR, GRAY8) that sensors and Foxglove raw images have.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum ImagePixelFormat {
+    Unspecified = 0,
+    /// 8 bits each: R, G, B; B, G, R
+    Rgb = 1,
+    Bgr = 2,
+    /// 8 bits each, the fourth unused (X) or alpha (A)
+    Rgba = 3,
+    Rgbx = 4,
+    Bgra = 5,
+    Bgrx = 6,
+    /// luma only, 8 bits
+    Gray8 = 7,
+    /// planes Y, U, V; U and V of half the width and height. YUV is BT.601
+    /// of limited range (Y 16-235), as video has it
+    I420 = 8,
+    /// planes Y and UV interleaved; UV of half the height
+    Nv12 = 9,
+}
+impl ImagePixelFormat {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "ImagePixelFormatUnspecified",
+            Self::Rgb => "ImagePixelFormatRGB",
+            Self::Bgr => "ImagePixelFormatBGR",
+            Self::Rgba => "ImagePixelFormatRGBA",
+            Self::Rgbx => "ImagePixelFormatRGBX",
+            Self::Bgra => "ImagePixelFormatBGRA",
+            Self::Bgrx => "ImagePixelFormatBGRX",
+            Self::Gray8 => "ImagePixelFormatGRAY8",
+            Self::I420 => "ImagePixelFormatI420",
+            Self::Nv12 => "ImagePixelFormatNV12",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "ImagePixelFormatUnspecified" => Some(Self::Unspecified),
+            "ImagePixelFormatRGB" => Some(Self::Rgb),
+            "ImagePixelFormatBGR" => Some(Self::Bgr),
+            "ImagePixelFormatRGBA" => Some(Self::Rgba),
+            "ImagePixelFormatRGBX" => Some(Self::Rgbx),
+            "ImagePixelFormatBGRA" => Some(Self::Bgra),
+            "ImagePixelFormatBGRX" => Some(Self::Bgrx),
+            "ImagePixelFormatGRAY8" => Some(Self::Gray8),
+            "ImagePixelFormatI420" => Some(Self::I420),
+            "ImagePixelFormatNV12" => Some(Self::Nv12),
+            _ => None,
+        }
+    }
+}
+/// A sample format: a WebCodecs AudioSampleFormat (u8, s16, s32, f32, and
+/// their -planar forms), little endian. Interleaved: sample 0 of every
+/// channel, then sample 1 of every channel, ... Planar: every sample of
+/// channel 0, then every sample of channel 1, ...: the frame split in
+/// channels equal runs.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
+#[repr(i32)]
+pub enum WaveformSampleFormat {
+    Unspecified = 0,
+    U8 = 1,
+    S16 = 2,
+    S32 = 3,
+    F32 = 4,
+    U8Planar = 5,
+    S16Planar = 6,
+    S32Planar = 7,
+    F32Planar = 8,
+}
+impl WaveformSampleFormat {
+    /// String value of the enum field names used in the ProtoBuf definition.
+    ///
+    /// The values are not transformed in any way and thus are considered stable
+    /// (if the ProtoBuf definition does not change) and safe for programmatic use.
+    pub fn as_str_name(&self) -> &'static str {
+        match self {
+            Self::Unspecified => "WaveformSampleFormatUnspecified",
+            Self::U8 => "WaveformSampleFormatU8",
+            Self::S16 => "WaveformSampleFormatS16",
+            Self::S32 => "WaveformSampleFormatS32",
+            Self::F32 => "WaveformSampleFormatF32",
+            Self::U8Planar => "WaveformSampleFormatU8Planar",
+            Self::S16Planar => "WaveformSampleFormatS16Planar",
+            Self::S32Planar => "WaveformSampleFormatS32Planar",
+            Self::F32Planar => "WaveformSampleFormatF32Planar",
+        }
+    }
+    /// Creates an enum from field names used in the ProtoBuf definition.
+    pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
+        match value {
+            "WaveformSampleFormatUnspecified" => Some(Self::Unspecified),
+            "WaveformSampleFormatU8" => Some(Self::U8),
+            "WaveformSampleFormatS16" => Some(Self::S16),
+            "WaveformSampleFormatS32" => Some(Self::S32),
+            "WaveformSampleFormatF32" => Some(Self::F32),
+            "WaveformSampleFormatU8Planar" => Some(Self::U8Planar),
+            "WaveformSampleFormatS16Planar" => Some(Self::S16Planar),
+            "WaveformSampleFormatS32Planar" => Some(Self::S32Planar),
+            "WaveformSampleFormatF32Planar" => Some(Self::F32Planar),
+            _ => None,
+        }
     }
 }
 /// How the pixels of an ImageMask are held in its data.
@@ -1920,9 +2142,9 @@ pub struct TaskingTaxonomyCommissionPosition {}
 pub struct TaskingTaxonomyCommissionCalibrate {}
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
 pub struct TaskingTaxonomyUpdate {}
-/// metadata
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Entity {
+    /// metadata
     #[prost(string, tag = "1")]
     pub id: ::prost::alloc::string::String,
     #[prost(string, optional, tag = "2")]
@@ -1937,6 +2159,7 @@ pub struct Entity {
     pub lease: ::core::option::Option<Lease>,
     #[prost(message, optional, tag = "7")]
     pub routing: ::core::option::Option<Routing>,
+    /// cop
     #[prost(message, optional, tag = "11")]
     pub geo: ::core::option::Option<GeoSpatialComponent>,
     #[prost(message, optional, tag = "12")]
@@ -1977,12 +2200,29 @@ pub struct Entity {
     pub link: ::core::option::Option<LinkComponent>,
     #[prost(message, optional, tag = "38")]
     pub pose: ::core::option::Option<PoseComponent>,
-    #[prost(message, optional, tag = "62")]
-    pub target_pose: ::core::option::Option<TargetPoseComponent>,
     #[prost(message, optional, tag = "29")]
     pub local_shape: ::core::option::Option<LocalShapeComponent>,
+    #[prost(message, optional, tag = "31")]
+    pub mission: ::core::option::Option<MissionComponent>,
+    #[prost(message, optional, tag = "37")]
+    pub sensor: ::core::option::Option<SensorComponent>,
+    #[prost(message, optional, tag = "60")]
+    pub interactivity: ::core::option::Option<InteractivityComponent>,
+    #[prost(message, optional, tag = "39")]
+    pub chat: ::core::option::Option<ChatComponent>,
+    #[prost(message, optional, tag = "40")]
+    pub assembly: ::core::option::Option<AssemblyComponent>,
+    #[prost(message, optional, tag = "63")]
+    pub map_layer: ::core::option::Option<MapLayerComponent>,
+    #[prost(message, optional, tag = "66")]
+    pub bounds: ::core::option::Option<BoundsComponent>,
+    #[prost(message, optional, tag = "69")]
+    pub measurement: ::core::option::Option<MeasurementComponent>,
     #[prost(message, optional, tag = "36")]
     pub metric: ::core::option::Option<MetricComponent>,
+    /// control
+    #[prost(message, optional, tag = "62")]
+    pub target_pose: ::core::option::Option<TargetPoseComponent>,
     #[prost(message, optional, tag = "51")]
     pub config: ::core::option::Option<ConfigurationComponent>,
     #[prost(message, optional, tag = "52")]
@@ -1991,32 +2231,18 @@ pub struct Entity {
     pub taskable: ::core::option::Option<TaskableComponent>,
     #[prost(message, optional, tag = "41")]
     pub task_execution: ::core::option::Option<TaskExecutionComponent>,
-    #[prost(message, optional, tag = "31")]
-    pub mission: ::core::option::Option<MissionComponent>,
-    #[prost(message, optional, tag = "37")]
-    pub sensor: ::core::option::Option<SensorComponent>,
-    #[prost(message, optional, tag = "60")]
-    pub interactivity: ::core::option::Option<InteractivityComponent>,
-    #[prost(message, optional, tag = "61")]
-    pub artifact: ::core::option::Option<ArtifactComponent>,
-    #[prost(message, optional, tag = "39")]
-    pub chat: ::core::option::Option<ChatComponent>,
-    #[prost(message, optional, tag = "40")]
-    pub assembly: ::core::option::Option<AssemblyComponent>,
-    #[prost(message, optional, tag = "63")]
-    pub map_layer: ::core::option::Option<MapLayerComponent>,
     #[prost(message, optional, tag = "64")]
     pub manual_control: ::core::option::Option<ManualControlComponent>,
     #[prost(message, optional, tag = "65")]
     pub target_manual_control: ::core::option::Option<TargetManualControlComponent>,
-    #[prost(message, optional, tag = "66")]
-    pub bounds: ::core::option::Option<BoundsComponent>,
+    /// infrastructure
     #[prost(message, optional, tag = "67")]
     pub policy: ::core::option::Option<PolicyComponent>,
+    #[prost(message, optional, tag = "61")]
+    pub artifact: ::core::option::Option<ArtifactComponent>,
     #[prost(message, optional, tag = "68")]
     pub authorization: ::core::option::Option<AuthorizationComponent>,
-    #[prost(message, optional, tag = "69")]
-    pub measurement: ::core::option::Option<MeasurementComponent>,
+    /// raw data streams
     #[prost(message, optional, tag = "70")]
     pub stream: ::core::option::Option<StreamComponent>,
     #[prost(message, optional, tag = "73")]
@@ -2155,7 +2381,7 @@ pub struct InteractivityComponent {
 /// Where the two differ the components are right. codec says what to expect
 /// before the source was reached (an RTSP camera declared H264 can turn out
 /// to send JPEG, and is then streamed as images); readers decode by
-/// VideoComponent.codec or ImageComponent.format, never by this.
+/// VideoComponent.codec or ImageComponent.codec, never by this.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct MediaStream {
     #[prost(string, tag = "1")]
@@ -2169,8 +2395,9 @@ pub struct MediaStream {
     #[prost(enumeration = "MediaStreamRole", tag = "9")]
     pub role: i32,
     /// the codec expected, by its short name: "H264", "H265", "MJPEG". The
-    /// streamed VideoComponent.codec and ImageComponent.format are media types
-    /// instead ("video/H264", "image/jpeg"), and say what was found.
+    /// streamed VideoComponent.codec (a WebCodecs codec string, "avc1.64001F")
+    /// and ImageComponent.codec (a media type, "image/jpeg") say what was
+    /// found.
     #[prost(string, tag = "10")]
     pub codec: ::prost::alloc::string::String,
     /// the resolution expected, in pixels. What is streamed can differ: its

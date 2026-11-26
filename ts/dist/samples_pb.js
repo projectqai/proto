@@ -11,7 +11,7 @@ import { file_metrics } from "./metrics_pb.js";
  * Describes the file samples.proto.
  */
 export const file_samples = /*@__PURE__*/
-  fileDesc("Cg1zYW1wbGVzLnByb3RvEgV3b3JsZCJdCg5WaWRlb0NvbXBvbmVudBINCgVjb2RlYxgBIAEoCRISCgV3aWR0aBgCIAEoDUgAiAEBEhMKBmhlaWdodBgDIAEoDUgBiAEBQggKBl93aWR0aEIJCgdfaGVpZ2h0IkcKE1ZpZGVvRnJhbWVDb21wb25lbnQSDAoEYm9keRgBIAEoDBIVCghrZXlmcmFtZRgCIAEoCEgAiAEBQgsKCV9rZXlmcmFtZSKMAQoOSW1hZ2VDb21wb25lbnQSDgoGZm9ybWF0GAEgASgJEhIKBXdpZHRoGAIgASgNSACIAQESEwoGaGVpZ2h0GAMgASgNSAGIAQESEwoGc3RyaWRlGAQgASgNSAKIAQESDAoEZGF0YRgFIAEoDEIICgZfd2lkdGhCCQoHX2hlaWdodEIJCgdfc3RyaWRlIoECChFXYXZlZm9ybUNvbXBvbmVudBIOCgZmb3JtYXQYASABKAkSEwoLc2FtcGxlX3JhdGUYAiABKA0SEAoIY2hhbm5lbHMYAyABKA0SFQoNY2hhbm5lbF9uYW1lcxgEIAMoCRIkCgRraW5kGAUgASgOMhEud29ybGQuTWV0cmljS2luZEgAiAEBEh8KBHVuaXQYBiABKA4yES53b3JsZC5NZXRyaWNVbml0EhIKBXNjYWxlGAcgASgBSAGIAQESJgoFcmFuZ2UYCCABKAsyEi53b3JsZC5NZXRyaWNSYW5nZUgCiAEBQgcKBV9raW5kQggKBl9zY2FsZUIICgZfcmFuZ2UiRAoWV2F2ZWZvcm1GcmFtZUNvbXBvbmVudBIMCgRkYXRhGAEgASgMEhIKBXNjYWxlGAIgASgBSACIAQFCCAoGX3NjYWxlIusBChRNY2FwQ2hhbm5lbENvbXBvbmVudBINCgV0b3BpYxgBIAEoCRIYChBtZXNzYWdlX2VuY29kaW5nGAIgASgJEhMKC3NjaGVtYV9uYW1lGAMgASgJEhcKD3NjaGVtYV9lbmNvZGluZxgEIAEoCRIOCgZzY2hlbWEYBSABKAwSOwoIbWV0YWRhdGEYBiADKAsyKS53b3JsZC5NY2FwQ2hhbm5lbENvbXBvbmVudC5NZXRhZGF0YUVudHJ5Gi8KDU1ldGFkYXRhRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ASIkChRNY2FwTWVzc2FnZUNvbXBvbmVudBIMCgRkYXRhGAEgASgMInoKCUltYWdlTWFzaxIJCgF4GAEgASgNEgkKAXkYAiABKA0SDQoFd2lkdGgYAyABKA0SDgoGaGVpZ2h0GAQgASgNEioKCGVuY29kaW5nGAUgASgOMhgud29ybGQuSW1hZ2VNYXNrRW5jb2RpbmcSDAoEZGF0YRgGIAEoDCLoAQoPU3RyZWFtQ29tcG9uZW50Ei4KB3N0cmVhbXMYASADKAsyHS53b3JsZC5TdHJlYW1Db21wb25lbnQuU3RyZWFtGqQBCgZTdHJlYW0SKQoJY29tcG9uZW50GAEgASgOMhYud29ybGQuRW50aXR5Q29tcG9uZW50Ei0KBGxhc3QYAiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wSACIAQESDwoHcmVhZGVycxgDIAMoCRIXCgpsYXRlbmN5X21zGAQgASgNSAGIAQFCBwoFX2xhc3RCDQoLX2xhdGVuY3lfbXMqUgoRSW1hZ2VNYXNrRW5jb2RpbmcSIAocSW1hZ2VNYXNrRW5jb2RpbmdVbnNwZWNpZmllZBAAEhsKF0ltYWdlTWFza0VuY29kaW5nQml0bWFwEAFCIFoeZ2l0aHViLmNvbS9wcm9qZWN0cWFpL3Byb3RvL2dvYgZwcm90bzM", [file_components, file_google_protobuf_timestamp, file_metrics]);
+  fileDesc("Cg1zYW1wbGVzLnByb3RvEgV3b3JsZCJdCg5WaWRlb0NvbXBvbmVudBINCgVjb2RlYxgBIAEoCRISCgV3aWR0aBgCIAEoDUgAiAEBEhMKBmhlaWdodBgDIAEoDUgBiAEBQggKBl93aWR0aEIJCgdfaGVpZ2h0IkcKE1ZpZGVvRnJhbWVDb21wb25lbnQSDAoEYm9keRgBIAEoDBIVCghrZXlmcmFtZRgCIAEoCEgAiAEBQgsKCV9rZXlmcmFtZSKyAQoOSW1hZ2VDb21wb25lbnQSJAoGcGl4ZWxzGAYgASgLMhIud29ybGQuSW1hZ2VQaXhlbHNIABIiCgVjb2RlYxgHIAEoCzIRLndvcmxkLkltYWdlQ29kZWNIABISCgV3aWR0aBgCIAEoDUgBiAEBEhMKBmhlaWdodBgDIAEoDUgCiAEBEgwKBGRhdGEYBSABKAxCCgoIZW5jb2RpbmdCCAoGX3dpZHRoQgkKB19oZWlnaHQiGgoKSW1hZ2VDb2RlYxIMCgR0eXBlGAEgASgJIlgKC0ltYWdlUGl4ZWxzEicKBmZvcm1hdBgBIAEoDjIXLndvcmxkLkltYWdlUGl4ZWxGb3JtYXQSDwoHc3RyaWRlcxgCIAMoDRIPCgdvZmZzZXRzGAMgAygNIpEDChFXYXZlZm9ybUNvbXBvbmVudBIhCgNwY20YDCABKAsyEi53b3JsZC5XYXZlZm9ybVBjbUgAEiUKBWNvZGVjGA0gASgLMhQud29ybGQuV2F2ZWZvcm1Db2RlY0gAEhMKC3NhbXBsZV9yYXRlGAIgASgNEhAKCGNoYW5uZWxzGAMgASgNEhUKDWNoYW5uZWxfbmFtZXMYBCADKAkSJAoEa2luZBgFIAEoDjIRLndvcmxkLk1ldHJpY0tpbmRIAYgBARIfCgR1bml0GAYgASgOMhEud29ybGQuTWV0cmljVW5pdBISCgVzY2FsZRgHIAEoAUgCiAEBEiYKBXJhbmdlGAggASgLMhIud29ybGQuTWV0cmljUmFuZ2VIA4gBARIZCgx0aWNrX3JhdGVfaHoYCiABKAFIBIgBARISCgVjbG9jaxgLIAEoCUgFiAEBQgoKCGVuY29kaW5nQgcKBV9raW5kQggKBl9zY2FsZUIICgZfcmFuZ2VCDwoNX3RpY2tfcmF0ZV9oekIICgZfY2xvY2siYgoLV2F2ZWZvcm1QY20SKwoGZm9ybWF0GAEgASgOMhsud29ybGQuV2F2ZWZvcm1TYW1wbGVGb3JtYXQSFwoKdmFsaWRfYml0cxgCIAEoDUgAiAEBQg0KC192YWxpZF9iaXRzIjMKDVdhdmVmb3JtQ29kZWMSDQoFY29kZWMYASABKAkSEwoLZGVzY3JpcHRpb24YAiABKAwi5wEKFldhdmVmb3JtRnJhbWVDb21wb25lbnQSDAoEZGF0YRgBIAEoDBISCgVzY2FsZRgCIAEoAUgAiAEBEhQKB3NhbXBsZXMYAyABKA1IAYgBARIMCgRsb3N0GAQgASgEEhUKDWRpc2NvbnRpbnVvdXMYBSABKAgSEQoJcmVzdGFydGVkGAYgASgIEhgKEGludmFsaWRfY2hhbm5lbHMYByADKA0SDwoHY2xpcHBlZBgIIAEoCBISCgV0aWNrcxgJIAEoBEgCiAEBQggKBl9zY2FsZUIKCghfc2FtcGxlc0IICgZfdGlja3Mi6wEKFE1jYXBDaGFubmVsQ29tcG9uZW50Eg0KBXRvcGljGAEgASgJEhgKEG1lc3NhZ2VfZW5jb2RpbmcYAiABKAkSEwoLc2NoZW1hX25hbWUYAyABKAkSFwoPc2NoZW1hX2VuY29kaW5nGAQgASgJEg4KBnNjaGVtYRgFIAEoDBI7CghtZXRhZGF0YRgGIAMoCzIpLndvcmxkLk1jYXBDaGFubmVsQ29tcG9uZW50Lk1ldGFkYXRhRW50cnkaLwoNTWV0YWRhdGFFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgBIiQKFE1jYXBNZXNzYWdlQ29tcG9uZW50EgwKBGRhdGEYASABKAwiegoJSW1hZ2VNYXNrEgkKAXgYASABKA0SCQoBeRgCIAEoDRINCgV3aWR0aBgDIAEoDRIOCgZoZWlnaHQYBCABKA0SKgoIZW5jb2RpbmcYBSABKA4yGC53b3JsZC5JbWFnZU1hc2tFbmNvZGluZxIMCgRkYXRhGAYgASgMIugBCg9TdHJlYW1Db21wb25lbnQSLgoHc3RyZWFtcxgBIAMoCzIdLndvcmxkLlN0cmVhbUNvbXBvbmVudC5TdHJlYW0apAEKBlN0cmVhbRIpCgljb21wb25lbnQYASABKA4yFi53b3JsZC5FbnRpdHlDb21wb25lbnQSLQoEbGFzdBgCIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBIAIgBARIPCgdyZWFkZXJzGAMgAygJEhcKCmxhdGVuY3lfbXMYBCABKA1IAYgBAUIHCgVfbGFzdEINCgtfbGF0ZW5jeV9tcyqcAgoQSW1hZ2VQaXhlbEZvcm1hdBIfChtJbWFnZVBpeGVsRm9ybWF0VW5zcGVjaWZpZWQQABIXChNJbWFnZVBpeGVsRm9ybWF0UkdCEAESFwoTSW1hZ2VQaXhlbEZvcm1hdEJHUhACEhgKFEltYWdlUGl4ZWxGb3JtYXRSR0JBEAMSGAoUSW1hZ2VQaXhlbEZvcm1hdFJHQlgQBBIYChRJbWFnZVBpeGVsRm9ybWF0QkdSQRAFEhgKFEltYWdlUGl4ZWxGb3JtYXRCR1JYEAYSGQoVSW1hZ2VQaXhlbEZvcm1hdEdSQVk4EAcSGAoUSW1hZ2VQaXhlbEZvcm1hdEk0MjAQCBIYChRJbWFnZVBpeGVsRm9ybWF0TlYxMhAJKrkCChRXYXZlZm9ybVNhbXBsZUZvcm1hdBIjCh9XYXZlZm9ybVNhbXBsZUZvcm1hdFVuc3BlY2lmaWVkEAASGgoWV2F2ZWZvcm1TYW1wbGVGb3JtYXRVOBABEhsKF1dhdmVmb3JtU2FtcGxlRm9ybWF0UzE2EAISGwoXV2F2ZWZvcm1TYW1wbGVGb3JtYXRTMzIQAxIbChdXYXZlZm9ybVNhbXBsZUZvcm1hdEYzMhAEEiAKHFdhdmVmb3JtU2FtcGxlRm9ybWF0VThQbGFuYXIQBRIhCh1XYXZlZm9ybVNhbXBsZUZvcm1hdFMxNlBsYW5hchAGEiEKHVdhdmVmb3JtU2FtcGxlRm9ybWF0UzMyUGxhbmFyEAcSIQodV2F2ZWZvcm1TYW1wbGVGb3JtYXRGMzJQbGFuYXIQCCpSChFJbWFnZU1hc2tFbmNvZGluZxIgChxJbWFnZU1hc2tFbmNvZGluZ1Vuc3BlY2lmaWVkEAASGwoXSW1hZ2VNYXNrRW5jb2RpbmdCaXRtYXAQAUIgWh5naXRodWIuY29tL3Byb2plY3RxYWkvcHJvdG8vZ29iBnByb3RvMw", [file_components, file_google_protobuf_timestamp, file_metrics]);
 
 /**
  * Describes the message world.VideoComponent.
@@ -35,59 +35,120 @@ export const ImageComponentSchema = /*@__PURE__*/
   messageDesc(file_samples, 2);
 
 /**
+ * Describes the message world.ImageCodec.
+ * Use `create(ImageCodecSchema)` to create a new message.
+ */
+export const ImageCodecSchema = /*@__PURE__*/
+  messageDesc(file_samples, 3);
+
+/**
+ * Describes the message world.ImagePixels.
+ * Use `create(ImagePixelsSchema)` to create a new message.
+ */
+export const ImagePixelsSchema = /*@__PURE__*/
+  messageDesc(file_samples, 4);
+
+/**
  * Describes the message world.WaveformComponent.
  * Use `create(WaveformComponentSchema)` to create a new message.
  */
 export const WaveformComponentSchema = /*@__PURE__*/
-  messageDesc(file_samples, 3);
+  messageDesc(file_samples, 5);
+
+/**
+ * Describes the message world.WaveformPcm.
+ * Use `create(WaveformPcmSchema)` to create a new message.
+ */
+export const WaveformPcmSchema = /*@__PURE__*/
+  messageDesc(file_samples, 6);
+
+/**
+ * Describes the message world.WaveformCodec.
+ * Use `create(WaveformCodecSchema)` to create a new message.
+ */
+export const WaveformCodecSchema = /*@__PURE__*/
+  messageDesc(file_samples, 7);
 
 /**
  * Describes the message world.WaveformFrameComponent.
  * Use `create(WaveformFrameComponentSchema)` to create a new message.
  */
 export const WaveformFrameComponentSchema = /*@__PURE__*/
-  messageDesc(file_samples, 4);
+  messageDesc(file_samples, 8);
 
 /**
  * Describes the message world.McapChannelComponent.
  * Use `create(McapChannelComponentSchema)` to create a new message.
  */
 export const McapChannelComponentSchema = /*@__PURE__*/
-  messageDesc(file_samples, 5);
+  messageDesc(file_samples, 9);
 
 /**
  * Describes the message world.McapMessageComponent.
  * Use `create(McapMessageComponentSchema)` to create a new message.
  */
 export const McapMessageComponentSchema = /*@__PURE__*/
-  messageDesc(file_samples, 6);
+  messageDesc(file_samples, 10);
 
 /**
  * Describes the message world.ImageMask.
  * Use `create(ImageMaskSchema)` to create a new message.
  */
 export const ImageMaskSchema = /*@__PURE__*/
-  messageDesc(file_samples, 7);
+  messageDesc(file_samples, 11);
 
 /**
  * Describes the message world.StreamComponent.
  * Use `create(StreamComponentSchema)` to create a new message.
  */
 export const StreamComponentSchema = /*@__PURE__*/
-  messageDesc(file_samples, 8);
+  messageDesc(file_samples, 12);
 
 /**
  * Describes the message world.StreamComponent.Stream.
  * Use `create(StreamComponent_StreamSchema)` to create a new message.
  */
 export const StreamComponent_StreamSchema = /*@__PURE__*/
-  messageDesc(file_samples, 8, 0);
+  messageDesc(file_samples, 12, 0);
+
+/**
+ * Describes the enum world.ImagePixelFormat.
+ */
+export const ImagePixelFormatSchema = /*@__PURE__*/
+  enumDesc(file_samples, 0);
+
+/**
+ * A pixel format: a WebCodecs VideoPixelFormat of the same name, or one
+ * it lacks (RGB, BGR, GRAY8) that sensors and Foxglove raw images have.
+ *
+ * @generated from enum world.ImagePixelFormat
+ */
+export const ImagePixelFormat = /*@__PURE__*/
+  tsEnum(ImagePixelFormatSchema);
+
+/**
+ * Describes the enum world.WaveformSampleFormat.
+ */
+export const WaveformSampleFormatSchema = /*@__PURE__*/
+  enumDesc(file_samples, 1);
+
+/**
+ * A sample format: a WebCodecs AudioSampleFormat (u8, s16, s32, f32, and
+ * their -planar forms), little endian. Interleaved: sample 0 of every
+ * channel, then sample 1 of every channel, ... Planar: every sample of
+ * channel 0, then every sample of channel 1, ...: the frame split in
+ * channels equal runs.
+ *
+ * @generated from enum world.WaveformSampleFormat
+ */
+export const WaveformSampleFormat = /*@__PURE__*/
+  tsEnum(WaveformSampleFormatSchema);
 
 /**
  * Describes the enum world.ImageMaskEncoding.
  */
 export const ImageMaskEncodingSchema = /*@__PURE__*/
-  enumDesc(file_samples, 0);
+  enumDesc(file_samples, 2);
 
 /**
  * How the pixels of an ImageMask are held in its data.

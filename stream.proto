@@ -36,6 +36,11 @@ option go_package = "github.com/projectqai/proto/go";
 //
 // Who reads which component is listed by the engine in the entity's
 // StreamComponent, so that a producer knows when it is wanted.
+//
+// A value is at most 16 MiB marshalled, and a request or response at most
+// 64 MiB: a client reading or writing values of more than a few MiB raises
+// its message limit to that (gRPC's default is 4 MiB). A read response
+// carries several values within 1 MiB, or a single larger one.
 
 // a component of an entity, read or written through a session
 message StreamScope {
@@ -71,8 +76,9 @@ message OpenStream {
 //
 // A request is rejected whole (InvalidArgument), and nothing of it is
 // written, when a value has no id, carries no component, carries a
-// component only the engine produces (ComponentBehavior.managed), or
-// carries a sampled component together with any other component. A
+// component only the engine produces (ComponentBehavior.managed), carries
+// a sampled component together with any other component, or is larger
+// than 16 MiB marshalled. A
 // session write rejected so ends the session; an OpenStream naming a
 // managed component as a write scope fails.
 message StreamWriteRequest {

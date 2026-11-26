@@ -27,7 +27,7 @@ from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__
 from . import metrics_pb2 as metrics__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rsamples.proto\x12\x05world\x1a\x10\x63omponents.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\rmetrics.proto\"]\n\x0eVideoComponent\x12\r\n\x05\x63odec\x18\x01 \x01(\t\x12\x12\n\x05width\x18\x02 \x01(\rH\x00\x88\x01\x01\x12\x13\n\x06height\x18\x03 \x01(\rH\x01\x88\x01\x01\x42\x08\n\x06_widthB\t\n\x07_height\"G\n\x13VideoFrameComponent\x12\x0c\n\x04\x62ody\x18\x01 \x01(\x0c\x12\x15\n\x08keyframe\x18\x02 \x01(\x08H\x00\x88\x01\x01\x42\x0b\n\t_keyframe\"\x8c\x01\n\x0eImageComponent\x12\x0e\n\x06\x66ormat\x18\x01 \x01(\t\x12\x12\n\x05width\x18\x02 \x01(\rH\x00\x88\x01\x01\x12\x13\n\x06height\x18\x03 \x01(\rH\x01\x88\x01\x01\x12\x13\n\x06stride\x18\x04 \x01(\rH\x02\x88\x01\x01\x12\x0c\n\x04\x64\x61ta\x18\x05 \x01(\x0c\x42\x08\n\x06_widthB\t\n\x07_heightB\t\n\x07_stride\"\x81\x02\n\x11WaveformComponent\x12\x0e\n\x06\x66ormat\x18\x01 \x01(\t\x12\x13\n\x0bsample_rate\x18\x02 \x01(\r\x12\x10\n\x08\x63hannels\x18\x03 \x01(\r\x12\x15\n\rchannel_names\x18\x04 \x03(\t\x12$\n\x04kind\x18\x05 \x01(\x0e\x32\x11.world.MetricKindH\x00\x88\x01\x01\x12\x1f\n\x04unit\x18\x06 \x01(\x0e\x32\x11.world.MetricUnit\x12\x12\n\x05scale\x18\x07 \x01(\x01H\x01\x88\x01\x01\x12&\n\x05range\x18\x08 \x01(\x0b\x32\x12.world.MetricRangeH\x02\x88\x01\x01\x42\x07\n\x05_kindB\x08\n\x06_scaleB\x08\n\x06_range\"D\n\x16WaveformFrameComponent\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\x12\x12\n\x05scale\x18\x02 \x01(\x01H\x00\x88\x01\x01\x42\x08\n\x06_scale\"\xeb\x01\n\x14McapChannelComponent\x12\r\n\x05topic\x18\x01 \x01(\t\x12\x18\n\x10message_encoding\x18\x02 \x01(\t\x12\x13\n\x0bschema_name\x18\x03 \x01(\t\x12\x17\n\x0fschema_encoding\x18\x04 \x01(\t\x12\x0e\n\x06schema\x18\x05 \x01(\x0c\x12;\n\x08metadata\x18\x06 \x03(\x0b\x32).world.McapChannelComponent.MetadataEntry\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"$\n\x14McapMessageComponent\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\"z\n\tImageMask\x12\t\n\x01x\x18\x01 \x01(\r\x12\t\n\x01y\x18\x02 \x01(\r\x12\r\n\x05width\x18\x03 \x01(\r\x12\x0e\n\x06height\x18\x04 \x01(\r\x12*\n\x08\x65ncoding\x18\x05 \x01(\x0e\x32\x18.world.ImageMaskEncoding\x12\x0c\n\x04\x64\x61ta\x18\x06 \x01(\x0c\"\xe8\x01\n\x0fStreamComponent\x12.\n\x07streams\x18\x01 \x03(\x0b\x32\x1d.world.StreamComponent.Stream\x1a\xa4\x01\n\x06Stream\x12)\n\tcomponent\x18\x01 \x01(\x0e\x32\x16.world.EntityComponent\x12-\n\x04last\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x88\x01\x01\x12\x0f\n\x07readers\x18\x03 \x03(\t\x12\x17\n\nlatency_ms\x18\x04 \x01(\rH\x01\x88\x01\x01\x42\x07\n\x05_lastB\r\n\x0b_latency_ms*R\n\x11ImageMaskEncoding\x12 \n\x1cImageMaskEncodingUnspecified\x10\x00\x12\x1b\n\x17ImageMaskEncodingBitmap\x10\x01\x42 Z\x1egithub.com/projectqai/proto/gob\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rsamples.proto\x12\x05world\x1a\x10\x63omponents.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\rmetrics.proto\"]\n\x0eVideoComponent\x12\r\n\x05\x63odec\x18\x01 \x01(\t\x12\x12\n\x05width\x18\x02 \x01(\rH\x00\x88\x01\x01\x12\x13\n\x06height\x18\x03 \x01(\rH\x01\x88\x01\x01\x42\x08\n\x06_widthB\t\n\x07_height\"G\n\x13VideoFrameComponent\x12\x0c\n\x04\x62ody\x18\x01 \x01(\x0c\x12\x15\n\x08keyframe\x18\x02 \x01(\x08H\x00\x88\x01\x01\x42\x0b\n\t_keyframe\"\xb2\x01\n\x0eImageComponent\x12$\n\x06pixels\x18\x06 \x01(\x0b\x32\x12.world.ImagePixelsH\x00\x12\"\n\x05\x63odec\x18\x07 \x01(\x0b\x32\x11.world.ImageCodecH\x00\x12\x12\n\x05width\x18\x02 \x01(\rH\x01\x88\x01\x01\x12\x13\n\x06height\x18\x03 \x01(\rH\x02\x88\x01\x01\x12\x0c\n\x04\x64\x61ta\x18\x05 \x01(\x0c\x42\n\n\x08\x65ncodingB\x08\n\x06_widthB\t\n\x07_height\"\x1a\n\nImageCodec\x12\x0c\n\x04type\x18\x01 \x01(\t\"X\n\x0bImagePixels\x12\'\n\x06\x66ormat\x18\x01 \x01(\x0e\x32\x17.world.ImagePixelFormat\x12\x0f\n\x07strides\x18\x02 \x03(\r\x12\x0f\n\x07offsets\x18\x03 \x03(\r\"\x91\x03\n\x11WaveformComponent\x12!\n\x03pcm\x18\x0c \x01(\x0b\x32\x12.world.WaveformPcmH\x00\x12%\n\x05\x63odec\x18\r \x01(\x0b\x32\x14.world.WaveformCodecH\x00\x12\x13\n\x0bsample_rate\x18\x02 \x01(\r\x12\x10\n\x08\x63hannels\x18\x03 \x01(\r\x12\x15\n\rchannel_names\x18\x04 \x03(\t\x12$\n\x04kind\x18\x05 \x01(\x0e\x32\x11.world.MetricKindH\x01\x88\x01\x01\x12\x1f\n\x04unit\x18\x06 \x01(\x0e\x32\x11.world.MetricUnit\x12\x12\n\x05scale\x18\x07 \x01(\x01H\x02\x88\x01\x01\x12&\n\x05range\x18\x08 \x01(\x0b\x32\x12.world.MetricRangeH\x03\x88\x01\x01\x12\x19\n\x0ctick_rate_hz\x18\n \x01(\x01H\x04\x88\x01\x01\x12\x12\n\x05\x63lock\x18\x0b \x01(\tH\x05\x88\x01\x01\x42\n\n\x08\x65ncodingB\x07\n\x05_kindB\x08\n\x06_scaleB\x08\n\x06_rangeB\x0f\n\r_tick_rate_hzB\x08\n\x06_clock\"b\n\x0bWaveformPcm\x12+\n\x06\x66ormat\x18\x01 \x01(\x0e\x32\x1b.world.WaveformSampleFormat\x12\x17\n\nvalid_bits\x18\x02 \x01(\rH\x00\x88\x01\x01\x42\r\n\x0b_valid_bits\"3\n\rWaveformCodec\x12\r\n\x05\x63odec\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\x0c\"\xe7\x01\n\x16WaveformFrameComponent\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\x12\x12\n\x05scale\x18\x02 \x01(\x01H\x00\x88\x01\x01\x12\x14\n\x07samples\x18\x03 \x01(\rH\x01\x88\x01\x01\x12\x0c\n\x04lost\x18\x04 \x01(\x04\x12\x15\n\rdiscontinuous\x18\x05 \x01(\x08\x12\x11\n\trestarted\x18\x06 \x01(\x08\x12\x18\n\x10invalid_channels\x18\x07 \x03(\r\x12\x0f\n\x07\x63lipped\x18\x08 \x01(\x08\x12\x12\n\x05ticks\x18\t \x01(\x04H\x02\x88\x01\x01\x42\x08\n\x06_scaleB\n\n\x08_samplesB\x08\n\x06_ticks\"\xeb\x01\n\x14McapChannelComponent\x12\r\n\x05topic\x18\x01 \x01(\t\x12\x18\n\x10message_encoding\x18\x02 \x01(\t\x12\x13\n\x0bschema_name\x18\x03 \x01(\t\x12\x17\n\x0fschema_encoding\x18\x04 \x01(\t\x12\x0e\n\x06schema\x18\x05 \x01(\x0c\x12;\n\x08metadata\x18\x06 \x03(\x0b\x32).world.McapChannelComponent.MetadataEntry\x1a/\n\rMetadataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"$\n\x14McapMessageComponent\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\"z\n\tImageMask\x12\t\n\x01x\x18\x01 \x01(\r\x12\t\n\x01y\x18\x02 \x01(\r\x12\r\n\x05width\x18\x03 \x01(\r\x12\x0e\n\x06height\x18\x04 \x01(\r\x12*\n\x08\x65ncoding\x18\x05 \x01(\x0e\x32\x18.world.ImageMaskEncoding\x12\x0c\n\x04\x64\x61ta\x18\x06 \x01(\x0c\"\xe8\x01\n\x0fStreamComponent\x12.\n\x07streams\x18\x01 \x03(\x0b\x32\x1d.world.StreamComponent.Stream\x1a\xa4\x01\n\x06Stream\x12)\n\tcomponent\x18\x01 \x01(\x0e\x32\x16.world.EntityComponent\x12-\n\x04last\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x88\x01\x01\x12\x0f\n\x07readers\x18\x03 \x03(\t\x12\x17\n\nlatency_ms\x18\x04 \x01(\rH\x01\x88\x01\x01\x42\x07\n\x05_lastB\r\n\x0b_latency_ms*\x9c\x02\n\x10ImagePixelFormat\x12\x1f\n\x1bImagePixelFormatUnspecified\x10\x00\x12\x17\n\x13ImagePixelFormatRGB\x10\x01\x12\x17\n\x13ImagePixelFormatBGR\x10\x02\x12\x18\n\x14ImagePixelFormatRGBA\x10\x03\x12\x18\n\x14ImagePixelFormatRGBX\x10\x04\x12\x18\n\x14ImagePixelFormatBGRA\x10\x05\x12\x18\n\x14ImagePixelFormatBGRX\x10\x06\x12\x19\n\x15ImagePixelFormatGRAY8\x10\x07\x12\x18\n\x14ImagePixelFormatI420\x10\x08\x12\x18\n\x14ImagePixelFormatNV12\x10\t*\xb9\x02\n\x14WaveformSampleFormat\x12#\n\x1fWaveformSampleFormatUnspecified\x10\x00\x12\x1a\n\x16WaveformSampleFormatU8\x10\x01\x12\x1b\n\x17WaveformSampleFormatS16\x10\x02\x12\x1b\n\x17WaveformSampleFormatS32\x10\x03\x12\x1b\n\x17WaveformSampleFormatF32\x10\x04\x12 \n\x1cWaveformSampleFormatU8Planar\x10\x05\x12!\n\x1dWaveformSampleFormatS16Planar\x10\x06\x12!\n\x1dWaveformSampleFormatS32Planar\x10\x07\x12!\n\x1dWaveformSampleFormatF32Planar\x10\x08*R\n\x11ImageMaskEncoding\x12 \n\x1cImageMaskEncodingUnspecified\x10\x00\x12\x1b\n\x17ImageMaskEncodingBitmap\x10\x01\x42 Z\x1egithub.com/projectqai/proto/gob\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -37,28 +37,40 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._serialized_options = b'Z\036github.com/projectqai/proto/go'
   _globals['_MCAPCHANNELCOMPONENT_METADATAENTRY']._loaded_options = None
   _globals['_MCAPCHANNELCOMPONENT_METADATAENTRY']._serialized_options = b'8\001'
-  _globals['_IMAGEMASKENCODING']._serialized_start=1366
-  _globals['_IMAGEMASKENCODING']._serialized_end=1448
+  _globals['_IMAGEPIXELFORMAT']._serialized_start=1984
+  _globals['_IMAGEPIXELFORMAT']._serialized_end=2268
+  _globals['_WAVEFORMSAMPLEFORMAT']._serialized_start=2271
+  _globals['_WAVEFORMSAMPLEFORMAT']._serialized_end=2584
+  _globals['_IMAGEMASKENCODING']._serialized_start=2586
+  _globals['_IMAGEMASKENCODING']._serialized_end=2668
   _globals['_VIDEOCOMPONENT']._serialized_start=90
   _globals['_VIDEOCOMPONENT']._serialized_end=183
   _globals['_VIDEOFRAMECOMPONENT']._serialized_start=185
   _globals['_VIDEOFRAMECOMPONENT']._serialized_end=256
   _globals['_IMAGECOMPONENT']._serialized_start=259
-  _globals['_IMAGECOMPONENT']._serialized_end=399
-  _globals['_WAVEFORMCOMPONENT']._serialized_start=402
-  _globals['_WAVEFORMCOMPONENT']._serialized_end=659
-  _globals['_WAVEFORMFRAMECOMPONENT']._serialized_start=661
-  _globals['_WAVEFORMFRAMECOMPONENT']._serialized_end=729
-  _globals['_MCAPCHANNELCOMPONENT']._serialized_start=732
-  _globals['_MCAPCHANNELCOMPONENT']._serialized_end=967
-  _globals['_MCAPCHANNELCOMPONENT_METADATAENTRY']._serialized_start=920
-  _globals['_MCAPCHANNELCOMPONENT_METADATAENTRY']._serialized_end=967
-  _globals['_MCAPMESSAGECOMPONENT']._serialized_start=969
-  _globals['_MCAPMESSAGECOMPONENT']._serialized_end=1005
-  _globals['_IMAGEMASK']._serialized_start=1007
-  _globals['_IMAGEMASK']._serialized_end=1129
-  _globals['_STREAMCOMPONENT']._serialized_start=1132
-  _globals['_STREAMCOMPONENT']._serialized_end=1364
-  _globals['_STREAMCOMPONENT_STREAM']._serialized_start=1200
-  _globals['_STREAMCOMPONENT_STREAM']._serialized_end=1364
+  _globals['_IMAGECOMPONENT']._serialized_end=437
+  _globals['_IMAGECODEC']._serialized_start=439
+  _globals['_IMAGECODEC']._serialized_end=465
+  _globals['_IMAGEPIXELS']._serialized_start=467
+  _globals['_IMAGEPIXELS']._serialized_end=555
+  _globals['_WAVEFORMCOMPONENT']._serialized_start=558
+  _globals['_WAVEFORMCOMPONENT']._serialized_end=959
+  _globals['_WAVEFORMPCM']._serialized_start=961
+  _globals['_WAVEFORMPCM']._serialized_end=1059
+  _globals['_WAVEFORMCODEC']._serialized_start=1061
+  _globals['_WAVEFORMCODEC']._serialized_end=1112
+  _globals['_WAVEFORMFRAMECOMPONENT']._serialized_start=1115
+  _globals['_WAVEFORMFRAMECOMPONENT']._serialized_end=1346
+  _globals['_MCAPCHANNELCOMPONENT']._serialized_start=1349
+  _globals['_MCAPCHANNELCOMPONENT']._serialized_end=1584
+  _globals['_MCAPCHANNELCOMPONENT_METADATAENTRY']._serialized_start=1537
+  _globals['_MCAPCHANNELCOMPONENT_METADATAENTRY']._serialized_end=1584
+  _globals['_MCAPMESSAGECOMPONENT']._serialized_start=1586
+  _globals['_MCAPMESSAGECOMPONENT']._serialized_end=1622
+  _globals['_IMAGEMASK']._serialized_start=1624
+  _globals['_IMAGEMASK']._serialized_end=1746
+  _globals['_STREAMCOMPONENT']._serialized_start=1749
+  _globals['_STREAMCOMPONENT']._serialized_end=1981
+  _globals['_STREAMCOMPONENT_STREAM']._serialized_start=1817
+  _globals['_STREAMCOMPONENT_STREAM']._serialized_end=1981
 # @@protoc_insertion_point(module_scope)

@@ -70,7 +70,10 @@ func Dial() (*grpc.ClientConn, error) {
 	}
 	return grpc.NewClient("passthrough:///"+t,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithPerRPCCredentials(bearer(os.Getenv("HYDRIS_TOKEN"))))
+		grpc.WithPerRPCCredentials(bearer(os.Getenv("HYDRIS_TOKEN"))),
+		// a stream's values are up to 16 MiB each, a response of them up
+		// to 64 MiB (stream.proto), beyond gRPC's default of 4 MiB
+		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(64<<20), grpc.MaxCallSendMsgSize(64<<20)))
 }
 
 // target is HYDRIS_SERVER as a gRPC target. The connection is plaintext, so

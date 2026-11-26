@@ -22,6 +22,156 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// A pixel format: a WebCodecs VideoPixelFormat of the same name, or one
+// it lacks (RGB, BGR, GRAY8) that sensors and Foxglove raw images have.
+type ImagePixelFormat int32
+
+const (
+	ImagePixelFormat_ImagePixelFormatUnspecified ImagePixelFormat = 0
+	// 8 bits each: R, G, B; B, G, R
+	ImagePixelFormat_ImagePixelFormatRGB ImagePixelFormat = 1
+	ImagePixelFormat_ImagePixelFormatBGR ImagePixelFormat = 2
+	// 8 bits each, the fourth unused (X) or alpha (A)
+	ImagePixelFormat_ImagePixelFormatRGBA ImagePixelFormat = 3
+	ImagePixelFormat_ImagePixelFormatRGBX ImagePixelFormat = 4
+	ImagePixelFormat_ImagePixelFormatBGRA ImagePixelFormat = 5
+	ImagePixelFormat_ImagePixelFormatBGRX ImagePixelFormat = 6
+	// luma only, 8 bits
+	ImagePixelFormat_ImagePixelFormatGRAY8 ImagePixelFormat = 7
+	// planes Y, U, V; U and V of half the width and height. YUV is BT.601
+	// of limited range (Y 16-235), as video has it
+	ImagePixelFormat_ImagePixelFormatI420 ImagePixelFormat = 8
+	// planes Y and UV interleaved; UV of half the height
+	ImagePixelFormat_ImagePixelFormatNV12 ImagePixelFormat = 9
+)
+
+// Enum value maps for ImagePixelFormat.
+var (
+	ImagePixelFormat_name = map[int32]string{
+		0: "ImagePixelFormatUnspecified",
+		1: "ImagePixelFormatRGB",
+		2: "ImagePixelFormatBGR",
+		3: "ImagePixelFormatRGBA",
+		4: "ImagePixelFormatRGBX",
+		5: "ImagePixelFormatBGRA",
+		6: "ImagePixelFormatBGRX",
+		7: "ImagePixelFormatGRAY8",
+		8: "ImagePixelFormatI420",
+		9: "ImagePixelFormatNV12",
+	}
+	ImagePixelFormat_value = map[string]int32{
+		"ImagePixelFormatUnspecified": 0,
+		"ImagePixelFormatRGB":         1,
+		"ImagePixelFormatBGR":         2,
+		"ImagePixelFormatRGBA":        3,
+		"ImagePixelFormatRGBX":        4,
+		"ImagePixelFormatBGRA":        5,
+		"ImagePixelFormatBGRX":        6,
+		"ImagePixelFormatGRAY8":       7,
+		"ImagePixelFormatI420":        8,
+		"ImagePixelFormatNV12":        9,
+	}
+)
+
+func (x ImagePixelFormat) Enum() *ImagePixelFormat {
+	p := new(ImagePixelFormat)
+	*p = x
+	return p
+}
+
+func (x ImagePixelFormat) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ImagePixelFormat) Descriptor() protoreflect.EnumDescriptor {
+	return file_samples_proto_enumTypes[0].Descriptor()
+}
+
+func (ImagePixelFormat) Type() protoreflect.EnumType {
+	return &file_samples_proto_enumTypes[0]
+}
+
+func (x ImagePixelFormat) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ImagePixelFormat.Descriptor instead.
+func (ImagePixelFormat) EnumDescriptor() ([]byte, []int) {
+	return file_samples_proto_rawDescGZIP(), []int{0}
+}
+
+// A sample format: a WebCodecs AudioSampleFormat (u8, s16, s32, f32, and
+// their -planar forms), little endian. Interleaved: sample 0 of every
+// channel, then sample 1 of every channel, ... Planar: every sample of
+// channel 0, then every sample of channel 1, ...: the frame split in
+// channels equal runs.
+type WaveformSampleFormat int32
+
+const (
+	WaveformSampleFormat_WaveformSampleFormatUnspecified WaveformSampleFormat = 0
+	WaveformSampleFormat_WaveformSampleFormatU8          WaveformSampleFormat = 1
+	WaveformSampleFormat_WaveformSampleFormatS16         WaveformSampleFormat = 2
+	WaveformSampleFormat_WaveformSampleFormatS32         WaveformSampleFormat = 3
+	WaveformSampleFormat_WaveformSampleFormatF32         WaveformSampleFormat = 4
+	WaveformSampleFormat_WaveformSampleFormatU8Planar    WaveformSampleFormat = 5
+	WaveformSampleFormat_WaveformSampleFormatS16Planar   WaveformSampleFormat = 6
+	WaveformSampleFormat_WaveformSampleFormatS32Planar   WaveformSampleFormat = 7
+	WaveformSampleFormat_WaveformSampleFormatF32Planar   WaveformSampleFormat = 8
+)
+
+// Enum value maps for WaveformSampleFormat.
+var (
+	WaveformSampleFormat_name = map[int32]string{
+		0: "WaveformSampleFormatUnspecified",
+		1: "WaveformSampleFormatU8",
+		2: "WaveformSampleFormatS16",
+		3: "WaveformSampleFormatS32",
+		4: "WaveformSampleFormatF32",
+		5: "WaveformSampleFormatU8Planar",
+		6: "WaveformSampleFormatS16Planar",
+		7: "WaveformSampleFormatS32Planar",
+		8: "WaveformSampleFormatF32Planar",
+	}
+	WaveformSampleFormat_value = map[string]int32{
+		"WaveformSampleFormatUnspecified": 0,
+		"WaveformSampleFormatU8":          1,
+		"WaveformSampleFormatS16":         2,
+		"WaveformSampleFormatS32":         3,
+		"WaveformSampleFormatF32":         4,
+		"WaveformSampleFormatU8Planar":    5,
+		"WaveformSampleFormatS16Planar":   6,
+		"WaveformSampleFormatS32Planar":   7,
+		"WaveformSampleFormatF32Planar":   8,
+	}
+)
+
+func (x WaveformSampleFormat) Enum() *WaveformSampleFormat {
+	p := new(WaveformSampleFormat)
+	*p = x
+	return p
+}
+
+func (x WaveformSampleFormat) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (WaveformSampleFormat) Descriptor() protoreflect.EnumDescriptor {
+	return file_samples_proto_enumTypes[1].Descriptor()
+}
+
+func (WaveformSampleFormat) Type() protoreflect.EnumType {
+	return &file_samples_proto_enumTypes[1]
+}
+
+func (x WaveformSampleFormat) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use WaveformSampleFormat.Descriptor instead.
+func (WaveformSampleFormat) EnumDescriptor() ([]byte, []int) {
+	return file_samples_proto_rawDescGZIP(), []int{1}
+}
+
 // How the pixels of an ImageMask are held in its data.
 type ImageMaskEncoding int32
 
@@ -56,11 +206,11 @@ func (x ImageMaskEncoding) String() string {
 }
 
 func (ImageMaskEncoding) Descriptor() protoreflect.EnumDescriptor {
-	return file_samples_proto_enumTypes[0].Descriptor()
+	return file_samples_proto_enumTypes[2].Descriptor()
 }
 
 func (ImageMaskEncoding) Type() protoreflect.EnumType {
-	return &file_samples_proto_enumTypes[0]
+	return &file_samples_proto_enumTypes[2]
 }
 
 func (x ImageMaskEncoding) Number() protoreflect.EnumNumber {
@@ -69,7 +219,7 @@ func (x ImageMaskEncoding) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ImageMaskEncoding.Descriptor instead.
 func (ImageMaskEncoding) EnumDescriptor() ([]byte, []int) {
-	return file_samples_proto_rawDescGZIP(), []int{0}
+	return file_samples_proto_rawDescGZIP(), []int{2}
 }
 
 // What the entity's video is, as the driver streaming it found it (a
@@ -77,7 +227,11 @@ func (ImageMaskEncoding) EnumDescriptor() ([]byte, []int) {
 // frames it applies to, and again when it changes.
 type VideoComponent struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// a media type, e.g. "video/H264" or "video/H264; codecs=avc1.64001F"
+	// a WebCodecs codec string: "avc1.64001F" (H264), "hvc1.1.6.L93.B0"
+	// (H265), with the profile and level of the stream's SPS; the bare
+	// "avc1" or "hvc1" while the driver has not seen one. The frames are
+	// Annex B with the parameter sets in-band, as WebCodecs decodes them
+	// without a description.
 	Codec string `protobuf:"bytes,1,opt,name=codec,proto3" json:"codec,omitempty"`
 	// the display size of the video, in pixels, as streamed; unset when not
 	// known. When the size changes, VideoComponent is written again before
@@ -198,12 +352,14 @@ func (x *VideoFrameComponent) GetKeyframe() bool {
 // spectrogram. Its time is Lifetime.fresh.
 type ImageComponent struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// a media type: "image/jpeg", "image/png", "image/x-raw; encoding=rgb8"
-	Format        string  `protobuf:"bytes,1,opt,name=format,proto3" json:"format,omitempty"`
-	Width         *uint32 `protobuf:"varint,2,opt,name=width,proto3,oneof" json:"width,omitempty"`
-	Height        *uint32 `protobuf:"varint,3,opt,name=height,proto3,oneof" json:"height,omitempty"`
-	Stride        *uint32 `protobuf:"varint,4,opt,name=stride,proto3,oneof" json:"stride,omitempty"` // bytes per row of a raw image; unset: tight
-	Data          []byte  `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`
+	// Types that are valid to be assigned to Encoding:
+	//
+	//	*ImageComponent_Pixels
+	//	*ImageComponent_Codec
+	Encoding      isImageComponent_Encoding `protobuf_oneof:"encoding"`
+	Width         *uint32                   `protobuf:"varint,2,opt,name=width,proto3,oneof" json:"width,omitempty"`
+	Height        *uint32                   `protobuf:"varint,3,opt,name=height,proto3,oneof" json:"height,omitempty"`
+	Data          []byte                    `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -238,11 +394,29 @@ func (*ImageComponent) Descriptor() ([]byte, []int) {
 	return file_samples_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *ImageComponent) GetFormat() string {
+func (x *ImageComponent) GetEncoding() isImageComponent_Encoding {
 	if x != nil {
-		return x.Format
+		return x.Encoding
 	}
-	return ""
+	return nil
+}
+
+func (x *ImageComponent) GetPixels() *ImagePixels {
+	if x != nil {
+		if x, ok := x.Encoding.(*ImageComponent_Pixels); ok {
+			return x.Pixels
+		}
+	}
+	return nil
+}
+
+func (x *ImageComponent) GetCodec() *ImageCodec {
+	if x != nil {
+		if x, ok := x.Encoding.(*ImageComponent_Codec); ok {
+			return x.Codec
+		}
+	}
+	return nil
 }
 
 func (x *ImageComponent) GetWidth() uint32 {
@@ -259,16 +433,138 @@ func (x *ImageComponent) GetHeight() uint32 {
 	return 0
 }
 
-func (x *ImageComponent) GetStride() uint32 {
-	if x != nil && x.Stride != nil {
-		return *x.Stride
-	}
-	return 0
-}
-
 func (x *ImageComponent) GetData() []byte {
 	if x != nil {
 		return x.Data
+	}
+	return nil
+}
+
+type isImageComponent_Encoding interface {
+	isImageComponent_Encoding()
+}
+
+type ImageComponent_Pixels struct {
+	Pixels *ImagePixels `protobuf:"bytes,6,opt,name=pixels,proto3,oneof"`
+}
+
+type ImageComponent_Codec struct {
+	Codec *ImageCodec `protobuf:"bytes,7,opt,name=codec,proto3,oneof"`
+}
+
+func (*ImageComponent_Pixels) isImageComponent_Encoding() {}
+
+func (*ImageComponent_Codec) isImageComponent_Encoding() {}
+
+// An encoded image, as WebCodecs' ImageDecoder takes it (ImageDecoderInit).
+type ImageCodec struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// its media type: "image/jpeg", "image/png", "image/webp"
+	Type          string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ImageCodec) Reset() {
+	*x = ImageCodec{}
+	mi := &file_samples_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ImageCodec) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImageCodec) ProtoMessage() {}
+
+func (x *ImageCodec) ProtoReflect() protoreflect.Message {
+	mi := &file_samples_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImageCodec.ProtoReflect.Descriptor instead.
+func (*ImageCodec) Descriptor() ([]byte, []int) {
+	return file_samples_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ImageCodec) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+// The pixels of a raw image: its planes in data, as WebCodecs' PlaneLayout
+// places them.
+type ImagePixels struct {
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	Format ImagePixelFormat       `protobuf:"varint,1,opt,name=format,proto3,enum=world.ImagePixelFormat" json:"format,omitempty"`
+	// bytes per row of each plane, in order; fewer than the planes: the
+	// rest are tight (a chroma plane: as wide as the format says)
+	Strides []uint32 `protobuf:"varint,2,rep,packed,name=strides,proto3" json:"strides,omitempty"`
+	// where each plane starts in data, in bytes, in order; fewer than the
+	// planes: the rest start where the one before ends (its rows times its
+	// stride), the first at 0
+	Offsets       []uint32 `protobuf:"varint,3,rep,packed,name=offsets,proto3" json:"offsets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ImagePixels) Reset() {
+	*x = ImagePixels{}
+	mi := &file_samples_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ImagePixels) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ImagePixels) ProtoMessage() {}
+
+func (x *ImagePixels) ProtoReflect() protoreflect.Message {
+	mi := &file_samples_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ImagePixels.ProtoReflect.Descriptor instead.
+func (*ImagePixels) Descriptor() ([]byte, []int) {
+	return file_samples_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ImagePixels) GetFormat() ImagePixelFormat {
+	if x != nil {
+		return x.Format
+	}
+	return ImagePixelFormat_ImagePixelFormatUnspecified
+}
+
+func (x *ImagePixels) GetStrides() []uint32 {
+	if x != nil {
+		return x.Strides
+	}
+	return nil
+}
+
+func (x *ImagePixels) GetOffsets() []uint32 {
+	if x != nil {
+		return x.Offsets
 	}
 	return nil
 }
@@ -279,30 +575,41 @@ func (x *ImageComponent) GetData() []byte {
 // entities.
 type WaveformComponent struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// a media type: "audio/pcm; format=s16le", "audio/opus", ... PCM of
-	// fewer significant bits than its words says so: "audio/pcm;
-	// format=s32le; depth=24" (24-bit samples, right-aligned, sign-extended)
-	Format     string `protobuf:"bytes,1,opt,name=format,proto3" json:"format,omitempty"`
-	SampleRate uint32 `protobuf:"varint,2,opt,name=sample_rate,json=sampleRate,proto3" json:"sample_rate,omitempty"`
-	Channels   uint32 `protobuf:"varint,3,opt,name=channels,proto3" json:"channels,omitempty"`
+	// how the frames carry the samples
+	//
+	// Types that are valid to be assigned to Encoding:
+	//
+	//	*WaveformComponent_Pcm
+	//	*WaveformComponent_Codec
+	Encoding   isWaveformComponent_Encoding `protobuf_oneof:"encoding"`
+	SampleRate uint32                       `protobuf:"varint,2,opt,name=sample_rate,json=sampleRate,proto3" json:"sample_rate,omitempty"`
+	Channels   uint32                       `protobuf:"varint,3,opt,name=channels,proto3" json:"channels,omitempty"`
 	// what each channel is, in the order of a frame's samples ("mic0",
 	// "s0.x"); fewer than channels: the rest are not named
 	ChannelNames []string `protobuf:"bytes,4,rep,name=channel_names,json=channelNames,proto3" json:"channel_names,omitempty"`
 	// what the samples measure: a sample times scale is a value of kind in
 	// unit. Unset: not a calibrated quantity (audio as recorded); the samples
-	// are as their format says
+	// are as their encoding says
 	Kind  *MetricKind `protobuf:"varint,5,opt,name=kind,proto3,enum=world.MetricKind,oneof" json:"kind,omitempty"`
 	Unit  MetricUnit  `protobuf:"varint,6,opt,name=unit,proto3,enum=world.MetricUnit" json:"unit,omitempty"`
 	Scale *float64    `protobuf:"fixed64,7,opt,name=scale,proto3,oneof" json:"scale,omitempty"` // unit per sample count; a frame may say its own
 	// the values the sensor can report, in unit
-	Range         *MetricRange `protobuf:"bytes,8,opt,name=range,proto3,oneof" json:"range,omitempty"`
+	Range *MetricRange `protobuf:"bytes,8,opt,name=range,proto3,oneof" json:"range,omitempty"`
+	// the device clock a frame's ticks count, in ticks per second; unset:
+	// frames carry no ticks
+	TickRateHz *float64 `protobuf:"fixed64,10,opt,name=tick_rate_hz,json=tickRateHz,proto3,oneof" json:"tick_rate_hz,omitempty"`
+	// names that clock: the frames of waveforms on the same clock (the
+	// microphones and the accelerometers of one board) are aligned by their
+	// ticks, which are exact where Lifetime.fresh is not. Unset: a clock of
+	// this waveform's own
+	Clock         *string `protobuf:"bytes,11,opt,name=clock,proto3,oneof" json:"clock,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *WaveformComponent) Reset() {
 	*x = WaveformComponent{}
-	mi := &file_samples_proto_msgTypes[3]
+	mi := &file_samples_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -314,7 +621,7 @@ func (x *WaveformComponent) String() string {
 func (*WaveformComponent) ProtoMessage() {}
 
 func (x *WaveformComponent) ProtoReflect() protoreflect.Message {
-	mi := &file_samples_proto_msgTypes[3]
+	mi := &file_samples_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -327,14 +634,32 @@ func (x *WaveformComponent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WaveformComponent.ProtoReflect.Descriptor instead.
 func (*WaveformComponent) Descriptor() ([]byte, []int) {
-	return file_samples_proto_rawDescGZIP(), []int{3}
+	return file_samples_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *WaveformComponent) GetFormat() string {
+func (x *WaveformComponent) GetEncoding() isWaveformComponent_Encoding {
 	if x != nil {
-		return x.Format
+		return x.Encoding
 	}
-	return ""
+	return nil
+}
+
+func (x *WaveformComponent) GetPcm() *WaveformPcm {
+	if x != nil {
+		if x, ok := x.Encoding.(*WaveformComponent_Pcm); ok {
+			return x.Pcm
+		}
+	}
+	return nil
+}
+
+func (x *WaveformComponent) GetCodec() *WaveformCodec {
+	if x != nil {
+		if x, ok := x.Encoding.(*WaveformComponent_Codec); ok {
+			return x.Codec
+		}
+	}
+	return nil
 }
 
 func (x *WaveformComponent) GetSampleRate() uint32 {
@@ -386,21 +711,194 @@ func (x *WaveformComponent) GetRange() *MetricRange {
 	return nil
 }
 
-// One frame of a waveform: a codec frame, or a block of samples
-// (interleaved). Its time is that of its first sample, Lifetime.fresh.
+func (x *WaveformComponent) GetTickRateHz() float64 {
+	if x != nil && x.TickRateHz != nil {
+		return *x.TickRateHz
+	}
+	return 0
+}
+
+func (x *WaveformComponent) GetClock() string {
+	if x != nil && x.Clock != nil {
+		return *x.Clock
+	}
+	return ""
+}
+
+type isWaveformComponent_Encoding interface {
+	isWaveformComponent_Encoding()
+}
+
+type WaveformComponent_Pcm struct {
+	Pcm *WaveformPcm `protobuf:"bytes,12,opt,name=pcm,proto3,oneof"`
+}
+
+type WaveformComponent_Codec struct {
+	Codec *WaveformCodec `protobuf:"bytes,13,opt,name=codec,proto3,oneof"`
+}
+
+func (*WaveformComponent_Pcm) isWaveformComponent_Encoding() {}
+
+func (*WaveformComponent_Codec) isWaveformComponent_Encoding() {}
+
+// Raw samples: a frame is an AudioData buffer of WebCodecs, of format.
+type WaveformPcm struct {
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	Format WaveformSampleFormat   `protobuf:"varint,1,opt,name=format,proto3,enum=world.WaveformSampleFormat" json:"format,omitempty"`
+	// significant bits of a sample, right-aligned and sign-extended in its
+	// word (24 of S32: a 24-bit converter). Unset: all of them. A player
+	// scales by the bits not used, else it plays 2^(32-24) times too quiet
+	ValidBits     *uint32 `protobuf:"varint,2,opt,name=valid_bits,json=validBits,proto3,oneof" json:"valid_bits,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WaveformPcm) Reset() {
+	*x = WaveformPcm{}
+	mi := &file_samples_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WaveformPcm) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WaveformPcm) ProtoMessage() {}
+
+func (x *WaveformPcm) ProtoReflect() protoreflect.Message {
+	mi := &file_samples_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WaveformPcm.ProtoReflect.Descriptor instead.
+func (*WaveformPcm) Descriptor() ([]byte, []int) {
+	return file_samples_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *WaveformPcm) GetFormat() WaveformSampleFormat {
+	if x != nil {
+		return x.Format
+	}
+	return WaveformSampleFormat_WaveformSampleFormatUnspecified
+}
+
+func (x *WaveformPcm) GetValidBits() uint32 {
+	if x != nil && x.ValidBits != nil {
+		return *x.ValidBits
+	}
+	return 0
+}
+
+// Encoded samples: a frame is one packet of the codec, an
+// EncodedAudioChunk of WebCodecs.
+type WaveformCodec struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// a WebCodecs codec string: "opus", "mp3", "flac", "mp4a.40.2" (AAC-LC)
+	Codec string `protobuf:"bytes,1,opt,name=codec,proto3" json:"codec,omitempty"`
+	// AudioDecoderConfig.description, as the codec registry defines it for
+	// the codec (OpusHead, AudioSpecificConfig, "fLaC" and STREAMINFO);
+	// empty for a codec whose packets need none (mp3, AAC in ADTS). When
+	// it changes, WaveformComponent is written again before the first frame
+	// it applies to.
+	Description   []byte `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WaveformCodec) Reset() {
+	*x = WaveformCodec{}
+	mi := &file_samples_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WaveformCodec) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WaveformCodec) ProtoMessage() {}
+
+func (x *WaveformCodec) ProtoReflect() protoreflect.Message {
+	mi := &file_samples_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WaveformCodec.ProtoReflect.Descriptor instead.
+func (*WaveformCodec) Descriptor() ([]byte, []int) {
+	return file_samples_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *WaveformCodec) GetCodec() string {
+	if x != nil {
+		return x.Codec
+	}
+	return ""
+}
+
+func (x *WaveformCodec) GetDescription() []byte {
+	if x != nil {
+		return x.Description
+	}
+	return nil
+}
+
+// One frame of a waveform: a packet of its codec, or a block of samples in
+// its PCM sample format. Its time is that of its first sample,
+// Lifetime.fresh; its duration is samples / sample_rate.
+// What a frame says of its samples applies to it alone: the next frame
+// says it again or it no longer holds.
 type WaveformFrameComponent struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	Data  []byte                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	// unit per sample count of this frame, when it differs from the
 	// waveform's scale (a sensor that reports it as it measures)
-	Scale         *float64 `protobuf:"fixed64,2,opt,name=scale,proto3,oneof" json:"scale,omitempty"`
+	Scale *float64 `protobuf:"fixed64,2,opt,name=scale,proto3,oneof" json:"scale,omitempty"`
+	// samples per channel that are valid, counted from the first; the rest
+	// of each channel is padding (zero), not signal. Unset: all of them. A
+	// codec's packet: the samples it decodes to (EncodedAudioChunk.duration),
+	// which a reader does not know without decoding it, so it is set
+	Samples *uint32 `protobuf:"varint,3,opt,name=samples,proto3,oneof" json:"samples,omitempty"`
+	// samples per channel lost between the previous frame and this one: the
+	// signal does not continue from there. 0: it does, as far as the
+	// producer knows (a gap in fresh says so too)
+	Lost uint64 `protobuf:"varint,4,opt,name=lost,proto3" json:"lost,omitempty"`
+	// samples are missing inside this frame, an unknown number (an
+	// overflowed FIFO): the frame is not continuous within itself
+	Discontinuous bool `protobuf:"varint,5,opt,name=discontinuous,proto3" json:"discontinuous,omitempty"`
+	// the first frame after the capture restarted: nothing before it
+	// continues into it
+	Restarted bool `protobuf:"varint,6,opt,name=restarted,proto3" json:"restarted,omitempty"`
+	// channels, by their index in the frame, that carried no valid data in
+	// at least part of this frame (zeroed there): a microphone or a sensor
+	// that failed or did not answer
+	InvalidChannels []uint32 `protobuf:"varint,7,rep,packed,name=invalid_channels,json=invalidChannels,proto3" json:"invalid_channels,omitempty"`
+	// some sample hit full scale: the signal was clipped
+	Clipped bool `protobuf:"varint,8,opt,name=clipped,proto3" json:"clipped,omitempty"`
+	// the device clock (WaveformComponent.tick_rate_hz) at the first sample;
+	// unset: not known
+	Ticks         *uint64 `protobuf:"varint,9,opt,name=ticks,proto3,oneof" json:"ticks,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *WaveformFrameComponent) Reset() {
 	*x = WaveformFrameComponent{}
-	mi := &file_samples_proto_msgTypes[4]
+	mi := &file_samples_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -412,7 +910,7 @@ func (x *WaveformFrameComponent) String() string {
 func (*WaveformFrameComponent) ProtoMessage() {}
 
 func (x *WaveformFrameComponent) ProtoReflect() protoreflect.Message {
-	mi := &file_samples_proto_msgTypes[4]
+	mi := &file_samples_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -425,7 +923,7 @@ func (x *WaveformFrameComponent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WaveformFrameComponent.ProtoReflect.Descriptor instead.
 func (*WaveformFrameComponent) Descriptor() ([]byte, []int) {
-	return file_samples_proto_rawDescGZIP(), []int{4}
+	return file_samples_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *WaveformFrameComponent) GetData() []byte {
@@ -438,6 +936,55 @@ func (x *WaveformFrameComponent) GetData() []byte {
 func (x *WaveformFrameComponent) GetScale() float64 {
 	if x != nil && x.Scale != nil {
 		return *x.Scale
+	}
+	return 0
+}
+
+func (x *WaveformFrameComponent) GetSamples() uint32 {
+	if x != nil && x.Samples != nil {
+		return *x.Samples
+	}
+	return 0
+}
+
+func (x *WaveformFrameComponent) GetLost() uint64 {
+	if x != nil {
+		return x.Lost
+	}
+	return 0
+}
+
+func (x *WaveformFrameComponent) GetDiscontinuous() bool {
+	if x != nil {
+		return x.Discontinuous
+	}
+	return false
+}
+
+func (x *WaveformFrameComponent) GetRestarted() bool {
+	if x != nil {
+		return x.Restarted
+	}
+	return false
+}
+
+func (x *WaveformFrameComponent) GetInvalidChannels() []uint32 {
+	if x != nil {
+		return x.InvalidChannels
+	}
+	return nil
+}
+
+func (x *WaveformFrameComponent) GetClipped() bool {
+	if x != nil {
+		return x.Clipped
+	}
+	return false
+}
+
+func (x *WaveformFrameComponent) GetTicks() uint64 {
+	if x != nil && x.Ticks != nil {
+		return *x.Ticks
 	}
 	return 0
 }
@@ -458,7 +1005,7 @@ type McapChannelComponent struct {
 
 func (x *McapChannelComponent) Reset() {
 	*x = McapChannelComponent{}
-	mi := &file_samples_proto_msgTypes[5]
+	mi := &file_samples_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -470,7 +1017,7 @@ func (x *McapChannelComponent) String() string {
 func (*McapChannelComponent) ProtoMessage() {}
 
 func (x *McapChannelComponent) ProtoReflect() protoreflect.Message {
-	mi := &file_samples_proto_msgTypes[5]
+	mi := &file_samples_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -483,7 +1030,7 @@ func (x *McapChannelComponent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use McapChannelComponent.ProtoReflect.Descriptor instead.
 func (*McapChannelComponent) Descriptor() ([]byte, []int) {
-	return file_samples_proto_rawDescGZIP(), []int{5}
+	return file_samples_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *McapChannelComponent) GetTopic() string {
@@ -538,7 +1085,7 @@ type McapMessageComponent struct {
 
 func (x *McapMessageComponent) Reset() {
 	*x = McapMessageComponent{}
-	mi := &file_samples_proto_msgTypes[6]
+	mi := &file_samples_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -550,7 +1097,7 @@ func (x *McapMessageComponent) String() string {
 func (*McapMessageComponent) ProtoMessage() {}
 
 func (x *McapMessageComponent) ProtoReflect() protoreflect.Message {
-	mi := &file_samples_proto_msgTypes[6]
+	mi := &file_samples_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -563,7 +1110,7 @@ func (x *McapMessageComponent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use McapMessageComponent.ProtoReflect.Descriptor instead.
 func (*McapMessageComponent) Descriptor() ([]byte, []int) {
-	return file_samples_proto_rawDescGZIP(), []int{6}
+	return file_samples_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *McapMessageComponent) GetData() []byte {
@@ -592,7 +1139,7 @@ type ImageMask struct {
 
 func (x *ImageMask) Reset() {
 	*x = ImageMask{}
-	mi := &file_samples_proto_msgTypes[7]
+	mi := &file_samples_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -604,7 +1151,7 @@ func (x *ImageMask) String() string {
 func (*ImageMask) ProtoMessage() {}
 
 func (x *ImageMask) ProtoReflect() protoreflect.Message {
-	mi := &file_samples_proto_msgTypes[7]
+	mi := &file_samples_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -617,7 +1164,7 @@ func (x *ImageMask) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImageMask.ProtoReflect.Descriptor instead.
 func (*ImageMask) Descriptor() ([]byte, []int) {
-	return file_samples_proto_rawDescGZIP(), []int{7}
+	return file_samples_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *ImageMask) GetX() uint32 {
@@ -674,7 +1221,7 @@ type StreamComponent struct {
 
 func (x *StreamComponent) Reset() {
 	*x = StreamComponent{}
-	mi := &file_samples_proto_msgTypes[8]
+	mi := &file_samples_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -686,7 +1233,7 @@ func (x *StreamComponent) String() string {
 func (*StreamComponent) ProtoMessage() {}
 
 func (x *StreamComponent) ProtoReflect() protoreflect.Message {
-	mi := &file_samples_proto_msgTypes[8]
+	mi := &file_samples_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -699,7 +1246,7 @@ func (x *StreamComponent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreamComponent.ProtoReflect.Descriptor instead.
 func (*StreamComponent) Descriptor() ([]byte, []int) {
-	return file_samples_proto_rawDescGZIP(), []int{8}
+	return file_samples_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *StreamComponent) GetStreams() []*StreamComponent_Stream {
@@ -730,7 +1277,7 @@ type StreamComponent_Stream struct {
 
 func (x *StreamComponent_Stream) Reset() {
 	*x = StreamComponent_Stream{}
-	mi := &file_samples_proto_msgTypes[10]
+	mi := &file_samples_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -742,7 +1289,7 @@ func (x *StreamComponent_Stream) String() string {
 func (*StreamComponent_Stream) ProtoMessage() {}
 
 func (x *StreamComponent_Stream) ProtoReflect() protoreflect.Message {
-	mi := &file_samples_proto_msgTypes[10]
+	mi := &file_samples_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -755,7 +1302,7 @@ func (x *StreamComponent_Stream) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreamComponent_Stream.ProtoReflect.Descriptor instead.
 func (*StreamComponent_Stream) Descriptor() ([]byte, []int) {
-	return file_samples_proto_rawDescGZIP(), []int{8, 0}
+	return file_samples_proto_rawDescGZIP(), []int{12, 0}
 }
 
 func (x *StreamComponent_Stream) GetComponent() EntityComponent {
@@ -800,33 +1347,68 @@ const file_samples_proto_rawDesc = "" +
 	"\x13VideoFrameComponent\x12\x12\n" +
 	"\x04body\x18\x01 \x01(\fR\x04body\x12\x1f\n" +
 	"\bkeyframe\x18\x02 \x01(\bH\x00R\bkeyframe\x88\x01\x01B\v\n" +
-	"\t_keyframe\"\xb1\x01\n" +
-	"\x0eImageComponent\x12\x16\n" +
-	"\x06format\x18\x01 \x01(\tR\x06format\x12\x19\n" +
-	"\x05width\x18\x02 \x01(\rH\x00R\x05width\x88\x01\x01\x12\x1b\n" +
-	"\x06height\x18\x03 \x01(\rH\x01R\x06height\x88\x01\x01\x12\x1b\n" +
-	"\x06stride\x18\x04 \x01(\rH\x02R\x06stride\x88\x01\x01\x12\x12\n" +
-	"\x04data\x18\x05 \x01(\fR\x04dataB\b\n" +
+	"\t_keyframe\"\xd6\x01\n" +
+	"\x0eImageComponent\x12,\n" +
+	"\x06pixels\x18\x06 \x01(\v2\x12.world.ImagePixelsH\x00R\x06pixels\x12)\n" +
+	"\x05codec\x18\a \x01(\v2\x11.world.ImageCodecH\x00R\x05codec\x12\x19\n" +
+	"\x05width\x18\x02 \x01(\rH\x01R\x05width\x88\x01\x01\x12\x1b\n" +
+	"\x06height\x18\x03 \x01(\rH\x02R\x06height\x88\x01\x01\x12\x12\n" +
+	"\x04data\x18\x05 \x01(\fR\x04dataB\n" +
+	"\n" +
+	"\bencodingB\b\n" +
 	"\x06_widthB\t\n" +
-	"\a_heightB\t\n" +
-	"\a_stride\"\xc7\x02\n" +
-	"\x11WaveformComponent\x12\x16\n" +
-	"\x06format\x18\x01 \x01(\tR\x06format\x12\x1f\n" +
+	"\a_height\" \n" +
+	"\n" +
+	"ImageCodec\x12\x12\n" +
+	"\x04type\x18\x01 \x01(\tR\x04type\"r\n" +
+	"\vImagePixels\x12/\n" +
+	"\x06format\x18\x01 \x01(\x0e2\x17.world.ImagePixelFormatR\x06format\x12\x18\n" +
+	"\astrides\x18\x02 \x03(\rR\astrides\x12\x18\n" +
+	"\aoffsets\x18\x03 \x03(\rR\aoffsets\"\xee\x03\n" +
+	"\x11WaveformComponent\x12&\n" +
+	"\x03pcm\x18\f \x01(\v2\x12.world.WaveformPcmH\x00R\x03pcm\x12,\n" +
+	"\x05codec\x18\r \x01(\v2\x14.world.WaveformCodecH\x00R\x05codec\x12\x1f\n" +
 	"\vsample_rate\x18\x02 \x01(\rR\n" +
 	"sampleRate\x12\x1a\n" +
 	"\bchannels\x18\x03 \x01(\rR\bchannels\x12#\n" +
 	"\rchannel_names\x18\x04 \x03(\tR\fchannelNames\x12*\n" +
-	"\x04kind\x18\x05 \x01(\x0e2\x11.world.MetricKindH\x00R\x04kind\x88\x01\x01\x12%\n" +
+	"\x04kind\x18\x05 \x01(\x0e2\x11.world.MetricKindH\x01R\x04kind\x88\x01\x01\x12%\n" +
 	"\x04unit\x18\x06 \x01(\x0e2\x11.world.MetricUnitR\x04unit\x12\x19\n" +
-	"\x05scale\x18\a \x01(\x01H\x01R\x05scale\x88\x01\x01\x12-\n" +
-	"\x05range\x18\b \x01(\v2\x12.world.MetricRangeH\x02R\x05range\x88\x01\x01B\a\n" +
+	"\x05scale\x18\a \x01(\x01H\x02R\x05scale\x88\x01\x01\x12-\n" +
+	"\x05range\x18\b \x01(\v2\x12.world.MetricRangeH\x03R\x05range\x88\x01\x01\x12%\n" +
+	"\ftick_rate_hz\x18\n" +
+	" \x01(\x01H\x04R\n" +
+	"tickRateHz\x88\x01\x01\x12\x19\n" +
+	"\x05clock\x18\v \x01(\tH\x05R\x05clock\x88\x01\x01B\n" +
+	"\n" +
+	"\bencodingB\a\n" +
 	"\x05_kindB\b\n" +
 	"\x06_scaleB\b\n" +
-	"\x06_range\"Q\n" +
+	"\x06_rangeB\x0f\n" +
+	"\r_tick_rate_hzB\b\n" +
+	"\x06_clock\"u\n" +
+	"\vWaveformPcm\x123\n" +
+	"\x06format\x18\x01 \x01(\x0e2\x1b.world.WaveformSampleFormatR\x06format\x12\"\n" +
+	"\n" +
+	"valid_bits\x18\x02 \x01(\rH\x00R\tvalidBits\x88\x01\x01B\r\n" +
+	"\v_valid_bits\"G\n" +
+	"\rWaveformCodec\x12\x14\n" +
+	"\x05codec\x18\x01 \x01(\tR\x05codec\x12 \n" +
+	"\vdescription\x18\x02 \x01(\fR\vdescription\"\xbe\x02\n" +
 	"\x16WaveformFrameComponent\x12\x12\n" +
 	"\x04data\x18\x01 \x01(\fR\x04data\x12\x19\n" +
-	"\x05scale\x18\x02 \x01(\x01H\x00R\x05scale\x88\x01\x01B\b\n" +
-	"\x06_scale\"\xbd\x02\n" +
+	"\x05scale\x18\x02 \x01(\x01H\x00R\x05scale\x88\x01\x01\x12\x1d\n" +
+	"\asamples\x18\x03 \x01(\rH\x01R\asamples\x88\x01\x01\x12\x12\n" +
+	"\x04lost\x18\x04 \x01(\x04R\x04lost\x12$\n" +
+	"\rdiscontinuous\x18\x05 \x01(\bR\rdiscontinuous\x12\x1c\n" +
+	"\trestarted\x18\x06 \x01(\bR\trestarted\x12)\n" +
+	"\x10invalid_channels\x18\a \x03(\rR\x0finvalidChannels\x12\x18\n" +
+	"\aclipped\x18\b \x01(\bR\aclipped\x12\x19\n" +
+	"\x05ticks\x18\t \x01(\x04H\x02R\x05ticks\x88\x01\x01B\b\n" +
+	"\x06_scaleB\n" +
+	"\n" +
+	"\b_samplesB\b\n" +
+	"\x06_ticks\"\xbd\x02\n" +
 	"\x14McapChannelComponent\x12\x14\n" +
 	"\x05topic\x18\x01 \x01(\tR\x05topic\x12)\n" +
 	"\x10message_encoding\x18\x02 \x01(\tR\x0fmessageEncoding\x12\x1f\n" +
@@ -856,7 +1438,28 @@ const file_samples_proto_rawDesc = "" +
 	"\n" +
 	"latency_ms\x18\x04 \x01(\rH\x01R\tlatencyMs\x88\x01\x01B\a\n" +
 	"\x05_lastB\r\n" +
-	"\v_latency_ms*R\n" +
+	"\v_latency_ms*\x9c\x02\n" +
+	"\x10ImagePixelFormat\x12\x1f\n" +
+	"\x1bImagePixelFormatUnspecified\x10\x00\x12\x17\n" +
+	"\x13ImagePixelFormatRGB\x10\x01\x12\x17\n" +
+	"\x13ImagePixelFormatBGR\x10\x02\x12\x18\n" +
+	"\x14ImagePixelFormatRGBA\x10\x03\x12\x18\n" +
+	"\x14ImagePixelFormatRGBX\x10\x04\x12\x18\n" +
+	"\x14ImagePixelFormatBGRA\x10\x05\x12\x18\n" +
+	"\x14ImagePixelFormatBGRX\x10\x06\x12\x19\n" +
+	"\x15ImagePixelFormatGRAY8\x10\a\x12\x18\n" +
+	"\x14ImagePixelFormatI420\x10\b\x12\x18\n" +
+	"\x14ImagePixelFormatNV12\x10\t*\xb9\x02\n" +
+	"\x14WaveformSampleFormat\x12#\n" +
+	"\x1fWaveformSampleFormatUnspecified\x10\x00\x12\x1a\n" +
+	"\x16WaveformSampleFormatU8\x10\x01\x12\x1b\n" +
+	"\x17WaveformSampleFormatS16\x10\x02\x12\x1b\n" +
+	"\x17WaveformSampleFormatS32\x10\x03\x12\x1b\n" +
+	"\x17WaveformSampleFormatF32\x10\x04\x12 \n" +
+	"\x1cWaveformSampleFormatU8Planar\x10\x05\x12!\n" +
+	"\x1dWaveformSampleFormatS16Planar\x10\x06\x12!\n" +
+	"\x1dWaveformSampleFormatS32Planar\x10\a\x12!\n" +
+	"\x1dWaveformSampleFormatF32Planar\x10\b*R\n" +
 	"\x11ImageMaskEncoding\x12 \n" +
 	"\x1cImageMaskEncodingUnspecified\x10\x00\x12\x1b\n" +
 	"\x17ImageMaskEncodingBitmap\x10\x01B Z\x1egithub.com/projectqai/proto/gob\x06proto3"
@@ -873,41 +1476,53 @@ func file_samples_proto_rawDescGZIP() []byte {
 	return file_samples_proto_rawDescData
 }
 
-var file_samples_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_samples_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_samples_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_samples_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_samples_proto_goTypes = []any{
-	(ImageMaskEncoding)(0),         // 0: world.ImageMaskEncoding
-	(*VideoComponent)(nil),         // 1: world.VideoComponent
-	(*VideoFrameComponent)(nil),    // 2: world.VideoFrameComponent
-	(*ImageComponent)(nil),         // 3: world.ImageComponent
-	(*WaveformComponent)(nil),      // 4: world.WaveformComponent
-	(*WaveformFrameComponent)(nil), // 5: world.WaveformFrameComponent
-	(*McapChannelComponent)(nil),   // 6: world.McapChannelComponent
-	(*McapMessageComponent)(nil),   // 7: world.McapMessageComponent
-	(*ImageMask)(nil),              // 8: world.ImageMask
-	(*StreamComponent)(nil),        // 9: world.StreamComponent
-	nil,                            // 10: world.McapChannelComponent.MetadataEntry
-	(*StreamComponent_Stream)(nil), // 11: world.StreamComponent.Stream
-	(MetricKind)(0),                // 12: world.MetricKind
-	(MetricUnit)(0),                // 13: world.MetricUnit
-	(*MetricRange)(nil),            // 14: world.MetricRange
-	(EntityComponent)(0),           // 15: world.EntityComponent
-	(*timestamppb.Timestamp)(nil),  // 16: google.protobuf.Timestamp
+	(ImagePixelFormat)(0),          // 0: world.ImagePixelFormat
+	(WaveformSampleFormat)(0),      // 1: world.WaveformSampleFormat
+	(ImageMaskEncoding)(0),         // 2: world.ImageMaskEncoding
+	(*VideoComponent)(nil),         // 3: world.VideoComponent
+	(*VideoFrameComponent)(nil),    // 4: world.VideoFrameComponent
+	(*ImageComponent)(nil),         // 5: world.ImageComponent
+	(*ImageCodec)(nil),             // 6: world.ImageCodec
+	(*ImagePixels)(nil),            // 7: world.ImagePixels
+	(*WaveformComponent)(nil),      // 8: world.WaveformComponent
+	(*WaveformPcm)(nil),            // 9: world.WaveformPcm
+	(*WaveformCodec)(nil),          // 10: world.WaveformCodec
+	(*WaveformFrameComponent)(nil), // 11: world.WaveformFrameComponent
+	(*McapChannelComponent)(nil),   // 12: world.McapChannelComponent
+	(*McapMessageComponent)(nil),   // 13: world.McapMessageComponent
+	(*ImageMask)(nil),              // 14: world.ImageMask
+	(*StreamComponent)(nil),        // 15: world.StreamComponent
+	nil,                            // 16: world.McapChannelComponent.MetadataEntry
+	(*StreamComponent_Stream)(nil), // 17: world.StreamComponent.Stream
+	(MetricKind)(0),                // 18: world.MetricKind
+	(MetricUnit)(0),                // 19: world.MetricUnit
+	(*MetricRange)(nil),            // 20: world.MetricRange
+	(EntityComponent)(0),           // 21: world.EntityComponent
+	(*timestamppb.Timestamp)(nil),  // 22: google.protobuf.Timestamp
 }
 var file_samples_proto_depIdxs = []int32{
-	12, // 0: world.WaveformComponent.kind:type_name -> world.MetricKind
-	13, // 1: world.WaveformComponent.unit:type_name -> world.MetricUnit
-	14, // 2: world.WaveformComponent.range:type_name -> world.MetricRange
-	10, // 3: world.McapChannelComponent.metadata:type_name -> world.McapChannelComponent.MetadataEntry
-	0,  // 4: world.ImageMask.encoding:type_name -> world.ImageMaskEncoding
-	11, // 5: world.StreamComponent.streams:type_name -> world.StreamComponent.Stream
-	15, // 6: world.StreamComponent.Stream.component:type_name -> world.EntityComponent
-	16, // 7: world.StreamComponent.Stream.last:type_name -> google.protobuf.Timestamp
-	8,  // [8:8] is the sub-list for method output_type
-	8,  // [8:8] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	7,  // 0: world.ImageComponent.pixels:type_name -> world.ImagePixels
+	6,  // 1: world.ImageComponent.codec:type_name -> world.ImageCodec
+	0,  // 2: world.ImagePixels.format:type_name -> world.ImagePixelFormat
+	9,  // 3: world.WaveformComponent.pcm:type_name -> world.WaveformPcm
+	10, // 4: world.WaveformComponent.codec:type_name -> world.WaveformCodec
+	18, // 5: world.WaveformComponent.kind:type_name -> world.MetricKind
+	19, // 6: world.WaveformComponent.unit:type_name -> world.MetricUnit
+	20, // 7: world.WaveformComponent.range:type_name -> world.MetricRange
+	1,  // 8: world.WaveformPcm.format:type_name -> world.WaveformSampleFormat
+	16, // 9: world.McapChannelComponent.metadata:type_name -> world.McapChannelComponent.MetadataEntry
+	2,  // 10: world.ImageMask.encoding:type_name -> world.ImageMaskEncoding
+	17, // 11: world.StreamComponent.streams:type_name -> world.StreamComponent.Stream
+	21, // 12: world.StreamComponent.Stream.component:type_name -> world.EntityComponent
+	22, // 13: world.StreamComponent.Stream.last:type_name -> google.protobuf.Timestamp
+	14, // [14:14] is the sub-list for method output_type
+	14, // [14:14] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_samples_proto_init() }
@@ -919,17 +1534,24 @@ func file_samples_proto_init() {
 	file_metrics_proto_init()
 	file_samples_proto_msgTypes[0].OneofWrappers = []any{}
 	file_samples_proto_msgTypes[1].OneofWrappers = []any{}
-	file_samples_proto_msgTypes[2].OneofWrappers = []any{}
-	file_samples_proto_msgTypes[3].OneofWrappers = []any{}
-	file_samples_proto_msgTypes[4].OneofWrappers = []any{}
-	file_samples_proto_msgTypes[10].OneofWrappers = []any{}
+	file_samples_proto_msgTypes[2].OneofWrappers = []any{
+		(*ImageComponent_Pixels)(nil),
+		(*ImageComponent_Codec)(nil),
+	}
+	file_samples_proto_msgTypes[5].OneofWrappers = []any{
+		(*WaveformComponent_Pcm)(nil),
+		(*WaveformComponent_Codec)(nil),
+	}
+	file_samples_proto_msgTypes[6].OneofWrappers = []any{}
+	file_samples_proto_msgTypes[8].OneofWrappers = []any{}
+	file_samples_proto_msgTypes[14].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_samples_proto_rawDesc), len(file_samples_proto_rawDesc)),
-			NumEnums:      1,
-			NumMessages:   11,
+			NumEnums:      3,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

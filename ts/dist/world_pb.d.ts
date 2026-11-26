@@ -607,7 +607,7 @@ export declare const InteractivityComponentSchema: GenMessage<InteractivityCompo
  * Where the two differ the components are right. codec says what to expect
  * before the source was reached (an RTSP camera declared H264 can turn out
  * to send JPEG, and is then streamed as images); readers decode by
- * VideoComponent.codec or ImageComponent.format, never by this.
+ * VideoComponent.codec or ImageComponent.codec, never by this.
  *
  * @generated from message world.MediaStream
  */
@@ -638,8 +638,9 @@ export declare type MediaStream = Message<"world.MediaStream"> & {
 
   /**
    * the codec expected, by its short name: "H264", "H265", "MJPEG". The
-   * streamed VideoComponent.codec and ImageComponent.format are media types
-   * instead ("video/H264", "image/jpeg"), and say what was found.
+   * streamed VideoComponent.codec (a WebCodecs codec string, "avc1.64001F")
+   * and ImageComponent.codec (a media type, "image/jpeg") say what was
+   * found.
    *
    * @generated from field: string codec = 10;
    */

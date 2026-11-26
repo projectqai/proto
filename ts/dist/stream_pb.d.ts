@@ -94,8 +94,9 @@ export declare const OpenStreamSchema: GenMessage<OpenStream>;
  *
  * A request is rejected whole (InvalidArgument), and nothing of it is
  * written, when a value has no id, carries no component, carries a
- * component only the engine produces (ComponentBehavior.managed), or
- * carries a sampled component together with any other component. A
+ * component only the engine produces (ComponentBehavior.managed), carries
+ * a sampled component together with any other component, or is larger
+ * than 16 MiB marshalled. A
  * session write rejected so ends the session; an OpenStream naming a
  * managed component as a write scope fails.
  *

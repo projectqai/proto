@@ -9,10 +9,54 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class ImagePixelFormat(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    ImagePixelFormatUnspecified: _ClassVar[ImagePixelFormat]
+    ImagePixelFormatRGB: _ClassVar[ImagePixelFormat]
+    ImagePixelFormatBGR: _ClassVar[ImagePixelFormat]
+    ImagePixelFormatRGBA: _ClassVar[ImagePixelFormat]
+    ImagePixelFormatRGBX: _ClassVar[ImagePixelFormat]
+    ImagePixelFormatBGRA: _ClassVar[ImagePixelFormat]
+    ImagePixelFormatBGRX: _ClassVar[ImagePixelFormat]
+    ImagePixelFormatGRAY8: _ClassVar[ImagePixelFormat]
+    ImagePixelFormatI420: _ClassVar[ImagePixelFormat]
+    ImagePixelFormatNV12: _ClassVar[ImagePixelFormat]
+
+class WaveformSampleFormat(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+    __slots__ = ()
+    WaveformSampleFormatUnspecified: _ClassVar[WaveformSampleFormat]
+    WaveformSampleFormatU8: _ClassVar[WaveformSampleFormat]
+    WaveformSampleFormatS16: _ClassVar[WaveformSampleFormat]
+    WaveformSampleFormatS32: _ClassVar[WaveformSampleFormat]
+    WaveformSampleFormatF32: _ClassVar[WaveformSampleFormat]
+    WaveformSampleFormatU8Planar: _ClassVar[WaveformSampleFormat]
+    WaveformSampleFormatS16Planar: _ClassVar[WaveformSampleFormat]
+    WaveformSampleFormatS32Planar: _ClassVar[WaveformSampleFormat]
+    WaveformSampleFormatF32Planar: _ClassVar[WaveformSampleFormat]
+
 class ImageMaskEncoding(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
     ImageMaskEncodingUnspecified: _ClassVar[ImageMaskEncoding]
     ImageMaskEncodingBitmap: _ClassVar[ImageMaskEncoding]
+ImagePixelFormatUnspecified: ImagePixelFormat
+ImagePixelFormatRGB: ImagePixelFormat
+ImagePixelFormatBGR: ImagePixelFormat
+ImagePixelFormatRGBA: ImagePixelFormat
+ImagePixelFormatRGBX: ImagePixelFormat
+ImagePixelFormatBGRA: ImagePixelFormat
+ImagePixelFormatBGRX: ImagePixelFormat
+ImagePixelFormatGRAY8: ImagePixelFormat
+ImagePixelFormatI420: ImagePixelFormat
+ImagePixelFormatNV12: ImagePixelFormat
+WaveformSampleFormatUnspecified: WaveformSampleFormat
+WaveformSampleFormatU8: WaveformSampleFormat
+WaveformSampleFormatS16: WaveformSampleFormat
+WaveformSampleFormatS32: WaveformSampleFormat
+WaveformSampleFormatF32: WaveformSampleFormat
+WaveformSampleFormatU8Planar: WaveformSampleFormat
+WaveformSampleFormatS16Planar: WaveformSampleFormat
+WaveformSampleFormatS32Planar: WaveformSampleFormat
+WaveformSampleFormatF32Planar: WaveformSampleFormat
 ImageMaskEncodingUnspecified: ImageMaskEncoding
 ImageMaskEncodingBitmap: ImageMaskEncoding
 
@@ -35,22 +79,39 @@ class VideoFrameComponent(_message.Message):
     def __init__(self, body: _Optional[bytes] = ..., keyframe: bool = ...) -> None: ...
 
 class ImageComponent(_message.Message):
-    __slots__ = ("format", "width", "height", "stride", "data")
-    FORMAT_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ("pixels", "codec", "width", "height", "data")
+    PIXELS_FIELD_NUMBER: _ClassVar[int]
+    CODEC_FIELD_NUMBER: _ClassVar[int]
     WIDTH_FIELD_NUMBER: _ClassVar[int]
     HEIGHT_FIELD_NUMBER: _ClassVar[int]
-    STRIDE_FIELD_NUMBER: _ClassVar[int]
     DATA_FIELD_NUMBER: _ClassVar[int]
-    format: str
+    pixels: ImagePixels
+    codec: ImageCodec
     width: int
     height: int
-    stride: int
     data: bytes
-    def __init__(self, format: _Optional[str] = ..., width: _Optional[int] = ..., height: _Optional[int] = ..., stride: _Optional[int] = ..., data: _Optional[bytes] = ...) -> None: ...
+    def __init__(self, pixels: _Optional[_Union[ImagePixels, _Mapping]] = ..., codec: _Optional[_Union[ImageCodec, _Mapping]] = ..., width: _Optional[int] = ..., height: _Optional[int] = ..., data: _Optional[bytes] = ...) -> None: ...
+
+class ImageCodec(_message.Message):
+    __slots__ = ("type",)
+    TYPE_FIELD_NUMBER: _ClassVar[int]
+    type: str
+    def __init__(self, type: _Optional[str] = ...) -> None: ...
+
+class ImagePixels(_message.Message):
+    __slots__ = ("format", "strides", "offsets")
+    FORMAT_FIELD_NUMBER: _ClassVar[int]
+    STRIDES_FIELD_NUMBER: _ClassVar[int]
+    OFFSETS_FIELD_NUMBER: _ClassVar[int]
+    format: ImagePixelFormat
+    strides: _containers.RepeatedScalarFieldContainer[int]
+    offsets: _containers.RepeatedScalarFieldContainer[int]
+    def __init__(self, format: _Optional[_Union[ImagePixelFormat, str]] = ..., strides: _Optional[_Iterable[int]] = ..., offsets: _Optional[_Iterable[int]] = ...) -> None: ...
 
 class WaveformComponent(_message.Message):
-    __slots__ = ("format", "sample_rate", "channels", "channel_names", "kind", "unit", "scale", "range")
-    FORMAT_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ("pcm", "codec", "sample_rate", "channels", "channel_names", "kind", "unit", "scale", "range", "tick_rate_hz", "clock")
+    PCM_FIELD_NUMBER: _ClassVar[int]
+    CODEC_FIELD_NUMBER: _ClassVar[int]
     SAMPLE_RATE_FIELD_NUMBER: _ClassVar[int]
     CHANNELS_FIELD_NUMBER: _ClassVar[int]
     CHANNEL_NAMES_FIELD_NUMBER: _ClassVar[int]
@@ -58,7 +119,10 @@ class WaveformComponent(_message.Message):
     UNIT_FIELD_NUMBER: _ClassVar[int]
     SCALE_FIELD_NUMBER: _ClassVar[int]
     RANGE_FIELD_NUMBER: _ClassVar[int]
-    format: str
+    TICK_RATE_HZ_FIELD_NUMBER: _ClassVar[int]
+    CLOCK_FIELD_NUMBER: _ClassVar[int]
+    pcm: WaveformPcm
+    codec: WaveformCodec
     sample_rate: int
     channels: int
     channel_names: _containers.RepeatedScalarFieldContainer[str]
@@ -66,15 +130,47 @@ class WaveformComponent(_message.Message):
     unit: _metrics_pb2.MetricUnit
     scale: float
     range: _metrics_pb2.MetricRange
-    def __init__(self, format: _Optional[str] = ..., sample_rate: _Optional[int] = ..., channels: _Optional[int] = ..., channel_names: _Optional[_Iterable[str]] = ..., kind: _Optional[_Union[_metrics_pb2.MetricKind, str]] = ..., unit: _Optional[_Union[_metrics_pb2.MetricUnit, str]] = ..., scale: _Optional[float] = ..., range: _Optional[_Union[_metrics_pb2.MetricRange, _Mapping]] = ...) -> None: ...
+    tick_rate_hz: float
+    clock: str
+    def __init__(self, pcm: _Optional[_Union[WaveformPcm, _Mapping]] = ..., codec: _Optional[_Union[WaveformCodec, _Mapping]] = ..., sample_rate: _Optional[int] = ..., channels: _Optional[int] = ..., channel_names: _Optional[_Iterable[str]] = ..., kind: _Optional[_Union[_metrics_pb2.MetricKind, str]] = ..., unit: _Optional[_Union[_metrics_pb2.MetricUnit, str]] = ..., scale: _Optional[float] = ..., range: _Optional[_Union[_metrics_pb2.MetricRange, _Mapping]] = ..., tick_rate_hz: _Optional[float] = ..., clock: _Optional[str] = ...) -> None: ...
+
+class WaveformPcm(_message.Message):
+    __slots__ = ("format", "valid_bits")
+    FORMAT_FIELD_NUMBER: _ClassVar[int]
+    VALID_BITS_FIELD_NUMBER: _ClassVar[int]
+    format: WaveformSampleFormat
+    valid_bits: int
+    def __init__(self, format: _Optional[_Union[WaveformSampleFormat, str]] = ..., valid_bits: _Optional[int] = ...) -> None: ...
+
+class WaveformCodec(_message.Message):
+    __slots__ = ("codec", "description")
+    CODEC_FIELD_NUMBER: _ClassVar[int]
+    DESCRIPTION_FIELD_NUMBER: _ClassVar[int]
+    codec: str
+    description: bytes
+    def __init__(self, codec: _Optional[str] = ..., description: _Optional[bytes] = ...) -> None: ...
 
 class WaveformFrameComponent(_message.Message):
-    __slots__ = ("data", "scale")
+    __slots__ = ("data", "scale", "samples", "lost", "discontinuous", "restarted", "invalid_channels", "clipped", "ticks")
     DATA_FIELD_NUMBER: _ClassVar[int]
     SCALE_FIELD_NUMBER: _ClassVar[int]
+    SAMPLES_FIELD_NUMBER: _ClassVar[int]
+    LOST_FIELD_NUMBER: _ClassVar[int]
+    DISCONTINUOUS_FIELD_NUMBER: _ClassVar[int]
+    RESTARTED_FIELD_NUMBER: _ClassVar[int]
+    INVALID_CHANNELS_FIELD_NUMBER: _ClassVar[int]
+    CLIPPED_FIELD_NUMBER: _ClassVar[int]
+    TICKS_FIELD_NUMBER: _ClassVar[int]
     data: bytes
     scale: float
-    def __init__(self, data: _Optional[bytes] = ..., scale: _Optional[float] = ...) -> None: ...
+    samples: int
+    lost: int
+    discontinuous: bool
+    restarted: bool
+    invalid_channels: _containers.RepeatedScalarFieldContainer[int]
+    clipped: bool
+    ticks: int
+    def __init__(self, data: _Optional[bytes] = ..., scale: _Optional[float] = ..., samples: _Optional[int] = ..., lost: _Optional[int] = ..., discontinuous: bool = ..., restarted: bool = ..., invalid_channels: _Optional[_Iterable[int]] = ..., clipped: bool = ..., ticks: _Optional[int] = ...) -> None: ...
 
 class McapChannelComponent(_message.Message):
     __slots__ = ("topic", "message_encoding", "schema_name", "schema_encoding", "schema", "metadata")

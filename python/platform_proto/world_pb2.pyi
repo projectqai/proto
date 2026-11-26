@@ -301,7 +301,7 @@ TaskStatusCompleted: TaskStatus
 TaskStatusFailed: TaskStatus
 
 class Entity(_message.Message):
-    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "gnss", "device", "link", "pose", "target_pose", "local_shape", "metric", "config", "configurable", "taskable", "task_execution", "mission", "sensor", "interactivity", "artifact", "chat", "assembly", "map_layer", "manual_control", "target_manual_control", "bounds", "policy", "authorization", "measurement", "stream", "video_frame", "video", "mcap_channel", "mcap_message", "image", "waveform", "waveform_frame")
+    __slots__ = ("id", "label", "controller", "lifetime", "priority", "lease", "routing", "geo", "symbol", "camera", "detection", "bearing", "track", "locator", "kinematics", "shape", "classification", "transponder", "administrative", "orientation", "navigation", "power", "capture", "gnss", "device", "link", "pose", "local_shape", "mission", "sensor", "interactivity", "chat", "assembly", "map_layer", "bounds", "measurement", "metric", "target_pose", "config", "configurable", "taskable", "task_execution", "manual_control", "target_manual_control", "policy", "artifact", "authorization", "stream", "video_frame", "video", "mcap_channel", "mcap_message", "image", "waveform", "waveform_frame")
     ID_FIELD_NUMBER: _ClassVar[int]
     LABEL_FIELD_NUMBER: _ClassVar[int]
     CONTROLLER_FIELD_NUMBER: _ClassVar[int]
@@ -329,26 +329,26 @@ class Entity(_message.Message):
     DEVICE_FIELD_NUMBER: _ClassVar[int]
     LINK_FIELD_NUMBER: _ClassVar[int]
     POSE_FIELD_NUMBER: _ClassVar[int]
-    TARGET_POSE_FIELD_NUMBER: _ClassVar[int]
     LOCAL_SHAPE_FIELD_NUMBER: _ClassVar[int]
+    MISSION_FIELD_NUMBER: _ClassVar[int]
+    SENSOR_FIELD_NUMBER: _ClassVar[int]
+    INTERACTIVITY_FIELD_NUMBER: _ClassVar[int]
+    CHAT_FIELD_NUMBER: _ClassVar[int]
+    ASSEMBLY_FIELD_NUMBER: _ClassVar[int]
+    MAP_LAYER_FIELD_NUMBER: _ClassVar[int]
+    BOUNDS_FIELD_NUMBER: _ClassVar[int]
+    MEASUREMENT_FIELD_NUMBER: _ClassVar[int]
     METRIC_FIELD_NUMBER: _ClassVar[int]
+    TARGET_POSE_FIELD_NUMBER: _ClassVar[int]
     CONFIG_FIELD_NUMBER: _ClassVar[int]
     CONFIGURABLE_FIELD_NUMBER: _ClassVar[int]
     TASKABLE_FIELD_NUMBER: _ClassVar[int]
     TASK_EXECUTION_FIELD_NUMBER: _ClassVar[int]
-    MISSION_FIELD_NUMBER: _ClassVar[int]
-    SENSOR_FIELD_NUMBER: _ClassVar[int]
-    INTERACTIVITY_FIELD_NUMBER: _ClassVar[int]
-    ARTIFACT_FIELD_NUMBER: _ClassVar[int]
-    CHAT_FIELD_NUMBER: _ClassVar[int]
-    ASSEMBLY_FIELD_NUMBER: _ClassVar[int]
-    MAP_LAYER_FIELD_NUMBER: _ClassVar[int]
     MANUAL_CONTROL_FIELD_NUMBER: _ClassVar[int]
     TARGET_MANUAL_CONTROL_FIELD_NUMBER: _ClassVar[int]
-    BOUNDS_FIELD_NUMBER: _ClassVar[int]
     POLICY_FIELD_NUMBER: _ClassVar[int]
+    ARTIFACT_FIELD_NUMBER: _ClassVar[int]
     AUTHORIZATION_FIELD_NUMBER: _ClassVar[int]
-    MEASUREMENT_FIELD_NUMBER: _ClassVar[int]
     STREAM_FIELD_NUMBER: _ClassVar[int]
     VIDEO_FRAME_FIELD_NUMBER: _ClassVar[int]
     VIDEO_FIELD_NUMBER: _ClassVar[int]
@@ -384,26 +384,26 @@ class Entity(_message.Message):
     device: DeviceComponent
     link: LinkComponent
     pose: PoseComponent
-    target_pose: TargetPoseComponent
     local_shape: LocalShapeComponent
+    mission: MissionComponent
+    sensor: SensorComponent
+    interactivity: InteractivityComponent
+    chat: ChatComponent
+    assembly: AssemblyComponent
+    map_layer: MapLayerComponent
+    bounds: BoundsComponent
+    measurement: MeasurementComponent
     metric: _metrics_pb2.MetricComponent
+    target_pose: TargetPoseComponent
     config: ConfigurationComponent
     configurable: ConfigurableComponent
     taskable: TaskableComponent
     task_execution: TaskExecutionComponent
-    mission: MissionComponent
-    sensor: SensorComponent
-    interactivity: InteractivityComponent
-    artifact: ArtifactComponent
-    chat: ChatComponent
-    assembly: AssemblyComponent
-    map_layer: MapLayerComponent
     manual_control: ManualControlComponent
     target_manual_control: TargetManualControlComponent
-    bounds: BoundsComponent
     policy: _policy_pb2.PolicyComponent
+    artifact: ArtifactComponent
     authorization: _policy_pb2.AuthorizationComponent
-    measurement: MeasurementComponent
     stream: _samples_pb2.StreamComponent
     video_frame: _samples_pb2.VideoFrameComponent
     video: _samples_pb2.VideoComponent
@@ -412,7 +412,7 @@ class Entity(_message.Message):
     image: _samples_pb2.ImageComponent
     waveform: _samples_pb2.WaveformComponent
     waveform_frame: _samples_pb2.WaveformFrameComponent
-    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., gnss: _Optional[_Union[GnssComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ..., map_layer: _Optional[_Union[MapLayerComponent, _Mapping]] = ..., manual_control: _Optional[_Union[ManualControlComponent, _Mapping]] = ..., target_manual_control: _Optional[_Union[TargetManualControlComponent, _Mapping]] = ..., bounds: _Optional[_Union[BoundsComponent, _Mapping]] = ..., policy: _Optional[_Union[_policy_pb2.PolicyComponent, _Mapping]] = ..., authorization: _Optional[_Union[_policy_pb2.AuthorizationComponent, _Mapping]] = ..., measurement: _Optional[_Union[MeasurementComponent, _Mapping]] = ..., stream: _Optional[_Union[_samples_pb2.StreamComponent, _Mapping]] = ..., video_frame: _Optional[_Union[_samples_pb2.VideoFrameComponent, _Mapping]] = ..., video: _Optional[_Union[_samples_pb2.VideoComponent, _Mapping]] = ..., mcap_channel: _Optional[_Union[_samples_pb2.McapChannelComponent, _Mapping]] = ..., mcap_message: _Optional[_Union[_samples_pb2.McapMessageComponent, _Mapping]] = ..., image: _Optional[_Union[_samples_pb2.ImageComponent, _Mapping]] = ..., waveform: _Optional[_Union[_samples_pb2.WaveformComponent, _Mapping]] = ..., waveform_frame: _Optional[_Union[_samples_pb2.WaveformFrameComponent, _Mapping]] = ...) -> None: ...
+    def __init__(self, id: _Optional[str] = ..., label: _Optional[str] = ..., controller: _Optional[_Union[Controller, _Mapping]] = ..., lifetime: _Optional[_Union[Lifetime, _Mapping]] = ..., priority: _Optional[_Union[Priority, str]] = ..., lease: _Optional[_Union[Lease, _Mapping]] = ..., routing: _Optional[_Union[Routing, _Mapping]] = ..., geo: _Optional[_Union[GeoSpatialComponent, _Mapping]] = ..., symbol: _Optional[_Union[SymbolComponent, _Mapping]] = ..., camera: _Optional[_Union[CameraComponent, _Mapping]] = ..., detection: _Optional[_Union[DetectionComponent, _Mapping]] = ..., bearing: _Optional[_Union[BearingComponent, _Mapping]] = ..., track: _Optional[_Union[TrackComponent, _Mapping]] = ..., locator: _Optional[_Union[LocatorComponent, _Mapping]] = ..., kinematics: _Optional[_Union[KinematicsComponent, _Mapping]] = ..., shape: _Optional[_Union[GeoShapeComponent, _Mapping]] = ..., classification: _Optional[_Union[ClassificationComponent, _Mapping]] = ..., transponder: _Optional[_Union[TransponderComponent, _Mapping]] = ..., administrative: _Optional[_Union[AdministrativeComponent, _Mapping]] = ..., orientation: _Optional[_Union[OrientationComponent, _Mapping]] = ..., navigation: _Optional[_Union[NavigationComponent, _Mapping]] = ..., power: _Optional[_Union[PowerComponent, _Mapping]] = ..., capture: _Optional[_Union[CaptureComponent, _Mapping]] = ..., gnss: _Optional[_Union[GnssComponent, _Mapping]] = ..., device: _Optional[_Union[DeviceComponent, _Mapping]] = ..., link: _Optional[_Union[LinkComponent, _Mapping]] = ..., pose: _Optional[_Union[PoseComponent, _Mapping]] = ..., local_shape: _Optional[_Union[LocalShapeComponent, _Mapping]] = ..., mission: _Optional[_Union[MissionComponent, _Mapping]] = ..., sensor: _Optional[_Union[SensorComponent, _Mapping]] = ..., interactivity: _Optional[_Union[InteractivityComponent, _Mapping]] = ..., chat: _Optional[_Union[ChatComponent, _Mapping]] = ..., assembly: _Optional[_Union[AssemblyComponent, _Mapping]] = ..., map_layer: _Optional[_Union[MapLayerComponent, _Mapping]] = ..., bounds: _Optional[_Union[BoundsComponent, _Mapping]] = ..., measurement: _Optional[_Union[MeasurementComponent, _Mapping]] = ..., metric: _Optional[_Union[_metrics_pb2.MetricComponent, _Mapping]] = ..., target_pose: _Optional[_Union[TargetPoseComponent, _Mapping]] = ..., config: _Optional[_Union[ConfigurationComponent, _Mapping]] = ..., configurable: _Optional[_Union[ConfigurableComponent, _Mapping]] = ..., taskable: _Optional[_Union[TaskableComponent, _Mapping]] = ..., task_execution: _Optional[_Union[TaskExecutionComponent, _Mapping]] = ..., manual_control: _Optional[_Union[ManualControlComponent, _Mapping]] = ..., target_manual_control: _Optional[_Union[TargetManualControlComponent, _Mapping]] = ..., policy: _Optional[_Union[_policy_pb2.PolicyComponent, _Mapping]] = ..., artifact: _Optional[_Union[ArtifactComponent, _Mapping]] = ..., authorization: _Optional[_Union[_policy_pb2.AuthorizationComponent, _Mapping]] = ..., stream: _Optional[_Union[_samples_pb2.StreamComponent, _Mapping]] = ..., video_frame: _Optional[_Union[_samples_pb2.VideoFrameComponent, _Mapping]] = ..., video: _Optional[_Union[_samples_pb2.VideoComponent, _Mapping]] = ..., mcap_channel: _Optional[_Union[_samples_pb2.McapChannelComponent, _Mapping]] = ..., mcap_message: _Optional[_Union[_samples_pb2.McapMessageComponent, _Mapping]] = ..., image: _Optional[_Union[_samples_pb2.ImageComponent, _Mapping]] = ..., waveform: _Optional[_Union[_samples_pb2.WaveformComponent, _Mapping]] = ..., waveform_frame: _Optional[_Union[_samples_pb2.WaveformFrameComponent, _Mapping]] = ...) -> None: ...
 
 class Controller(_message.Message):
     __slots__ = ("id", "node", "origin")
