@@ -6,7 +6,7 @@ import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobu
 import type { JsonObject, Message } from "@bufbuild/protobuf";
 import type { MetricComponent, MetricKind } from "./metrics_pb.js";
 import type { AuthorizationComponent, PolicyComponent } from "./policy_pb.js";
-import type { ImageComponent, ImageMask, McapChannelComponent, McapMessageComponent, StreamComponent, VideoComponent, VideoFrameComponent, WaveformComponent, WaveformFrameComponent } from "./samples_pb.js";
+import type { AudioComponent, AudioFrameComponent, ImageComponent, ImageMask, McapChannelComponent, McapMessageComponent, StreamComponent, VideoComponent, VideoFrameComponent } from "./samples_pb.js";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { DeviceSoftware, SoftwareArtifact } from "./software_pb.js";
 import type { Reference } from "./components_pb.js";
@@ -300,14 +300,14 @@ export declare type Entity = Message<"world.Entity"> & {
   image?: ImageComponent | undefined;
 
   /**
-   * @generated from field: optional world.WaveformComponent waveform = 78;
+   * @generated from field: optional world.AudioComponent audio = 78;
    */
-  waveform?: WaveformComponent | undefined;
+  audio?: AudioComponent | undefined;
 
   /**
-   * @generated from field: optional world.WaveformFrameComponent waveform_frame = 79;
+   * @generated from field: optional world.AudioFrameComponent audio_frame = 79;
    */
-  waveformFrame?: WaveformFrameComponent | undefined;
+  audioFrame?: AudioFrameComponent | undefined;
 };
 
 /**
@@ -761,8 +761,8 @@ export declare const CameraComponentSchema: GenMessage<CameraComponent>;
  * them): from alone, the one sample whose fresh it is; with until, those
  * from `from` up to and including until. GET /artifacts/{id} serves them as
  * the artifact's content_type: as recorded when that is their format, else
- * converted (waveform frames as audio/wav, raw images as image/png). The
- * artifact entity carries what the stream is (e.g. a WaveformComponent).
+ * converted (audio frames as audio/wav, raw images as image/png). The artifact entity carries what the stream is (e.g. an
+ * AudioComponent).
  *
  * @generated from message world.ArtifactLocation
  */

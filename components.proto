@@ -62,8 +62,8 @@ enum EntityComponent {
   EntityComponentMcapChannel = 75;
   EntityComponentMcapMessage = 76;
   EntityComponentImage = 77;
-  EntityComponentWaveform = 78;
-  EntityComponentWaveformFrame = 79;
+  EntityComponentAudio = 78;
+  EntityComponentAudioFrame = 79;
 }
 
 // Points at an entity, or at samples of one of its components. The field

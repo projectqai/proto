@@ -1099,14 +1099,14 @@ type Entity struct {
 	Artifact      *ArtifactComponent      `protobuf:"bytes,61,opt,name=artifact,proto3,oneof" json:"artifact,omitempty"`
 	Authorization *AuthorizationComponent `protobuf:"bytes,68,opt,name=authorization,proto3,oneof" json:"authorization,omitempty"`
 	// raw data streams
-	Stream        *StreamComponent        `protobuf:"bytes,70,opt,name=stream,proto3,oneof" json:"stream,omitempty"`
-	VideoFrame    *VideoFrameComponent    `protobuf:"bytes,73,opt,name=video_frame,json=videoFrame,proto3,oneof" json:"video_frame,omitempty"`
-	Video         *VideoComponent         `protobuf:"bytes,74,opt,name=video,proto3,oneof" json:"video,omitempty"`
-	McapChannel   *McapChannelComponent   `protobuf:"bytes,75,opt,name=mcap_channel,json=mcapChannel,proto3,oneof" json:"mcap_channel,omitempty"`
-	McapMessage   *McapMessageComponent   `protobuf:"bytes,76,opt,name=mcap_message,json=mcapMessage,proto3,oneof" json:"mcap_message,omitempty"`
-	Image         *ImageComponent         `protobuf:"bytes,77,opt,name=image,proto3,oneof" json:"image,omitempty"`
-	Waveform      *WaveformComponent      `protobuf:"bytes,78,opt,name=waveform,proto3,oneof" json:"waveform,omitempty"`
-	WaveformFrame *WaveformFrameComponent `protobuf:"bytes,79,opt,name=waveform_frame,json=waveformFrame,proto3,oneof" json:"waveform_frame,omitempty"`
+	Stream        *StreamComponent      `protobuf:"bytes,70,opt,name=stream,proto3,oneof" json:"stream,omitempty"`
+	VideoFrame    *VideoFrameComponent  `protobuf:"bytes,73,opt,name=video_frame,json=videoFrame,proto3,oneof" json:"video_frame,omitempty"`
+	Video         *VideoComponent       `protobuf:"bytes,74,opt,name=video,proto3,oneof" json:"video,omitempty"`
+	McapChannel   *McapChannelComponent `protobuf:"bytes,75,opt,name=mcap_channel,json=mcapChannel,proto3,oneof" json:"mcap_channel,omitempty"`
+	McapMessage   *McapMessageComponent `protobuf:"bytes,76,opt,name=mcap_message,json=mcapMessage,proto3,oneof" json:"mcap_message,omitempty"`
+	Image         *ImageComponent       `protobuf:"bytes,77,opt,name=image,proto3,oneof" json:"image,omitempty"`
+	Audio         *AudioComponent       `protobuf:"bytes,78,opt,name=audio,proto3,oneof" json:"audio,omitempty"`
+	AudioFrame    *AudioFrameComponent  `protobuf:"bytes,79,opt,name=audio_frame,json=audioFrame,proto3,oneof" json:"audio_frame,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1512,16 +1512,16 @@ func (x *Entity) GetImage() *ImageComponent {
 	return nil
 }
 
-func (x *Entity) GetWaveform() *WaveformComponent {
+func (x *Entity) GetAudio() *AudioComponent {
 	if x != nil {
-		return x.Waveform
+		return x.Audio
 	}
 	return nil
 }
 
-func (x *Entity) GetWaveformFrame() *WaveformFrameComponent {
+func (x *Entity) GetAudioFrame() *AudioFrameComponent {
 	if x != nil {
-		return x.WaveformFrame
+		return x.AudioFrame
 	}
 	return nil
 }
@@ -2340,8 +2340,8 @@ func (x *CameraComponent) GetFovTele() float64 {
 // them): from alone, the one sample whose fresh it is; with until, those
 // from `from` up to and including until. GET /artifacts/{id} serves them as
 // the artifact's content_type: as recorded when that is their format, else
-// converted (waveform frames as audio/wav, raw images as image/png). The
-// artifact entity carries what the stream is (e.g. a WaveformComponent).
+// converted (audio frames as audio/wav, raw images as image/png). The artifact entity carries what the stream is (e.g. an
+// AudioComponent).
 type ArtifactLocation struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
@@ -9627,7 +9627,7 @@ var File_world_proto protoreflect.FileDescriptor
 
 const file_world_proto_rawDesc = "" +
 	"\n" +
-	"\vworld.proto\x12\x05world\x1a\x0ebehavior.proto\x1a\x10components.proto\x1a\x0egeometry.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x13manualcontrol.proto\x1a\rmetrics.proto\x1a\fpolicy.proto\x1a\rsamples.proto\x1a\x0esoftware.proto\x1a\rtasking.proto\x1a\x0etaxonomy.proto\"\xbf\x1f\n" +
+	"\vworld.proto\x12\x05world\x1a\x0ebehavior.proto\x1a\x10components.proto\x1a\x0egeometry.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x13manualcontrol.proto\x1a\rmetrics.proto\x1a\fpolicy.proto\x1a\rsamples.proto\x1a\x0esoftware.proto\x1a\rtasking.proto\x1a\x0etaxonomy.proto\"\xa7\x1f\n" +
 	"\x06Entity\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x19\n" +
 	"\x05label\x18\x02 \x01(\tH\x00R\x05label\x88\x01\x01\x126\n" +
@@ -9692,9 +9692,10 @@ const file_world_proto_rawDesc = "" +
 	"\x05video\x18J \x01(\v2\x15.world.VideoComponentH0R\x05video\x88\x01\x01\x12C\n" +
 	"\fmcap_channel\x18K \x01(\v2\x1b.world.McapChannelComponentH1R\vmcapChannel\x88\x01\x01\x12K\n" +
 	"\fmcap_message\x18L \x01(\v2\x1b.world.McapMessageComponentB\x06\xea\xd8#\x02\b\x01H2R\vmcapMessage\x88\x01\x01\x128\n" +
-	"\x05image\x18M \x01(\v2\x15.world.ImageComponentB\x06\xea\xd8#\x02\b\x01H3R\x05image\x88\x01\x01\x129\n" +
-	"\bwaveform\x18N \x01(\v2\x18.world.WaveformComponentH4R\bwaveform\x88\x01\x01\x12Q\n" +
-	"\x0ewaveform_frame\x18O \x01(\v2\x1d.world.WaveformFrameComponentB\x06\xea\xd8#\x02\b\x01H5R\rwaveformFrame\x88\x01\x01B\b\n" +
+	"\x05image\x18M \x01(\v2\x15.world.ImageComponentB\x06\xea\xd8#\x02\b\x01H3R\x05image\x88\x01\x01\x120\n" +
+	"\x05audio\x18N \x01(\v2\x15.world.AudioComponentH4R\x05audio\x88\x01\x01\x12H\n" +
+	"\vaudio_frame\x18O \x01(\v2\x1a.world.AudioFrameComponentB\x06\xea\xd8#\x02\b\x01H5R\n" +
+	"audioFrame\x88\x01\x01B\b\n" +
 	"\x06_labelB\r\n" +
 	"\v_controllerB\v\n" +
 	"\t_lifetimeB\v\n" +
@@ -9753,9 +9754,9 @@ const file_world_proto_rawDesc = "" +
 	"\x06_videoB\x0f\n" +
 	"\r_mcap_channelB\x0f\n" +
 	"\r_mcap_messageB\b\n" +
-	"\x06_imageB\v\n" +
-	"\t_waveformB\x11\n" +
-	"\x0f_waveform_frameJ\x04\b\b\x10\tJ\x04\b\t\x10\n" +
+	"\x06_imageB\b\n" +
+	"\x06_audioB\x0e\n" +
+	"\f_audio_frameJ\x04\b\b\x10\tJ\x04\b\t\x10\n" +
 	"J\x04\b\n" +
 	"\x10\v\"r\n" +
 	"\n" +
@@ -11016,8 +11017,8 @@ var file_world_proto_goTypes = []any{
 	(*McapChannelComponent)(nil),         // 140: world.McapChannelComponent
 	(*McapMessageComponent)(nil),         // 141: world.McapMessageComponent
 	(*ImageComponent)(nil),               // 142: world.ImageComponent
-	(*WaveformComponent)(nil),            // 143: world.WaveformComponent
-	(*WaveformFrameComponent)(nil),       // 144: world.WaveformFrameComponent
+	(*AudioComponent)(nil),               // 143: world.AudioComponent
+	(*AudioFrameComponent)(nil),          // 144: world.AudioFrameComponent
 	(*timestamppb.Timestamp)(nil),        // 145: google.protobuf.Timestamp
 	(*SoftwareArtifact)(nil),             // 146: world.SoftwareArtifact
 	(*Reference)(nil),                    // 147: world.Reference
@@ -11087,8 +11088,8 @@ var file_world_proto_depIdxs = []int32{
 	140, // 48: world.Entity.mcap_channel:type_name -> world.McapChannelComponent
 	141, // 49: world.Entity.mcap_message:type_name -> world.McapMessageComponent
 	142, // 50: world.Entity.image:type_name -> world.ImageComponent
-	143, // 51: world.Entity.waveform:type_name -> world.WaveformComponent
-	144, // 52: world.Entity.waveform_frame:type_name -> world.WaveformFrameComponent
+	143, // 51: world.Entity.audio:type_name -> world.AudioComponent
+	144, // 52: world.Entity.audio_frame:type_name -> world.AudioFrameComponent
 	145, // 53: world.Lease.expires:type_name -> google.protobuf.Timestamp
 	145, // 54: world.Lifetime.from:type_name -> google.protobuf.Timestamp
 	145, // 55: world.Lifetime.until:type_name -> google.protobuf.Timestamp

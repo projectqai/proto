@@ -157,12 +157,14 @@ message HistoryReadStreamRequest {
   HistoryTimeline timeline = 6;
 }
 
-// One recorded sample (a video frame, an image, a waveform frame, an MCAP
-// message) and the entities citing it: those with a Reference naming the
-// sample exactly (entity, component and from = its fresh). Today these are
-// the detections whose DetectionComponent.frame names it. A sample is returned
-// once the changes citing it are recorded, so a very recent sample may be
-// held back; a later read from the last sample's time returns it.
+// One recorded sample (a video frame, an image, an audio frame, an MCAP
+// message) and the entities citing it: those with a Reference (a
+// detection's frame or references, a track's references) of its entity and
+// component that names it exactly (from alone = its fresh) or spans it
+// (from and until, its fresh in between: a detection made of a window of
+// samples). A sample is returned once the changes citing it are recorded,
+// so a very recent sample may be held back; a later read from the last
+// sample's time returns it.
 message RecordedSample {
   // the sample as recorded: its entity as it was written (when it
   // happened: Lifetime.fresh), and now, when this node accepted it (the
@@ -236,6 +238,34 @@ service HistoryService {
   // the entities citing it
   rpc ReadStream(HistoryReadStreamRequest) returns (stream HistoryReadStreamResponse);
 }
+
+// A recording made elsewhere (a sensor that records while it is away) is
+// MCAP that an import reads as a recording of hydris. Channels are
+// recognized by schema (protobuf) and metadata, not by topic:
+//
+//   metadata "hydris"    "recording": the recording's id, stable over its
+//                        files: files of one id join into one recording,
+//                        so the segments of one are imported one at a time,
+//                        in any order
+//   world.EntityChangeBatch
+//                        changes of entities (log time: the entity's
+//                        Lifetime.fresh; publish time: when it was
+//                        recorded). Description components (AudioComponent,
+//                        VideoComponent) are changes too, written before
+//                        the first sample they apply to
+//   world.EntityChangeEvent with metadata "entity" and "component" (the
+//                        component's field name, "audio_frame")
+//                        the samples of that component of that entity, one
+//                        per message (log time: its fresh), each continuing
+//                        the one before: a sample does not repeat what
+//                        another holds
+//   OTLP logs, traces, metrics
+//
+// Our topics are hydris/world, hydris/stream/<entity>/<component> and
+// otel/logs|traces|metrics. Keyframes and the index are not needed: an
+// import makes them. An entity made of samples (a detection) cites them
+// by a Reference of their entity and component: from alone the one sample
+// of that fresh, from and until the samples whose fresh lies in between.
 
 // The index of a recorded MCAP file: the MCAP attachment "hydris/index",
 // one for the whole file. The recorder writes it into each file it records,

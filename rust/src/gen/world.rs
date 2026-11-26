@@ -906,8 +906,8 @@ pub enum EntityComponent {
     McapChannel = 75,
     McapMessage = 76,
     Image = 77,
-    Waveform = 78,
-    WaveformFrame = 79,
+    Audio = 78,
+    AudioFrame = 79,
 }
 impl EntityComponent {
     /// String value of the enum field names used in the ProtoBuf definition.
@@ -969,8 +969,8 @@ impl EntityComponent {
             Self::McapChannel => "EntityComponentMcapChannel",
             Self::McapMessage => "EntityComponentMcapMessage",
             Self::Image => "EntityComponentImage",
-            Self::Waveform => "EntityComponentWaveform",
-            Self::WaveformFrame => "EntityComponentWaveformFrame",
+            Self::Audio => "EntityComponentAudio",
+            Self::AudioFrame => "EntityComponentAudioFrame",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
@@ -1029,8 +1029,8 @@ impl EntityComponent {
             "EntityComponentMcapChannel" => Some(Self::McapChannel),
             "EntityComponentMcapMessage" => Some(Self::McapMessage),
             "EntityComponentImage" => Some(Self::Image),
-            "EntityComponentWaveform" => Some(Self::Waveform),
-            "EntityComponentWaveformFrame" => Some(Self::WaveformFrame),
+            "EntityComponentAudio" => Some(Self::Audio),
+            "EntityComponentAudioFrame" => Some(Self::AudioFrame),
             _ => None,
         }
     }
@@ -1273,62 +1273,41 @@ pub struct ImagePixels {
     #[prost(uint32, repeated, tag = "3")]
     pub offsets: ::prost::alloc::vec::Vec<u32>,
 }
-/// What the entity's waveform is: audio, seismic, any sampled 1-D signal.
-/// Written before the frames it applies to. Several channels share its
-/// clock and rate (a microphone array); independent streams are separate
-/// entities.
+/// What the entity's audio is, as WebCodecs has it (AudioData,
+/// EncodedAudioChunk).
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct WaveformComponent {
-    #[prost(uint32, tag = "2")]
-    pub sample_rate: u32,
+pub struct AudioComponent {
     #[prost(uint32, tag = "3")]
+    pub sample_rate: u32,
+    #[prost(uint32, tag = "4")]
     pub channels: u32,
-    /// what each channel is, in the order of a frame's samples ("mic0",
-    /// "s0.x"); fewer than channels: the rest are not named
-    #[prost(string, repeated, tag = "4")]
+    /// what each channel is, in the order of a frame's samples ("mic0");
+    /// fewer than channels: the rest are not named
+    #[prost(string, repeated, tag = "5")]
     pub channel_names: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    /// what the samples measure: a sample times scale is a value of kind in
-    /// unit. Unset: not a calibrated quantity (audio as recorded); the samples
-    /// are as their encoding says
-    #[prost(enumeration = "MetricKind", optional, tag = "5")]
-    pub kind: ::core::option::Option<i32>,
-    #[prost(enumeration = "MetricUnit", tag = "6")]
-    pub unit: i32,
-    /// unit per sample count; a frame may say its own
-    #[prost(double, optional, tag = "7")]
-    pub scale: ::core::option::Option<f64>,
-    /// the values the sensor can report, in unit
-    #[prost(message, optional, tag = "8")]
-    pub range: ::core::option::Option<MetricRange>,
-    /// the device clock a frame's ticks count, in ticks per second; unset:
-    /// frames carry no ticks
-    #[prost(double, optional, tag = "10")]
-    pub tick_rate_hz: ::core::option::Option<f64>,
-    /// names that clock: the frames of waveforms on the same clock (the
-    /// microphones and the accelerometers of one board) are aligned by their
-    /// ticks, which are exact where Lifetime.fresh is not. Unset: a clock of
-    /// this waveform's own
-    #[prost(string, optional, tag = "11")]
-    pub clock: ::core::option::Option<::prost::alloc::string::String>,
+    /// the sound pressure of a full-scale sine, in dB SPL: what a level in
+    /// dBFS is in dB SPL. Unset: not calibrated
+    #[prost(double, optional, tag = "6")]
+    pub full_scale_db_spl: ::core::option::Option<f64>,
     /// how the frames carry the samples
-    #[prost(oneof = "waveform_component::Encoding", tags = "12, 13")]
-    pub encoding: ::core::option::Option<waveform_component::Encoding>,
+    #[prost(oneof = "audio_component::Encoding", tags = "1, 2")]
+    pub encoding: ::core::option::Option<audio_component::Encoding>,
 }
-/// Nested message and enum types in `WaveformComponent`.
-pub mod waveform_component {
+/// Nested message and enum types in `AudioComponent`.
+pub mod audio_component {
     /// how the frames carry the samples
     #[derive(Clone, PartialEq, ::prost::Oneof)]
     pub enum Encoding {
-        #[prost(message, tag = "12")]
-        Pcm(super::WaveformPcm),
-        #[prost(message, tag = "13")]
-        Codec(super::WaveformCodec),
+        #[prost(message, tag = "1")]
+        Pcm(super::AudioPcm),
+        #[prost(message, tag = "2")]
+        Codec(super::AudioCodec),
     }
 }
 /// Raw samples: a frame is an AudioData buffer of WebCodecs, of format.
 #[derive(Clone, Copy, PartialEq, ::prost::Message)]
-pub struct WaveformPcm {
-    #[prost(enumeration = "WaveformSampleFormat", tag = "1")]
+pub struct AudioPcm {
+    #[prost(enumeration = "SampleFormat", tag = "1")]
     pub format: i32,
     /// significant bits of a sample, right-aligned and sign-extended in its
     /// word (24 of S32: a 24-bit converter). Unset: all of them. A player
@@ -1339,62 +1318,31 @@ pub struct WaveformPcm {
 /// Encoded samples: a frame is one packet of the codec, an
 /// EncodedAudioChunk of WebCodecs.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct WaveformCodec {
+pub struct AudioCodec {
     /// a WebCodecs codec string: "opus", "mp3", "flac", "mp4a.40.2" (AAC-LC)
     #[prost(string, tag = "1")]
     pub codec: ::prost::alloc::string::String,
     /// AudioDecoderConfig.description, as the codec registry defines it for
     /// the codec (OpusHead, AudioSpecificConfig, "fLaC" and STREAMINFO);
     /// empty for a codec whose packets need none (mp3, AAC in ADTS). When
-    /// it changes, WaveformComponent is written again before the first frame
+    /// it changes, AudioComponent is written again before the first frame
     /// it applies to.
     #[prost(bytes = "vec", tag = "2")]
     pub description: ::prost::alloc::vec::Vec<u8>,
 }
-/// One frame of a waveform: a packet of its codec, or a block of samples in
-/// its PCM sample format. Its time is that of its first sample,
-/// Lifetime.fresh; its duration is samples / sample_rate.
-/// What a frame says of its samples applies to it alone: the next frame
-/// says it again or it no longer holds.
+/// One frame of audio: a packet of its codec, or a block of samples in its
+/// PCM sample format. Its time is that of its first sample, Lifetime.fresh;
+/// its duration is samples / sample_rate.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct WaveformFrameComponent {
+pub struct AudioFrameComponent {
     #[prost(bytes = "vec", tag = "1")]
     pub data: ::prost::alloc::vec::Vec<u8>,
-    /// unit per sample count of this frame, when it differs from the
-    /// waveform's scale (a sensor that reports it as it measures)
-    #[prost(double, optional, tag = "2")]
-    pub scale: ::core::option::Option<f64>,
-    /// samples per channel that are valid, counted from the first; the rest
-    /// of each channel is padding (zero), not signal. Unset: all of them. A
-    /// codec's packet: the samples it decodes to (EncodedAudioChunk.duration),
-    /// which a reader does not know without decoding it, so it is set
-    #[prost(uint32, optional, tag = "3")]
+    /// samples per channel that are signal, counted from the first; the rest
+    /// of each channel is padding (zero). Unset: all of them. A codec's
+    /// packet: the samples it decodes to (EncodedAudioChunk.duration), which a
+    /// reader does not know without decoding it, so it is set
+    #[prost(uint32, optional, tag = "2")]
     pub samples: ::core::option::Option<u32>,
-    /// samples per channel lost between the previous frame and this one: the
-    /// signal does not continue from there. 0: it does, as far as the
-    /// producer knows (a gap in fresh says so too)
-    #[prost(uint64, tag = "4")]
-    pub lost: u64,
-    /// samples are missing inside this frame, an unknown number (an
-    /// overflowed FIFO): the frame is not continuous within itself
-    #[prost(bool, tag = "5")]
-    pub discontinuous: bool,
-    /// the first frame after the capture restarted: nothing before it
-    /// continues into it
-    #[prost(bool, tag = "6")]
-    pub restarted: bool,
-    /// channels, by their index in the frame, that carried no valid data in
-    /// at least part of this frame (zeroed there): a microphone or a sensor
-    /// that failed or did not answer
-    #[prost(uint32, repeated, tag = "7")]
-    pub invalid_channels: ::prost::alloc::vec::Vec<u32>,
-    /// some sample hit full scale: the signal was clipped
-    #[prost(bool, tag = "8")]
-    pub clipped: bool,
-    /// the device clock (WaveformComponent.tick_rate_hz) at the first sample;
-    /// unset: not known
-    #[prost(uint64, optional, tag = "9")]
-    pub ticks: ::core::option::Option<u64>,
 }
 /// A channel of a foreign MCAP file, kept raw: what is not understood is
 /// kept, readable once it is, and exported back as it came.
@@ -1539,7 +1487,7 @@ impl ImagePixelFormat {
 /// channels equal runs.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum WaveformSampleFormat {
+pub enum SampleFormat {
     Unspecified = 0,
     U8 = 1,
     S16 = 2,
@@ -1550,36 +1498,36 @@ pub enum WaveformSampleFormat {
     S32Planar = 7,
     F32Planar = 8,
 }
-impl WaveformSampleFormat {
+impl SampleFormat {
     /// String value of the enum field names used in the ProtoBuf definition.
     ///
     /// The values are not transformed in any way and thus are considered stable
     /// (if the ProtoBuf definition does not change) and safe for programmatic use.
     pub fn as_str_name(&self) -> &'static str {
         match self {
-            Self::Unspecified => "WaveformSampleFormatUnspecified",
-            Self::U8 => "WaveformSampleFormatU8",
-            Self::S16 => "WaveformSampleFormatS16",
-            Self::S32 => "WaveformSampleFormatS32",
-            Self::F32 => "WaveformSampleFormatF32",
-            Self::U8Planar => "WaveformSampleFormatU8Planar",
-            Self::S16Planar => "WaveformSampleFormatS16Planar",
-            Self::S32Planar => "WaveformSampleFormatS32Planar",
-            Self::F32Planar => "WaveformSampleFormatF32Planar",
+            Self::Unspecified => "SampleFormatUnspecified",
+            Self::U8 => "SampleFormatU8",
+            Self::S16 => "SampleFormatS16",
+            Self::S32 => "SampleFormatS32",
+            Self::F32 => "SampleFormatF32",
+            Self::U8Planar => "SampleFormatU8Planar",
+            Self::S16Planar => "SampleFormatS16Planar",
+            Self::S32Planar => "SampleFormatS32Planar",
+            Self::F32Planar => "SampleFormatF32Planar",
         }
     }
     /// Creates an enum from field names used in the ProtoBuf definition.
     pub fn from_str_name(value: &str) -> ::core::option::Option<Self> {
         match value {
-            "WaveformSampleFormatUnspecified" => Some(Self::Unspecified),
-            "WaveformSampleFormatU8" => Some(Self::U8),
-            "WaveformSampleFormatS16" => Some(Self::S16),
-            "WaveformSampleFormatS32" => Some(Self::S32),
-            "WaveformSampleFormatF32" => Some(Self::F32),
-            "WaveformSampleFormatU8Planar" => Some(Self::U8Planar),
-            "WaveformSampleFormatS16Planar" => Some(Self::S16Planar),
-            "WaveformSampleFormatS32Planar" => Some(Self::S32Planar),
-            "WaveformSampleFormatF32Planar" => Some(Self::F32Planar),
+            "SampleFormatUnspecified" => Some(Self::Unspecified),
+            "SampleFormatU8" => Some(Self::U8),
+            "SampleFormatS16" => Some(Self::S16),
+            "SampleFormatS32" => Some(Self::S32),
+            "SampleFormatF32" => Some(Self::F32),
+            "SampleFormatU8Planar" => Some(Self::U8Planar),
+            "SampleFormatS16Planar" => Some(Self::S16Planar),
+            "SampleFormatS32Planar" => Some(Self::S32Planar),
+            "SampleFormatF32Planar" => Some(Self::F32Planar),
             _ => None,
         }
     }
@@ -2256,9 +2204,9 @@ pub struct Entity {
     #[prost(message, optional, tag = "77")]
     pub image: ::core::option::Option<ImageComponent>,
     #[prost(message, optional, tag = "78")]
-    pub waveform: ::core::option::Option<WaveformComponent>,
+    pub audio: ::core::option::Option<AudioComponent>,
     #[prost(message, optional, tag = "79")]
-    pub waveform_frame: ::core::option::Option<WaveformFrameComponent>,
+    pub audio_frame: ::core::option::Option<AudioFrameComponent>,
 }
 /// A controller owns an entity or change
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -2458,8 +2406,8 @@ pub struct CameraComponent {
 /// them): from alone, the one sample whose fresh it is; with until, those
 /// from `from` up to and including until. GET /artifacts/{id} serves them as
 /// the artifact's content_type: as recorded when that is their format, else
-/// converted (waveform frames as audio/wav, raw images as image/png). The
-/// artifact entity carries what the stream is (e.g. a WaveformComponent).
+/// converted (audio frames as audio/wav, raw images as image/png). The artifact entity carries what the stream is (e.g. an
+/// AudioComponent).
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct ArtifactLocation {
     #[prost(string, tag = "1")]

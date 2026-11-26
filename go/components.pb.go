@@ -80,8 +80,8 @@ const (
 	EntityComponent_EntityComponentMcapChannel         EntityComponent = 75
 	EntityComponent_EntityComponentMcapMessage         EntityComponent = 76
 	EntityComponent_EntityComponentImage               EntityComponent = 77
-	EntityComponent_EntityComponentWaveform            EntityComponent = 78
-	EntityComponent_EntityComponentWaveformFrame       EntityComponent = 79
+	EntityComponent_EntityComponentAudio               EntityComponent = 78
+	EntityComponent_EntityComponentAudioFrame          EntityComponent = 79
 )
 
 // Enum value maps for EntityComponent.
@@ -140,8 +140,8 @@ var (
 		75: "EntityComponentMcapChannel",
 		76: "EntityComponentMcapMessage",
 		77: "EntityComponentImage",
-		78: "EntityComponentWaveform",
-		79: "EntityComponentWaveformFrame",
+		78: "EntityComponentAudio",
+		79: "EntityComponentAudioFrame",
 	}
 	EntityComponent_value = map[string]int32{
 		"EntityComponentUnspecified":         0,
@@ -197,8 +197,8 @@ var (
 		"EntityComponentMcapChannel":         75,
 		"EntityComponentMcapMessage":         76,
 		"EntityComponentImage":               77,
-		"EntityComponentWaveform":            78,
-		"EntityComponentWaveformFrame":       79,
+		"EntityComponentAudio":               78,
+		"EntityComponentAudioFrame":          79,
 	}
 )
 
@@ -319,7 +319,7 @@ const file_components_proto_rawDesc = "" +
 	"\x05_fromB\b\n" +
 	"\x06_untilB\f\n" +
 	"\n" +
-	"_component*\xde\f\n" +
+	"_component*\xd8\f\n" +
 	"\x0fEntityComponent\x12\x1e\n" +
 	"\x1aEntityComponentUnspecified\x10\x00\x12\x18\n" +
 	"\x14EntityComponentLabel\x10\x02\x12\x1d\n" +
@@ -373,9 +373,9 @@ const file_components_proto_rawDesc = "" +
 	"\x14EntityComponentVideo\x10J\x12\x1e\n" +
 	"\x1aEntityComponentMcapChannel\x10K\x12\x1e\n" +
 	"\x1aEntityComponentMcapMessage\x10L\x12\x18\n" +
-	"\x14EntityComponentImage\x10M\x12\x1b\n" +
-	"\x17EntityComponentWaveform\x10N\x12 \n" +
-	"\x1cEntityComponentWaveformFrame\x10OB Z\x1egithub.com/projectqai/proto/gob\x06proto3"
+	"\x14EntityComponentImage\x10M\x12\x18\n" +
+	"\x14EntityComponentAudio\x10N\x12\x1d\n" +
+	"\x19EntityComponentAudioFrame\x10OB Z\x1egithub.com/projectqai/proto/gob\x06proto3"
 
 var (
 	file_components_proto_rawDescOnce sync.Once

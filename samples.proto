@@ -8,8 +8,8 @@ import "metrics.proto";
 
 option go_package = "github.com/projectqai/proto/go";
 
-// Sampled payloads carried as Entity components: video, images, waveforms
-// and raw MCAP channels, each a description component written before the
+// Sampled payloads carried as Entity components: video, images, audio and
+// raw MCAP channels, each a description component written before the
 // sample components it applies to.
 
 // What the entity's video is, as the driver streaming it found it (a
@@ -90,49 +90,63 @@ enum ImagePixelFormat {
   ImagePixelFormatNV12 = 9;
 }
 
-// What the entity's waveform is: audio, seismic, any sampled 1-D signal.
-// Written before the frames it applies to. Several channels share its
-// clock and rate (a microphone array); independent streams are separate
-// entities.
-message WaveformComponent {
+// A sampled signal (a microphone, demodulated radio, for now any sensor
+// sampled at a fixed rate) is audio: a description component, written
+// before the frames it applies to, and frames: blocks of samples of every
+// channel, each continuing the one before (a sample is not in two frames).
+// Several channels share a rate (a microphone array); independent streams
+// are separate entities.
+
+// What the entity's audio is, as WebCodecs has it (AudioData,
+// EncodedAudioChunk).
+message AudioComponent {
   // how the frames carry the samples
   oneof encoding {
-    WaveformPcm pcm = 12;
-    WaveformCodec codec = 13;
+    AudioPcm pcm = 1;
+    AudioCodec codec = 2;
   }
-  uint32 sample_rate = 2;
-  uint32 channels = 3;
-
-  // what each channel is, in the order of a frame's samples ("mic0",
-  // "s0.x"); fewer than channels: the rest are not named
-  repeated string channel_names = 4;
-
-  // what the samples measure: a sample times scale is a value of kind in
-  // unit. Unset: not a calibrated quantity (audio as recorded); the samples
-  // are as their encoding says
-  optional MetricKind kind = 5;
-  MetricUnit unit = 6;
-  optional double scale = 7; // unit per sample count; a frame may say its own
-  // the values the sensor can report, in unit
-  optional MetricRange range = 8;
-
-  // the device clock a frame's ticks count, in ticks per second; unset:
-  // frames carry no ticks
-  optional double tick_rate_hz = 10;
-  // names that clock: the frames of waveforms on the same clock (the
-  // microphones and the accelerometers of one board) are aligned by their
-  // ticks, which are exact where Lifetime.fresh is not. Unset: a clock of
-  // this waveform's own
-  optional string clock = 11;
+  uint32 sample_rate = 3;
+  uint32 channels = 4;
+  // what each channel is, in the order of a frame's samples ("mic0");
+  // fewer than channels: the rest are not named
+  repeated string channel_names = 5;
+  // the sound pressure of a full-scale sine, in dB SPL: what a level in
+  // dBFS is in dB SPL. Unset: not calibrated
+  optional double full_scale_db_spl = 6;
 }
 
 // Raw samples: a frame is an AudioData buffer of WebCodecs, of format.
-message WaveformPcm {
-  WaveformSampleFormat format = 1;
+message AudioPcm {
+  SampleFormat format = 1;
   // significant bits of a sample, right-aligned and sign-extended in its
   // word (24 of S32: a 24-bit converter). Unset: all of them. A player
   // scales by the bits not used, else it plays 2^(32-24) times too quiet
   optional uint32 valid_bits = 2;
+}
+
+// Encoded samples: a frame is one packet of the codec, an
+// EncodedAudioChunk of WebCodecs.
+message AudioCodec {
+  // a WebCodecs codec string: "opus", "mp3", "flac", "mp4a.40.2" (AAC-LC)
+  string codec = 1;
+  // AudioDecoderConfig.description, as the codec registry defines it for
+  // the codec (OpusHead, AudioSpecificConfig, "fLaC" and STREAMINFO);
+  // empty for a codec whose packets need none (mp3, AAC in ADTS). When
+  // it changes, AudioComponent is written again before the first frame
+  // it applies to.
+  bytes description = 2;
+}
+
+// One frame of audio: a packet of its codec, or a block of samples in its
+// PCM sample format. Its time is that of its first sample, Lifetime.fresh;
+// its duration is samples / sample_rate.
+message AudioFrameComponent {
+  bytes data = 1;
+  // samples per channel that are signal, counted from the first; the rest
+  // of each channel is padding (zero). Unset: all of them. A codec's
+  // packet: the samples it decodes to (EncodedAudioChunk.duration), which a
+  // reader does not know without decoding it, so it is set
+  optional uint32 samples = 2;
 }
 
 // A sample format: a WebCodecs AudioSampleFormat (u8, s16, s32, f32, and
@@ -140,72 +154,16 @@ message WaveformPcm {
 // channel, then sample 1 of every channel, ... Planar: every sample of
 // channel 0, then every sample of channel 1, ...: the frame split in
 // channels equal runs.
-enum WaveformSampleFormat {
-  WaveformSampleFormatUnspecified = 0;
-  WaveformSampleFormatU8 = 1;
-  WaveformSampleFormatS16 = 2;
-  WaveformSampleFormatS32 = 3;
-  WaveformSampleFormatF32 = 4;
-  WaveformSampleFormatU8Planar = 5;
-  WaveformSampleFormatS16Planar = 6;
-  WaveformSampleFormatS32Planar = 7;
-  WaveformSampleFormatF32Planar = 8;
-}
-
-// Encoded samples: a frame is one packet of the codec, an
-// EncodedAudioChunk of WebCodecs.
-message WaveformCodec {
-  // a WebCodecs codec string: "opus", "mp3", "flac", "mp4a.40.2" (AAC-LC)
-  string codec = 1;
-  // AudioDecoderConfig.description, as the codec registry defines it for
-  // the codec (OpusHead, AudioSpecificConfig, "fLaC" and STREAMINFO);
-  // empty for a codec whose packets need none (mp3, AAC in ADTS). When
-  // it changes, WaveformComponent is written again before the first frame
-  // it applies to.
-  bytes description = 2;
-}
-
-// One frame of a waveform: a packet of its codec, or a block of samples in
-// its PCM sample format. Its time is that of its first sample,
-// Lifetime.fresh; its duration is samples / sample_rate.
-// What a frame says of its samples applies to it alone: the next frame
-// says it again or it no longer holds.
-message WaveformFrameComponent {
-  bytes data = 1;
-  // unit per sample count of this frame, when it differs from the
-  // waveform's scale (a sensor that reports it as it measures)
-  optional double scale = 2;
-
-  // samples per channel that are valid, counted from the first; the rest
-  // of each channel is padding (zero), not signal. Unset: all of them. A
-  // codec's packet: the samples it decodes to (EncodedAudioChunk.duration),
-  // which a reader does not know without decoding it, so it is set
-  optional uint32 samples = 3;
-
-  // samples per channel lost between the previous frame and this one: the
-  // signal does not continue from there. 0: it does, as far as the
-  // producer knows (a gap in fresh says so too)
-  uint64 lost = 4;
-
-  // samples are missing inside this frame, an unknown number (an
-  // overflowed FIFO): the frame is not continuous within itself
-  bool discontinuous = 5;
-
-  // the first frame after the capture restarted: nothing before it
-  // continues into it
-  bool restarted = 6;
-
-  // channels, by their index in the frame, that carried no valid data in
-  // at least part of this frame (zeroed there): a microphone or a sensor
-  // that failed or did not answer
-  repeated uint32 invalid_channels = 7;
-
-  // some sample hit full scale: the signal was clipped
-  bool clipped = 8;
-
-  // the device clock (WaveformComponent.tick_rate_hz) at the first sample;
-  // unset: not known
-  optional uint64 ticks = 9;
+enum SampleFormat {
+  SampleFormatUnspecified = 0;
+  SampleFormatU8 = 1;
+  SampleFormatS16 = 2;
+  SampleFormatS32 = 3;
+  SampleFormatF32 = 4;
+  SampleFormatU8Planar = 5;
+  SampleFormatS16Planar = 6;
+  SampleFormatS32Planar = 7;
+  SampleFormatF32Planar = 8;
 }
 
 // A channel of a foreign MCAP file, kept raw: what is not understood is

@@ -429,12 +429,14 @@ export declare type HistoryReadStreamRequest = Message<"world.HistoryReadStreamR
 export declare const HistoryReadStreamRequestSchema: GenMessage<HistoryReadStreamRequest>;
 
 /**
- * One recorded sample (a video frame, an image, a waveform frame, an MCAP
- * message) and the entities citing it: those with a Reference naming the
- * sample exactly (entity, component and from = its fresh). Today these are
- * the detections whose DetectionComponent.frame names it. A sample is returned
- * once the changes citing it are recorded, so a very recent sample may be
- * held back; a later read from the last sample's time returns it.
+ * One recorded sample (a video frame, an image, an audio frame, an MCAP
+ * message) and the entities citing it: those with a Reference (a
+ * detection's frame or references, a track's references) of its entity and
+ * component that names it exactly (from alone = its fresh) or spans it
+ * (from and until, its fresh in between: a detection made of a window of
+ * samples). A sample is returned once the changes citing it are recorded,
+ * so a very recent sample may be held back; a later read from the last
+ * sample's time returns it.
  *
  * @generated from message world.RecordedSample
  */

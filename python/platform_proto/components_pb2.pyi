@@ -61,8 +61,8 @@ class EntityComponent(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     EntityComponentMcapChannel: _ClassVar[EntityComponent]
     EntityComponentMcapMessage: _ClassVar[EntityComponent]
     EntityComponentImage: _ClassVar[EntityComponent]
-    EntityComponentWaveform: _ClassVar[EntityComponent]
-    EntityComponentWaveformFrame: _ClassVar[EntityComponent]
+    EntityComponentAudio: _ClassVar[EntityComponent]
+    EntityComponentAudioFrame: _ClassVar[EntityComponent]
 EntityComponentUnspecified: EntityComponent
 EntityComponentLabel: EntityComponent
 EntityComponentController: EntityComponent
@@ -116,8 +116,8 @@ EntityComponentVideo: EntityComponent
 EntityComponentMcapChannel: EntityComponent
 EntityComponentMcapMessage: EntityComponent
 EntityComponentImage: EntityComponent
-EntityComponentWaveform: EntityComponent
-EntityComponentWaveformFrame: EntityComponent
+EntityComponentAudio: EntityComponent
+EntityComponentAudioFrame: EntityComponent
 
 class Reference(_message.Message):
     __slots__ = ("entity_id", "until", "component")

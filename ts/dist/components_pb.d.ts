@@ -326,14 +326,14 @@ export enum EntityComponent {
   EntityComponentImage = 77,
 
   /**
-   * @generated from enum value: EntityComponentWaveform = 78;
+   * @generated from enum value: EntityComponentAudio = 78;
    */
-  EntityComponentWaveform = 78,
+  EntityComponentAudio = 78,
 
   /**
-   * @generated from enum value: EntityComponentWaveformFrame = 79;
+   * @generated from enum value: EntityComponentAudioFrame = 79;
    */
-  EntityComponentWaveformFrame = 79,
+  EntityComponentAudioFrame = 79,
 }
 
 /**
